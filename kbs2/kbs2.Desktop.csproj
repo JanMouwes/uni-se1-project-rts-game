@@ -45,6 +45,16 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Unit\Unit\Model\Unit_Model.cs" />
+    <Compile Include="Unit\Interfaces\IHasXP.cs" />
+    <Compile Include="Unit\Interfaces\IHasHP.cs" />
+    <Compile Include="Unit\Enums\ElementType.cs" />
+    <Compile Include="Unit\Structs\CostValue.cs" />
+    <Compile Include="Unit\Structs\BattleValue.cs" />
+    <Compile Include="World\Structs\Coords.cs" />
+    <Compile Include="World\Enums\TerrainType.cs" />
+    <Compile Include="World\Enums\ViewMode.cs" />
+    <Compile Include="GamePackage\Enums\GameState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -52,6 +62,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -104,6 +121,22 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="World\" />
+    <Folder Include="GamePackage\" />
+    <Folder Include="Unit\" />
+    <Folder Include="Unit\Unit\" />
+    <Folder Include="Unit\Unit\Model\" />
+    <Folder Include="Unit\Interfaces\" />
+    <Folder Include="Unit\Structs\" />
+    <Folder Include="Unit\Enums\" />
+    <Folder Include="World\Structs\" />
+    <Folder Include="World\Interfaces\" />
+    <Folder Include="World\Enums\" />
+    <Folder Include="GamePackage\Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
