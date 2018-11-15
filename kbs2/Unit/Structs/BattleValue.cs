@@ -6,5 +6,6 @@ namespace kbs2.Unit
         float attMod;
         float defMod;
         int BaseMaxHealth;
+        int XPToGive;
     }
 }
