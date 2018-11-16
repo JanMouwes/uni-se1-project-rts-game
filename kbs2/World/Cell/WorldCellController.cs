@@ -7,14 +7,24 @@ using kbs2.World.Interfaces;
 
 namespace kbs2.World.Cell
 {
-	class WorldCellController
-	{
-		public void ChangeTerrain(TerrainType type) { }
+    class WorldCellController
+    {
+        private WorldCellModel worldCellModel;
 
-		public void Construct(IConstructable cunstructable) { }
+        public void ChangeTerrain(TerrainType type)
+        {
+        }
 
-		public void ChangeView(ViewMode mode) { }
+        public void Construct(IConstructable constructable)
+        {
+        }
 
-		public void OnDestruction() { }
-	}
+        public void ChangeView(ViewMode mode)
+        {
+        }
+
+        public void OnDestruction()
+        {
+        }
+    }
 }
