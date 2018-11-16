@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GamePackage\Enums\GameSpeed.cs" />
+    <Compile Include="GamePackage\EventArgs\GameStateEventArgs.cs" />
     <Compile Include="GamePackage\Game\GameController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
