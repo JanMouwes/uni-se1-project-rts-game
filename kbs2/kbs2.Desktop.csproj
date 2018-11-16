@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
   <PropertyGroup>
@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>905b6b3b-33b1-49fb-b691-ae30f88cb4f5</ProjectGuid>
+    <ProjectGuid>{905B6B3B-33B1-49FB-B691-AE30F88CB4F5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>kbs2</RootNamespace>
@@ -42,16 +42,48 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GamePackage\Game\GameController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
+    <Compile Include="WorldEntity\Abstract\Hitbox.cs" />
+    <Compile Include="WorldEntity\Enums\ElementType.cs" />
+    <Compile Include="WorldEntity\Interfaces\IClickable.cs" />
+    <Compile Include="WorldEntity\Interfaces\IElemental.cs" />
+    <Compile Include="WorldEntity\Interfaces\IHasPersonalSpace.cs" />
+    <Compile Include="WorldEntity\Interfaces\IPurchasable.cs" />
+    <Compile Include="WorldEntity\Structs\BattleValue.cs" />
+    <Compile Include="WorldEntity\Structs\CostValue.cs" />
+    <Compile Include="WorldEntity\Unit\Hitbox.cs" />
+    <Compile Include="WorldEntity\Unit\MVC\Unit_Model.cs" />
+    <Compile Include="WorldEntity\Unit\UnitDef.cs" />
+    <Compile Include="World\Cell\WorldCellController.cs" />
+    <Compile Include="World\Cell\WorldCellModel.cs" />
+    <Compile Include="World\Chunk\WorldChunkController.cs" />
+    <Compile Include="World\Chunk\WorldChunkModel.cs" />
+    <Compile Include="World\Structs\FloatCoords.cs" />
+    <Compile Include="World\Structs\Coords.cs" />
+    <Compile Include="World\Enums\TerrainType.cs" />
+    <Compile Include="World\Enums\ViewMode.cs" />
+    <Compile Include="GamePackage\Enums\GameState.cs" />
+    <Compile Include="Faction\Interfaces\IHasFaction.cs" />
+    <Compile Include="World\World\WorldController.cs" />
+    <Compile Include="World\World\WorldModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
-       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
+      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -104,6 +136,14 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="World\Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="World\.DS_Store" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
