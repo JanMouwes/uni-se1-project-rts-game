@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.World.Chunk
 {
-	class WorldChunkModel
+	public class WorldChunkModel
 	{
 		private Cell[,] grid;
 		private Coords coords;

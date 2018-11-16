@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace kbs2.World.Chunk
 {
-	class WorldChunkController
+	public class WorldChunkController
 	{
+		private WorldChunkModel worldChunkModel;
+		
 		public void Load() { } 
 
 		public void UnLoad() { }
