@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kbs2.World.Chunk
+namespace kbs2.World.Interfaces
 {
-	public class WorldChunkModel
+	public interface IConstructable
 	{
-		private Cell[,] grid;
-		private Coords coords;
 	}
 }

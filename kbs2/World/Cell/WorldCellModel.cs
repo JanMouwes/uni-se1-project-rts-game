@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace kbs2.World.Cell
 {
-	class WorldCellModel
+	public class WorldCellModel
 	{
+		private TerrainType baseTerrain;
+		private TerrainType terrain;
+		private Coords realCoords;
+		private WorldChunkModel parentChunk;
+		private ViewMode viewMode;
 	}
 }

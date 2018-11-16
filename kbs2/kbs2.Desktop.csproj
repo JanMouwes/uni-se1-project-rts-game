@@ -55,6 +55,7 @@
     <Compile Include="World\Cell\WorldCellModel.cs" />
     <Compile Include="World\Chunk\WorldChunkController.cs" />
     <Compile Include="World\Chunk\WorldChunkModel.cs" />
+    <Compile Include="World\Interfaces\IConstructable.cs" />
     <Compile Include="World\Structs\Coords.cs" />
     <Compile Include="World\Enums\TerrainType.cs" />
     <Compile Include="World\Enums\ViewMode.cs" />
@@ -138,9 +139,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="World\Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
 </Project>
