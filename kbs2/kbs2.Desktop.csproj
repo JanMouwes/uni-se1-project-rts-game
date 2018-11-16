@@ -63,10 +63,12 @@
     <Compile Include="Unit\Abstract\Hitbox.cs" />
     <Compile Include="Unit\Interfaces\IElemental.cs" />
     <Compile Include="Faction\Interfaces\IHasFaction.cs" />
+    <Compile Include="World\World\WorldController.cs" />
+    <Compile Include="World\World\WorldModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
-       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
+      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
