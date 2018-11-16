@@ -3,17 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using kbs2.World.Interfaces;
 
 namespace kbs2.World.Cell
 {
-	class WorldCellController
-	{
-		public void ChangeTerrain(TerrainType type) { }
+    class WorldCellController
+    {
+        private WorldCellModel worldCellModel;
 
-		public void Construct(Iconstructable cunstructable) { }
+        public void ChangeTerrain(TerrainType type)
+        {
+        }
 
-		public void ChangeView(ViewMode mode) { }
+        public void Construct(IConstructable constructable)
+        {
+        }
 
-		public void OnDestruction() { }
-	}
+        public void ChangeView(ViewMode mode)
+        {
+        }
+
+        public void OnDestruction()
+        {
+        }
+    }
 }
