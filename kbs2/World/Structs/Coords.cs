@@ -3,7 +3,7 @@ namespace kbs2.World
 {
     public struct Coords
     {
-		int x;
-		int y;
+		public int x;
+		public int y;
     }
 }
