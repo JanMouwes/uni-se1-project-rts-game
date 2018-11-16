@@ -14,7 +14,7 @@ public class Pathfinder
 
     public List<Coords> FindPath(FloatCoords TargetCoords, Unit_Model unit)
     {
-        
+        return null;
     }
 
     private void CalculateWeight(Coords targetCell)
@@ -24,12 +24,12 @@ public class Pathfinder
 
     private bool CellIsObstacle(Coords Cell, Unit_Model unit)
     {
-
+        return true;
     }
 
     private List<FloatCoords> MinimizeWaypoints(List<Coords> RouteCells)
     {
-
+        return null;
     }
 
 

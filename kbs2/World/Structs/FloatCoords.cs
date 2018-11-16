@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.World.Structs
 {
-    struct FloatCoords
+    public struct FloatCoords
     {
         float x;
         float y;
