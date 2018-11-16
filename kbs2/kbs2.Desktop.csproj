@@ -62,6 +62,7 @@
     <Compile Include="World\Cell\WorldCellModel.cs" />
     <Compile Include="World\Chunk\WorldChunkController.cs" />
     <Compile Include="World\Chunk\WorldChunkModel.cs" />
+    <Compile Include="World\Interfaces\IConstructable.cs" />
     <Compile Include="World\Structs\FloatCoords.cs" />
     <Compile Include="World\Structs\Coords.cs" />
     <Compile Include="World\Enums\TerrainType.cs" />
@@ -139,9 +140,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="World\Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="World\.DS_Store" />
   </ItemGroup>
