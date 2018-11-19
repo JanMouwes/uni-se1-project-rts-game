@@ -1,13 +1,12 @@
 using kbs2.Desktop.GamePackage.EventArgs;
-using kbs2.GamePackage;
 
-namespace kbs2.Desktop.GamePackage.Game
+namespace kbs2.GamePackage.Game
 {
     public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
 
     public class GameController
     {
-        //private GameTimer Timer;
+        private GameTimer Timer; //TODO
 
         public GameSpeed Speed { get; set; }
 
