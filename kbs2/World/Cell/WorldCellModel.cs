@@ -9,10 +9,10 @@ namespace kbs2.World.Cell
 {
 	public class WorldCellModel
 	{
-		private TerrainType baseTerrain;
-		private TerrainType terrain;
-		private Coords realCoords;
-		private WorldChunkModel parentChunk;
-		private ViewMode viewMode;
+		public TerrainType baseTerrain { get; set; }
+		public TerrainType terrain { get; set; }
+		public Coords realCoords { get; set; }
+		public WorldChunkModel parentChunk { get; set; }
+		public ViewMode viewMode { get; set; }
 	}
 }

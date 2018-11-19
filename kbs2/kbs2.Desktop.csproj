@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
   <PropertyGroup>
@@ -42,11 +42,21 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GamePackage\Enums\GameSpeed.cs" />
+    <Compile Include="GamePackage\EventArgs\GameSpeedEventArgs.cs" />
+    <Compile Include="GamePackage\EventArgs\GameStateEventArgs.cs" />
     <Compile Include="GamePackage\Game\GameController.cs" />
+    <Compile Include="GamePackage\Game\GameModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
+    <Compile Include="Unit\Pathfinder\Pathfinder.cs" />
+    <Compile Include="Unit\Unit\MVC\Unit_Model.cs" />
+    <Compile Include="Unit\Interfaces\IHasXP.cs" />
+    <Compile Include="Unit\Interfaces\IHasHP.cs" />
+    <Compile Include="Unit\Enums\ElementType.cs" />
+    <Compile Include="Unit\Structs\CostValue.cs" />
+    <Compile Include="Unit\Structs\BattleValue.cs" />
     <Compile Include="WorldEntity\Abstract\Hitbox.cs" />
     <Compile Include="WorldEntity\Enums\ElementType.cs" />
     <Compile Include="WorldEntity\Interfaces\IClickable.cs" />
@@ -62,11 +72,19 @@
     <Compile Include="World\Cell\WorldCellModel.cs" />
     <Compile Include="World\Chunk\WorldChunkController.cs" />
     <Compile Include="World\Chunk\WorldChunkModel.cs" />
+    <Compile Include="World\Interfaces\IConstructable.cs" />
     <Compile Include="World\Structs\FloatCoords.cs" />
     <Compile Include="World\Structs\Coords.cs" />
     <Compile Include="World\Enums\TerrainType.cs" />
     <Compile Include="World\Enums\ViewMode.cs" />
     <Compile Include="GamePackage\Enums\GameState.cs" />
+    <Compile Include="Unit\Unit\UnitDef.cs" />
+    <Compile Include="Unit\Interfaces\IPurchasable.cs" />
+    <Compile Include="Unit\Interfaces\IBattleEntity.cs" />
+    <Compile Include="Unit\Interfaces\IClickable.cs" />
+    <Compile Include="Unit\Interfaces\IHasPersonalSpace.cs" />
+    <Compile Include="Unit\Abstract\Hitbox.cs" />
+    <Compile Include="Unit\Interfaces\IElemental.cs" />
     <Compile Include="Faction\Interfaces\IHasFaction.cs" />
     <Compile Include="World\World\WorldController.cs" />
     <Compile Include="World\World\WorldModel.cs" />
@@ -139,9 +157,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="World\Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="World\.DS_Store" />
   </ItemGroup>
