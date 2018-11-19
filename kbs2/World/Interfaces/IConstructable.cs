@@ -1,4 +1,4 @@
-﻿namespace kbs2.Desktop.World.Interfaces
+﻿namespace kbs2.World.Interfaces
 {
     public interface IConstructable
     {
