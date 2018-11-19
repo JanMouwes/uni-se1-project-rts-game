@@ -1,6 +1,7 @@
 ﻿using kbs2.Faction.Enums;
 using kbs2.Faction.Interfaces;
 using kbs2.Unit.Model;
+using kbs2.WorldEntity.Building;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,22 +14,50 @@ namespace kbs2.Faction.FactionMVC
     {
         public string Name { get; set; }
         public Dictionary<Faction_Model, Faction_Relations> FactionRelationships { get; set; }
-        public List<Unit_Model> Units { get; set; }
-        public List<Building_Model> Buildings { get; set; }
-
-        public void AddRelationship(Faction_Model faction, Faction_Relations relation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ChangeRelationship(Faction_Model faction, Faction_Relations relation)
-        {
-            throw new NotImplementedException();
-        }
-
+        public List<Unit_Model> Units { get; }
+        public List<Building_Model> Buildings { get; }
+        // Checks if the given faction is hostile to this faction
         public bool IsHostileTo(IHasFaction faction)
         {
-            throw new NotImplementedException();
+            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
+            {
+                if (relationship.Key.Name == faction.Faction.Name && relationship.Value == Faction_Relations.hostile)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+        // Adds a new relationship from the given faction to the FactionRelationships dictionary
+        public void AddRelationship(Faction_Model faction, Faction_Relations relation)
+        {
+            // Checks if there is not already an existing relation with this faction
+            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
+            {
+                if (relationship.Key.Name == faction.Name)
+                {
+                    break;
+                } else
+                {
+                    FactionRelationships.Add(faction, relation);
+                }
+            }
+        }
+        // Edits the relationship from the given faction to the FactionRelationships dictionary
+        public void ChangeRelationship(Faction_Model faction, Faction_Relations relation)
+        {
+            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
+            {
+                // Checks if the given relation is not the same as the current dictionary's relation
+                if (relationship.Key.Name == faction.Name && relationship.Value != relation)
+                {
+                    FactionRelationships[relationship.Key] = relation;
+                }
+            }
         }
     }
 }
