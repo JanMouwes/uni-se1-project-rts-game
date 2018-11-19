@@ -1,4 +1,5 @@
-﻿using System;
+﻿using kbs2.WorldEntity.Building;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace kbs2.Faction.Interfaces
 {
     public interface IHasFactionBuilding
     {
-        List<Building_Model> Buildings { get; set; }
+        List<Building_Model> Buildings { get; }
     }
 }

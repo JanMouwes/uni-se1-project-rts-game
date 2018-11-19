@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.WorldEntity.Building
 {
-	class Building_Model
+	public class Building_Model
 	{
 	}
 }
