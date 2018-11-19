@@ -1,3 +1,4 @@
+using System.Timers;
 using kbs2.Desktop.GamePackage.EventArgs;
 
 namespace kbs2.GamePackage.Game
@@ -6,7 +7,7 @@ namespace kbs2.GamePackage.Game
 
     public class GameController
     {
-        private GameTimer Timer; //TODO
+        private Timer GameTimer; //TODO
 
         public GameSpeed Speed { get; set; }
 
