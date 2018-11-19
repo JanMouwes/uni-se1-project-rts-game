@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using kbs2.WorldEntity.Structs;
 
-namespace kbs2.WorldEntity.Building
+namespace kbs2.WorldEntity.XP.XPMVC
 {
-	public class BuildingDef
+	class LevelEventArgs
 	{
+		public Level level;
+
+
 	}
 }

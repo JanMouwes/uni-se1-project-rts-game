@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kbs2.WorldEntity.Building
+namespace kbs2.WorldEntity.Unit.MVC
 {
-	public class BuildingDef
+	public class Unit_View
 	{
 	}
 }

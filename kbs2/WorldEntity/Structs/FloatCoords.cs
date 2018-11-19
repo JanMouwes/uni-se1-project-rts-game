@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kbs2.WorldEntity.Building
+namespace kbs2.WorldEntity.Structs
 {
-	public class BuildingDef
+	public struct FloatCoords
 	{
 	}
 }
