@@ -12,7 +12,7 @@ namespace kbs2.GamePackage.Game
     {
         public const int TicksPerSecond = 30;
 
-        public static int TickInterval => 1 / TicksPerSecond;
+        public static int TickIntervalMilliseconds => 1000 / TicksPerSecond;
 
         private Timer GameTimer; //TODO
 
@@ -57,7 +57,7 @@ namespace kbs2.GamePackage.Game
             this.GameSpeed = gameSpeed;
             this.GameState = gameState;
 
-            GameTimer = new Timer(TickInterval);
+            GameTimer = new Timer(TickIntervalMilliseconds);
         }
     }
 }
