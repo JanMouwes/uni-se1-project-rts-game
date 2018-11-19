@@ -16,6 +16,12 @@ namespace kbs2.Faction.FactionMVC
         public Dictionary<Faction_Model, Faction_Relations> FactionRelationships { get; set; }
         public List<Unit_Model> Units { get; }
         public List<Building_Model> Buildings { get; }
+
+        public Faction_Model()
+        {
+            
+        }
+
         // Checks if the given faction is hostile to this faction
         public bool IsHostileTo(IHasFaction faction)
         {

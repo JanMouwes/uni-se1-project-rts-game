@@ -8,5 +8,6 @@ namespace kbs2.Faction.FactionMVC
 {
     public class Faction_Controller
     {
+        public Faction_Model FactionModel { get; set; }
     }
 }
