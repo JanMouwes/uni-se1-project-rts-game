@@ -46,6 +46,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorldEntity\Building\BuildingDef.cs" />
+    <Compile Include="WorldEntity\Building\Building_Controller.cs" />
+    <Compile Include="WorldEntity\Building\Building_Model.cs" />
     <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
     <Compile Include="WorldEntity\Abstract\Hitbox.cs" />
     <Compile Include="WorldEntity\Enums\ElementType.cs" />
