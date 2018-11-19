@@ -76,6 +76,10 @@ namespace kbs2.Desktop
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            // Done draw basic sprite on screen
+            spriteBatch.Begin();
+            spriteBatch.Draw(this.Content.Load<Texture2D>("wall"), new Rectangle(10, 10, 780, 460), Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
