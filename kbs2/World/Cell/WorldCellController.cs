@@ -7,9 +7,9 @@ using kbs2.World.Interfaces;
 
 namespace kbs2.World.Cell
 {
-    class WorldCellController
-    {
-        private WorldCellModel worldCellModel;
+	public class WorldCellController
+	{
+		public WorldCellModel worldCellModel { get; set; }
 
         public void ChangeTerrain(TerrainType type)
         {
