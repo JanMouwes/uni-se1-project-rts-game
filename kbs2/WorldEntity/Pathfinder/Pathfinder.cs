@@ -157,4 +157,30 @@ public class Pathfinder
     {
         return null;
     }
+
+    // Checks if 
+    private bool CheckDiagonalsBlocked(Coords one, Coords two, WeightDictionarys stuf)
+    {
+        //checks if coord are not next to each other
+        if (one.x == two.x || one.y == two.y)
+        {
+            return false;
+        }
+
+        Coords three;
+        three.x = one.x;
+        three.y = two.y;
+
+        Coords four;
+        four.x = two.x;
+        four.y = one.y;
+
+        //Checks if both coords are blocked by an obstacle
+        if(stuf.ObstacleList.Contains(three) && stuf.ObstacleList.Contains(four))
+        {
+            return false;
+        }
+
+        return true;
+    }
 }
