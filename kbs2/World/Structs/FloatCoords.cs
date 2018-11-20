@@ -8,7 +8,7 @@ namespace kbs2.World.Structs
 {
     public struct FloatCoords
     {
-        float x;
-        float y;
+        public float x;
+        public float y;
     }
 }

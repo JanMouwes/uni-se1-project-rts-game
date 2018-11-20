@@ -9,7 +9,7 @@ namespace kbs2.World.Cell
 {
     class WorldCellController
     {
-        private WorldCellModel worldCellModel;
+        public WorldCellModel worldCellModel;
 
         public void ChangeTerrain(TerrainType type)
         {
