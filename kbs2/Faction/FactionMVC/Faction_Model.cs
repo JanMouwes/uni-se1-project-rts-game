@@ -40,15 +40,19 @@ namespace kbs2.Faction.FactionMVC
         public void AddRelationship(Faction_Model faction, Faction_Relations relation)
         {
             // Checks if there is not already an existing relation with this faction
+            int i = 0;
+
             foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
             {
                 if (relationship.Key.Name == faction.Name)
                 {
-                    break;
-                } else
-                {
-                    FactionRelationships.Add(faction, relation);
+                    i++;
                 }
+            }
+
+            if(i == 0)
+            {
+                FactionRelationships.Add(faction, relation);
             }
         }
         // Edits the relationship from the given faction to the FactionRelationships dictionary
