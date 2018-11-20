@@ -184,8 +184,8 @@ public class Pathfinder
         return null;
     }
 
-    // Checks if 
-    private bool CheckDiagonalsBlocked(Coords one, Coords two, WeightDictionarys stuf)
+    // Checks if Diagonal move is possible/not blocked 
+    private bool CheckDiagonalsBlocked(Coords one, Coords two, WeightDictionarys ObstaclesDictorary)
     {
         //checks if coord are not next to each other
         if (one.x == two.x || one.y == two.y)
@@ -202,7 +202,7 @@ public class Pathfinder
         four.y = one.y;
 
         //Checks if both coords are blocked by an obstacle
-        if(stuf.ObstacleList.Contains(three) && stuf.ObstacleList.Contains(four))
+        if(ObstaclesDictorary.ObstacleList.Contains(three) && ObstaclesDictorary.ObstacleList.Contains(four))
         {
             return false;
         }
