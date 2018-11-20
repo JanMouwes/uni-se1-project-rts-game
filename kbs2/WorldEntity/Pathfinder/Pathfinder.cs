@@ -16,14 +16,16 @@ public struct CellWeight
 
 public struct WeightDictionarys
 {
-    public WeightDictionarys(bool x)
+    public WeightDictionarys(bool shit)// bool does nothing but is required
     {
         CellsWithWeight = new Dictionary<Coords, CellWeight>();
         BorderCellsWithWeight = new Dictionary<Coords, CellWeight>();
+        ObstacleList = new List<Coords>();
     }
 
     public Dictionary<Coords, CellWeight> CellsWithWeight;
     public Dictionary<Coords, CellWeight> BorderCellsWithWeight;
+    public List<Coords> ObstacleList;
 }
 
 public class Pathfinder
@@ -47,12 +49,12 @@ public class Pathfinder
     {
         WeightDictionarys weightDictionarys = new WeightDictionarys(true);
 
-        //todo add unit cell that contains unit to CellsWithWeight
+        //TODO add unit cell that contains unit to CellsWithWeight
         Coords targetIntCoords;
         targetIntCoords.x = (int)TargetCoords.x;
         targetIntCoords.y = (int)TargetCoords.y;
 
-        for (int i = 0; i<Limit*Limit*2;i++)
+        for (int i = 0; i<Limit*2*Limit*2*2;i++)
         {
 
             double lowestWeight = double.MaxValue;
@@ -104,7 +106,7 @@ public class Pathfinder
 
             Coords coords = currentCell + loop[i];
 
-            if (!weightDictionarys.CellsWithWeight.ContainsKey(coords))
+            if (!weightDictionarys.CellsWithWeight.ContainsKey(coords)||!weightDictionarys.ObstacleList.Contains(coords))
             {
                 Coords chunkCoords;
                 chunkCoords.x = coords.x / worldModel.ChunkSize;
@@ -121,16 +123,19 @@ public class Pathfinder
                     CellWeight cellWeight;
 
                         
-                    cellWeight.DistanceToTarget = getDistance2d(coords, TargetCoords);
+                    cellWeight.DistanceToTarget = getDistance2d(coords, TargetCoords)*10;
 
-                    cellWeight.DistanceToUnit = 0;
-                    // TODO calc distance via unit.location
-
+                    cellWeight.DistanceToUnit = weightDictionarys.CellsWithWeight[currentCell].DistanceToUnit + 10;
+                    
                     if(cellWeight.DistanceToTarget<Limit || cellWeight.DistanceToUnit < Limit)
                     {
                         weightDictionarys.BorderCellsWithWeight.Add(coords, cellWeight);
                         weightDictionarys.CellsWithWeight.Add(coords, cellWeight);
                     }
+                }
+                else
+                {
+                    weightDictionarys.ObstacleList.Add(coords);
                 }
             }
         }
