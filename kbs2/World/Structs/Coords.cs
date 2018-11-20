@@ -13,5 +13,29 @@ namespace kbs2.World
             value1.y += value2.y;
             return value1;
         }
+
+        public static bool operator ==(Coords value1, Coords value2)
+        {
+            if (value1.x == value2.x && value1.y == value2.y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool operator !=(Coords value1, Coords value2)
+        {
+            if (value1.x == value2.x && value1.y == value2.y)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }

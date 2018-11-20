@@ -219,7 +219,7 @@ public class Pathfinder
         {
             WayPoints.Add(FindNextWayPoint(RouteCoords, WayPoints));
 
-            if (WayPoints[WayPoints.Count].Equals(RouteCoords[RouteCoords.Count]))
+            if (WayPoints[WayPoints.Count]==RouteCoords[RouteCoords.Count])
             {
                 break;
             }
