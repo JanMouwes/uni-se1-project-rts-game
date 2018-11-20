@@ -92,54 +92,80 @@ public class Pathfinder
 
     private void CalculateWeight(Coords currentCell, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
     {
-        Coords[] loop = new Coords[4];
-        loop[0] = new Coords { x = 1, y = 0 };
-        loop[1] = new Coords { x = -1, y = 0 };
-        loop[2] = new Coords { x = 0, y = 1 };
-        loop[3] = new Coords { x = 0, y = -1 };
+        Coords[] HorizontalNeigbours = new Coords[4];
+        HorizontalNeigbours[0] = new Coords { x = 1, y = 0 };
+        HorizontalNeigbours[1] = new Coords { x = -1, y = 0 };
+        HorizontalNeigbours[2] = new Coords { x = 0, y = 1 };
+        HorizontalNeigbours[3] = new Coords { x = 0, y = -1 };
 
-
-
-
+        Coords[] DiagonalNeigbours = new Coords[4];
+        DiagonalNeigbours[0] = new Coords { x = 1, y = 1 };
+        DiagonalNeigbours[1] = new Coords { x = -1, y = 1 };
+        DiagonalNeigbours[2] = new Coords { x = -1, y = 1 };
+        DiagonalNeigbours[3] = new Coords { x = -1, y = -1 };
+        
         for (int i = 0; i<4; i++)
         {
-
-            Coords coords = currentCell + loop[i];
-
-            if (!weightDictionarys.CellsWithWeight.ContainsKey(coords)||!weightDictionarys.ObstacleList.Contains(coords))
-            {
-                Coords chunkCoords;
-                chunkCoords.x = coords.x / worldModel.ChunkSize;
-                chunkCoords.y = coords.y / worldModel.ChunkSize;
-                    
-                int coordsInChunkx = coords.x % worldModel.ChunkSize;
-                int coordsInChunky = coords.y % worldModel.ChunkSize;
-
-                WorldCellModel cell;
-                cell = worldModel.ChunkGrid[chunkCoords].worldChunkModel.grid[coordsInChunkx, coordsInChunky];
-
-                if (!CellIsObstacle(cell, unit))
-                {
-                    CellWeight cellWeight;
-
-                        
-                    cellWeight.DistanceToTarget = getDistance2d(coords, TargetCoords)*10;
-
-                    cellWeight.DistanceToUnit = weightDictionarys.CellsWithWeight[currentCell].DistanceToUnit + 10;
-                    
-                    if(cellWeight.DistanceToTarget<Limit || cellWeight.DistanceToUnit < Limit)
-                    {
-                        weightDictionarys.BorderCellsWithWeight.Add(coords, cellWeight);
-                        weightDictionarys.CellsWithWeight.Add(coords, cellWeight);
-                    }
-                }
-                else
-                {
-                    weightDictionarys.ObstacleList.Add(coords);
-                }
-            }
+            Coords coords = currentCell + HorizontalNeigbours[i];
+            SetWeightCell(currentCell, coords, TargetCoords, unit, weightDictionarys);
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            Coords coords = currentCell + DiagonalNeigbours[i];
+            SetWeightCell(currentCell, coords, TargetCoords, unit, weightDictionarys);
         }
     }
+
+    private void SetWeightCell(Coords CurrentCoords, Coords NieghbourCoords, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
+    {
+        if (weightDictionarys.ObstacleList.Contains(NieghbourCoords))
+        {
+            return;
+        }
+        if(weightDictionarys.CellsWithWeight.ContainsKey(NieghbourCoords))
+        {
+            if(!weightDictionarys.BorderCellsWithWeight.ContainsKey(NieghbourCoords))
+            {
+                return;
+            }
+        }
+        if (CheckDiagonalsBlocked())
+        {
+            return;
+        }
+
+        Coords chunkCoords;
+        chunkCoords.x = NieghbourCoords.x / worldModel.ChunkSize;
+        chunkCoords.y = NieghbourCoords.y / worldModel.ChunkSize;
+
+        int coordsInChunkx = NieghbourCoords.x % worldModel.ChunkSize;
+        int coordsInChunky = NieghbourCoords.y % worldModel.ChunkSize;
+
+        WorldCellModel cell;
+        cell = worldModel.ChunkGrid[chunkCoords].worldChunkModel.grid[coordsInChunkx, coordsInChunky];
+
+        if (!CellIsObstacle(cell, unit))
+        {
+            CellWeight cellWeight;
+
+
+            cellWeight.DistanceToTarget = getDistance2d(NieghbourCoords, TargetCoords) * 10;
+
+            cellWeight.DistanceToUnit = weightDictionarys.CellsWithWeight[CurrentCoords].DistanceToUnit + 10;
+
+            if (cellWeight.DistanceToTarget < Limit || cellWeight.DistanceToUnit < Limit)
+            {
+                weightDictionarys.BorderCellsWithWeight.Add(NieghbourCoords, cellWeight);
+                weightDictionarys.CellsWithWeight.Add(NieghbourCoords, cellWeight);
+            }
+        }
+        else
+        {
+            weightDictionarys.ObstacleList.Add(NieghbourCoords);
+        }
+        
+    }
+
 
     private bool CellIsObstacle(WorldCellModel Cell, Unit_Model unit)
     {
