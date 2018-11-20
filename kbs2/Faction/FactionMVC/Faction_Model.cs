@@ -17,22 +17,20 @@ namespace kbs2.Faction.FactionMVC
         public List<Unit_Model> Units { get; }
         public List<Building_Model> Buildings { get; }
 
-        public Faction_Model()
+        public Faction_Model(string name)
         {
-            
+			Name = name;
+			FactionRelationships = new Dictionary<Faction_Model, Faction_Relations>();
         }
 
         // Checks if the given faction is hostile to this faction
-        public bool IsHostileTo(IHasFaction faction)
+        public bool IsHostileTo(Faction_Model faction)
         {
             foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
             {
-                if (relationship.Key.Name == faction.Faction.Name && relationship.Value == Faction_Relations.hostile)
+                if (relationship.Key.Name == faction.Name && relationship.Value == Faction_Relations.hostile)
                 {
                     return true;
-                } else
-                {
-                    return false;
                 }
             }
 
@@ -42,15 +40,20 @@ namespace kbs2.Faction.FactionMVC
         public void AddRelationship(Faction_Model faction, Faction_Relations relation)
         {
             // Checks if there is not already an existing relation with this faction
+            int i = 0;
+
             foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
             {
                 if (relationship.Key.Name == faction.Name)
                 {
-                    break;
-                } else
-                {
-                    FactionRelationships.Add(faction, relation);
+                    i++;
                 }
+            }
+
+            if(i == 0)
+            {
+                FactionRelationships.Add(faction, relation);
+                faction.FactionRelationships.Add(this, relation);
             }
         }
         // Edits the relationship from the given faction to the FactionRelationships dictionary

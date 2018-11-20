@@ -10,7 +10,7 @@ namespace kbs2.Faction.Interfaces
 {
     public interface IHasFactionRelationship
     {
-        bool IsHostileTo(IHasFaction faction);
+        bool IsHostileTo(Faction_Model faction);
         void ChangeRelationship(Faction_Model faction, Faction_Relations relation);
         void AddRelationship(Faction_Model faction, Faction_Relations relation);
     }
