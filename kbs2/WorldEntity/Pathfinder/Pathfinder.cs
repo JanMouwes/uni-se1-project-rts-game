@@ -117,37 +117,37 @@ public class Pathfinder
         }
     }
 
-    private void SetWeightCell(Coords CurrentCoords, Coords NieghbourCoords, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
+    private void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
     {
-        if (weightDictionarys.ObstacleList.Contains(NieghbourCoords))
+        if (weightDictionarys.ObstacleList.Contains(NeighbourCoords))
         {
             return;
         }
-        if (weightDictionarys.CellsWithWeight.ContainsKey(NieghbourCoords))
+        if (weightDictionarys.CellsWithWeight.ContainsKey(NeighbourCoords))
         {
-            if (!weightDictionarys.BorderCellsWithWeight.ContainsKey(NieghbourCoords))
+            if (!weightDictionarys.BorderCellsWithWeight.ContainsKey(NeighbourCoords))
             {
                 return;
             }
         }
-        if (CheckDiagonalsBlocked(CurrentCoords, NieghbourCoords, weightDictionarys))
+        if (CheckDiagonalsBlocked(CurrentCoords, NeighbourCoords, weightDictionarys))
         {
             return;
         }
 
         Coords chunkCoords;
-        chunkCoords.x = NieghbourCoords.x / worldModel.ChunkSize;
-        chunkCoords.y = NieghbourCoords.y / worldModel.ChunkSize;
+        chunkCoords.x = NeighbourCoords.x / worldModel.ChunkSize;
+        chunkCoords.y = NeighbourCoords.y / worldModel.ChunkSize;
 
-        int coordsInChunkx = NieghbourCoords.x % worldModel.ChunkSize;
-        int coordsInChunky = NieghbourCoords.y % worldModel.ChunkSize;
+        int coordsInChunkx = NeighbourCoords.x % worldModel.ChunkSize;
+        int coordsInChunky = NeighbourCoords.y % worldModel.ChunkSize;
 
         WorldCellModel cell;
         cell = worldModel.ChunkGrid[chunkCoords].worldChunkModel.grid[coordsInChunkx, coordsInChunky];
 
         if (CellIsObstacle(cell, unit))
         {
-            weightDictionarys.ObstacleList.Add(NieghbourCoords);
+            weightDictionarys.ObstacleList.Add(NeighbourCoords);
             return;
         }
 
@@ -155,8 +155,8 @@ public class Pathfinder
         CellWeight cellWeight;
 
 
-        cellWeight.AbsoluteDistanceToTarget = getDistance2d(NieghbourCoords, TargetCoords) * 10;
-        cellWeight.AbsoluteDistanceToUnit = getDistance2d(NieghbourCoords, TargetCoords) * 10; // TODO change targetcoords to unitcoords
+        cellWeight.AbsoluteDistanceToTarget = getDistance2d(NeighbourCoords, TargetCoords) * 10;
+        cellWeight.AbsoluteDistanceToUnit = getDistance2d(NeighbourCoords, TargetCoords) * 10; // TODO change targetcoords to unitcoords
 
 
         if (cellWeight.AbsoluteDistanceToTarget > Limit || cellWeight.AbsoluteDistanceToUnit > Limit) // check if cell is within limit
@@ -164,27 +164,22 @@ public class Pathfinder
             return;
         }
 
-        if (CurrentCoords.x == NieghbourCoords.x || CurrentCoords.y == NieghbourCoords.y)
-        {
-            cellWeight.DistanceToUnit = weightDictionarys.CellsWithWeight[CurrentCoords].DistanceToUnit + 10;
-        }
-        else
-        {
-            cellWeight.DistanceToUnit = weightDictionarys.CellsWithWeight[CurrentCoords].DistanceToUnit + 14;
-        }
+        cellWeight.DistanceToUnit = CurrentCoords.x == NeighbourCoords.x || CurrentCoords.y == NeighbourCoords.y
+            ? weightDictionarys.CellsWithWeight[CurrentCoords].DistanceToUnit + 10
+            : weightDictionarys.CellsWithWeight[CurrentCoords].DistanceToUnit + 14;
 
-        if (weightDictionarys.BorderCellsWithWeight.ContainsKey(NieghbourCoords)) //if Nieghbourcell already has a weight overwrite it if the new one is lower
+        if (weightDictionarys.BorderCellsWithWeight.ContainsKey(NeighbourCoords)) //if Nieghbourcell already has a weight overwrite it if the new one is lower
         {
-            if (weightDictionarys.CellsWithWeight[NieghbourCoords].DistanceToUnit > cellWeight.DistanceToUnit)
+            if (weightDictionarys.CellsWithWeight[NeighbourCoords].DistanceToUnit > cellWeight.DistanceToUnit)
             {
-                weightDictionarys.BorderCellsWithWeight[NieghbourCoords] = cellWeight;
-                weightDictionarys.CellsWithWeight[NieghbourCoords] = cellWeight;
+                weightDictionarys.BorderCellsWithWeight[NeighbourCoords] = cellWeight;
+                weightDictionarys.CellsWithWeight[NeighbourCoords] = cellWeight;
             }
             return;
         }
 
-        weightDictionarys.BorderCellsWithWeight.Add(NieghbourCoords, cellWeight);
-        weightDictionarys.CellsWithWeight.Add(NieghbourCoords, cellWeight);
+        weightDictionarys.BorderCellsWithWeight.Add(NeighbourCoords, cellWeight);
+        weightDictionarys.CellsWithWeight.Add(NeighbourCoords, cellWeight);
     }
 
 
