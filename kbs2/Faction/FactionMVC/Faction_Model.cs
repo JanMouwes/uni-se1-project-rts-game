@@ -53,6 +53,7 @@ namespace kbs2.Faction.FactionMVC
             if(i == 0)
             {
                 FactionRelationships.Add(faction, relation);
+                faction.FactionRelationships.Add(this, relation);
             }
         }
         // Edits the relationship from the given faction to the FactionRelationships dictionary
