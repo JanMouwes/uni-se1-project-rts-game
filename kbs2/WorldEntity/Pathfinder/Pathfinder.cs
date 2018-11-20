@@ -200,9 +200,67 @@ public class Pathfinder
         return r;
     }
 
-    private List<FloatCoords> MinimizeWaypoints(List<Coords> RouteCells)
+    private List<FloatCoords> CellToFloatCoords(List<Coords> coords)
     {
-        return null;
+        List<FloatCoords> floatCoords = new List<FloatCoords>();
+
+        foreach( Coords entry in coords)
+        {
+            FloatCoords temp;
+            temp.x = entry.x;
+            temp.y = entry.y;
+            floatCoords.Add(temp);
+        }
+        return floatCoords;
+    }
+
+
+    private List<FloatCoords> MinimizeWaypoints(List<FloatCoords> RouteCoords)
+    {
+        List<FloatCoords> WayPoints = new List<FloatCoords>();
+        WayPoints.Add(RouteCoords[0]);
+
+        while (true)
+        {
+            WayPoints.Add(FindNextWayPoint(RouteCoords, WayPoints));
+
+            if (WayPoints[WayPoints.Count].Equals(RouteCoords[RouteCoords.Count]))
+            {
+                break;
+            }
+        }
+        return WayPoints;
+    }
+
+    private FloatCoords FindNextWayPoint(List<FloatCoords> RouteCoords, List<FloatCoords> WayPoints)
+    {
+        FloatCoords l1 = WayPoints[WayPoints.Count];
+        FloatCoords l2;
+
+        for (int i = 1; true; i++)
+        {
+            if (RouteCoords.IndexOf(l1) + i <= RouteCoords.Count)
+            {
+                l2 = RouteCoords[RouteCoords.IndexOf(l1) + i];
+            }
+            else
+            {
+                return RouteCoords[RouteCoords.IndexOf(l1) + i - 1];
+            }
+
+
+            for (int j = 0; j < i; j++)
+            {
+                FloatCoords point = RouteCoords[RouteCoords.IndexOf(l1) + j];
+
+                double DistancePointToLine = Math.Abs((l2.x - l1.x) * (l1.y - point.y) - (l1.x - point.x) * (l2.y - l1.y)) / Math.Sqrt(Math.Pow(l2.x - l1.x, 2) + Math.Pow(l2.y - l1.y, 2));
+
+                if (DistancePointToLine > 0.5)
+                {
+                    return RouteCoords[RouteCoords.IndexOf(l2)];
+                }
+            }
+        }
     }
 
     // Checks if 
