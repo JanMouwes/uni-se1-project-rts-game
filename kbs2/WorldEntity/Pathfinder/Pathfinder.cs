@@ -9,9 +9,10 @@ using kbs2.World.Structs;
 
 public struct CellWeight
 {
-    public double DistanceToTarget;
+    public double AbsoluteDistanceToTarget;
+    public double AbsoluteDistanceToUnit;
     public double DistanceToUnit;
-    public double Weight => DistanceToTarget + DistanceToUnit;
+    public double Weight => AbsoluteDistanceToTarget + DistanceToUnit;
 }
 
 public struct WeightDictionarys
@@ -122,14 +123,14 @@ public class Pathfinder
         {
             return;
         }
-        if(weightDictionarys.CellsWithWeight.ContainsKey(NieghbourCoords))
+        if (weightDictionarys.CellsWithWeight.ContainsKey(NieghbourCoords))
         {
-            if(!weightDictionarys.BorderCellsWithWeight.ContainsKey(NieghbourCoords))
+            if (!weightDictionarys.BorderCellsWithWeight.ContainsKey(NieghbourCoords))
             {
                 return;
             }
         }
-        if (CheckDiagonalsBlocked())
+        if (CheckDiagonalsBlocked(CurrentCoords, NieghbourCoords, weightDictionarys))
         {
             return;
         }
@@ -144,26 +145,46 @@ public class Pathfinder
         WorldCellModel cell;
         cell = worldModel.ChunkGrid[chunkCoords].worldChunkModel.grid[coordsInChunkx, coordsInChunky];
 
-        if (!CellIsObstacle(cell, unit))
+        if (CellIsObstacle(cell, unit))
         {
-            CellWeight cellWeight;
+            weightDictionarys.ObstacleList.Add(NieghbourCoords);
+            return;
+        }
 
 
-            cellWeight.DistanceToTarget = getDistance2d(NieghbourCoords, TargetCoords) * 10;
+        CellWeight cellWeight;
 
+
+        cellWeight.AbsoluteDistanceToTarget = getDistance2d(NieghbourCoords, TargetCoords) * 10;
+        cellWeight.AbsoluteDistanceToUnit = getDistance2d(NieghbourCoords, TargetCoords) * 10; // TODO change targetcoords to unitcoords
+
+
+        if (cellWeight.AbsoluteDistanceToTarget > Limit || cellWeight.AbsoluteDistanceToUnit > Limit) // check if cell is within limit
+        {
+            return;
+        }
+
+        if (CurrentCoords.x == NieghbourCoords.x || CurrentCoords.y == NieghbourCoords.y)
+        {
             cellWeight.DistanceToUnit = weightDictionarys.CellsWithWeight[CurrentCoords].DistanceToUnit + 10;
-
-            if (cellWeight.DistanceToTarget < Limit || cellWeight.DistanceToUnit < Limit)
-            {
-                weightDictionarys.BorderCellsWithWeight.Add(NieghbourCoords, cellWeight);
-                weightDictionarys.CellsWithWeight.Add(NieghbourCoords, cellWeight);
-            }
         }
         else
         {
-            weightDictionarys.ObstacleList.Add(NieghbourCoords);
+            cellWeight.DistanceToUnit = weightDictionarys.CellsWithWeight[CurrentCoords].DistanceToUnit + 14;
         }
-        
+
+        if (weightDictionarys.BorderCellsWithWeight.ContainsKey(NieghbourCoords)) //if Nieghbourcell already has a weight overwrite it if the new one is lower
+        {
+            if (weightDictionarys.CellsWithWeight[NieghbourCoords].DistanceToUnit > cellWeight.DistanceToUnit)
+            {
+                weightDictionarys.BorderCellsWithWeight[NieghbourCoords] = cellWeight;
+                weightDictionarys.CellsWithWeight[NieghbourCoords] = cellWeight;
+            }
+            return;
+        }
+
+        weightDictionarys.BorderCellsWithWeight.Add(NieghbourCoords, cellWeight);
+        weightDictionarys.CellsWithWeight.Add(NieghbourCoords, cellWeight);
     }
 
 
@@ -174,7 +195,7 @@ public class Pathfinder
         {
             r = false;
         }
-        // todo check buildings
+        // TODO check buildings
 
         return r;
     }
@@ -190,7 +211,7 @@ public class Pathfinder
         //checks if coord are not next to each other
         if (one.x == two.x || one.y == two.y)
         {
-            return false;
+            return true;
         }
 
         Coords three;
