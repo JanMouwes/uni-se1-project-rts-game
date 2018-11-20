@@ -54,6 +54,7 @@
     <Compile Include="GamePackage\EventArgs\GameStateEventArgs.cs" />
     <Compile Include="GamePackage\Game\GameController.cs" />
     <Compile Include="GamePackage\Game\GameModel.cs" />
+    <Compile Include="GamePackage\Game\GameView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="WorldEntity\XP\XPMVC\XP_Model.cs" />
     <Compile Include="World\Cell\WorldCellController.cs" />
     <Compile Include="World\Cell\WorldCellModel.cs" />
+    <Compile Include="World\Cell\WorldCellView.cs" />
     <Compile Include="World\Chunk\WorldChunkController.cs" />
     <Compile Include="World\Chunk\WorldChunkModel.cs" />
     <Compile Include="World\Interfaces\IConstructable.cs" />
