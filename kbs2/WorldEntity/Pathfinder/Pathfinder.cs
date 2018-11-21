@@ -4,30 +4,9 @@ using kbs2.Desktop.World.World;
 using kbs2.Unit.Model;
 using kbs2.World;
 using kbs2.World.Cell;
+using kbs2.WorldEntity.Structs;
 using kbs2.World.Structs;
 
-
-public struct CellWeight
-{
-    public double AbsoluteDistanceToTarget;
-    public double AbsoluteDistanceToUnit;
-    public double DistanceToUnit;
-    public double Weight => AbsoluteDistanceToTarget + DistanceToUnit;
-}
-
-public struct WeightDictionarys
-{
-    public WeightDictionarys(bool shit)// bool does nothing but is required
-    {
-        CellsWithWeight = new Dictionary<Coords, CellWeight>();
-        BorderCellsWithWeight = new Dictionary<Coords, CellWeight>();
-        ObstacleList = new List<Coords>();
-    }
-
-    public Dictionary<Coords, CellWeight> CellsWithWeight;
-    public Dictionary<Coords, CellWeight> BorderCellsWithWeight;
-    public List<Coords> ObstacleList;
-}
 
 public class Pathfinder
 {
