@@ -113,7 +113,7 @@ namespace kbs2.Desktop.View.MapView
             Vector2 tilePostition = Vector2.Zero;
 
             int width = (int)TileCount;
-            int height = 15;
+            int height = (int)(width / viewPortRatio) ;
 
             for (int x = 0; x < width; x++)
             {
