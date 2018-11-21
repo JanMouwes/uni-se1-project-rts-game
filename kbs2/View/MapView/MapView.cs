@@ -1,3 +1,5 @@
+using System;
+using kbs2.Desktop.View.EventArgs;
 using kbs2.Desktop.World.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,6 +8,8 @@ using MonoGame.Extended;
 
 namespace kbs2.Desktop.View.MapView
 {
+    public delegate void ZoomObserver(object sender, ZoomEventArgs eventArgs);
+
     public class MapView : Game
     {
         GraphicsDeviceManager graphics;
@@ -75,6 +79,10 @@ namespace kbs2.Desktop.View.MapView
             if (Keyboard.GetState().IsKeyDown(Keys.G)) Zoom -= 0.1;
             if (Keyboard.GetState().IsKeyDown(Keys.H)) Zoom += 0.1;
 
+
+            Zoom = 1 + Mouse.GetState().ScrollWheelValue / 10000.0;
+
+
             camera2D.Move(moveVelocity);
 
             base.Update(gameTime);
@@ -82,10 +90,32 @@ namespace kbs2.Desktop.View.MapView
 
         // added temp camera
         Camera2D camera2D;
+
         // tempsize
         const int DefaultTiles = 30;
-        double Zoom = 1;
-        double TileCount => ((int)(DefaultTiles / Zoom) > 1) ? (DefaultTiles / Zoom) : 1;
+        const double MinZoom = 1.0 / 4.0; //    Percent zoom (outer-most zoom)
+        const double MaxZoom = 8.0; //    Percent zoom (inner-most zoom)
+
+        private double zoom = 1;
+
+        private double Zoom
+        {
+            get => zoom;
+            set
+            {
+                if (!(value < MaxZoom && value > MinZoom))
+                    return;
+
+                zoom = value;
+                Console.WriteLine(zoom + " " + MinZoom);
+                ZoomEvent?.Invoke(this, new ZoomEventArgs(Zoom));
+            }
+        }
+
+        public event ZoomObserver ZoomEvent;
+
+
+        double TileCount => ((int) (DefaultTiles / Zoom) > 1) ? (DefaultTiles / Zoom) : 1;
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -94,7 +124,6 @@ namespace kbs2.Desktop.View.MapView
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             base.Window.AllowUserResizing = true;
             base.IsMouseVisible = true;
 
@@ -103,25 +132,26 @@ namespace kbs2.Desktop.View.MapView
             float viewPortRatio = viewPort.AspectRatio;
             int viewPortHeight = viewPort.Height;
             int viewPortWidth = viewPort.Width;
-
-            int tileSize = (int)(viewPortWidth / TileCount);
+            int tileSize = (int) (viewPortWidth / TileCount);
 
             // TODO: Add your drawing code here
             // Done draw basic sprite on screen
             spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
-
             Vector2 tilePostition = Vector2.Zero;
+            int width = (int) TileCount;
 
-            int width = (int)TileCount;
-            int height = (int)(width / viewPortRatio) ;
-
-            for (int x = 0; x < width; x++)
+            int height = (int) (width / viewPortRatio);
+            for (int x = 0;
+                x < width;
+                x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle((int)tilePostition.X, (int)tilePostition.Y, tileSize, tileSize), Color.White);
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"),
+                        new Rectangle((int) tilePostition.X, (int) tilePostition.Y, tileSize, tileSize), Color.White);
                     tilePostition.Y += tileSize;
                 }
+
                 tilePostition.Y = 0;
                 tilePostition.X += tileSize;
             }
@@ -129,7 +159,6 @@ namespace kbs2.Desktop.View.MapView
             spriteBatch.End();
 
             // end own code
-
             base.Draw(gameTime);
         }
 
@@ -138,4 +167,3 @@ namespace kbs2.Desktop.View.MapView
         }
     }
 }
- 
