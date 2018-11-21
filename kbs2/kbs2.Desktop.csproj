@@ -42,10 +42,31 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Faction\Enums\Faction_Relations.cs" />
+    <Compile Include="Faction\FactionMVC\Faction_Controller.cs" />
+    <Compile Include="Faction\FactionMVC\Faction_Model.cs" />
+    <Compile Include="Faction\FactionMVC\Faction_View.cs" />
+    <Compile Include="Faction\Interfaces\IHasFactionBuilding.cs" />
+    <Compile Include="Faction\Interfaces\IHasFactionRelationship.cs" />
+    <Compile Include="Faction\Interfaces\IHasFactionUnit.cs" />
+    <Compile Include="GamePackage\Enums\GameSpeed.cs" />
+    <Compile Include="GamePackage\EventArgs\GameSpeedEventArgs.cs" />
+    <Compile Include="GamePackage\EventArgs\GameStateEventArgs.cs" />
     <Compile Include="GamePackage\Game\GameController.cs" />
+    <Compile Include="GamePackage\Game\GameModel.cs" />
+    <Compile Include="GamePackage\Game\GameView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Controller.cs" />
+    <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Model.cs" />
+    <Compile Include="WorldEntity\Building\BuildingDef.cs" />
+    <Compile Include="WorldEntity\Building\BuildingMVC\Building_Controller.cs" />
+    <Compile Include="WorldEntity\Building\BuildingMVC\Building_Model.cs" />
+    <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
+    <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
+    <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
+    <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
     <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
     <Compile Include="WorldEntity\Abstract\Hitbox.cs" />
     <Compile Include="WorldEntity\Enums\ElementType.cs" />
@@ -54,14 +75,24 @@
     <Compile Include="WorldEntity\Interfaces\IHasPersonalSpace.cs" />
     <Compile Include="WorldEntity\Interfaces\IPurchasable.cs" />
     <Compile Include="WorldEntity\Structs\BattleValue.cs" />
+    <Compile Include="WorldEntity\Structs\Coords.cs" />
     <Compile Include="WorldEntity\Structs\CostValue.cs" />
-    <Compile Include="WorldEntity\Unit\Hitbox.cs" />
+    <Compile Include="WorldEntity\Structs\FloatCoords.cs" />
+    <Compile Include="WorldEntity\Structs\Level.cs" />
+    <Compile Include="WorldEntity\Unit\MVC\Unit_Controller.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_Model.cs" />
+    <Compile Include="WorldEntity\Unit\MVC\Unit_View.cs" />
     <Compile Include="WorldEntity\Unit\UnitDef.cs" />
+    <Compile Include="WorldEntity\XP\LevelEventArgs.cs" />
+    <Compile Include="WorldEntity\XP\XPMVC\Lvl_Model.cs" />
+    <Compile Include="WorldEntity\XP\XPMVC\XP_Controller.cs" />
+    <Compile Include="WorldEntity\XP\XPMVC\XP_Model.cs" />
     <Compile Include="World\Cell\WorldCellController.cs" />
     <Compile Include="World\Cell\WorldCellModel.cs" />
+    <Compile Include="World\Cell\WorldCellView.cs" />
     <Compile Include="World\Chunk\WorldChunkController.cs" />
     <Compile Include="World\Chunk\WorldChunkModel.cs" />
+    <Compile Include="World\Interfaces\IConstructable.cs" />
     <Compile Include="World\Structs\FloatCoords.cs" />
     <Compile Include="World\Structs\Coords.cs" />
     <Compile Include="World\Enums\TerrainType.cs" />
@@ -139,9 +170,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="World\Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="World\.DS_Store" />
   </ItemGroup>

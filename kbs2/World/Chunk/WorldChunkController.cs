@@ -8,7 +8,9 @@ namespace kbs2.World.Chunk
 {
 	public class WorldChunkController
 	{
-		public WorldChunkModel worldChunkModel;
+
+		public WorldChunkModel worldChunkModel { get; set; }
+
 		
 		public void Load() { } 
 

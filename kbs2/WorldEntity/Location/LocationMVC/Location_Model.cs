@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using kbs2.World.Cell;
+using kbs2.World;
+using kbs2.World.Structs;
 
-namespace kbs2.World.Chunk
+namespace kbs2.WorldEntity.Location
 {
-	public class WorldChunkModel
+	public class Location_Model
 	{
-		public WorldCellModel[,] grid;
-
 		public Coords coords;
+		public FloatCoords floatCoords;
 	}
 }
