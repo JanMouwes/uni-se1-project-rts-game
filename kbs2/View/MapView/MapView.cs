@@ -72,8 +72,8 @@ namespace kbs2.Desktop.View.MapView
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, 1);
             if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-1, 0);
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -1);
-            if (Keyboard.GetState().IsKeyDown(Keys.G)) tileSize += 1;
-            if (Keyboard.GetState().IsKeyDown(Keys.H)) tileSize -= 1;
+            if (Keyboard.GetState().IsKeyDown(Keys.G)) Zoom -= 0.1;
+            if (Keyboard.GetState().IsKeyDown(Keys.H)) Zoom += 0.1;
 
             camera2D.Move(moveVelocity);
 
@@ -82,8 +82,10 @@ namespace kbs2.Desktop.View.MapView
 
         // added temp camera
         Camera2D camera2D;
-        // temp size
-        int tileSize = 50;
+        // tempsize
+        const int DefaultTiles = 30;
+        double Zoom = 1;
+        double TileCount => ((int)(DefaultTiles / Zoom) > 1) ? (DefaultTiles / Zoom) : 1;
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -98,12 +100,11 @@ namespace kbs2.Desktop.View.MapView
 
             // handy functions
             Viewport viewPort = base.GraphicsDevice.Viewport;
-            
             float viewPortRatio = viewPort.AspectRatio;
             int viewPortHeight = viewPort.Height;
             int viewPortWidth = viewPort.Width;
-            int viewPortX = viewPort.X;
-            int viewPortY = viewPort.Y;
+
+            int tileSize = (int)(viewPortWidth / TileCount);
 
             // TODO: Add your drawing code here
             // Done draw basic sprite on screen
@@ -111,7 +112,7 @@ namespace kbs2.Desktop.View.MapView
 
             Vector2 tilePostition = Vector2.Zero;
 
-            int width = 15;
+            int width = (int)TileCount;
             int height = 15;
 
             for (int x = 0; x < width; x++)
