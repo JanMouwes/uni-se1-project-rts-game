@@ -83,9 +83,7 @@
     <Compile Include="WorldEntity\Interfaces\IHasPersonalSpace.cs" />
     <Compile Include="WorldEntity\Interfaces\IPurchasable.cs" />
     <Compile Include="WorldEntity\Structs\BattleValue.cs" />
-    <Compile Include="WorldEntity\Structs\Coords.cs" />
     <Compile Include="WorldEntity\Structs\CostValue.cs" />
-    <Compile Include="WorldEntity\Structs\FloatCoords.cs" />
     <Compile Include="WorldEntity\Structs\Level.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_Controller.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_Model.cs" />
@@ -109,6 +107,8 @@
     <Compile Include="Faction\Interfaces\IHasFaction.cs" />
     <Compile Include="World\World\WorldController.cs" />
     <Compile Include="World\World\WorldModel.cs" />
+    <Compile Include="WorldEntity\Structs\CellWeight.cs" />
+    <Compile Include="WorldEntity\Structs\WeightDictionarys.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.CodeCoverage.Shim, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
