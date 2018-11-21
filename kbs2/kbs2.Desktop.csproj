@@ -58,6 +58,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\EventArgs\ZoomEventArgs.cs" />
     <Compile Include="View\MapView\MapView.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Controller.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Model.cs" />
