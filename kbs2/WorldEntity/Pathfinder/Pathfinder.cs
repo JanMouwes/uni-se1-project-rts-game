@@ -31,7 +31,6 @@ public struct WeightDictionarys
 
 public class Pathfinder
 {
-    List<Coords> RouteCells;
 
     WorldModel worldModel;
     public int Limit { get; set; }
@@ -98,8 +97,11 @@ public class Pathfinder
         return null;
     }
 
-    private List<Coords> DefineRoute(WeightDictionarys CheckedCells, Coords TargetCoords)
+    private List<Coords> DefineRoute(WeightDictionarys CheckedCells, Coords TargetCoords , Unit_Model unit)
     {
+        List<Coords> RouteCells = new List<Coords>();
+        RouteCells.Add(TargetCoords);
+
         //Delete all bordercoords, they are not needed.
         foreach (KeyValuePair<Coords, CellWeight> cell in CheckedCells.BorderCellsWithWeight){
             if (cell.Key == TargetCoords)
@@ -110,21 +112,20 @@ public class Pathfinder
         }
 
 
-        while (true)
+        while (RouteCells[RouteCells.Count - 1] != unit.)
         {
             Coords current;
-            // if current is empty use targetpoint to start from
-            current.x = TargetCoords.x;
-            current.y = TargetCoords.y;
 
-            List<Coords> NeighboursFromCurrent;
+            current = RouteCells[RouteCells.Count - 1];
 
             //get neighbours
             Coords[] Neighbours = new Coords[8];
-            CellWeight lowest;
-            lowest.DistanceToUnit = float.MaxValue;
-            lowest.AbsoluteDistanceToTarget = float.MaxValue;
-            Coords lowestcoords;
+            CellWeight lowest = new CellWeight
+            {
+                DistanceToUnit = float.MaxValue,
+                AbsoluteDistanceToTarget = float.MaxValue
+            };
+            Coords lowestcoords = new Coords();
 
             Neighbours[0] = new Coords { x = 1, y = 0 };
             Neighbours[1] = new Coords { x = -1, y = 0 };
@@ -138,14 +139,21 @@ public class Pathfinder
             for (int i = 0; i < 8; i++)
             {
                 Coords TempCoords = current + Neighbours[i];
-                NeighboursFromCurrent.Add(TempCoords);
+                if(CheckedCells.CellsWithWeight[TempCoords].Weight < lowest.Weight){
+                    lowestcoords = TempCoords;
+                }
+                if (CheckedCells.CellsWithWeight[TempCoords].Weight == lowest.Weight)
+                {
+                    if(CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit < lowest.DistanceToUnit){
+                        lowestcoords = TempCoords;
+                    }
+                }
             }
+
+            RouteCells.Add(lowestcoords);
         }
-
-
-
-        return null;
-    }
+        return RouteCells;
+      }
 
     // sets the weightvalues of all the neighbours of a cell
     private void CalculateWeight(Coords currentCell, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
