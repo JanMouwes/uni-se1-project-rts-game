@@ -1,3 +1,4 @@
+using kbs2.Desktop.World.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,6 +10,8 @@ namespace kbs2.Desktop.View.MapView
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        private WorldModel worldModel;
 
         public MapView()
         {
@@ -127,6 +130,10 @@ namespace kbs2.Desktop.View.MapView
             // end own code
 
             base.Draw(gameTime);
+        }
+
+        private void DrawCells(GameTime gameTime)
+        {
         }
     }
 }
