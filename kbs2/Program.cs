@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SQLite;
 
 namespace kbs2.Desktop
 {
@@ -13,6 +14,9 @@ namespace kbs2.Desktop
         [STAThread]
         static void Main()
         {
+            DBConnection dB = new DBConnection();
+            dB.OpenConnection("DefDex");
+
             using (var game = new Game1())
                 game.Run();
         }
