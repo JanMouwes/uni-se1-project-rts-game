@@ -112,7 +112,7 @@ public class Pathfinder
         }
 
 
-        while (RouteCells[RouteCells.Count - 1] != unit.)
+        while (RouteCells[RouteCells.Count - 1] != unit.Coords) // todo fix this to unit coords
         {
             Coords current;
 
