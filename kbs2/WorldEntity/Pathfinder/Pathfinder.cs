@@ -31,9 +31,11 @@ public struct WeightDictionarys
 
 public class Pathfinder
 {
-    
+    List<Coords> RouteCells;
+
     WorldModel worldModel;
     public int Limit { get; set; }
+    public List<Coords> CheckedCells;
 
     static Func<double, double, double> pythagoras = (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
     static Func<double, double, double> getDistance = (x, y) => x > y ? x - y : y - x;
@@ -87,6 +89,50 @@ public class Pathfinder
                 break;
             }
         }
+
+        return null;
+    }
+
+    private List<Coords> DefineRoute(WeightDictionarys CheckedCells, Coords TargetCoords)
+    {
+        //Delete all bordercoords, they are not needed.
+        foreach (KeyValuePair<Coords, CellWeight> cell in CheckedCells.BorderCellsWithWeight){
+            if (cell.Key.x == TargetCoords.x && cell.Key.y == TargetCoords.y)
+            {
+            }else{
+                CheckedCells.CellsWithWeight.Remove(cell.Key);
+            }
+        }
+
+
+        while (true)
+        {
+            Coords current;
+            // if current is empty use targetpoint to start from
+            current.x = TargetCoords.x;
+            current.y = TargetCoords.y;
+
+            List<Coords> NeighboursFromCurrent;
+
+            //get neighbours
+            Coords[] Neighbours = new Coords[8];
+            Neighbours[0] = new Coords { x = 1, y = 0 };
+            Neighbours[1] = new Coords { x = -1, y = 0 };
+            Neighbours[2] = new Coords { x = 0, y = 1 };
+            Neighbours[3] = new Coords { x = 0, y = -1 };
+            Neighbours[4] = new Coords { x = 1, y = 1 };
+            Neighbours[5] = new Coords { x = -1, y = 1 };
+            Neighbours[6] = new Coords { x = -1, y = 1 };
+            Neighbours[7] = new Coords { x = -1, y = -1 };
+
+            for (int i = 0; i < 8; i++)
+            {
+                Coords TempCoords = current + Neighbours[i];
+                NeighboursFromCurrent.Add(TempCoords);
+            }
+        }
+
+
 
         return null;
     }
