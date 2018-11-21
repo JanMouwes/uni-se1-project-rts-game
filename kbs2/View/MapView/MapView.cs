@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 
 namespace kbs2.Desktop.View.MapView
 {
@@ -24,6 +25,7 @@ namespace kbs2.Desktop.View.MapView
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            camera2D = new Camera2D(GraphicsDevice);
 
             base.Initialize();
         }
@@ -61,9 +63,24 @@ namespace kbs2.Desktop.View.MapView
                 Exit();
 
             // TODO: Add your update logic here
+            // Add possible camera logic
+            Vector2 moveVelocity = Vector2.Zero;
+            if (Keyboard.GetState().IsKeyDown(Keys.Right)) moveVelocity += new Vector2(1, 0);
+            if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, 1);
+            if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-1, 0);
+            if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -1);
+            if (Keyboard.GetState().IsKeyDown(Keys.G)) tileSize += 1;
+            if (Keyboard.GetState().IsKeyDown(Keys.H)) tileSize -= 1;
+
+            camera2D.Move(moveVelocity);
 
             base.Update(gameTime);
         }
+
+        // added temp camera
+        Camera2D camera2D;
+        // temp size
+        int tileSize = 50;
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -73,13 +90,44 @@ namespace kbs2.Desktop.View.MapView
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            base.Window.AllowUserResizing = true;
+            base.IsMouseVisible = true;
+
+            // handy functions
+            Viewport viewPort = base.GraphicsDevice.Viewport;
+            
+            float viewPortRatio = viewPort.AspectRatio;
+            int viewPortHeight = viewPort.Height;
+            int viewPortWidth = viewPort.Width;
+            int viewPortX = viewPort.X;
+            int viewPortY = viewPort.Y;
+
             // TODO: Add your drawing code here
             // Done draw basic sprite on screen
-            spriteBatch.Begin();
-            spriteBatch.Draw(this.Content.Load<Texture2D>("wall"), new Vector2(5, 10), Color.White);
+            spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
+
+            Vector2 tilePostition = Vector2.Zero;
+
+            int width = 15;
+            int height = 15;
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle((int)tilePostition.X, (int)tilePostition.Y, tileSize, tileSize), Color.White);
+                    tilePostition.Y += tileSize;
+                }
+                tilePostition.Y = 0;
+                tilePostition.X += tileSize;
+            }
+
             spriteBatch.End();
+
+            // end own code
 
             base.Draw(gameTime);
         }
     }
 }
+ 
