@@ -52,9 +52,18 @@ public class Pathfinder
     {
         WeightDictionarys weightDictionarys = new WeightDictionarys(true);
 
-        //TODO add unit cell that contains unit to CellsWithWeight
-
         Coords targetIntCoords = (Coords)TargetFloatCoords;
+
+        
+
+        CellWeight unitLocation;
+        unitLocation.AbsoluteDistanceToTarget = getDistance2d(unit.LocationModel.coords, targetIntCoords);
+        unitLocation.AbsoluteDistanceToUnit = 0;
+        unitLocation.DistanceToUnit = 0;
+
+        weightDictionarys.CellsWithWeight.Add(unit.LocationModel.coords ,unitLocation);
+        weightDictionarys.BorderCellsWithWeight.Add(unit.LocationModel.coords, unitLocation);
+
 
         for (int i = 0; i<Limit*2*Limit*2*2;i++) // backup plan to keep the search area within a limit
         {
@@ -112,7 +121,7 @@ public class Pathfinder
         }
 
 
-        while (RouteCells[RouteCells.Count - 1] != unit.Coords) // todo fix this to unit coords
+        while (RouteCells[RouteCells.Count - 1] != unit.LocationModel.coords) 
         {
             Coords current;
 
@@ -224,7 +233,7 @@ public class Pathfinder
 
         // set weightvalues
         cellWeight.AbsoluteDistanceToTarget = getDistance2d(NeighbourCoords, TargetCoords) * 10;
-        cellWeight.AbsoluteDistanceToUnit = getDistance2d(NeighbourCoords, TargetCoords) * 10; // TODO change targetcoords to unitcoords
+        cellWeight.AbsoluteDistanceToUnit = getDistance2d(NeighbourCoords, unit.LocationModel.coords) * 10; 
 
 
         if (cellWeight.AbsoluteDistanceToTarget > Limit || cellWeight.AbsoluteDistanceToUnit > Limit) // check if cell is within limit
@@ -256,7 +265,7 @@ public class Pathfinder
     private bool CellIsObstacle(WorldCellModel Cell, Unit_Model unit)
     {
         bool r = true;
-        if (unit.UnwalkableTerrain.Contains(Cell.terrain))
+        if (unit.UnwalkableTerrain.Contains(Cell.Terrain))
         {
             r = false;
         }
