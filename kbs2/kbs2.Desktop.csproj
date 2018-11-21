@@ -66,6 +66,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorldEntity\Battle\BattleDef.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Controller.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Model.cs" />
     <Compile Include="WorldEntity\Building\BuildingDef.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Model.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
+    <Compile Include="WorldEntity\Health\HPDef.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
     <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="WorldEntity\Unit\MVC\Unit_View.cs" />
     <Compile Include="WorldEntity\Unit\UnitDef.cs" />
     <Compile Include="WorldEntity\XP\LevelEventArgs.cs" />
+    <Compile Include="WorldEntity\XP\LevelXPDef.cs" />
     <Compile Include="WorldEntity\XP\XPMVC\Lvl_Model.cs" />
     <Compile Include="WorldEntity\XP\XPMVC\XP_Controller.cs" />
     <Compile Include="WorldEntity\XP\XPMVC\XP_Model.cs" />
