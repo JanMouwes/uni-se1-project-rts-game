@@ -102,7 +102,7 @@ public class Pathfinder
     {
         //Delete all bordercoords, they are not needed.
         foreach (KeyValuePair<Coords, CellWeight> cell in CheckedCells.BorderCellsWithWeight){
-            if (cell.Key.x == TargetCoords.x && cell.Key.y == TargetCoords.y)
+            if (cell.Key == TargetCoords)
             {
             }else{
                 CheckedCells.CellsWithWeight.Remove(cell.Key);
@@ -121,6 +121,11 @@ public class Pathfinder
 
             //get neighbours
             Coords[] Neighbours = new Coords[8];
+            CellWeight lowest;
+            lowest.DistanceToUnit = float.MaxValue;
+            lowest.AbsoluteDistanceToTarget = float.MaxValue;
+            Coords lowestcoords;
+
             Neighbours[0] = new Coords { x = 1, y = 0 };
             Neighbours[1] = new Coords { x = -1, y = 0 };
             Neighbours[2] = new Coords { x = 0, y = 1 };
