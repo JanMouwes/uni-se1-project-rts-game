@@ -9,6 +9,7 @@ namespace kbs2.World.Cell
 {
 	public class WorldCellModel
 	{
+
         // The base terrain defines the original terrain of this tile while the terrain keeps track of the current terrain state.
 		public TerrainType BaseTerrain { get; set; }
 		public TerrainType Terrain { get; set; }

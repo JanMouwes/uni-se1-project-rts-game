@@ -9,7 +9,7 @@ namespace kbs2.WorldEntity.Location
 	public class Location_Controller
 	{
 		// ToDo: Pathfinder attribute
-		private Location_Model LocationModel;
+		public Location_Model LocationModel;
 
 		public Location_Controller()
 		{

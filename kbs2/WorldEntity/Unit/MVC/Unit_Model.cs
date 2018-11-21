@@ -1,4 +1,7 @@
-﻿using System;
+﻿using kbs2.World;
+using kbs2.World.Structs;
+using System;
+using System.Collections.Generic;
 using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Unit;
 using kbs2.WorldEntity.Battle;
@@ -22,5 +25,7 @@ namespace kbs2.Unit.Model
 			
 			
         }
+
+        public List<TerrainType> UnwalkableTerrain { get; set; }
     }
 }

@@ -7,9 +7,11 @@ using kbs2.World.Interfaces;
 
 namespace kbs2.World.Cell
 {
+
 	public class WorldCellController
 	{
 		public WorldCellModel worldCellModel { get; set; }
+
 
         // Changes the TerrainType of the current cell
         public void ChangeTerrain(TerrainType type)

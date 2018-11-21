@@ -79,6 +79,7 @@ namespace kbs2.Desktop
             // Done draw basic sprite on screen
             spriteBatch.Begin();
             spriteBatch.Draw(this.Content.Load<Texture2D>("wall"), new Vector2(5, 10), Color.White);
+            spriteBatch.Draw(this.Content.Load<Texture2D>("wall"), new Rectangle(5, 10, 50, 50), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);
