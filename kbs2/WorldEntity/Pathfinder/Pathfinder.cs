@@ -48,7 +48,7 @@ public class Pathfinder
 	}
 
     // returns a path to the target that does not contain obstacles
-    public List<Coords> FindPath(FloatCoords TargetFloatCoords, Unit_Model unit)
+    public List<FloatCoords> FindPath(FloatCoords TargetFloatCoords, Unit_Model unit)
     {
         WeightDictionarys weightDictionarys = new WeightDictionarys(true);
 
@@ -92,8 +92,8 @@ public class Pathfinder
             }
             else
             {
-                // TODO no path found
-                break;
+                // no path found
+                return null;
             }
 
             if (weightDictionarys.CellsWithWeight.ContainsKey(targetIntCoords)) // check if target cell has been found
@@ -103,7 +103,14 @@ public class Pathfinder
             }
         }
 
-        return null;
+        List<FloatCoords> route = CellToFloatCoords(DefineRoute(weightDictionarys, targetIntCoords, unit));
+
+        route[0] = unit.LocationModel.floatCoords;
+        route[route.Count - 1] = TargetFloatCoords;
+
+        route = MinimizeWaypoints(route);
+
+        return route;
     }
 
     private List<Coords> DefineRoute(WeightDictionarys CheckedCells, Coords TargetCoords , Unit_Model unit)
