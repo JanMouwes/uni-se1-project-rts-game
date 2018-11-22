@@ -12,22 +12,10 @@ namespace kbs2.World.Chunk
 
             WorldChunkController controller = new WorldChunkController(chunkCoords);
 
-            int xIndex = 0, yIndex = 0;
+            //int xIndex = 0, yIndex = 0; 
             foreach (WorldCellModel worldCellModel in controller.worldChunkModel.grid)
             {
-                worldCellModel.BaseTerrain = terrainType;
-                worldCellModel.Terrain = terrainType;
-
-                worldCellModel.RealCoords = new Coords()
-                {
-                    x = chunkCoords.x * WorldChunkModel.ChunkSize + xIndex,
-                    y = chunkCoords.y * WorldChunkModel.ChunkSize + yIndex
-                };
-
-                //    If x would pass ChunkSize-limit, reset to zero. Else, add one
-                //    If x has been reset, increment yIndex by 1.
-                xIndex = xIndex == WorldChunkModel.ChunkSize ? 0 : xIndex + 1;
-                yIndex = xIndex != 0 ? yIndex : yIndex + 1;
+                worldCellModel.BaseTerrain = worldCellModel.Terrain = terrainType;
             }
 
             return controller;
