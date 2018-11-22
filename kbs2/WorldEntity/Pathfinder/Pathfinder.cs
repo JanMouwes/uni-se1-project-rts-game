@@ -92,6 +92,8 @@ public class Pathfinder
         return route;
     }
 
+
+    // finds the route based on the cells that have there weight calculated
     private List<Coords> DefineRoute(WeightDictionarys CheckedCells, Coords TargetCoords , Unit_Model unit)
     {
         List<Coords> RouteCells = new List<Coords>();
@@ -106,14 +108,14 @@ public class Pathfinder
             }
         }
 
-
+        //Makes the actual route by repeating while last coords in the routecells is not the unit location
         while (RouteCells[RouteCells.Count - 1] != unit.LocationModel.coords) 
         {
             Coords current;
 
+            //sets current cell to last added cell
             current = RouteCells[RouteCells.Count - 1];
 
-            //get neighbours
             Coords[] Neighbours = new Coords[8];
             CellWeight lowest = new CellWeight
             {
@@ -131,6 +133,7 @@ public class Pathfinder
             Neighbours[6] = new Coords { x = -1, y = 1 };
             Neighbours[7] = new Coords { x = -1, y = -1 };
 
+            //get neighbours from current and replace lowestcoords if its lower
             for (int i = 0; i < 8; i++)
             {
                 Coords TempCoords = current + Neighbours[i];
@@ -151,7 +154,7 @@ public class Pathfinder
       }
 
     // sets the weightvalues of all the neighbours of a cell
-    private void CalculateWeight(Coords currentCell, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
+    public void CalculateWeight(Coords currentCell, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
     {
         Coords[] HorizontalNeigbours = new Coords[4];
         HorizontalNeigbours[0] = new Coords { x = 1, y = 0 };
@@ -178,7 +181,7 @@ public class Pathfinder
     }
 
     // sets the weightvalues of a single cell and ads them to a dictionary
-    private void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
+    public void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
     {
         if (weightDictionarys.ObstacleList.Contains(NeighbourCoords)) //check if cell is a known obstacle
         {
@@ -248,7 +251,7 @@ public class Pathfinder
     }
 
     // checks if a cell is an obstacle for the specifeid unit
-    private bool CellIsObstacle(WorldCellModel Cell, Unit_Model unit)
+    public bool CellIsObstacle(WorldCellModel Cell, Unit_Model unit)
     {
         bool r = true;
         if (unit.UnwalkableTerrain.Contains(Cell.Terrain))
@@ -261,7 +264,7 @@ public class Pathfinder
     }
 
     // converts a list of coords to a list of FloatCoords
-    private List<FloatCoords> CellToFloatCoords(List<Coords> coords)
+    public List<FloatCoords> CellToFloatCoords(List<Coords> coords)
     {
         List<FloatCoords> floatCoords = new List<FloatCoords>();
         foreach( Coords entry in coords)
@@ -270,8 +273,8 @@ public class Pathfinder
         }
         return floatCoords;
     }
-    
-    private List<FloatCoords> MinimizeWaypoints(List<FloatCoords> RouteCoords)
+
+    public List<FloatCoords> MinimizeWaypoints(List<FloatCoords> RouteCoords)
     {
         List<FloatCoords> WayPoints = new List<FloatCoords>
         {
@@ -282,28 +285,28 @@ public class Pathfinder
         {
             WayPoints.Add(FindNextWayPoint(RouteCoords, WayPoints));
 
-            if (WayPoints[WayPoints.Count]==RouteCoords[RouteCoords.Count])// check if the last waypoint is the target
+            if (WayPoints[WayPoints.Count-1]==RouteCoords[RouteCoords.Count-1])// check if the last waypoint is the target
             {
                 break;
             }
         }
         return WayPoints;
     }
-    
-    private FloatCoords FindNextWayPoint(List<FloatCoords> RouteCoords, List<FloatCoords> WayPoints)
+
+    public FloatCoords FindNextWayPoint(List<FloatCoords> RouteCoords, List<FloatCoords> WayPoints)
     {
-        FloatCoords l1 = WayPoints[WayPoints.Count]; // start from the last waypoint added
+        FloatCoords l1 = WayPoints[WayPoints.Count-1]; // start from the last waypoint added
         FloatCoords l2;
 
         for (int i = 1; true; i++)
         {
             if (RouteCoords.IndexOf(l1) + i <= RouteCoords.Count) //check if we reached the target
             {
-                l2 = RouteCoords[RouteCoords.IndexOf(l1) + i];
+                l2 = RouteCoords[RouteCoords.IndexOf(l1) + i-1];
             }
             else
             {
-                return RouteCoords[RouteCoords.IndexOf(l1) + i - 1]; //add target to the waypoints
+                return RouteCoords[RouteCoords.Count - 1]; //add target to the waypoints
             }
 
             // calculate the distance of the line between the two waypoints to all the points we will skip 
@@ -323,7 +326,7 @@ public class Pathfinder
     }
 
     // Checks if Diagonal move is possible/not blocked 
-    private bool CheckDiagonalsBlocked(Coords one, Coords two, WeightDictionarys ObstaclesDictorary)
+    public bool CheckDiagonalsBlocked(Coords one, Coords two, WeightDictionarys ObstaclesDictorary)
     {
         //checks if coord are not next to each other
         if (one.x == two.x || one.y == two.y)
