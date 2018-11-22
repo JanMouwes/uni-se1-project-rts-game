@@ -145,9 +145,11 @@ namespace kbs2.Desktop.View.MapView
             // Makes the mouse visible in the window
             base.IsMouseVisible = true;
 
+            // Calculate the size (Width) of a tile
             int tileSize = (int) (base.GraphicsDevice.Viewport.Width / TileCount);
-            int CellWidth = (int) TileCount;
-            int CellHeight = (int) (CellWidth / base.GraphicsDevice.Viewport.AspectRatio);
+            
+            // Calculates the height of a cell
+            int CellHeight = (int) (TileCount / base.GraphicsDevice.Viewport.AspectRatio);
             
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
