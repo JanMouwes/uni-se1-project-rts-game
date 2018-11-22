@@ -56,17 +56,26 @@ namespace kbs2.Faction.FactionMVC
                 faction.FactionRelationships.Add(this, relation);
             }
         }
-        // Edits the relationship from the given faction to the FactionRelationships dictionary
-        public void ChangeRelationship(Faction_Model faction, Faction_Relations relation)
-        {
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
-            {
-                // Checks if the given relation is not the same as the current dictionary's relation
-                if (relationship.Key.Name == faction.Name && relationship.Value != relation)
-                {
-                    FactionRelationships[relationship.Key] = relation;
-                }
-            }
-        }
+		// Edits the relationship from the given faction to the FactionRelationships dictionary
+		public void ChangeRelationship(Faction_Model faction, Faction_Relations relation)
+		{
+			
+
+			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships.ToList())
+			{
+				
+				// Checks if the given relation is not the same as the current dictionary's relation
+				if (relationship.Key.Name == faction.Name && relationship.Value != relation)
+				{
+
+					FactionRelationships.Remove(relationship.Key);
+					FactionRelationships.Add(relationship.Key, relation);
+
+					faction.FactionRelationships.Remove(this);
+					faction.FactionRelationships.Add(this, relation);
+				}
+
+			}
+		}
     }
 }
