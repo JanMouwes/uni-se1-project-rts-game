@@ -69,32 +69,52 @@ namespace kbs2.Desktop.View.MapView
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+
             // TODO: Add your update logic here
             // Add possible camera logic
             Vector2 moveVelocity = Vector2.Zero;
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) moveVelocity += new Vector2(1, 0);
-            if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, 1);
-            if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-1, 0);
-            if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -1);
+
+            int moveSpeed = 2;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Right)) moveVelocity += new Vector2(moveSpeed, 0);
+            if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, moveSpeed);
+            if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-moveSpeed, 0);
+            if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -moveSpeed);
             if (Keyboard.GetState().IsKeyDown(Keys.G)) Zoom -= 0.1;
             if (Keyboard.GetState().IsKeyDown(Keys.H)) Zoom += 0.1;
 
-
-            Zoom = 1 + Mouse.GetState().ScrollWheelValue / 10000.0;
-
+            updateZoom(Mouse.GetState());
 
             camera2D.Move(moveVelocity);
 
             base.Update(gameTime);
         }
 
+        private void updateZoom(MouseState mouseState)
+        {
+            int currentScrollWheelValue = mouseState.ScrollWheelValue;
+            int scrollChange = previousScrollWheelValue - currentScrollWheelValue;
+
+            if (Math.Abs(scrollChange) == 0) return;
+
+            Console.WriteLine($"PreviousScrollValue: {previousScrollWheelValue}");
+            Console.WriteLine($"CurrentScrollValue: {currentScrollWheelValue}");
+            Console.WriteLine($"ScrollChange: {scrollChange}");
+            Console.WriteLine($"Tiles on screen: {TileCount}");
+            Zoom = 1.0 + scrollChange / 100.0;
+
+            previousScrollWheelValue = currentScrollWheelValue;
+        }
+
         // added temp camera
         Camera2D camera2D;
 
         // tempsize
-        const int DefaultTiles = 30;
-        const double MinZoom = 1.0 / 4.0; //    Percent zoom (outer-most zoom)
-        const double MaxZoom = 8.0; //    Percent zoom (inner-most zoom)
+        private const int DefaultTiles = 30;
+        private const double MinZoom = 1.0 / 6.0; //    Percent zoom (outer-most zoom)
+        private const double MaxZoom = 8.0; //    Percent zoom (inner-most zoom)
+
+        private int previousScrollWheelValue;
 
         private double zoom = 1;
 
@@ -107,7 +127,7 @@ namespace kbs2.Desktop.View.MapView
                     return;
 
                 zoom = value;
-                Console.WriteLine(zoom + " " + MinZoom);
+                Console.WriteLine($"Zoom: {zoom}");
                 ZoomEvent?.Invoke(this, new ZoomEventArgs(Zoom));
             }
         }
@@ -115,7 +135,7 @@ namespace kbs2.Desktop.View.MapView
         public event ZoomObserver ZoomEvent;
 
 
-        double TileCount => ((int) (DefaultTiles / Zoom) > 1) ? (DefaultTiles / Zoom) : 1;
+        double TileCount => Math.Ceiling((DefaultTiles / Zoom) > 1.0 ? (DefaultTiles / Zoom) : 1);
 
         /// <summary>
         /// This is called when the game should draw itself.
