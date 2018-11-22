@@ -20,8 +20,7 @@ namespace kbs2.Desktop.View.MapView
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
-        private WorldModel worldModel;
+        Camera2D camera2D;
 
         public MapView()
         {
@@ -37,11 +36,12 @@ namespace kbs2.Desktop.View.MapView
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // Add your initialization logic here
+
             camera2D = new Camera2D(GraphicsDevice);
 
-            camera2D.MinimumZoom = (float) MinZoom;
-            camera2D.MaximumZoom = (float) MaxZoom;
+            camera2D.MinimumZoom = (float)MinZoom;
+            camera2D.MaximumZoom = (float)MaxZoom;
 
             base.Initialize();
         }
@@ -78,9 +78,13 @@ namespace kbs2.Desktop.View.MapView
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            Move();
 
-            // TODO: Add your update logic here
-            // Add possible camera logic
+            base.Update(gameTime);
+        }
+
+        private void Move()
+        {
             Vector2 moveVelocity = Vector2.Zero;
 
             const float moveSpeed = 1.5f;
@@ -89,25 +93,21 @@ namespace kbs2.Desktop.View.MapView
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, moveSpeed);
             if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-moveSpeed, 0);
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -moveSpeed);
-            if (Keyboard.GetState().IsKeyDown(Keys.G)) camera2D.ZoomOut((float) 0.1);
-            if (Keyboard.GetState().IsKeyDown(Keys.H)) camera2D.ZoomIn((float) 0.1);
+            if (Keyboard.GetState().IsKeyDown(Keys.G)) camera2D.ZoomOut((float)0.1);
+            if (Keyboard.GetState().IsKeyDown(Keys.H)) camera2D.ZoomIn((float)0.1);
 
-            updateZoom(Mouse.GetState());
+            updateZoom();
 
             camera2D.Move(moveVelocity);
-
-            base.Update(gameTime);
         }
 
-
-        private void updateZoom(MouseState mouseState)
+        private void updateZoom()
         {
-            int currentScrollWheelValue = mouseState.ScrollWheelValue;
+            int currentScrollWheelValue = Mouse.GetState().ScrollWheelValue;
             int scrollChange = previousScrollWheelValue - currentScrollWheelValue;
             double zoomChange = scrollChange / 36000.0;
 
-            camera2D.ZoomIn((float) zoomChange);
-
+            camera2D.ZoomOut((float) zoomChange);
 
             previousScrollWheelValue = currentScrollWheelValue;
 
@@ -116,9 +116,6 @@ namespace kbs2.Desktop.View.MapView
             Console.WriteLine($"Zoom: {Zoom}");
             Console.WriteLine($"Camera-pos: {camera2D.Position}");
         }
-
-        // added temp camera
-        Camera2D camera2D;
 
         // tempsize
         private const int DefaultTiles = 30;
