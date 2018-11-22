@@ -10,7 +10,7 @@ namespace kbs2.World.Chunk
             Func<int, int, int> rowIndex = (d2Index, rowSize) => d2Index % rowSize;
             Func<int, int, int> colIndex = (d2Index, rowSize) => (int) Math.Floor((double) (d2Index / rowSize));
 
-            WorldChunkController controller = new WorldChunkController();
+            WorldChunkController controller = new WorldChunkController(chunkCoords);
 
             int xIndex = 0, yIndex = 0;
             foreach (WorldCellModel worldCellModel in controller.worldChunkModel.grid)
