@@ -32,6 +32,6 @@ namespace kbs2.Unit.Model
             Con.CloseConnection();
         }
 
-        public List<TerrainType> UnwalkableTerrain { get; set; }
+        
     }
 }
