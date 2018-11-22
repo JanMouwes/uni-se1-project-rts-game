@@ -10,6 +10,7 @@ namespace kbs2.World.Chunk
 	public class WorldChunkModel
 	{
 		public WorldCellModel[,] grid;
+
 		public Coords coords;
 	}
 }

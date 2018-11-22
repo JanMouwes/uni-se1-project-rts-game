@@ -8,7 +8,60 @@ namespace kbs2.World.Structs
 {
     public struct FloatCoords
     {
-        float x;
-        float y;
+        public float x;
+        public float y;
+
+
+        public static FloatCoords operator +(FloatCoords value1, FloatCoords value2)
+        {
+            value1.x += value2.x;
+            value1.y += value2.y;
+            return value1;
+        }
+
+        public static FloatCoords operator +(FloatCoords value1, Coords value2)
+        {
+            value1.x += value2.x;
+            value1.y += value2.y;
+            return value1;
+        }
+
+        public static FloatCoords operator -(FloatCoords value1, FloatCoords value2)
+        {
+            value1.x -= value2.x;
+            value1.y -= value2.y;
+            return value1;
+        }
+
+        public static FloatCoords operator -(FloatCoords value1, Coords value2)
+        {
+            value1.x -= value2.x;
+            value1.y -= value2.y;
+            return value1;
+        }
+
+        public static bool operator ==(FloatCoords value1, FloatCoords value2)
+        {
+            if (value1.x == value2.x && value1.y == value2.y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool operator !=(FloatCoords value1, FloatCoords value2)
+        {
+            if (value1.x == value2.x && value1.y == value2.y)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }
