@@ -103,6 +103,7 @@
     <Compile Include="GamePackage\Enums\GameState.cs" />
     <Compile Include="Faction\Interfaces\IHasFaction.cs" />
     <Compile Include="World\World\WorldController.cs" />
+    <Compile Include="World\World\WorldFactory.cs" />
     <Compile Include="World\World\WorldModel.cs" />
   </ItemGroup>
   <ItemGroup>

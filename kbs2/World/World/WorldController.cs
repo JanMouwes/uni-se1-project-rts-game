@@ -4,7 +4,7 @@ namespace kbs2.Desktop.World.World
 {
     public class WorldController
     {
-        private WorldModel worldModel;
+        public WorldModel worldModel { get; set; }
 
         public void Load( /*Faction faction*/)
         {

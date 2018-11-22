@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using kbs2.Desktop.View.EventArgs;
 using kbs2.Desktop.World.World;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -159,22 +161,34 @@ namespace kbs2.Desktop.View.MapView
             int tileSize = (int)(viewPortWidth / TileCount);
             int CellWidth = (int)TileCount;
             int CellHeight = (int)(CellWidth / viewPortRatio);
-
-            // TODO: Add your drawing code here
-            // Done draw basic sprite on screen
+            
+            // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
 
-            Coords coords = new Coords();
-            coords.x = 1;
-            coords.y = 1;
+            // initialize world
+            WorldController world = WorldFactory.GetNewWorld();
+            
+            // make new chunk and add it to the chunk dictionary
+            Coords coords = new Coords { x = 0, y = 0 };
             WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrainType(coords, TerrainType.Sand);
-            foreach (WorldCellModel cell in chunkController.worldChunkModel.grid)
-            {
-                int y = cell.RealCoords.y * tileSize;
-                int x = cell.RealCoords.x * tileSize;
-                spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), Color.White);
-            }
+            world.worldModel.ChunkGrid.Add(coords, chunkController);
 
+            // make new chunk and add it to the chunk dictionary
+            Coords coords2 = new Coords { x = 1, y = 1 };
+            WorldChunkController chunkController2 = WorldChunkFactory.ChunkOfTerrainType(coords2, TerrainType.Sand);
+            world.worldModel.ChunkGrid.Add(coords2, chunkController2);
+            
+            // draw each tile in the chunks in the chunkGrid
+            foreach(KeyValuePair<Coords, WorldChunkController> chunkGrid in world.worldModel.ChunkGrid)
+            {
+                foreach (WorldCellModel cell in chunkGrid.Value.worldChunkModel.grid)
+                {
+                    int y = cell.RealCoords.y * tileSize;
+                    int x = cell.RealCoords.x * tileSize;
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), Color.LawnGreen);
+                }
+            }
+            
             spriteBatch.End();
 
             base.Draw(gameTime);
