@@ -92,6 +92,8 @@ public class Pathfinder
         return route;
     }
 
+
+    // finds the route based on the cells that have there weight calculated
     private List<Coords> DefineRoute(WeightDictionarys CheckedCells, Coords TargetCoords , Unit_Model unit)
     {
         List<Coords> RouteCells = new List<Coords>();
@@ -106,14 +108,14 @@ public class Pathfinder
             }
         }
 
-
+        //Makes the actual route by repeating while last coords in the routecells is not the unit location
         while (RouteCells[RouteCells.Count - 1] != unit.LocationModel.coords) 
         {
             Coords current;
 
+            //sets current cell to last added cell
             current = RouteCells[RouteCells.Count - 1];
 
-            //get neighbours
             Coords[] Neighbours = new Coords[8];
             CellWeight lowest = new CellWeight
             {
@@ -131,6 +133,7 @@ public class Pathfinder
             Neighbours[6] = new Coords { x = -1, y = 1 };
             Neighbours[7] = new Coords { x = -1, y = -1 };
 
+            //get neighbours from current and replace lowestcoords if its lower
             for (int i = 0; i < 8; i++)
             {
                 Coords TempCoords = current + Neighbours[i];
