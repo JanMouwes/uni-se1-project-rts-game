@@ -18,9 +18,9 @@ namespace kbs2.World.World
                 ChunkGrid = new Dictionary<Coords, WorldChunkController>()
             };
 
-            for(int x = 0; x < 5; x++)
+            for(int x = -2; x < 2; x++)
             {
-                for (int y = 0; y < 5; y++)
+                for (int y = -2; y < 2; y++)
                 {
                     Coords coords = new Coords { x = x, y = y };
                     WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrainType(coords, TerrainType.Sand);
