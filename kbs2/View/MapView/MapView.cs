@@ -168,16 +168,6 @@ namespace kbs2.Desktop.View.MapView
             // initialize world
             WorldController world = WorldFactory.GetNewWorld();
             
-            // make new chunk and add it to the chunk dictionary
-            Coords coords = new Coords { x = 0, y = 0 };
-            WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrainType(coords, TerrainType.Sand);
-            world.worldModel.ChunkGrid.Add(coords, chunkController);
-
-            // make new chunk and add it to the chunk dictionary
-            Coords coords2 = new Coords { x = 1, y = 1 };
-            WorldChunkController chunkController2 = WorldChunkFactory.ChunkOfTerrainType(coords2, TerrainType.Sand);
-            world.worldModel.ChunkGrid.Add(coords2, chunkController2);
-            
             // draw each tile in the chunks in the chunkGrid
             foreach(KeyValuePair<Coords, WorldChunkController> chunkGrid in world.worldModel.ChunkGrid)
             {

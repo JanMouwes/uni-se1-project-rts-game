@@ -18,6 +18,27 @@ namespace kbs2.World.World
                 ChunkGrid = new Dictionary<Coords, WorldChunkController>()
             };
 
+            for(int x = 0; x < 5; x++)
+            {
+                for (int y = 0; y < 5; y++)
+                {
+                    Coords coords = new Coords { x = x, y = y };
+                    WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrainType(coords, TerrainType.Sand);
+                    world.worldModel.ChunkGrid.Add(coords, chunkController);
+                }
+            }
+
+            return world;
+        }
+
+        public static WorldController GetNewEmptyWorld()
+        {
+            WorldController world = new WorldController();
+            world.worldModel = new WorldModel
+            {
+                ChunkGrid = new Dictionary<Coords, WorldChunkController>()
+            };
+
             return world;
         }
     }
