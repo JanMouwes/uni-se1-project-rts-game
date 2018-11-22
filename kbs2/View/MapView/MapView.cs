@@ -175,23 +175,6 @@ namespace kbs2.Desktop.View.MapView
                 spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), Color.White);
             }
 
-
-
-            /*
-            Vector2 tilePostition = Vector2.Zero;
-            for (int x = 0; x < CellWidth; x++)
-            {
-                for (int y = 0; y < CellHeight; y++)
-                {
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"),
-                        new Rectangle((int) tilePostition.X, (int) tilePostition.Y, tileSize, tileSize), Color.White);
-                    tilePostition.Y += tileSize;
-                }
-
-                tilePostition.Y = 0;
-                tilePostition.X += tileSize;
-            }
-            */
             spriteBatch.End();
 
             base.Draw(gameTime);
