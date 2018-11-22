@@ -8,5 +8,6 @@ namespace kbs2.WorldEntity.Unit.MVC
 {
 	public class Unit_View
 	{
+
 	}
 }
