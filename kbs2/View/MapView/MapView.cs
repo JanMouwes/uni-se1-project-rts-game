@@ -138,18 +138,16 @@ namespace kbs2.Desktop.View.MapView
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
+
+            // Makes the mouse visible in the window
             base.IsMouseVisible = true;
 
-            // handy functions
-            Viewport viewPort = base.GraphicsDevice.Viewport;
-            float viewPortRatio = viewPort.AspectRatio;
-            int viewPortHeight = viewPort.Height;
-            int viewPortWidth = viewPort.Width;
-
-            int tileSize = (int) (viewPortWidth / TileCount);
+            int tileSize = (int) (base.GraphicsDevice.Viewport.Width / TileCount);
             int CellWidth = (int) TileCount;
-            int CellHeight = (int) (CellWidth / viewPortRatio);
+            int CellHeight = (int) (CellWidth / base.GraphicsDevice.Viewport.AspectRatio);
             
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
