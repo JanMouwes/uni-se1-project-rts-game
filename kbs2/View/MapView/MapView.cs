@@ -1,6 +1,9 @@
 using System;
 using kbs2.Desktop.View.EventArgs;
 using kbs2.Desktop.World.World;
+using kbs2.World;
+using kbs2.World.Cell;
+using kbs2.World.Chunk;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -152,20 +155,33 @@ namespace kbs2.Desktop.View.MapView
             float viewPortRatio = viewPort.AspectRatio;
             int viewPortHeight = viewPort.Height;
             int viewPortWidth = viewPort.Width;
-            int tileSize = (int) (viewPortWidth / TileCount);
+
+            int tileSize = (int)(viewPortWidth / TileCount);
+            int CellWidth = (int)TileCount;
+            int CellHeight = (int)(CellWidth / viewPortRatio);
 
             // TODO: Add your drawing code here
             // Done draw basic sprite on screen
             spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
-            Vector2 tilePostition = Vector2.Zero;
-            int width = (int) TileCount;
 
-            int height = (int) (width / viewPortRatio);
-            for (int x = 0;
-                x < width;
-                x++)
+            Coords coords = new Coords();
+            coords.x = 1;
+            coords.y = 1;
+            WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrainType(coords, TerrainType.Sand);
+            foreach (WorldCellModel cell in chunkController.worldChunkModel.grid)
             {
-                for (int y = 0; y < height; y++)
+                int y = cell.RealCoords.y * tileSize;
+                int x = cell.RealCoords.x * tileSize;
+                spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), Color.White);
+            }
+
+
+
+            /*
+            Vector2 tilePostition = Vector2.Zero;
+            for (int x = 0; x < CellWidth; x++)
+            {
+                for (int y = 0; y < CellHeight; y++)
                 {
                     spriteBatch.Draw(this.Content.Load<Texture2D>("grass"),
                         new Rectangle((int) tilePostition.X, (int) tilePostition.Y, tileSize, tileSize), Color.White);
@@ -175,10 +191,9 @@ namespace kbs2.Desktop.View.MapView
                 tilePostition.Y = 0;
                 tilePostition.X += tileSize;
             }
-
+            */
             spriteBatch.End();
 
-            // end own code
             base.Draw(gameTime);
         }
 
