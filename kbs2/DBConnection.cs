@@ -14,17 +14,20 @@ namespace kbs2
     {
         public SQLiteConnection DBConn { get; set; }
 
+        // Open a connection with the given database file
         public void OpenConnection(string dbName)
         {
             DBConn = new SQLiteConnection($"Data Source={dbName}.sqlite; Version=3;");
             DBConn.Open();
         }
 
+        // Close the current connection with the database
         public void CloseConnection()
         {
             DBConn.Close();
         }
 
+        // Get the Def(ault) from the given unit
         public UnitDef GetDefaultFromUnit(int unit)
         {
             UnitDef returnedUnitDef = new UnitDef();
@@ -32,7 +35,7 @@ namespace kbs2
             string query =
                 "SELECT * " +
                 "FROM UnitDef " +
-                "WHERE Id=@i " + // Name or Id
+                "WHERE Id=@i " + // CHANGE to Name or Id
                 "JOIN BattleDef ON Id = BattleDef.UnitDefId " +
                 "JOIN HPDef ON Id = HPDef.UnitDefId " +
                 "JOIN LevelXPDef ON Id = LevelXPDef.UnitDefID";
@@ -65,26 +68,30 @@ namespace kbs2
 
             return returnedUnitDef;
         }
-
+        // Retrieves all units assigned to the given faction    CHANGE int factionName to string factionName if easier
         public List<Unit_Model> GetUnitsFromFaction(int factionName)
         {
+            // Creates a Unit_Model list to store all the retrieved units
             List<Unit_Model> units = new List<Unit_Model>();
             
+            // Query to select all units from the given faction
             string query = 
                 "SELECT * " +
                 "FROM Faction_Unit " +
-                "WHERE Faction_Unit.Faction_Id = @name " + // Change @name to @id
+                "WHERE Faction_Unit.Faction_Id = @name " + // CHANGE @name to @id
                 "JOIN Unit ON Factoin_Unit.UnitId = Unit.Id " +
                 "JOIN UnitLocation ON UnitLocation.UnitId = Faction_Unit.UnitId";
 
             using(SQLiteCommand cmd = new SQLiteCommand(query, DBConn))
             {
+                // Add the faction's name parameter
                 cmd.Parameters.Add(new SQLiteParameter("@name", factionName));
 
                 using(SQLiteDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
+                        // Create and insert values into a new Unit_Model and add the Unit_Model to the Unit_Model list afterwards
                         Unit_Model unit = new Unit_Model();
 
                         unit.BattleModel.Accuracy = (double)reader["Unit.Accuracy"];
@@ -108,6 +115,7 @@ namespace kbs2
                 }
             }
 
+            // Return the Unit_Model list
             return units;
         }
     }
