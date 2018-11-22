@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.TextureAtlases;
 
 namespace kbs2.Desktop.View.MapView
 {
@@ -36,6 +37,9 @@ namespace kbs2.Desktop.View.MapView
         {
             // TODO: Add your initialization logic here
             camera2D = new Camera2D(GraphicsDevice);
+
+            camera2D.MinimumZoom = (float) MinZoom;
+            camera2D.MaximumZoom = (float) MaxZoom;
 
             base.Initialize();
         }
@@ -77,14 +81,14 @@ namespace kbs2.Desktop.View.MapView
             // Add possible camera logic
             Vector2 moveVelocity = Vector2.Zero;
 
-            int moveSpeed = 2;
+            const float moveSpeed = 1.5f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right)) moveVelocity += new Vector2(moveSpeed, 0);
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, moveSpeed);
             if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-moveSpeed, 0);
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -moveSpeed);
-            if (Keyboard.GetState().IsKeyDown(Keys.G)) Zoom -= 0.1;
-            if (Keyboard.GetState().IsKeyDown(Keys.H)) Zoom += 0.1;
+            if (Keyboard.GetState().IsKeyDown(Keys.G)) camera2D.ZoomOut((float) 0.1);
+            if (Keyboard.GetState().IsKeyDown(Keys.H)) camera2D.ZoomIn((float) 0.1);
 
             updateZoom(Mouse.GetState());
 
@@ -93,20 +97,22 @@ namespace kbs2.Desktop.View.MapView
             base.Update(gameTime);
         }
 
+
         private void updateZoom(MouseState mouseState)
         {
             int currentScrollWheelValue = mouseState.ScrollWheelValue;
             int scrollChange = previousScrollWheelValue - currentScrollWheelValue;
+            double zoomChange = scrollChange / 36000.0;
 
-            if (Math.Abs(scrollChange) == 0) return;
+            camera2D.ZoomIn((float) zoomChange);
 
-            Console.WriteLine($"PreviousScrollValue: {previousScrollWheelValue}");
-            Console.WriteLine($"CurrentScrollValue: {currentScrollWheelValue}");
-            Console.WriteLine($"ScrollChange: {scrollChange}");
-            Console.WriteLine($"Tiles on screen: {TileCount}");
-            Zoom = 1.0 + scrollChange / 100.0;
 
             previousScrollWheelValue = currentScrollWheelValue;
+
+            if (Math.Abs(zoomChange) < 0.000001) return;
+
+            Console.WriteLine($"Zoom: {Zoom}");
+            Console.WriteLine($"Camera-pos: {camera2D.Position}");
         }
 
         // added temp camera
@@ -119,26 +125,9 @@ namespace kbs2.Desktop.View.MapView
 
         private int previousScrollWheelValue;
 
-        private double zoom = 1;
+        private float Zoom => camera2D.Zoom;
 
-        private double Zoom
-        {
-            get => zoom;
-            set
-            {
-                if (!(value < MaxZoom && value > MinZoom))
-                    return;
-
-                zoom = value;
-                Console.WriteLine($"Zoom: {zoom}");
-                ZoomEvent?.Invoke(this, new ZoomEventArgs(Zoom));
-            }
-        }
-
-        public event ZoomObserver ZoomEvent;
-
-
-        double TileCount => Math.Ceiling((DefaultTiles / Zoom) > 1.0 ? (DefaultTiles / Zoom) : 1);
+        float TileCount => (float) Math.Ceiling((DefaultTiles / Zoom) > 1.0 ? (DefaultTiles / Zoom) : 1);
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -156,25 +145,23 @@ namespace kbs2.Desktop.View.MapView
             int viewPortHeight = viewPort.Height;
             int viewPortWidth = viewPort.Width;
 
-            int tileSize = (int)(viewPortWidth / TileCount);
-            int CellWidth = (int)TileCount;
-            int CellHeight = (int)(CellWidth / viewPortRatio);
+            int tileSize = (int) (viewPortWidth / TileCount);
+            int CellWidth = (int) TileCount;
+            int CellHeight = (int) (CellWidth / viewPortRatio);
 
             // TODO: Add your drawing code here
             // Done draw basic sprite on screen
             spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
 
-            Coords coords = new Coords();
-            coords.x = 1;
-            coords.y = 1;
+            Coords coords = new Coords {x = 0, y = 0};
             WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrainType(coords, TerrainType.Sand);
             foreach (WorldCellModel cell in chunkController.worldChunkModel.grid)
             {
                 int y = cell.RealCoords.y * tileSize;
                 int x = cell.RealCoords.x * tileSize;
-                spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), Color.White);
+                Rectangle textureRegion = new Rectangle(x, y, tileSize, tileSize);
+                spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), textureRegion, Color.White);
             }
-
 
 
             /*
