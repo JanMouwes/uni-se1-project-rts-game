@@ -35,14 +35,12 @@ namespace kbs2.Unit.Model
 
         public void InsertUnitDef(int id)
         {
-            DBConnection Con = new DBConnection();
+            DBController Con = new DBController();
             Con.OpenConnection("DefDex");
 
             UnitDef = Con.GetDefaultFromUnit(1);
 
             Con.CloseConnection();
         }
-
-        
     }
 }
