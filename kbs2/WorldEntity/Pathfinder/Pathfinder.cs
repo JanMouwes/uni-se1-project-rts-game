@@ -11,10 +11,12 @@ using kbs2.World.Structs;
 public class Pathfinder
 {
 
+	//[Review] encapsulation	
     WorldModel worldModel;
     public int Limit { get; set; }
     public List<Coords> CheckedCells;
 
+	//[Review] encapsulation
     static Func<double, double, double> pythagoras = (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
     static Func<double, double, double> getDistance = (x, y) => x > y ? x - y : y - x;
     Func<Coords, Coords, double> getDistance2d = (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
@@ -26,6 +28,7 @@ public class Pathfinder
         Limit = limit;
 	}
 
+	//	[Review] Split up
     // returns a path to the target that does not contain obstacles
     public List<FloatCoords> FindPath(FloatCoords TargetFloatCoords, Unit_Model unit)
     {
@@ -34,16 +37,17 @@ public class Pathfinder
         Coords targetIntCoords = (Coords)TargetFloatCoords;
 
         
-
+		//	[Review][Style] new CellWeight { AbsoluteDistanceToTarget = getDistance2d(), AbsoluteDistanceToUnit = 0}, etc. Google 'object initialiser'
         CellWeight unitLocation;
         unitLocation.AbsoluteDistanceToTarget = getDistance2d(unit.LocationModel.coords, targetIntCoords);
         unitLocation.AbsoluteDistanceToUnit = 0;
         unitLocation.DistanceToUnit = 0;
 
+		//	[Review] weightDictionarIEs!
         weightDictionarys.CellsWithWeight.Add(unit.LocationModel.coords ,unitLocation);
         weightDictionarys.BorderCellsWithWeight.Add(unit.LocationModel.coords, unitLocation);
 
-
+		//	[Review] 'Limit*2*Limit*2*2' what is this, why is it? comment required!
         for (int i = 0; i<Limit*2*Limit*2*2;i++) // backup plan to keep the search area within a limit
         {
 
@@ -62,6 +66,7 @@ public class Pathfinder
                 }
             }
 
+			//	[Review][Suggestion] if (!isset) return null;
             if (isset)
             {
                 // find weight of the nieghbours of the cell
@@ -102,7 +107,7 @@ public class Pathfinder
         //Delete all bordercoords, they are not needed.
         foreach (KeyValuePair<Coords, CellWeight> cell in CheckedCells.BorderCellsWithWeight){
             if (cell.Key == TargetCoords)
-            {
+            {	//	[Review] empty if?
             }else{
                 CheckedCells.CellsWithWeight.Remove(cell.Key);
             }
@@ -112,7 +117,7 @@ public class Pathfinder
         while (RouteCells[RouteCells.Count - 1] != unit.LocationModel.coords) 
         {
             Coords current;
-
+			//	[Review] why not unified?
             //sets current cell to last added cell
             current = RouteCells[RouteCells.Count - 1];
 
@@ -123,13 +128,13 @@ public class Pathfinder
                 AbsoluteDistanceToTarget = float.MaxValue
             };
             Coords lowestcoords = new Coords();
-
+			//	[Review] Split this off. GetCellNeighbours, or simply 'CellNeighbours'
             Neighbours[0] = new Coords { x = 1, y = 0 };
             Neighbours[1] = new Coords { x = -1, y = 0 };
             Neighbours[2] = new Coords { x = 0, y = 1 };
             Neighbours[3] = new Coords { x = 0, y = -1 };
             Neighbours[4] = new Coords { x = 1, y = 1 };
-            Neighbours[5] = new Coords { x = -1, y = 1 };
+            Neighbours[5] = new Coords { x = -1, y = 1 };	//[Review] identical to Neighbours[6]
             Neighbours[6] = new Coords { x = -1, y = 1 };
             Neighbours[7] = new Coords { x = -1, y = -1 };
 
@@ -156,7 +161,7 @@ public class Pathfinder
     // sets the weightvalues of all the neighbours of a cell
     public void CalculateWeight(Coords currentCell, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
     {
-        Coords[] HorizontalNeigbours = new Coords[4];
+        Coords[] HorizontalNeigbours = new Coords[4]; //[Review] again, remaking the neighbours. Split off and use multiple times.
         HorizontalNeigbours[0] = new Coords { x = 1, y = 0 };
         HorizontalNeigbours[1] = new Coords { x = -1, y = 0 };
         HorizontalNeigbours[2] = new Coords { x = 0, y = 1 };
@@ -168,6 +173,7 @@ public class Pathfinder
         DiagonalNeigbours[2] = new Coords { x = -1, y = 1 };
         DiagonalNeigbours[3] = new Coords { x = -1, y = -1 };
         
+		//	[Review] The five lines below are awfully similar to the five lines below them. Time for Action<>!
         for (int i = 0; i<4; i++) // check non diagonal neighbours first to check if any of the diagonal neighbours are obstructed
         {
             Coords coords = currentCell + HorizontalNeigbours[i];
@@ -183,6 +189,7 @@ public class Pathfinder
     // sets the weightvalues of a single cell and ads them to a dictionary
     public void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
     {
+		//	[Review] I appreciate the guard-statements. I don't appreciate the nesting. &&'s & ||'s are preferrable
         if (weightDictionarys.ObstacleList.Contains(NeighbourCoords)) //check if cell is a known obstacle
         {
             return;
@@ -200,7 +207,7 @@ public class Pathfinder
         }
 
         // get coords of the chunk that contains the neighbourcell
-        Coords chunkCoords;
+        Coords chunkCoords; //	[Review] object intialisation
         chunkCoords.x = NeighbourCoords.x / worldModel.ChunkSize;
         chunkCoords.y = NeighbourCoords.y / worldModel.ChunkSize;
 
@@ -251,9 +258,9 @@ public class Pathfinder
     }
 
     // checks if a cell is an obstacle for the specifeid unit
-    public bool CellIsObstacle(WorldCellModel Cell, Unit_Model unit)
+    public bool CellIsObstacle(WorldCellModel Cell, Unit_Model unit) // [Review] CellIsObstacle => 
     {
-        bool r = true;
+        bool r = true; //	[Review] r = !unit.UnwalkableTerrain.Contains()
         if (unit.UnwalkableTerrain.Contains(Cell.Terrain))
         {
             r = false;
@@ -281,7 +288,7 @@ public class Pathfinder
             RouteCoords[0]
         };
 
-        while (true)
+        while (true) //	[Review] not-condition in while()
         {
             WayPoints.Add(FindNextWayPoint(RouteCoords, WayPoints));
 
@@ -298,7 +305,7 @@ public class Pathfinder
         FloatCoords l1 = WayPoints[WayPoints.Count-1]; // start from the last waypoint added
         FloatCoords l2;
 
-        for (int i = 1; true; i++)
+        for (int i = 1; true; i++)	//	[Review] change to while
         {
             if (RouteCoords.IndexOf(l1) + i <= RouteCoords.Count) //check if we reached the target
             {
@@ -310,7 +317,7 @@ public class Pathfinder
             }
 
             // calculate the distance of the line between the two waypoints to all the points we will skip 
-            for (int j = 0; j < i; j++)
+            for (int j = 0; j < i; j++) //	[Review] use Linq-query
             {
                 FloatCoords point = RouteCoords[RouteCoords.IndexOf(l1) + j];
                 
@@ -334,17 +341,17 @@ public class Pathfinder
             return true;
         }
 
-        Coords three;
+        Coords three; //	[Review] object-initialiser
         three.x = one.x;
         three.y = two.y;
 
-        Coords four;
+        Coords four; //	[Review] object-initialiser
         four.x = two.x;
         four.y = one.y;
 
         //Checks if both coords are blocked by an obstacle
         if(ObstaclesDictorary.ObstacleList.Contains(three) && ObstaclesDictorary.ObstacleList.Contains(four))
-        {
+        {	//	[Review][Suggestion] return !(ObstaclesDictionary.ObstacleList...)
             return false;
         }
 
