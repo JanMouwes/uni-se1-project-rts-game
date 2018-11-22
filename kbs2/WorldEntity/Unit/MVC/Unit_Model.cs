@@ -20,12 +20,16 @@ namespace kbs2.Unit.Model
 		public Battle_Model BattleModel;
 		public Location_Model LocationModel;
 
-		public Unit_Model(int id)
+		public Unit_Model() { }
+
+        public void InsertUnitDef(int id)
         {
             DBConnection Con = new DBConnection();
             Con.OpenConnection("DefDex");
 
             UnitDef = Con.GetDefaultFromUnit(1);
+
+            Con.CloseConnection();
         }
 
         public List<TerrainType> UnwalkableTerrain { get; set; }
