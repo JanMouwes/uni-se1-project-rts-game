@@ -150,24 +150,25 @@ namespace kbs2.Desktop.View.MapView
             int tileSize = (int) (viewPortWidth / TileCount);
             int CellWidth = (int) TileCount;
             int CellHeight = (int) (CellWidth / viewPortRatio);
-            
+
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
 
             // initialize world
             WorldController world = WorldFactory.GetNewWorld();
-            
+
             // draw each tile in the chunks in the chunkGrid
-            foreach(KeyValuePair<Coords, WorldChunkController> chunkGrid in world.worldModel.ChunkGrid)
+            foreach (KeyValuePair<Coords, WorldChunkController> chunkGrid in world.worldModel.ChunkGrid)
             {
                 foreach (WorldCellModel cell in chunkGrid.Value.worldChunkModel.grid)
                 {
                     int y = cell.RealCoords.y * tileSize;
                     int x = cell.RealCoords.x * tileSize;
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), Color.LawnGreen);
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize),
+                        Color.LawnGreen);
                 }
             }
-            
+
             spriteBatch.End();
 
             base.Draw(gameTime);
