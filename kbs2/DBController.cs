@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace kbs2
 {
-    class DBConnection
+    class DBController
     {
         public SQLiteConnection DBConn { get; set; }
 
