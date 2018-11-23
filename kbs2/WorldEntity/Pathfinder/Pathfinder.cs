@@ -8,16 +8,17 @@ using kbs2.WorldEntity.Structs;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Location;
 
+
 public class Pathfinder
 {
 
-    WorldModel worldModel;
+    private WorldModel worldModel;
     public int Limit { get; set; }
     public List<Coords> CheckedCells;
 
-    static Func<double, double, double> pythagoras = (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
-    static Func<double, double, double> getDistance = (x, y) => x > y ? x - y : y - x;
-    Func<Coords, Coords, double> getDistance2d = (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
+    private static Func<double, double, double> pythagoras = (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
+    private static Func<double, double, double> getDistance = (x, y) => x > y ? x - y : y - x;
+    private Func<Coords, Coords, double> getDistance2d = (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
 
 
     public Pathfinder(WorldModel worldModel,int limit)
@@ -29,19 +30,17 @@ public class Pathfinder
     // returns a path to the target that does not contain obstacles
     public List<FloatCoords> FindPath(FloatCoords TargetFloatCoords, Location_Model unit)
     {
-        WeightDictionarys weightDictionarys = new WeightDictionarys(true);
+        WeightDictionarys weightDictionaries = new WeightDictionarys(true);
 
         Coords targetIntCoords = (Coords)TargetFloatCoords;
-
-        
 
         CellWeight unitLocation;
         unitLocation.AbsoluteDistanceToTarget = getDistance2d(unit.LocationModel.coords, targetIntCoords);
         unitLocation.AbsoluteDistanceToUnit = 0;
         unitLocation.DistanceToUnit = 0;
 
-        weightDictionarys.CellsWithWeight.Add(unit.LocationModel.coords ,unitLocation);
-        weightDictionarys.BorderCellsWithWeight.Add(unit.LocationModel.coords, unitLocation);
+        weightDictionaries.CellsWithWeight.Add(unit.LocationModel.coords ,unitLocation);
+        weightDictionaries.BorderCellsWithWeight.Add(unit.LocationModel.coords, unitLocation);
 
 
         for (int i = 0; i<Limit*2*Limit*2*2;i++) // backup plan to keep the search area within a limit
@@ -52,7 +51,7 @@ public class Pathfinder
             bool isset = false;
 
             // find the bordercell with the lowest weight this cell is the most likely to be in the path to the target
-            foreach (KeyValuePair<Coords, CellWeight> entry in weightDictionarys.BorderCellsWithWeight) 
+            foreach (KeyValuePair<Coords, CellWeight> entry in weightDictionaries.BorderCellsWithWeight) 
             {
                 if (entry.Value.Weight < lowestWeight)
                 {
@@ -62,27 +61,26 @@ public class Pathfinder
                 }
             }
 
-            if (isset)
-            {
-                // find weight of the nieghbours of the cell
-                CalculateWeight(lowestCoords, targetIntCoords, unit, weightDictionarys);
-                // remove cell from bordercells since the nieghbours are added it is no longer a border
-                weightDictionarys.BorderCellsWithWeight.Remove(lowestCoords);
-            }
-            else
+            if (!isset)
             {
                 // no path found
                 return null;
             }
 
-            if (weightDictionarys.CellsWithWeight.ContainsKey(targetIntCoords)) // check if target cell has been found
+            // find weight of the nieghbours of the cell
+            CalculateWeight(lowestCoords, targetIntCoords, unit, weightDictionaries);
+            // remove cell from bordercells since the nieghbours are added it is no longer a border
+            weightDictionaries.BorderCellsWithWeight.Remove(lowestCoords);
+
+
+            if (weightDictionaries.CellsWithWeight.ContainsKey(targetIntCoords)) // check if target cell has been found
             {
                 // path found
                 break;
             }
         }
 
-        List<FloatCoords> route = CellToFloatCoords(DefineRoute(weightDictionarys, targetIntCoords, unit));
+        List<FloatCoords> route = CellToFloatCoords(DefineRoute(weightDictionaries, targetIntCoords, unit));
 
         route[0] = unit.LocationModel.floatCoords;
         route[route.Count - 1] = TargetFloatCoords;
@@ -93,6 +91,8 @@ public class Pathfinder
     }
 
 
+
+
     // finds the route based on the cells that have there weight calculated
     private List<Coords> DefineRoute(WeightDictionarys CheckedCells, Coords TargetCoords , Unit_Model unit)
     {
@@ -101,9 +101,8 @@ public class Pathfinder
 
         //Delete all bordercoords, they are not needed.
         foreach (KeyValuePair<Coords, CellWeight> cell in CheckedCells.BorderCellsWithWeight){
-            if (cell.Key == TargetCoords)
-            {
-            }else{
+            if (!(cell.Key == TargetCoords))
+            {	
                 CheckedCells.CellsWithWeight.Remove(cell.Key);
             }
         }
@@ -111,27 +110,18 @@ public class Pathfinder
         //Makes the actual route by repeating while last coords in the routecells is not the unit location
         while (RouteCells[RouteCells.Count - 1] != unit.LocationModel.coords) 
         {
-            Coords current;
-
-            //sets current cell to last added cell
-            current = RouteCells[RouteCells.Count - 1];
+            Coords current = RouteCells[RouteCells.Count - 1]; 
 
             Coords[] Neighbours = new Coords[8];
+            GetDiagonalNeighbours().CopyTo(Neighbours,0);
+            GetHorizontalNeighbours().CopyTo(Neighbours, 4);
+            
             CellWeight lowest = new CellWeight
             {
                 DistanceToUnit = float.MaxValue,
                 AbsoluteDistanceToTarget = float.MaxValue
             };
             Coords lowestcoords = new Coords();
-
-            Neighbours[0] = new Coords { x = 1, y = 0 };
-            Neighbours[1] = new Coords { x = -1, y = 0 };
-            Neighbours[2] = new Coords { x = 0, y = 1 };
-            Neighbours[3] = new Coords { x = 0, y = -1 };
-            Neighbours[4] = new Coords { x = 1, y = 1 };
-            Neighbours[5] = new Coords { x = -1, y = 1 };
-            Neighbours[6] = new Coords { x = -1, y = 1 };
-            Neighbours[7] = new Coords { x = -1, y = -1 };
 
             //get neighbours from current and replace lowestcoords if its lower
             for (int i = 0; i < 8; i++)
@@ -153,29 +143,40 @@ public class Pathfinder
         return RouteCells;
       }
 
-    // sets the weightvalues of all the neighbours of a cell
-    public void CalculateWeight(Coords currentCell, Coords TargetCoords, Location_Model unit, WeightDictionarys weightDictionarys)
+
+    public Coords[] GetHorizontalNeighbours()
+
     {
-        Coords[] HorizontalNeigbours = new Coords[4];
+        Coords[] HorizontalNeigbours = new Coords[4]; 
         HorizontalNeigbours[0] = new Coords { x = 1, y = 0 };
         HorizontalNeigbours[1] = new Coords { x = -1, y = 0 };
         HorizontalNeigbours[2] = new Coords { x = 0, y = 1 };
         HorizontalNeigbours[3] = new Coords { x = 0, y = -1 };
+        return HorizontalNeigbours;
+    }
 
+    public Coords[] GetDiagonalNeighbours()
+    {
         Coords[] DiagonalNeigbours = new Coords[4];
         DiagonalNeigbours[0] = new Coords { x = 1, y = 1 };
         DiagonalNeigbours[1] = new Coords { x = -1, y = 1 };
         DiagonalNeigbours[2] = new Coords { x = -1, y = 1 };
         DiagonalNeigbours[3] = new Coords { x = -1, y = -1 };
-        
-        for (int i = 0; i<4; i++) // check non diagonal neighbours first to check if any of the diagonal neighbours are obstructed
+        return DiagonalNeigbours;
+
+    }
+
+        // sets the weightvalues of all the neighbours of a cell
+        public void CalculateWeight(Coords currentCell, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
+    {
+        Coords[] Neighbours = new Coords[8];
+        GetHorizontalNeighbours().CopyTo(Neighbours, 0);
+        GetDiagonalNeighbours().CopyTo(Neighbours, 4);
+
+
+        for (int i = 0; i<8; i++) // check non diagonal neighbours first to check if any of the diagonal neighbours are obstructed
         {
-            Coords coords = currentCell + HorizontalNeigbours[i];
-            SetWeightCell(currentCell, coords, TargetCoords, unit, weightDictionarys);
-        }
-        for (int i = 0; i < 4; i++) // check diagonal neighbours
-        {
-            Coords coords = currentCell + DiagonalNeigbours[i];
+            Coords coords = currentCell + Neighbours[i];
             SetWeightCell(currentCell, coords, TargetCoords, unit, weightDictionarys);
         }
     }
@@ -187,12 +188,10 @@ public class Pathfinder
         {
             return;
         }
-        if (weightDictionarys.CellsWithWeight.ContainsKey(NeighbourCoords)) // check if cell weight is alread known
+        if (weightDictionarys.CellsWithWeight.ContainsKey(NeighbourCoords) && !weightDictionarys.BorderCellsWithWeight.ContainsKey(NeighbourCoords)) // check if cell weight is alread known
         {
-            if (!weightDictionarys.BorderCellsWithWeight.ContainsKey(NeighbourCoords))// if cell is a bordercell it is possible a shorter route to it will be found
-            {
-                return;
-            }
+            // if cell is a bordercell it is possible a shorter route to it will be found
+            return;
         }
         if (CheckDiagonalsBlocked(CurrentCoords, NeighbourCoords, weightDictionarys))// check if the diagonal nieghbour is reachable from currnetcell
         {
@@ -200,10 +199,11 @@ public class Pathfinder
         }
 
         // get coords of the chunk that contains the neighbourcell
-        Coords chunkCoords;
-        chunkCoords.x = NeighbourCoords.x / worldModel.ChunkSize;
-        chunkCoords.y = NeighbourCoords.y / worldModel.ChunkSize;
-
+        Coords chunkCoords = new Coords
+        {
+            x = NeighbourCoords.x / worldModel.ChunkSize,
+            y = NeighbourCoords.y / worldModel.ChunkSize
+        };
         // get coords of the neighbourcell in relation to the chunk
         int coordsInChunkx = NeighbourCoords.x % worldModel.ChunkSize;
         int coordsInChunky = NeighbourCoords.y % worldModel.ChunkSize;
@@ -251,13 +251,12 @@ public class Pathfinder
     }
 
     // checks if a cell is an obstacle for the specifeid unit
+
     public bool CellIsObstacle(WorldCellModel Cell, Location_Model unit)
+
     {
-        bool r = true;
-        if (unit.UnwalkableTerrain.Contains(Cell.Terrain))
-        {
-            r = false;
-        }
+        bool r = !unit.UnwalkableTerrain.Contains(Cell.Terrain);
+
         // TODO check buildings
 
         return r;
@@ -281,14 +280,9 @@ public class Pathfinder
             RouteCoords[0]
         };
 
-        while (true)
+        while (!(WayPoints[WayPoints.Count - 1] == RouteCoords[RouteCoords.Count - 1]))
         {
             WayPoints.Add(FindNextWayPoint(RouteCoords, WayPoints));
-
-            if (WayPoints[WayPoints.Count-1]==RouteCoords[RouteCoords.Count-1])// check if the last waypoint is the target
-            {
-                break;
-            }
         }
         return WayPoints;
     }
@@ -310,7 +304,7 @@ public class Pathfinder
             }
 
             // calculate the distance of the line between the two waypoints to all the points we will skip 
-            for (int j = 0; j < i; j++)
+            for (int j = 0; j < i; j++) 
             {
                 FloatCoords point = RouteCoords[RouteCoords.IndexOf(l1) + j];
                 
@@ -334,20 +328,19 @@ public class Pathfinder
             return true;
         }
 
-        Coords three;
-        three.x = one.x;
-        three.y = two.y;
+        Coords three = new Coords()
+        {
+            x = one.x,
+            y = two.y
+        };
 
-        Coords four;
-        four.x = two.x;
-        four.y = one.y;
+        Coords four = new Coords()
+        {
+            x = two.x,
+            y = one.y
+        };
 
         //Checks if both coords are blocked by an obstacle
-        if(ObstaclesDictorary.ObstacleList.Contains(three) && ObstaclesDictorary.ObstacleList.Contains(four))
-        {
-            return false;
-        }
-
-        return true;
+        return !ObstaclesDictorary.ObstacleList.Contains(three) || !ObstaclesDictorary.ObstacleList.Contains(four);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using kbs2.Unit.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace kbs2.Faction.FactionMVC
 {
     public class Faction_Controller
     {
-        public Faction_Model FactionModel { get; set; }
+        static public Faction_Model FactionModel { get; set; }
+
+        Action<Unit_Model> AddUnitToFaction = unit => FactionModel.Units.Add(unit);
+        //[review] also change faction in unit
     }
 }

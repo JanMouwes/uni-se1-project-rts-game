@@ -50,6 +50,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DBConnection.cs" />
+    <Compile Include="DBController.cs" />
     <Compile Include="Faction\Enums\Faction_Relations.cs" />
     <Compile Include="Faction\FactionMVC\Faction_Controller.cs" />
     <Compile Include="Faction\FactionMVC\Faction_Model.cs" />

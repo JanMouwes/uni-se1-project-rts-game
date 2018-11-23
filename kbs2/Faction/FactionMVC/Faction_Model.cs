@@ -24,8 +24,10 @@ namespace kbs2.Faction.FactionMVC
         }
 
         // Checks if the given faction is hostile to this faction
-        public bool IsHostileTo(Faction_Model faction)
+        public bool IsHostileTo(Faction_Model faction) //[review] naar controller
         {
+            //[review] if(FactionRelationships[faction] == Faction_Relations.hostile) why not use the key if you have it?
+
             foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
             {
                 if (relationship.Key.Name == faction.Name && relationship.Value == Faction_Relations.hostile)
@@ -41,7 +43,7 @@ namespace kbs2.Faction.FactionMVC
         {
             // Checks if there is not already an existing relation with this faction
             int i = 0;
-
+            // [review] if(FactionRelationships.ContainsKey(faction))
             foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
             {
                 if (relationship.Key.Name == faction.Name)
@@ -56,17 +58,26 @@ namespace kbs2.Faction.FactionMVC
                 faction.FactionRelationships.Add(this, relation);
             }
         }
-        // Edits the relationship from the given faction to the FactionRelationships dictionary
-        public void ChangeRelationship(Faction_Model faction, Faction_Relations relation)
-        {
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
-            {
-                // Checks if the given relation is not the same as the current dictionary's relation
-                if (relationship.Key.Name == faction.Name && relationship.Value != relation)
-                {
-                    FactionRelationships[relationship.Key] = relation;
-                }
-            }
-        }
+		// Edits the relationship from the given faction to the FactionRelationships dictionary
+		public void ChangeRelationship(Faction_Model faction, Faction_Relations relation)
+		{
+            //[review] if(FactionRelationships[faction] != relation)
+
+            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships.ToList())
+			{
+				
+				// Checks if the given relation is not the same as the current dictionary's relation
+				if (relationship.Key.Name == faction.Name && relationship.Value != relation)
+				{
+
+					FactionRelationships.Remove(relationship.Key);
+					FactionRelationships.Add(relationship.Key, relation);
+
+					faction.FactionRelationships.Remove(this);
+					faction.FactionRelationships.Add(this, relation);
+				}
+
+			}
+		}
     }
 }
