@@ -12,5 +12,6 @@ namespace kbs2.Faction.FactionMVC
         static public Faction_Model FactionModel { get; set; }
 
         Action<Unit_Model> AddUnitToFaction = unit => FactionModel.Units.Add(unit);
+        //[review] also change faction in unit
     }
 }
