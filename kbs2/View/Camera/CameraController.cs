@@ -8,10 +8,13 @@ namespace kbs2.Desktop.View.Camera
     {
         public CameraController(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
+            cameraModel = new CameraModel();
         }
 
         public CameraController(ViewportAdapter viewportAdapter) : base(viewportAdapter)
         {
         }
+
+        public CameraModel cameraModel { get; set; }
     }
 }

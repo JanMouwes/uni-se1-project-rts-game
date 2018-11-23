@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.View.EventArgs;
 using kbs2.Desktop.World.World;
 using kbs2.World;
@@ -20,7 +21,7 @@ namespace kbs2.Desktop.View.MapView
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Camera2D camera2D;
+        CameraController Camera;
 
         public MapView()
         {
@@ -38,10 +39,7 @@ namespace kbs2.Desktop.View.MapView
         {
             // Add your initialization logic here
 
-            camera2D = new Camera2D(GraphicsDevice);
-
-            camera2D.MinimumZoom = (float)MinZoom;
-            camera2D.MaximumZoom = (float)MaxZoom;
+            Camera = new CameraController(graphics.GraphicsDevice);
 
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
@@ -102,12 +100,12 @@ namespace kbs2.Desktop.View.MapView
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, moveSpeed);
             if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-moveSpeed, 0);
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -moveSpeed);
-            if (Keyboard.GetState().IsKeyDown(Keys.G)) camera2D.ZoomOut((float)0.1);
-            if (Keyboard.GetState().IsKeyDown(Keys.H)) camera2D.ZoomIn((float)0.1);
+            if (Keyboard.GetState().IsKeyDown(Keys.G)) Camera.ZoomOut((float)0.1);
+            if (Keyboard.GetState().IsKeyDown(Keys.H)) Camera.ZoomIn((float)0.1);
 
             updateZoom();
 
-            camera2D.Move(moveVelocity);
+            Camera.Move(moveVelocity);
         }
 
         /// <summary>
@@ -116,29 +114,15 @@ namespace kbs2.Desktop.View.MapView
         private void updateZoom()
         {
             int currentScrollWheelValue = Mouse.GetState().ScrollWheelValue;
-            int scrollChange = previousScrollWheelValue - currentScrollWheelValue;
+            int scrollChange = Camera.cameraModel.PreviousScrollWheelValue - currentScrollWheelValue;
             double zoomChange = scrollChange / 36000.0;
 
-            camera2D.ZoomOut((float) zoomChange);
+            Camera.ZoomOut((float) zoomChange);
 
-            previousScrollWheelValue = currentScrollWheelValue;
+            Camera.cameraModel.PreviousScrollWheelValue = currentScrollWheelValue;
 
             if (Math.Abs(zoomChange) < 0.000001) return;
-
-            Console.WriteLine($"Zoom: {Zoom}");
-            Console.WriteLine($"Camera-pos: {camera2D.Position}");
         }
-
-        // tempsize
-        private const int DefaultTiles = 30;
-        private const double MinZoom = 1.0 / 6.0; //    Percent zoom (outer-most zoom)
-        private const double MaxZoom = 8.0; //    Percent zoom (inner-most zoom)
-
-        private int previousScrollWheelValue;
-
-        private float Zoom => camera2D.Zoom;
-
-        float TileCount => (float) Math.Ceiling((DefaultTiles / Zoom) > 1.0 ? (DefaultTiles / Zoom) : 1);
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -146,7 +130,7 @@ namespace kbs2.Desktop.View.MapView
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             DrawCells(gameTime);
 
@@ -156,13 +140,13 @@ namespace kbs2.Desktop.View.MapView
         private void DrawCells(GameTime gameTime)
         {
             // Calculate the size (Width) of a tile
-            int tileSize = (int)(base.GraphicsDevice.Viewport.Width / TileCount);
+            int tileSize = (int)(base.GraphicsDevice.Viewport.Width / Camera.cameraModel.TileCount);
 
             // Calculates the height of a cell
-            int CellHeight = (int)(TileCount / base.GraphicsDevice.Viewport.AspectRatio);
+            int CellHeight = (int)(Camera.cameraModel.TileCount / base.GraphicsDevice.Viewport.AspectRatio);
 
             // Start spritebatch for drawing
-            spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
+            spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
             // initialize world
             WorldController world = WorldFactory.GetNewWorld();
