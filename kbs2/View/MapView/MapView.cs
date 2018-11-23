@@ -95,12 +95,12 @@ namespace kbs2.Desktop.View.MapView
         {
             GraphicsDevice.Clear(Color.Black);
 
-            DrawCells(gameTime);
+            DrawCells();
 
             base.Draw(gameTime);
         }
 
-        private void DrawCells(GameTime gameTime)
+        private void DrawCells()
         {
             // Calculate the size (Width) of a tile
             int tileSize = (int)(GraphicsDevice.Viewport.Width / Camera.cameraModel.TileCount);
