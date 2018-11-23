@@ -78,12 +78,15 @@ namespace kbs2.Desktop.View.MapView
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            Move();
+            MoveCamera();
 
             base.Update(gameTime);
         }
 
-        private void Move()
+        /// <summary>
+        /// Checks keys for moving the camera and updates the camera.
+        /// </summary>
+        private void MoveCamera()
         {
             Vector2 moveVelocity = Vector2.Zero;
 
@@ -101,6 +104,9 @@ namespace kbs2.Desktop.View.MapView
             camera2D.Move(moveVelocity);
         }
 
+        /// <summary>
+        /// Checks for zoom updates and changes zoom accordingly.
+        /// </summary>
         private void updateZoom()
         {
             int currentScrollWheelValue = Mouse.GetState().ScrollWheelValue;
