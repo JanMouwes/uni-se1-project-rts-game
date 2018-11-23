@@ -11,9 +11,7 @@ namespace kbs2.Desktop.View.Camera
             cameraModel = new CameraModel();
         }
 
-        public CameraController(ViewportAdapter viewportAdapter) : base(viewportAdapter)
-        {
-        }
+        public CameraController(ViewportAdapter viewportAdapter) : base(viewportAdapter) { }
 
         public CameraModel cameraModel { get; set; }
     }
