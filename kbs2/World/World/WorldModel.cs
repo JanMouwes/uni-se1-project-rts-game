@@ -6,6 +6,7 @@ namespace kbs2.Desktop.World.World
 {
 	public class WorldModel
 	{
+		//	Grid of chunks. Dictionary because it's expandable
 		public Dictionary<Coords, WorldChunkController> ChunkGrid { get; set; }
     }
 }
