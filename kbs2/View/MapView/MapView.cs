@@ -19,9 +19,9 @@ namespace kbs2.Desktop.View.MapView
 
     public class MapView : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        CameraController Camera;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private CameraController Camera;
 
         public MapView()
         {
