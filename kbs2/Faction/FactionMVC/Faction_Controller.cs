@@ -12,14 +12,14 @@ namespace kbs2.Faction.FactionMVC
 {
     public class Faction_Controller : IHasFactionRelationship 
     {
-        static public Faction_Model FactionModel { get; set; }
+        public Faction_Model FactionModel { get; set; }
 
         public Faction_Controller(string name)
         {
             FactionModel = new Faction_Model(name);
         }
         // Adds a unit to the faction units list
-        Action<Unit_Model> AddUnitToFaction = unit => FactionModel.Units.Add(unit);
+        public void AddUnitToFaction(Unit_Model unit) => FactionModel.Units.Add(unit);
         // Checks if the given faction is hostile to this faction
         public bool IsHostileTo(Faction_Model faction) => FactionModel.FactionRelationships[faction] == Faction_Relations.hostile;
         // Checks if there is a relation with the given faction and changes it to the given relation if not the same

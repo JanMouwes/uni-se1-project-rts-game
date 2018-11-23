@@ -10,22 +10,20 @@ namespace Tests
 	[TestFixture]
 	public class FactionTests
 	{
-		private Faction_Model Unit;
-		private Faction_Model Enemy;
-		private Faction_Model Friend;
-		private Faction_Model Neutral;
-
-		private Faction_Controller Controller;
+		private Faction_Controller Unit;
+		private Faction_Controller Enemy;
+		private Faction_Controller Friend;
+		private Faction_Controller Neutral;
+		
 
 		[SetUp]
 		public void init()
 		{
-			Unit = new Faction_Model("Water");
-			Enemy = new Faction_Model("Earth");
-			Friend = new Faction_Model("Fire");
-			Neutral = new Faction_Model("Äir");
-
-			Controller = new Faction_Controller();
+			Unit = new Faction_Controller("Water");
+			Enemy = new Faction_Controller("Earth");
+			Friend = new Faction_Controller("Fire");
+			Neutral = new Faction_Controller("Äir");
+			
 		}
 		
 		
@@ -35,11 +33,11 @@ namespace Tests
 		[TestCase(Faction_Relations.neutral, false)]
 		public void IsHostileToFaction(Faction_Relations relation, bool ExpectedResult)
 		{
-			Controller.AddRelationship(Enemy, relation);
+			Unit.AddRelationship(Enemy.FactionModel, relation);
 
 
-			var result = Controller.IsHostileTo(Enemy);
-			var result2 = Controller.IsHostileTo(Unit);
+			var result = Unit.IsHostileTo(Enemy.FactionModel);
+			var result2 = Enemy.IsHostileTo(Unit.FactionModel);
 
 
 			Assert.IsTrue(result == ExpectedResult);
@@ -56,22 +54,22 @@ namespace Tests
 		[TestCase(Faction_Relations.neutral, Faction_Relations.friendly, false)]
 		public void AddRelationshipToFaction(Faction_Relations relation, Faction_Relations RelationCheck, bool ExpectedResult)
 		{
-			Controller.AddRelationship(Friend, relation);
+			Unit.AddRelationship(Friend.FactionModel, relation);
 
 			var result = false;
 			var result2 = false;
 
-			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Unit.FactionRelationships)
+			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
 			{
-				if (relationship.Key.Name == Friend.Name && relationship.Value == RelationCheck)
+				if (relationship.Key.Name == Friend.FactionModel.Name && relationship.Value == RelationCheck)
 				{
 					result = true;
 				}
 			}
 
-			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Friend.FactionRelationships)
+			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
 			{
-				if (relationship.Key.Name == Unit.Name && relationship.Value == RelationCheck)
+				if (relationship.Key.Name == Unit.FactionModel.Name && relationship.Value == RelationCheck)
 				{
 					result2 = true;
 				}
@@ -88,24 +86,24 @@ namespace Tests
 		[TestCase(Faction_Relations.hostile, Faction_Relations.hostile, false)]
 		public void ChangeRelationshipOfFaction(Faction_Relations relation, Faction_Relations ChangedRelation, bool ExpectedResult)
 		{
-			Controller.AddRelationship(Friend, relation);
+			Unit.AddRelationship(Friend.FactionModel, relation);
 
 			var result = false;
 			var result2 = false;
 
-			Controller.ChangeRelationship(Friend, ChangedRelation);
+			Unit.ChangeRelationship(Friend.FactionModel, ChangedRelation);
 
-			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Unit.FactionRelationships)
+			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
 			{
-				if (relationship.Key.Name == Friend.Name && relationship.Value != relation)
+				if (relationship.Key.Name == Friend.FactionModel.Name && relationship.Value != relation)
 				{
 					result = true;
 				}
 			}
 
-			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Friend.FactionRelationships)
+			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
 			{
-				if (relationship.Key.Name == Unit.Name && relationship.Value != relation)
+				if (relationship.Key.Name == Unit.FactionModel.Name && relationship.Value != relation)
 				{
 					result2 = true;
 				}
