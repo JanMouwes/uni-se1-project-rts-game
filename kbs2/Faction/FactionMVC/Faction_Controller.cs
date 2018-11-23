@@ -13,6 +13,11 @@ namespace kbs2.Faction.FactionMVC
     public class Faction_Controller : IHasFactionRelationship 
     {
         static public Faction_Model FactionModel { get; set; }
+
+        public Faction_Controller(string name)
+        {
+            FactionModel = new Faction_Model(name);
+        }
         // Adds a unit to the faction units list
         Action<Unit_Model> AddUnitToFaction = unit => FactionModel.Units.Add(unit);
         // Checks if the given faction is hostile to this faction
