@@ -15,6 +15,8 @@ namespace Tests
 		private Faction_Model Friend;
 		private Faction_Model Neutral;
 
+		private Faction_Controller Controller;
+
 		[SetUp]
 		public void init()
 		{
@@ -23,7 +25,7 @@ namespace Tests
 			Friend = new Faction_Model("Fire");
 			Neutral = new Faction_Model("Äir");
 
-
+			Controller = new Faction_Controller();
 		}
 		
 		
@@ -31,13 +33,13 @@ namespace Tests
 		[TestCase(Faction_Relations.hostile, true)]
 		[TestCase(Faction_Relations.friendly, false)]
 		[TestCase(Faction_Relations.neutral, false)]
-		public void IsHostileToUnit(Faction_Relations relation, bool ExpectedResult)
+		public void IsHostileToFaction(Faction_Relations relation, bool ExpectedResult)
 		{
-			Unit.AddRelationship(Enemy, relation);
+			Controller.AddRelationship(Enemy, relation);
 
 
-			var result = Unit.IsHostileTo(Enemy);
-			var result2 = Enemy.IsHostileTo(Unit);
+			var result = Controller.IsHostileTo(Enemy);
+			var result2 = Controller.IsHostileTo(Unit);
 
 
 			Assert.IsTrue(result == ExpectedResult);
@@ -52,9 +54,9 @@ namespace Tests
 		[TestCase(Faction_Relations.friendly, Faction_Relations.hostile, false)]
 		[TestCase(Faction_Relations.hostile, Faction_Relations.neutral, false)]
 		[TestCase(Faction_Relations.neutral, Faction_Relations.friendly, false)]
-		public void AddRelationshipToUnit(Faction_Relations relation, Faction_Relations RelationCheck, bool ExpectedResult)
+		public void AddRelationshipToFaction(Faction_Relations relation, Faction_Relations RelationCheck, bool ExpectedResult)
 		{
-			Unit.AddRelationship(Friend, relation);
+			Controller.AddRelationship(Friend, relation);
 
 			var result = false;
 			var result2 = false;
@@ -84,14 +86,14 @@ namespace Tests
 		[TestCase(Faction_Relations.neutral, Faction_Relations.hostile, true)]
 		[TestCase(Faction_Relations.friendly, Faction_Relations.neutral, true)]
 		[TestCase(Faction_Relations.hostile, Faction_Relations.hostile, false)]
-		public void ChangeRelationshipOfUnit(Faction_Relations relation, Faction_Relations ChangedRelation, bool ExpectedResult)
+		public void ChangeRelationshipOfFaction(Faction_Relations relation, Faction_Relations ChangedRelation, bool ExpectedResult)
 		{
-			Unit.AddRelationship(Friend, relation);
+			Controller.AddRelationship(Friend, relation);
 
 			var result = false;
 			var result2 = false;
 
-			Unit.ChangeRelationship(Friend, ChangedRelation);
+			Controller.ChangeRelationship(Friend, ChangedRelation);
 
 			foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Unit.FactionRelationships)
 			{

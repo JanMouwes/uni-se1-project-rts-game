@@ -49,7 +49,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DBConnection.cs" />
     <Compile Include="DBController.cs" />
     <Compile Include="Faction\Enums\Faction_Relations.cs" />
     <Compile Include="Faction\FactionMVC\Faction_Controller.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
-    <Compile Include="WorldEntity\Location\LocationMVC\Floatcoords.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
     <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
