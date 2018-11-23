@@ -23,7 +23,7 @@ namespace kbs2.WorldEntity.Location
 		{
 
 		}
-		public void MoveTo(FloatCoords target)
+		public void MoveTo(FloatCoords target) //[Review] This can be a Lambda expression
 		{
             Waypoints.AddRange(pathfinder.FindPath(target, LocationModel));
 		}
