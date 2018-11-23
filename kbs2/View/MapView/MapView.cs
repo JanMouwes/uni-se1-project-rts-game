@@ -43,6 +43,12 @@ namespace kbs2.Desktop.View.MapView
             camera2D.MinimumZoom = (float)MinZoom;
             camera2D.MaximumZoom = (float)MaxZoom;
 
+            // Allows the user to resize the window
+            base.Window.AllowUserResizing = true;
+
+            // Makes the mouse visible in the window
+            base.IsMouseVisible = true;
+
             base.Initialize();
         }
 
@@ -140,20 +146,21 @@ namespace kbs2.Desktop.View.MapView
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // Allows the user to resize the window
-            base.Window.AllowUserResizing = true;
+            DrawCells(gameTime);
 
-            // Makes the mouse visible in the window
-            base.IsMouseVisible = true;
+            base.Draw(gameTime);
+        }
 
+        private void DrawCells(GameTime gameTime)
+        {
             // Calculate the size (Width) of a tile
-            int tileSize = (int) (base.GraphicsDevice.Viewport.Width / TileCount);
-            
+            int tileSize = (int)(base.GraphicsDevice.Viewport.Width / TileCount);
+
             // Calculates the height of a cell
-            int CellHeight = (int) (TileCount / base.GraphicsDevice.Viewport.AspectRatio);
-            
+            int CellHeight = (int)(TileCount / base.GraphicsDevice.Viewport.AspectRatio);
+
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: camera2D.GetViewMatrix());
 
@@ -173,12 +180,6 @@ namespace kbs2.Desktop.View.MapView
             }
 
             spriteBatch.End();
-
-            base.Draw(gameTime);
-        }
-
-        private void DrawCells(GameTime gameTime)
-        {
         }
     }
 }
