@@ -6,6 +6,7 @@ using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.WorldEntity.Structs;
 using kbs2.World.Structs;
+using kbs2.WorldEntity.Location;
 
 
 public class Pathfinder
@@ -27,7 +28,7 @@ public class Pathfinder
 	}
 
     // returns a path to the target that does not contain obstacles
-    public List<FloatCoords> FindPath(FloatCoords TargetFloatCoords, Unit_Model unit)
+    public List<FloatCoords> FindPath(FloatCoords TargetFloatCoords, Location_Model unit)
     {
         WeightDictionarys weightDictionaries = new WeightDictionarys(true);
 
@@ -142,7 +143,9 @@ public class Pathfinder
         return RouteCells;
       }
 
+
     public Coords[] GetHorizontalNeighbours()
+
     {
         Coords[] HorizontalNeigbours = new Coords[4]; 
         HorizontalNeigbours[0] = new Coords { x = 1, y = 0 };
@@ -179,7 +182,7 @@ public class Pathfinder
     }
 
     // sets the weightvalues of a single cell and ads them to a dictionary
-    public void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
+    public void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Location_Model unit, WeightDictionarys weightDictionarys)
     {
         if (weightDictionarys.ObstacleList.Contains(NeighbourCoords)) //check if cell is a known obstacle
         {
@@ -248,7 +251,9 @@ public class Pathfinder
     }
 
     // checks if a cell is an obstacle for the specifeid unit
-    public bool CellIsObstacle(WorldCellModel Cell, Unit_Model unit) // [Review] CellIsObstacle => 
+
+    public bool CellIsObstacle(WorldCellModel Cell, Location_Model unit)
+
     {
         bool r = !unit.UnwalkableTerrain.Contains(Cell.Terrain);
 
