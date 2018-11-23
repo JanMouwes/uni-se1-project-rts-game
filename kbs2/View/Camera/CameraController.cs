@@ -30,7 +30,7 @@ namespace kbs2.Desktop.View.Camera
         {
             Vector2 moveVelocity = Vector2.Zero;
 
-            const float moveSpeed = 1.5f;
+            const float moveSpeed = 2.5f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right)) moveVelocity += new Vector2(moveSpeed, 0);
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, moveSpeed);
@@ -51,7 +51,7 @@ namespace kbs2.Desktop.View.Camera
         {
             int currentScrollWheelValue = Mouse.GetState().ScrollWheelValue;
             int scrollChange = cameraModel.PreviousScrollWheelValue - currentScrollWheelValue;
-            double zoomChange = scrollChange / 36000.0;
+            double zoomChange = scrollChange / 18000.0;
 
             ZoomOut((float)zoomChange);
 
