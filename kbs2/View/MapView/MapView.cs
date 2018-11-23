@@ -115,9 +115,9 @@ namespace kbs2.Desktop.View.MapView
             WorldController world = WorldFactory.GetNewWorld();
 
             // draw each tile in the chunks in the chunkGrid
-            foreach (KeyValuePair<Coords, WorldChunkController> chunkGrid in world.worldModel.ChunkGrid)
+            foreach (KeyValuePair<Coords, WorldChunkController> chunkGrid in world.WorldModel.ChunkGrid)
             {
-                foreach (WorldCellModel cell in chunkGrid.Value.worldChunkModel.grid)
+                foreach (WorldCellModel cell in chunkGrid.Value.WorldChunkModel.grid)
                 {
                     int y = cell.RealCoords.y * tileSize;
                     int x = cell.RealCoords.x * tileSize;

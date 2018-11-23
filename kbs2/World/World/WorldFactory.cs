@@ -16,7 +16,7 @@ namespace kbs2.World.World
             WorldController world = new WorldController();
 
             // Initialize WorldModel and ChunkGrid in World so you can add chunks to this grid
-            world.worldModel = new WorldModel
+            world.WorldModel = new WorldModel
             {
                 ChunkGrid = new Dictionary<Coords, WorldChunkController>()
             };
@@ -33,7 +33,7 @@ namespace kbs2.World.World
                     WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrainType(coords, TerrainType.Sand);
 
                     // Adds the new chunk to the worldgrid
-                    world.worldModel.ChunkGrid.Add(coords, chunkController);
+                    world.WorldModel.ChunkGrid.Add(coords, chunkController);
                 }
             }
 
@@ -47,7 +47,7 @@ namespace kbs2.World.World
             WorldController world = new WorldController();
 
             // Initialize WorldModel and ChunkGrid in World so you can add chunks to this grid
-            world.worldModel = new WorldModel
+            world.WorldModel = new WorldModel
             {
                 ChunkGrid = new Dictionary<Coords, WorldChunkController>()
             };

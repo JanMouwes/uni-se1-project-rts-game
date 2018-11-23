@@ -4,7 +4,7 @@ namespace kbs2.Desktop.World.World
 {
     public class WorldController
     {
-        public WorldModel worldModel { get; set; }
+        public WorldModel WorldModel { get; set; }
 
         public void Load( /*Faction faction*/)
         {
@@ -16,8 +16,8 @@ namespace kbs2.Desktop.World.World
             //TODO
         }
 
-		public void LoadChunk(Coords coords) => worldModel.ChunkGrid[coords].Load();
+		public void LoadChunk(Coords coords) => WorldModel.ChunkGrid[coords].Load();
 
-		public void UnloadChunk(Coords coords) => worldModel.ChunkGrid[coords].UnLoad();
+		public void UnloadChunk(Coords coords) => WorldModel.ChunkGrid[coords].UnLoad();
 	}
 }

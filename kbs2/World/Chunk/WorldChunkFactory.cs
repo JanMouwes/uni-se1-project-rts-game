@@ -13,7 +13,7 @@ namespace kbs2.World.Chunk
             WorldChunkController controller = new WorldChunkController(chunkCoords);
 
             //int xIndex = 0, yIndex = 0; 
-            foreach (WorldCellModel worldCellModel in controller.worldChunkModel.grid)
+            foreach (WorldCellModel worldCellModel in controller.WorldChunkModel.grid)
             {
                 worldCellModel.BaseTerrain = worldCellModel.Terrain = terrainType;
             }
