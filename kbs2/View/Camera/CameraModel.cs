@@ -15,7 +15,7 @@ namespace kbs2.Desktop.View.Camera
         // Keeps track of the previous scrollwheel value to keep track of zoom
         public int PreviousScrollWheelValue;
 
-        public float Zoom;
+        public float Zoom = 1;
 
         public float TileCount => (float)Math.Ceiling((DefaultTiles / Zoom) > 1.0 ? (DefaultTiles / Zoom) : 1);
     }

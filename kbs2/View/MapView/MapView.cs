@@ -39,7 +39,7 @@ namespace kbs2.Desktop.View.MapView
         {
             // Add your initialization logic here
 
-            Camera = new CameraController(graphics.GraphicsDevice);
+            Camera = new CameraController(GraphicsDevice);
 
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
@@ -130,7 +130,7 @@ namespace kbs2.Desktop.View.MapView
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             DrawCells(gameTime);
 
@@ -140,10 +140,10 @@ namespace kbs2.Desktop.View.MapView
         private void DrawCells(GameTime gameTime)
         {
             // Calculate the size (Width) of a tile
-            int tileSize = (int)(base.GraphicsDevice.Viewport.Width / Camera.cameraModel.TileCount);
+            int tileSize = (int)(GraphicsDevice.Viewport.Width / Camera.cameraModel.TileCount);
 
             // Calculates the height of a cell
-            int CellHeight = (int)(Camera.cameraModel.TileCount / base.GraphicsDevice.Viewport.AspectRatio);
+            int CellHeight = (int)(Camera.cameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
 
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
@@ -158,8 +158,7 @@ namespace kbs2.Desktop.View.MapView
                 {
                     int y = cell.RealCoords.y * tileSize;
                     int x = cell.RealCoords.x * tileSize;
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize),
-                        Color.LawnGreen);
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), Color.LawnGreen);
                 }
             }
 
