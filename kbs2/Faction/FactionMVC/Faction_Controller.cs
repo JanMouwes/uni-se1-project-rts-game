@@ -10,13 +10,9 @@ using System.Threading.Tasks;
 
 namespace kbs2.Faction.FactionMVC
 {
-    public class Faction_Controller : IHasFactionBuilding, IHasFactionRelationship, IHasFactionUnit
+    public class Faction_Controller : IHasFactionRelationship 
     {
         static public Faction_Model FactionModel { get; set; }
-
-        public List<Building_Model> Buildings { get; set; }
-
-        public List<Unit_Model> Units { get; set; }
         // Adds a unit to the faction units list
         Action<Unit_Model> AddUnitToFaction = unit => FactionModel.Units.Add(unit);
         // Checks if the given faction is hostile to this faction

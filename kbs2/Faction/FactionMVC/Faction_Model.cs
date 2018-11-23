@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.Faction.FactionMVC
 {
-    public class Faction_Model
+    public class Faction_Model : IHasFactionUnit, IHasFactionBuilding
     {
         public string Name { get; set; }
         public Dictionary<Faction_Model, Faction_Relations> FactionRelationships { get; set; }
