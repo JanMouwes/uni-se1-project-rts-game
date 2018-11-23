@@ -103,10 +103,10 @@ namespace kbs2.Desktop.View.MapView
         private void DrawCells()
         {
             // Calculate the size (Width) of a tile
-            int tileSize = (int)(GraphicsDevice.Viewport.Width / Camera.cameraModel.TileCount);
+            int tileSize = (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
 
             // Calculates the height of a cell
-            int CellHeight = (int)(Camera.cameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
+            int CellHeight = (int)(Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
 
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());

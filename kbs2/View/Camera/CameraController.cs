@@ -9,11 +9,11 @@ namespace kbs2.Desktop.View.Camera
 {
     public class CameraController : Camera2D
     {
-        public CameraModel cameraModel { get; set; }
+        public CameraModel CameraModel { get; set; }
 
         public CameraController(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
-            cameraModel = new CameraModel();
+            CameraModel = new CameraModel();
 
             base.MinimumZoom = CameraModel.MinimumZoom;
             base.MaximumZoom = CameraModel.MaximumZoom;
@@ -46,12 +46,12 @@ namespace kbs2.Desktop.View.Camera
         public void UpdateZoom()
         {
             int currentScrollWheelValue = Mouse.GetState().ScrollWheelValue;
-            int scrollChange = cameraModel.PreviousScrollWheelValue - currentScrollWheelValue;
+            int scrollChange = CameraModel.PreviousScrollWheelValue - currentScrollWheelValue;
             double zoomChange = scrollChange / 18000.0;
 
             ZoomOut((float)zoomChange);
 
-            cameraModel.PreviousScrollWheelValue = currentScrollWheelValue;
+            CameraModel.PreviousScrollWheelValue = currentScrollWheelValue;
         }
     }
 }
