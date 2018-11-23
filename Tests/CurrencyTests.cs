@@ -31,5 +31,33 @@ namespace Tests
             controller.ResourcesToCurrency();
             Assert.AreEqual(controller.model.currency, result);
         }
+
+        [Test]
+        [TestCase(20)]
+        [TestCase(30)]
+        public void AddCurrency(float amount)
+        {
+            controller = new Currency_Controller();
+            float expected = 500 + amount;
+            controller.AddCurrency(amount);
+
+            Assert.IsTrue(controller.model.currency == expected);
+        }
+
+        [Test]
+        [TestCase(20)]
+        [TestCase(30)]
+        public void RemoveCurrency(float amount)
+        {
+            controller = new Currency_Controller();
+            float expected = 500 - amount;
+            controller.RemoveCurrency(amount);
+
+            Assert.IsTrue(controller.model.currency == expected);
+        }
+
+
+
     }
 }
+

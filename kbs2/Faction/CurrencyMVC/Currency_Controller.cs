@@ -8,6 +8,7 @@ namespace kbs2.Faction.CurrencyMVC
     {
         public Currency_Model model = new Currency_Model();
 
+        // Adds amount to currency
         public void AddCurrency(float amount)
         {
             if(amount>0){
@@ -15,6 +16,7 @@ namespace kbs2.Faction.CurrencyMVC
             }
         }
 
+        // Removes amount to currency
         public void RemoveCurrency(float amount)
         {
             if (amount > 0)
