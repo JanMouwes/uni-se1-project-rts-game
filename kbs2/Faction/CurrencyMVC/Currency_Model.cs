@@ -13,7 +13,7 @@ namespace kbs2.Faction.CurrencyMVC
             }
         }
 
-        public float currency; 
+        public float currency = 500; 
         public Dictionary<ResourceType, float> resources;
     }
 }
