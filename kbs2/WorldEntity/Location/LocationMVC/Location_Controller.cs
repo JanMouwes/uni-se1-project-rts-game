@@ -43,7 +43,7 @@ namespace kbs2.WorldEntity.Location
 
                     float xdifference = (float)getDistance(LocationModel.floatCoords.x, Waypoints[0].x);
                     float ydifference = (float)getDistance(LocationModel.floatCoords.y, Waypoints[0].y);
-
+                    // calculate new coords
                     float diagonaldifference = (float)pythagoras(xdifference, ydifference);
                     FloatCoords difference = new FloatCoords();
                     difference.x = diagonaldifference / speed * xdifference;
