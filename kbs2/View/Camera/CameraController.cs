@@ -36,8 +36,8 @@ namespace kbs2.Desktop.View.Camera
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, moveSpeed);
             if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-moveSpeed, 0);
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -moveSpeed);
-            if (Keyboard.GetState().IsKeyDown(Keys.G)) ZoomOut((float)0.1);
-            if (Keyboard.GetState().IsKeyDown(Keys.H)) ZoomIn((float)0.1);
+            if (Keyboard.GetState().IsKeyDown(Keys.G)) ZoomOut((float)0.01);
+            if (Keyboard.GetState().IsKeyDown(Keys.H)) ZoomIn((float)0.01);
 
             UpdateZoom();
 
@@ -56,8 +56,6 @@ namespace kbs2.Desktop.View.Camera
             ZoomOut((float)zoomChange);
 
             cameraModel.PreviousScrollWheelValue = currentScrollWheelValue;
-
-            if (Math.Abs(zoomChange) < 0.000001) return;
         }
     }
 }
