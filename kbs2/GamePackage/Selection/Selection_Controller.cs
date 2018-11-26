@@ -1,6 +1,8 @@
 ﻿using kbs2.GamePackage.Selection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +42,7 @@ namespace kbs2.GamePackage
             Model.PreviousMouseState = CurMouseState;
         }
 
-        private void DrawHorizontalLine(int PositionY)
+        public void DrawHorizontalLine(int PositionY)
         {
             if (View.Selection.Width > 0)
             {
@@ -48,7 +50,7 @@ namespace kbs2.GamePackage
                 {
                     if (View.Selection.Width - i >= 0)
                     {
-                        //spriteBatch.Draw(Controller.View.LineTexture, new Rectangle(View.Selection.X + i, PositionY, 10, 5), Color.White);
+                        //spriteBatch.Draw(View.LineTexture, new Rectangle(View.Selection.X + i, PositionY, 10, 5), Color.White);
                     }
                 }
             }
@@ -58,13 +60,13 @@ namespace kbs2.GamePackage
                 {
                     if (View.Selection.Width - i <= 0)
                     {
-                        //spriteBatch.Draw(Controller.View.LineTexture, new Rectangle(View.Selection.X + i, PositionY, 10, 5), Color.White);
+                        //spriteBatch.Draw(View.LineTexture, new Rectangle(View.Selection.X + i, PositionY, 10, 5), Color.White);
                     }
                 }
             }
         }
 
-        private void DrawVerticalLine(int PositionX)
+        public void DrawVerticalLine(int PositionX)
         {
             if (View.Selection.Height > 0)
             {
@@ -72,7 +74,7 @@ namespace kbs2.GamePackage
                 {
                     if (View.Selection.Height - i >= 0)
                     {
-                        //spriteBatch.Draw(Controller.View.LineTexture, new Rectangle(PositionX, View.Selection.Y + i, 10, 5),
+                        //spriteBatch.Draw(View.LineTexture, new Rectangle(PositionX, View.Selection.Y + i, 10, 5),
                         //new Rectangle(0, 0, mDottedLine.Width, mDottedLine.Height), Color.White, MathHelper.ToRadians(90), new Vector2(0, 0), SpriteEffects.None, 0);
                     }
                 }
@@ -83,7 +85,7 @@ namespace kbs2.GamePackage
                 {
                     if (View.Selection.Height - i <= 0)
                     {
-                        //spriteBatch.Draw(Controller.View.LineTexture, new Rectangle(PositionX - 10, View.Selection.Y + i, 10, 5), Color.White);
+                        //spriteBatch.Draw(View.LineTexture, new Rectangle(PositionX - 10, View.Selection.Y + i, 10, 5), Color.White);
                     }
                 }
             }
