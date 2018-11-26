@@ -22,6 +22,7 @@ namespace kbs2.Desktop.View.MapView
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private CameraController Camera;
+        private WorldController World;
 
         public MapView()
         {
@@ -39,6 +40,10 @@ namespace kbs2.Desktop.View.MapView
         {
             // Add your initialization logic here
 
+            // initialize world
+            World = WorldFactory.GetNewWorld();
+
+            // initialize camera
             Camera = new CameraController(GraphicsDevice);
 
             // Allows the user to resize the window
@@ -111,11 +116,8 @@ namespace kbs2.Desktop.View.MapView
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
-            // initialize world
-            WorldController world = WorldFactory.GetNewWorld();
-
             // draw each tile in the chunks in the chunkGrid
-            foreach (KeyValuePair<Coords, WorldChunkController> chunkGrid in world.WorldModel.ChunkGrid)
+            foreach (KeyValuePair<Coords, WorldChunkController> chunkGrid in GetChunksOnScreen())
             {
                 foreach (WorldCellModel cell in chunkGrid.Value.WorldChunkModel.grid)
                 {
@@ -126,6 +128,15 @@ namespace kbs2.Desktop.View.MapView
             }
 
             spriteBatch.End();
+        }
+
+        // Calculates wich chunks are in the camera's view and returns them in a list
+        public Dictionary<Coords, WorldChunkController> GetChunksOnScreen()
+        {
+            Dictionary<Coords, WorldChunkController> chunksOnScreen = new Dictionary<Coords, WorldChunkController>();
+            chunksOnScreen = World.WorldModel.ChunkGrid;
+
+            return chunksOnScreen;
         }
     }
 }
