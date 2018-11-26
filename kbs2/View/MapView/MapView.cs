@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.View.EventArgs;
 using kbs2.Desktop.World.World;
+using kbs2.GamePackage;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
 using kbs2.World.World;
+using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 
 namespace kbs2.Desktop.View.MapView
@@ -23,6 +26,8 @@ namespace kbs2.Desktop.View.MapView
         private SpriteBatch spriteBatch;
         private CameraController Camera;
         private WorldController World;
+        private Selection_Controller Selection;
+        private Unit_View Pichu = new Unit_View("unitview", 1, 1);
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -51,6 +56,9 @@ namespace kbs2.Desktop.View.MapView
 
             // initialize camera
             Camera = new CameraController(GraphicsDevice);
+
+            // initialize selection
+            Selection = new Selection_Controller("PurpleLine", Mouse.GetState());
 
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
@@ -95,6 +103,8 @@ namespace kbs2.Desktop.View.MapView
 
             Camera.MoveCamera();
 
+            Selection.DrawSelectionBox(Mouse.GetState());
+
             base.Update(gameTime);
         }
 
@@ -107,6 +117,21 @@ namespace kbs2.Desktop.View.MapView
             GraphicsDevice.Clear(Color.Black);
 
             DrawCells();
+
+            spriteBatch.Begin();
+
+            DrawHorizontalLine(Selection.View.Selection.Y);
+            DrawHorizontalLine(Selection.View.Selection.Y + Selection.View.Selection.Height);
+            DrawVerticalLine(Selection.View.Selection.X);
+            DrawVerticalLine(Selection.View.Selection.X + Selection.View.Selection.Width);
+
+            spriteBatch.End();
+
+            spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
+
+            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()), new Rectangle(20, 20, (int) (TileSize * Pichu.Height), (int) (TileSize * Pichu.Width)), Color.White);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
@@ -147,6 +172,58 @@ namespace kbs2.Desktop.View.MapView
             Console.WriteLine($"X: {x}");
             Console.WriteLine($"Y: {y}");
             return chunksOnScreen;
+        }
+
+        public void DrawHorizontalLine(int PositionY)
+        {
+            Texture2D texture = Content.Load<Texture2D>(Selection.View.LineTexture);
+            if (Selection.View.Selection.Width > 0)
+            {
+                for (int i = 0; i <= Selection.View.Selection.Width - 10; i += 10)
+                {
+                    if (Selection.View.Selection.Width - i >= 0)
+                    {
+                        spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5), Color.White);
+                    }
+                }
+            }
+            else if (Selection.View.Selection.Width < 0)
+            {
+                for (int i = -10; i >= Selection.View.Selection.Width; i -= 10)
+                {
+                    if (Selection.View.Selection.Width - i <= 0)
+                    {
+                        spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5), Color.White);
+                    }
+                }
+            }
+        }
+
+        public void DrawVerticalLine(int PositionX)
+        {
+            Texture2D texture = Content.Load<Texture2D>(Selection.View.LineTexture);
+            if (Selection.View.Selection.Height > 0)
+            {
+                for (int i = -2; i <= Selection.View.Selection.Height; i += 10)
+                {
+                    if (Selection.View.Selection.Height - i >= 0)
+                    {
+                        spriteBatch.Draw(texture, new Rectangle(PositionX, Selection.View.Selection.Y + i, 10, 5),
+                        new Rectangle(0, 0, texture.Width, texture.Height), Color.White, MathHelper.ToRadians(90), new Vector2(0, 0), SpriteEffects.None, 0);
+                    }
+                }
+            }
+
+            else if (Selection.View.Selection.Height < 0)
+            {
+                for (int i = 0; i >= Selection.View.Selection.Height; i -= 10)
+                {
+                    if (Selection.View.Selection.Height - i <= 0)
+                    {
+                        spriteBatch.Draw(texture, new Rectangle(PositionX - 10, Selection.View.Selection.Y + i, 10, 5), Color.White);
+                    }
+                }
+            }
         }
     }
 }
