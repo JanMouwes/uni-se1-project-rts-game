@@ -30,10 +30,10 @@ namespace kbs2.Desktop.View.MapView
         private Unit_View Pichu = new Unit_View("unitview", 1, 1);
 
         // Calculate the size (Width) of a tile
-        public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
+        public int TileSize => (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
 
         // Calculates the height of a cell
-        public int CellHeight => (int)(Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
+        public int CellHeight => (int) (Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
 
         public MapView()
         {
@@ -129,12 +129,41 @@ namespace kbs2.Desktop.View.MapView
 
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
-            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()), new Rectangle(20, 20, (int) (TileSize * Pichu.Height), (int) (TileSize * Pichu.Width)), Color.White);
+            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
+                new Rectangle(20, 20, (int) (TileSize * Pichu.Height), (int) (TileSize * Pichu.Width)), Color.White);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
+
+        public delegate Color TileColourDelegate(WorldCellModel cell);
+
+        public TileColourDelegate TileColour;
+
+        private Color ChunkCheckered(WorldCellModel cell) =>
+            Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
+            (Math.Abs(cell.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
+                ? Color.Gray
+                : Color.Pink;
+
+        private Color CellCheckered(WorldCellModel cell) =>
+            Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                ? Color.Gray
+                : Color.Pink;
+
+        private Color CellChunkCheckered(WorldCellModel cell) =>
+            Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
+            (Math.Abs(cell.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
+                ? Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                    ? Color.Gray
+                    : Color.Yellow
+                : Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                    ? Color.Green
+                    : Color.Red;
+
+        private Color RandomColour(WorldCellModel cell) =>
+            new Random(cell.RealCoords.y * cell.RealCoords.x).Next(0, 2) == 1 ? Color.Gray : Color.Pink;
 
         private void DrawCells()
         {
@@ -148,14 +177,11 @@ namespace kbs2.Desktop.View.MapView
                 {
                     int y = cell.RealCoords.y * TileSize;
                     int x = cell.RealCoords.x * TileSize;
-                    Color color = (((Math.Abs(chunkGrid.Key.x) % 2) == (((Math.Abs(chunkGrid.Key.y) % 2) == 1) ? 1: 0)) ? Color.Gray : Color.Pink);
 
-                    Color color2 = (((Math.Abs(cell.RealCoords.x) % 2) == (((Math.Abs(cell.RealCoords.y) % 2) == 1) ? 1 : 0)) ? Color.Gray : Color.Pink);
+                    Color colour = TileColour != null ? TileColour(cell) : CellChunkCheckered(cell);
 
-                    Random random = new Random(cell.RealCoords.y * cell.RealCoords.x);
-                    Color color3 = ((random.Next(0 , 2) == 1) ? Color.Gray : Color.Pink);
-
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, TileSize, TileSize), color3);
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, TileSize, TileSize),
+                        colour);
                 }
             }
 
@@ -167,7 +193,7 @@ namespace kbs2.Desktop.View.MapView
         {
             Dictionary<Coords, WorldChunkController> chunksOnScreen = new Dictionary<Coords, WorldChunkController>();
             chunksOnScreen = World.WorldModel.ChunkGrid;
-            float x =  Camera.GetViewMatrix().M41;
+            float x = Camera.GetViewMatrix().M41;
             float y = Camera.GetViewMatrix().M42;
             Console.WriteLine($"X: {x}");
             Console.WriteLine($"Y: {y}");
@@ -183,7 +209,8 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.Selection.Width - i >= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5), Color.White);
+                        spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5),
+                            Color.White);
                     }
                 }
             }
@@ -193,7 +220,8 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.Selection.Width - i <= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5), Color.White);
+                        spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5),
+                            Color.White);
                     }
                 }
             }
@@ -209,7 +237,8 @@ namespace kbs2.Desktop.View.MapView
                     if (Selection.View.Selection.Height - i >= 0)
                     {
                         spriteBatch.Draw(texture, new Rectangle(PositionX, Selection.View.Selection.Y + i, 10, 5),
-                        new Rectangle(0, 0, texture.Width, texture.Height), Color.White, MathHelper.ToRadians(90), new Vector2(0, 0), SpriteEffects.None, 0);
+                            new Rectangle(0, 0, texture.Width, texture.Height), Color.White, MathHelper.ToRadians(90),
+                            new Vector2(0, 0), SpriteEffects.None, 0);
                     }
                 }
             }
@@ -220,7 +249,8 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.Selection.Height - i <= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(PositionX - 10, Selection.View.Selection.Y + i, 10, 5), Color.White);
+                        spriteBatch.Draw(texture, new Rectangle(PositionX - 10, Selection.View.Selection.Y + i, 10, 5),
+                            Color.White);
                     }
                 }
             }
