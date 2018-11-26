@@ -24,6 +24,12 @@ namespace kbs2.Desktop.View.MapView
         private CameraController Camera;
         private WorldController World;
 
+        // Calculate the size (Width) of a tile
+        public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
+
+        // Calculates the height of a cell
+        public int CellHeight => (int)(Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
+
         public MapView()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -107,12 +113,6 @@ namespace kbs2.Desktop.View.MapView
 
         private void DrawCells()
         {
-            // Calculate the size (Width) of a tile
-            int tileSize = (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
-
-            // Calculates the height of a cell
-            int CellHeight = (int)(Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
-
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
@@ -121,8 +121,8 @@ namespace kbs2.Desktop.View.MapView
             {
                 foreach (WorldCellModel cell in chunkGrid.Value.WorldChunkModel.grid)
                 {
-                    int y = cell.RealCoords.y * tileSize;
-                    int x = cell.RealCoords.x * tileSize;
+                    int y = cell.RealCoords.y * TileSize;
+                    int x = cell.RealCoords.x * TileSize;
                     Color color = (((Math.Abs(chunkGrid.Key.x) % 2) == (((Math.Abs(chunkGrid.Key.y) % 2) == 1) ? 1: 0)) ? Color.Gray : Color.Pink);
 
                     Color color2 = (((Math.Abs(cell.RealCoords.x) % 2) == (((Math.Abs(cell.RealCoords.y) % 2) == 1) ? 1 : 0)) ? Color.Gray : Color.Pink);
@@ -130,7 +130,7 @@ namespace kbs2.Desktop.View.MapView
                     Random random = new Random(cell.RealCoords.y * cell.RealCoords.x);
                     Color color3 = ((random.Next(0 , 2) == 1) ? Color.Gray : Color.Pink);
 
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), color3);
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, TileSize, TileSize), color3);
                 }
             }
 
@@ -144,9 +144,9 @@ namespace kbs2.Desktop.View.MapView
             chunksOnScreen = World.WorldModel.ChunkGrid;
             float x =  Camera.GetViewMatrix().M41;
             float y = Camera.GetViewMatrix().M42;
-            int tileSize = (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
-            float boundsX = x / (Camera.CameraModel.TileCount * tileSize);
-            Console.WriteLine(boundsX);
+            float boundsX = x / (Camera.CameraModel.TileCount * TileSize);
+            Console.WriteLine($"Xpos: {Camera.GetViewMatrix().M41}");
+            Console.WriteLine($"Ypos: {Camera.GetViewMatrix().M42}");
             return chunksOnScreen;
         }
     }
