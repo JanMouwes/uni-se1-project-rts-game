@@ -7,12 +7,13 @@ using kbs2.World.Cell;
 using kbs2.WorldEntity.Structs;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Location;
-
+using kbs2.World.Chunk;
 
 public class Pathfinder
 {
 
     private WorldModel worldModel;
+    private WorldChunkModel chunkModel;
     public int Limit { get; set; }
     public List<Coords> CheckedCells;
 
@@ -21,9 +22,10 @@ public class Pathfinder
     private Func<Coords, Coords, double> getDistance2d = (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
 
 
-    public Pathfinder(WorldModel worldModel,int limit)
+    public Pathfinder(WorldModel worldModel,int limit, WorldChunkModel chunkModel)
 	{
         this.worldModel = worldModel;
+        this.chunkModel = chunkModel;
         Limit = limit;
 	}
 
@@ -201,15 +203,15 @@ public class Pathfinder
         // get coords of the chunk that contains the neighbourcell
         Coords chunkCoords = new Coords
         {
-            x = NeighbourCoords.x / worldModel.ChunkSize,
-            y = NeighbourCoords.y / worldModel.ChunkSize
+            x = NeighbourCoords.x / chunkModel.ChunkSize,
+            y = NeighbourCoords.y / chunkModel.ChunkSize
         };
         // get coords of the neighbourcell in relation to the chunk
-        int coordsInChunkx = NeighbourCoords.x % worldModel.ChunkSize;
-        int coordsInChunky = NeighbourCoords.y % worldModel.ChunkSize;
+        int coordsInChunkx = NeighbourCoords.x % chunkModel.ChunkSize;
+        int coordsInChunky = NeighbourCoords.y % chunkModel.ChunkSize;
 
         // get the actial cell from the worldmodel
-        WorldCellModel cell = worldModel.ChunkGrid[chunkCoords].worldChunkModel.grid[coordsInChunkx, coordsInChunky];
+        WorldCellModel cell = worldModel.ChunkGrid[chunkCoords].WorldChunkModel.grid[coordsInChunkx, coordsInChunky];
 
         if (CellIsObstacle(cell, unit)) // check if cell is obstacle for this unit
         {
