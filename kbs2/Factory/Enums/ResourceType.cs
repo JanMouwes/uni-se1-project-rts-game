@@ -1,5 +1,5 @@
 ﻿using System;
-namespace kbs2.Faction.Enums
+namespace kbs2.Factory.Enums
 {
     public enum ResourceType
     {
