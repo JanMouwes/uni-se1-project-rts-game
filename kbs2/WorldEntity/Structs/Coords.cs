@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kbs2.WorldEntity.Unit.MVC
+namespace kbs2.WorldEntity.Structs
 {
-	public class Unit_View
+	public struct Coords
 	{
 	}
 }

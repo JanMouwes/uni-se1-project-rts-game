@@ -1,6 +1,5 @@
 ﻿using System;
 using kbs2.Desktop.View.MapView;
-using System.Data.SQLite;
 
 namespace kbs2.Desktop
 {

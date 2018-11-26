@@ -10,7 +10,6 @@ namespace kbs2.World.Chunk
     {
         public WorldChunkModel WorldChunkModel { get; set; }
 
-
         public void Load()
         {
         }

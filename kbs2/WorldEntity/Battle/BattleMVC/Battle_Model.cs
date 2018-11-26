@@ -13,5 +13,8 @@ namespace kbs2.WorldEntity.Battle
 		public double Accuracy;
 		public double DodgeChance;
 		public double RangeModifier;
+
+
+
 	}
 }
