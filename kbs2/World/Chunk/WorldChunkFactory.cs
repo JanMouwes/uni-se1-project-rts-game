@@ -16,6 +16,7 @@ namespace kbs2.World.Chunk
             foreach (WorldCellModel worldCellModel in controller.WorldChunkModel.grid)
             {
                 worldCellModel.BaseTerrain = worldCellModel.Terrain = terrainType;
+                worldCellModel.ParentChunk = controller.WorldChunkModel;
             }
 
             return controller;

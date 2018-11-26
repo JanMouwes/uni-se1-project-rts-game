@@ -105,13 +105,41 @@ namespace kbs2.Desktop.View.MapView
             base.Draw(gameTime);
         }
 
+        public delegate Color TileColourDelegate(WorldCellModel cell);
+
+        public TileColourDelegate TileColour;
+
+        private Color ChunkCheckered(WorldCellModel cell) =>
+            Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
+            (Math.Abs(cell.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
+                ? Color.Gray
+                : Color.Pink;
+
+        private Color CellCheckered(WorldCellModel cell) =>
+            Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                ? Color.Gray
+                : Color.Pink;
+
+        private Color CellChunkCheckered(WorldCellModel cell) =>
+            Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
+            (Math.Abs(cell.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
+                ? Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                    ? Color.Gray
+                    : Color.Yellow
+                : Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                    ? Color.Green
+                    : Color.Red;
+
+        private Color RandomColour(WorldCellModel cell) =>
+            new Random(cell.RealCoords.y * cell.RealCoords.x).Next(0, 2) == 1 ? Color.Gray : Color.Pink;
+
         private void DrawCells()
         {
             // Calculate the size (Width) of a tile
-            int tileSize = (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
+            int tileSize = (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
 
             // Calculates the height of a cell
-            int CellHeight = (int)(Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
+            int CellHeight = (int) (Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
 
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
@@ -123,14 +151,11 @@ namespace kbs2.Desktop.View.MapView
                 {
                     int y = cell.RealCoords.y * tileSize;
                     int x = cell.RealCoords.x * tileSize;
-                    Color color = (((Math.Abs(chunkGrid.Key.x) % 2) == (((Math.Abs(chunkGrid.Key.y) % 2) == 1) ? 1: 0)) ? Color.Gray : Color.Pink);
 
-                    Color color2 = (((Math.Abs(cell.RealCoords.x) % 2) == (((Math.Abs(cell.RealCoords.y) % 2) == 1) ? 1 : 0)) ? Color.Gray : Color.Pink);
+                    Color colour = TileColour != null ? TileColour(cell) : CellChunkCheckered(cell);
 
-                    Random random = new Random(cell.RealCoords.y * cell.RealCoords.x);
-                    Color color3 = ((random.Next(0 , 2) == 1) ? Color.Gray : Color.Pink);
-
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), color3);
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize),
+                        colour);
                 }
             }
 
@@ -140,13 +165,16 @@ namespace kbs2.Desktop.View.MapView
         // Calculates wich chunks are in the camera's view and returns them in a list
         public Dictionary<Coords, WorldChunkController> GetChunksOnScreen()
         {
-            Dictionary<Coords, WorldChunkController> chunksOnScreen = new Dictionary<Coords, WorldChunkController>();
-            chunksOnScreen = World.WorldModel.ChunkGrid;
-            float x =  Camera.GetViewMatrix().M41;
+            Dictionary<Coords, WorldChunkController> chunksOnScreen = World.WorldModel.ChunkGrid;
+            
+            float x = Camera.GetViewMatrix().M41;
             float y = Camera.GetViewMatrix().M42;
-            int tileSize = (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
+            
+            int tileSize = (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
             float boundsX = x / (Camera.CameraModel.TileCount * tileSize);
-            Console.WriteLine(boundsX);
+            Console.WriteLine($"boundsX: {boundsX}");
+            Console.WriteLine($"TileSize: {tileSize}");
+            Console.WriteLine($"Matrix: {Camera.GetViewMatrix()}");
             return chunksOnScreen;
         }
     }
