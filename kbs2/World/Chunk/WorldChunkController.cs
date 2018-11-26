@@ -6,16 +6,26 @@ using System.Threading.Tasks;
 
 namespace kbs2.World.Chunk
 {
-	public class WorldChunkController
-	{
+    public class WorldChunkController
+    {
+        public WorldChunkModel WorldChunkModel { get; set; }
 
-		public WorldChunkModel worldChunkModel { get; set; }
 
-		
-		public void Load() { } 
+        public void Load()
+        {
+        }
 
-		public void UnLoad() { }
+        public void UnLoad()
+        {
+        }
 
-		private void LoadFromFile(string fileName) { }
-	}
+        private void LoadFromFile(string fileName)
+        {
+        }
+
+        public WorldChunkController(Coords coords)
+        {
+            this.WorldChunkModel = new WorldChunkModel(coords);
+        }
+    }
 }

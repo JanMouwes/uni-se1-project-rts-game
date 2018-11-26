@@ -13,6 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin grassSprite.png
 #begin Pikachu.gif
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -23,6 +24,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+/build:grassSprite.png;grass.png
 /build:Pikachu.gif
 
 #begin unitview.png
