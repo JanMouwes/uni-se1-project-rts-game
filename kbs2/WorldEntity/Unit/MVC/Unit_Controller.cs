@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Model;
 using kbs2.WorldEntity.Battle;
 using kbs2.WorldEntity.Health;
@@ -23,5 +24,11 @@ namespace kbs2.WorldEntity.Unit.MVC
 		{
 
 		}
+        // Create a new unit and add it to a faction
+        public void CreateUnit(Faction_Model faction)
+        {
+            UnitModel = new Unit_Model();
+            faction.Units.Add(UnitModel);
+        }
 	}
 }

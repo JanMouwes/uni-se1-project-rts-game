@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.Faction.FactionMVC
 {
-    public class Faction_Model : IHasFactionRelationship, IHasFactionUnit, IHasFactionBuilding
+    public class Faction_Model : IHasFactionUnit, IHasFactionBuilding
     {
         public string Name { get; set; }
         public Dictionary<Faction_Model, Faction_Relations> FactionRelationships { get; set; }
@@ -22,62 +22,5 @@ namespace kbs2.Faction.FactionMVC
 			Name = name;
 			FactionRelationships = new Dictionary<Faction_Model, Faction_Relations>();
         }
-
-        // Checks if the given faction is hostile to this faction
-        public bool IsHostileTo(Faction_Model faction) //[review] naar controller
-        {
-            //[review] if(FactionRelationships[faction] == Faction_Relations.hostile) why not use the key if you have it?
-
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
-            {
-                if (relationship.Key.Name == faction.Name && relationship.Value == Faction_Relations.hostile)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        // Adds a new relationship from the given faction to the FactionRelationships dictionary
-        public void AddRelationship(Faction_Model faction, Faction_Relations relation)
-        {
-            // Checks if there is not already an existing relation with this faction
-            int i = 0;
-            // [review] if(FactionRelationships.ContainsKey(faction))
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships)
-            {
-                if (relationship.Key.Name == faction.Name)
-                {
-                    i++;
-                }
-            }
-
-            if(i == 0)
-            {
-                FactionRelationships.Add(faction, relation);
-                faction.FactionRelationships.Add(this, relation);
-            }
-        }
-		// Edits the relationship from the given faction to the FactionRelationships dictionary
-		public void ChangeRelationship(Faction_Model faction, Faction_Relations relation)
-		{
-            //[review] if(FactionRelationships[faction] != relation)
-
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in FactionRelationships.ToList())
-			{
-				
-				// Checks if the given relation is not the same as the current dictionary's relation
-				if (relationship.Key.Name == faction.Name && relationship.Value != relation)
-				{
-
-					FactionRelationships.Remove(relationship.Key);
-					FactionRelationships.Add(relationship.Key, relation);
-
-					faction.FactionRelationships.Remove(this);
-					faction.FactionRelationships.Add(this, relation);
-				}
-
-			}
-		}
     }
 }

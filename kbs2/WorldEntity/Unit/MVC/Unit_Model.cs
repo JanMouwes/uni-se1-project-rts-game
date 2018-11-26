@@ -10,13 +10,14 @@ using kbs2.WorldEntity.Location;
 using kbs2.WorldEntity.XP.XPMVC;
 using kbs2.Unit.Interfaces;
 using kbs2.Unit.Abstract;
+using kbs2.Faction.Interfaces;
 
 namespace kbs2.Unit.Model
 {
-    public class Unit_Model : IHasPersonalSpace, IPurchasable, IClickable, IElemental
+    public class Unit_Model : IHasPersonalSpace, IPurchasable, IClickable, IElemental, IHasFaction
     {
-		public Faction_Model FactionModel;
-		public UnitDef UnitDef;
+        public Faction_Model Faction { get; set; }
+        public UnitDef UnitDef;
 		public HP_Model HPModel;
 		public XP_Model XPModel;
 		public Battle_Model BattleModel;
@@ -29,7 +30,6 @@ namespace kbs2.Unit.Model
         public CostValue CostValue { get; set; }
 
         public Hitbox Clickbox { get; set; }
-        
 
         public Unit_Model() { }
 
@@ -42,5 +42,6 @@ namespace kbs2.Unit.Model
 
             Con.CloseConnection();
         }
+
     }
 }

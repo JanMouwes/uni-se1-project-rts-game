@@ -6,6 +6,7 @@ using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.WorldEntity.Structs;
 using kbs2.World.Structs;
+using kbs2.WorldEntity.Location;
 
 
 public class Pathfinder
@@ -27,19 +28,19 @@ public class Pathfinder
 	}
 
     // returns a path to the target that does not contain obstacles
-    public List<FloatCoords> FindPath(FloatCoords TargetFloatCoords, Unit_Model unit)
+    public List<FloatCoords> FindPath(FloatCoords TargetFloatCoords, Location_Model unit)
     {
         WeightDictionarys weightDictionaries = new WeightDictionarys(true);
 
         Coords targetIntCoords = (Coords)TargetFloatCoords;
 
         CellWeight unitLocation;
-        unitLocation.AbsoluteDistanceToTarget = getDistance2d(unit.LocationModel.coords, targetIntCoords);
+        unitLocation.AbsoluteDistanceToTarget = getDistance2d(unit.coords, targetIntCoords);
         unitLocation.AbsoluteDistanceToUnit = 0;
         unitLocation.DistanceToUnit = 0;
 
-        weightDictionaries.CellsWithWeight.Add(unit.LocationModel.coords ,unitLocation);
-        weightDictionaries.BorderCellsWithWeight.Add(unit.LocationModel.coords, unitLocation);
+        weightDictionaries.CellsWithWeight.Add(unit.coords ,unitLocation);
+        weightDictionaries.BorderCellsWithWeight.Add(unit.coords, unitLocation);
 
 
         for (int i = 0; i<Limit*2*Limit*2*2;i++) // backup plan to keep the search area within a limit
@@ -81,7 +82,7 @@ public class Pathfinder
 
         List<FloatCoords> route = CellToFloatCoords(DefineRoute(weightDictionaries, targetIntCoords, unit));
 
-        route[0] = unit.LocationModel.floatCoords;
+        route[0] = unit.floatCoords;
         route[route.Count - 1] = TargetFloatCoords;
 
         route = MinimizeWaypoints(route);
@@ -93,7 +94,7 @@ public class Pathfinder
 
 
     // finds the route based on the cells that have there weight calculated
-    private List<Coords> DefineRoute(WeightDictionarys CheckedCells, Coords TargetCoords , Unit_Model unit)
+    private List<Coords> DefineRoute(WeightDictionarys CheckedCells, Coords TargetCoords , Location_Model unit)
     {
         List<Coords> RouteCells = new List<Coords>();
         RouteCells.Add(TargetCoords);
@@ -107,7 +108,7 @@ public class Pathfinder
         }
 
         //Makes the actual route by repeating while last coords in the routecells is not the unit location
-        while (RouteCells[RouteCells.Count - 1] != unit.LocationModel.coords) 
+        while (RouteCells[RouteCells.Count - 1] != unit.coords) 
         {
             Coords current = RouteCells[RouteCells.Count - 1]; 
 
@@ -142,7 +143,9 @@ public class Pathfinder
         return RouteCells;
       }
 
+
     public Coords[] GetHorizontalNeighbours()
+
     {
         Coords[] HorizontalNeigbours = new Coords[4]; 
         HorizontalNeigbours[0] = new Coords { x = 1, y = 0 };
@@ -164,7 +167,7 @@ public class Pathfinder
     }
 
         // sets the weightvalues of all the neighbours of a cell
-        public void CalculateWeight(Coords currentCell, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
+        public void CalculateWeight(Coords currentCell, Coords TargetCoords, Location_Model unit, WeightDictionarys weightDictionarys)
     {
         Coords[] Neighbours = new Coords[8];
         GetHorizontalNeighbours().CopyTo(Neighbours, 0);
@@ -179,7 +182,7 @@ public class Pathfinder
     }
 
     // sets the weightvalues of a single cell and ads them to a dictionary
-    public void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Unit_Model unit, WeightDictionarys weightDictionarys)
+    public void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Location_Model unit, WeightDictionarys weightDictionarys)
     {
         if (weightDictionarys.ObstacleList.Contains(NeighbourCoords)) //check if cell is a known obstacle
         {
@@ -219,7 +222,7 @@ public class Pathfinder
 
         // set weightvalues
         cellWeight.AbsoluteDistanceToTarget = getDistance2d(NeighbourCoords, TargetCoords) * 10;
-        cellWeight.AbsoluteDistanceToUnit = getDistance2d(NeighbourCoords, unit.LocationModel.coords) * 10; 
+        cellWeight.AbsoluteDistanceToUnit = getDistance2d(NeighbourCoords, unit.coords) * 10; 
 
 
         if (cellWeight.AbsoluteDistanceToTarget > Limit || cellWeight.AbsoluteDistanceToUnit > Limit) // check if cell is within limit
@@ -248,7 +251,9 @@ public class Pathfinder
     }
 
     // checks if a cell is an obstacle for the specifeid unit
-    public bool CellIsObstacle(WorldCellModel Cell, Unit_Model unit) // [Review] CellIsObstacle => 
+
+    public bool CellIsObstacle(WorldCellModel Cell, Location_Model unit)
+
     {
         bool r = !unit.UnwalkableTerrain.Contains(Cell.Terrain);
 
