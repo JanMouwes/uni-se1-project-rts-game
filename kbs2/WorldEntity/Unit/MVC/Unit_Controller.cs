@@ -19,10 +19,12 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public Battle_Controller BattleController;
 		public Location_Controller LocationController;
 		public Unit_Model UnitModel;
+        public Unit_View UnitView;
 
-		public Unit_Controller()
+		public Unit_Controller(string imageSrc)
 		{
-
+            UnitModel = new Unit_Model();
+            UnitView = new Unit_View(imageSrc, 1, 1);
 		}
         // Create a new unit and add it to a faction
         public void CreateUnit(Faction_Model faction)
