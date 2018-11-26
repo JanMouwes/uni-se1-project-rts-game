@@ -32,6 +32,7 @@ namespace kbs2.Desktop.View.Camera
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, CameraModel.MoveSpeed);
             if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-CameraModel.MoveSpeed, 0);
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -CameraModel.MoveSpeed);
+            if (Keyboard.GetState().IsKeyDown(Keys.B)) CameraModel.Zoom = this.Zoom = 1;
             if (Keyboard.GetState().IsKeyDown(Keys.G)) ZoomOut((float)0.01);
             if (Keyboard.GetState().IsKeyDown(Keys.H)) ZoomIn((float)0.01);
 

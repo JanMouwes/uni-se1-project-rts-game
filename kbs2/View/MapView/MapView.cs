@@ -24,6 +24,12 @@ namespace kbs2.Desktop.View.MapView
         private CameraController Camera;
         private WorldController World;
 
+        // Calculate the size (Width) of a tile
+        public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
+
+        // Calculates the height of a cell
+        public int CellHeight => (int)(Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
+
         public MapView()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -135,12 +141,6 @@ namespace kbs2.Desktop.View.MapView
 
         private void DrawCells()
         {
-            // Calculate the size (Width) of a tile
-            int tileSize = (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
-
-            // Calculates the height of a cell
-            int CellHeight = (int) (Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
-
             // Start spritebatch for drawing
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
@@ -169,12 +169,9 @@ namespace kbs2.Desktop.View.MapView
             
             float x = Camera.GetViewMatrix().M41;
             float y = Camera.GetViewMatrix().M42;
-            
-            int tileSize = (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
-            float boundsX = x / (Camera.CameraModel.TileCount * tileSize);
-            Console.WriteLine($"boundsX: {boundsX}");
-            Console.WriteLine($"TileSize: {tileSize}");
-            Console.WriteLine($"Matrix: {Camera.GetViewMatrix()}");
+            float boundsX = x / (Camera.CameraModel.TileCount * TileSize);
+            Console.WriteLine($"Xpos: {Camera.GetViewMatrix().M41}");
+            Console.WriteLine($"Ypos: {Camera.GetViewMatrix().M42}");
             return chunksOnScreen;
         }
     }
