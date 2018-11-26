@@ -123,7 +123,14 @@ namespace kbs2.Desktop.View.MapView
                 {
                     int y = cell.RealCoords.y * tileSize;
                     int x = cell.RealCoords.x * tileSize;
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), Color.LawnGreen);
+                    Color color = (((Math.Abs(chunkGrid.Key.x) % 2) == (((Math.Abs(chunkGrid.Key.y) % 2) == 1) ? 1: 0)) ? Color.Gray : Color.Pink);
+
+                    Color color2 = (((Math.Abs(cell.RealCoords.x) % 2) == (((Math.Abs(cell.RealCoords.y) % 2) == 1) ? 1 : 0)) ? Color.Gray : Color.Pink);
+
+                    Random random = new Random(cell.RealCoords.y * cell.RealCoords.x);
+                    Color color3 = ((random.Next(0 , 2) == 1) ? Color.Gray : Color.Pink);
+
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize), color3);
                 }
             }
 
@@ -135,7 +142,11 @@ namespace kbs2.Desktop.View.MapView
         {
             Dictionary<Coords, WorldChunkController> chunksOnScreen = new Dictionary<Coords, WorldChunkController>();
             chunksOnScreen = World.WorldModel.ChunkGrid;
-
+            float x =  Camera.GetViewMatrix().M41;
+            float y = Camera.GetViewMatrix().M42;
+            int tileSize = (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
+            float boundsX = x / (Camera.CameraModel.TileCount * tileSize);
+            Console.WriteLine(boundsX);
             return chunksOnScreen;
         }
     }
