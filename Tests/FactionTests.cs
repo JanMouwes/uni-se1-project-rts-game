@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using kbs2.Faction.Enums;
 using kbs2.Faction.FactionMVC;
-using kbs2.Faction.Interfaces;
+using Faction.Interfaces;
 using NUnit.Framework;
 
 
