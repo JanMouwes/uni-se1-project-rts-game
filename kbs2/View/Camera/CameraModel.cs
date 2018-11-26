@@ -13,7 +13,7 @@ namespace kbs2.Desktop.View.Camera
         public const int DefaultTiles = 30;
 
         // Defines the speed the camera moves at
-        public const float MoveSpeed = 2.5f;
+        public const float MoveSpeed = 4f;
 
         // Keeps track of the previous scrollwheel value to keep track of zoom
         public int PreviousScrollWheelValue;
