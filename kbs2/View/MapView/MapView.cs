@@ -10,8 +10,6 @@ using kbs2.World.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
-using MonoGame.Extended.TextureAtlases;
 
 namespace kbs2.Desktop.View.MapView
 {
@@ -149,12 +147,12 @@ namespace kbs2.Desktop.View.MapView
             {
                 foreach (WorldCellModel cell in chunkGrid.Value.WorldChunkModel.grid)
                 {
-                    int y = cell.RealCoords.y * tileSize;
-                    int x = cell.RealCoords.x * tileSize;
+                    int y = cell.RealCoords.y * TileSize;
+                    int x = cell.RealCoords.x * TileSize;
 
                     Color colour = TileColour != null ? TileColour(cell) : CellChunkCheckered(cell);
 
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, tileSize, tileSize),
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, TileSize, TileSize),
                         colour);
                 }
             }
