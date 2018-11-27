@@ -7,6 +7,7 @@ using kbs2.GamePackage;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
 using kbs2.WorldEntity.Unit.MVC;
@@ -145,18 +146,20 @@ namespace kbs2.Desktop.View.MapView
         // Holds the function that is called when the delegate is called
         public TileColourDelegate TileColour;
 
+        private Color NotCheckered => Color.White;
+        
         // Draws the chunks in a Checkered pattern for easy debugging
         private Color ChunkCheckered(WorldCellModel cell) =>
             Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
             (Math.Abs(cell.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
                 ? Color.Gray
-                : Color.Pink;
+                : Color.Yellow;
 
         // Draws the cells in a Checkered pattern for easy debugging
         private Color CellCheckered(WorldCellModel cell) =>
             Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
                 ? Color.Gray
-                : Color.Pink;
+                : Color.Yellow;
 
         // Draws the chunks and cells in a Checkered pattern for easy debugging
         private Color CellChunkCheckered(WorldCellModel cell) =>
@@ -173,6 +176,19 @@ namespace kbs2.Desktop.View.MapView
         private Color RandomColour(WorldCellModel cell) =>
             new Random(cell.RealCoords.y * cell.RealCoords.x).Next(0, 2) == 1 ? Color.Gray : Color.Pink;
 
+        //    Draw-position relative to x or y coordinate provided
+        private int CellDrawInt(double realCoord) => (int) Math.Round(realCoord * TileSize);
+
+        //    Draw-position relative to x or y coordinate provided
+        private int CellDrawPosition(double realCoord) => (int) Math.Round(realCoord * TileSize);
+
+        //    Draw-position relative to x or y coordinate provided
+        private Coords CellDrawCoords(FloatCoords floatCoords) => CellDrawCoords(floatCoords.x, floatCoords.y);
+
+        //    Draw-position relative to x or y coordinate provided
+        private Coords CellDrawCoords(float x, float y) => new Coords
+            {x = (int) Math.Round(x * TileSize), y = (int) Math.Round(y * TileSize)};
+
         // Draws the cells on the screen according to the given chunks in the camera view
         private void DrawCells()
         {
@@ -185,8 +201,8 @@ namespace kbs2.Desktop.View.MapView
                 foreach (WorldCellModel cell in chunkGrid.Value.WorldChunkModel.grid)
                 {
                     // Sets the x and y for the current tile
-                    int y = cell.RealCoords.y * TileSize;
-                    int x = cell.RealCoords.x * TileSize;
+                    int y = CellDrawPosition(cell.RealCoords.y);
+                    int x = CellDrawPosition(cell.RealCoords.x);
 
                     // Gets the texture according to the terrain type of the cell
                     Texture2D texture = this.Content.Load<Texture2D>(TerrainDef.TerrainDictionairy[cell.Terrain]);
@@ -198,6 +214,7 @@ namespace kbs2.Desktop.View.MapView
                     spriteBatch.Draw(texture, new Rectangle(x, y, TileSize, TileSize), colour);
                 }
             }
+
             // Close cells draw batch
             spriteBatch.End();
         }
@@ -229,7 +246,7 @@ namespace kbs2.Desktop.View.MapView
             // End drawing of the selection box
             spriteBatch.End();
         }
-            
+
         // Todo: Add comments from here on down
         public void DrawHorizontalLine(int PositionY)
         {
@@ -296,15 +313,31 @@ namespace kbs2.Desktop.View.MapView
 
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
-            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()), new Rectangle(20, 20, (int)(TileSize * Pichu.Height), (int)(TileSize * Pichu.Width)), Color.White);
-            spriteBatch.Draw(Content.Load<Texture2D>(Pikachu.Draw()), new Rectangle(40, 20, (int)(TileSize * Pikachu.Height), (int)(TileSize * Pikachu.Width)), Color.White);
-            spriteBatch.Draw(Content.Load<Texture2D>(Raichu.Draw()), new Rectangle(60, 20, (int)(TileSize * Raichu.Height), (int)(TileSize * Raichu.Width)), Color.White);
-            spriteBatch.Draw(Content.Load<Texture2D>(Rayquaza.Draw()), new Rectangle(120, 20, (int)(TileSize * Rayquaza.Height), (int)(TileSize * Rayquaza.Width)), Color.White);
+            Coords drawPos = CellDrawCoords(0.05f, 0.5f);
+            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
+                new Rectangle(
+                    (int)(drawPos.x - TileSize * Pichu.Width * .5), 
+                    (int)(drawPos.y - TileSize * Pichu.Height * .5), 
+                    (int) (TileSize * Pichu.Height), (int) (TileSize * Pichu.Width)), Color.White);
+            spriteBatch.Draw(Content.Load<Texture2D>(Pikachu.Draw()),
+                new Rectangle(
+                    CellDrawPosition(2),
+                    CellDrawPosition(1),
+                    (int) (TileSize * Pikachu.Height), (int) (TileSize * Pikachu.Width)),
+                Color.White);
+            spriteBatch.Draw(Content.Load<Texture2D>(Raichu.Draw()),
+                new Rectangle(
+                    CellDrawPosition(3),
+                    CellDrawPosition(1),
+                    (int) (TileSize * Raichu.Height), (int) (TileSize * Raichu.Width)), Color.White);
+            spriteBatch.Draw(Content.Load<Texture2D>(Rayquaza.Draw()),
+                new Rectangle(
+                    CellDrawPosition(6),
+                    CellDrawPosition(1),
+                    (int) (TileSize * Rayquaza.Height), (int) (TileSize * Rayquaza.Width)),
+                Color.White);
 
             spriteBatch.End();
         }
-
-
-
     }
 }
