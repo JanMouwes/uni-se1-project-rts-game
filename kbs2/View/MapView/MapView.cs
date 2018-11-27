@@ -118,21 +118,9 @@ namespace kbs2.Desktop.View.MapView
 
             DrawCells();
 
-            spriteBatch.Begin();
+            DrawSelection();
 
-            DrawHorizontalLine(Selection.View.Selection.Y);
-            DrawHorizontalLine(Selection.View.Selection.Y + Selection.View.Selection.Height);
-            DrawVerticalLine(Selection.View.Selection.X);
-            DrawVerticalLine(Selection.View.Selection.X + Selection.View.Selection.Width);
-
-            spriteBatch.End();
-
-            spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
-
-            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
-                new Rectangle(20, 20, (int) (TileSize * Pichu.Height), (int) (TileSize * Pichu.Width)), Color.White);
-
-            spriteBatch.End();
+            DrawUnits();
 
             base.Draw(gameTime);
         }
@@ -200,6 +188,18 @@ namespace kbs2.Desktop.View.MapView
             return chunksOnScreen;
         }
 
+        public void DrawSelection()
+        {
+            spriteBatch.Begin();
+
+            DrawHorizontalLine(Selection.View.Selection.Y);
+            DrawHorizontalLine(Selection.View.Selection.Y + Selection.View.Selection.Height);
+            DrawVerticalLine(Selection.View.Selection.X);
+            DrawVerticalLine(Selection.View.Selection.X + Selection.View.Selection.Width);
+
+            spriteBatch.End();
+        }
+
         public void DrawHorizontalLine(int PositionY)
         {
             Texture2D texture = Content.Load<Texture2D>(Selection.View.LineTexture);
@@ -254,6 +254,16 @@ namespace kbs2.Desktop.View.MapView
                     }
                 }
             }
+        }
+
+        public void DrawUnits()
+        {
+            spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
+
+            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
+                new Rectangle(20, 20, (int)(TileSize * Pichu.Height), (int)(TileSize * Pichu.Width)), Color.White);
+
+            spriteBatch.End();
         }
     }
 }
