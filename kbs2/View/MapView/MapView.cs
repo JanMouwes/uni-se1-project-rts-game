@@ -27,7 +27,6 @@ namespace kbs2.Desktop.View.MapView
         private CameraController Camera;
         private WorldController World;
         private Selection_Controller Selection;
-        private Unit_View Pichu = new Unit_View("unitview", 1, 1);
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -282,6 +281,8 @@ namespace kbs2.Desktop.View.MapView
 
         public void DrawUnits()
         {
+            Unit_View Pichu = new Unit_View("unitview", 1, 1);
+
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
             spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
