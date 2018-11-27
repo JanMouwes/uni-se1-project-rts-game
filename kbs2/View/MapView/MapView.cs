@@ -129,11 +129,11 @@ namespace kbs2.Desktop.View.MapView
             // Draws cells in that in the chunks that are in the camera's view
             DrawCells();
 
-            // Draws the selection box when you select and drag
-            DrawSelection();
-
             // Draws the units on screen
             DrawUnits();
+
+            // Draws the selection box when you select and drag
+            DrawSelection();
 
             // Calls the game's draw function
             base.Draw(gameTime);
