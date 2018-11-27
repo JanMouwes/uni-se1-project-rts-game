@@ -35,6 +35,7 @@ namespace kbs2.Desktop.View.MapView
         // Calculates the height of a cell
         public int CellHeight => (int) (Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
 
+        // Constructor
         public MapView()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -49,7 +50,7 @@ namespace kbs2.Desktop.View.MapView
         /// </summary>
         protected override void Initialize()
         {
-            // Add your initialization logic here
+            // Add initialization logic here
 
             // initialize world
             World = WorldFactory.GetNewWorld();
@@ -66,6 +67,7 @@ namespace kbs2.Desktop.View.MapView
             // Makes the mouse visible in the window
             base.IsMouseVisible = true;
 
+            // Initalize game
             base.Initialize();
         }
 
@@ -97,14 +99,18 @@ namespace kbs2.Desktop.View.MapView
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // Exit game if escape is pressed
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Updates camera according to the pressed buttons
             Camera.MoveCamera();
 
+            // Draws a selection box according to the selected area
             Selection.DrawSelectionBox(Mouse.GetState());
 
+            // Calls the game update
             base.Update(gameTime);
         }
 
@@ -114,32 +120,42 @@ namespace kbs2.Desktop.View.MapView
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            // Clears the GraphicsDevice to make room for the new draw items
             GraphicsDevice.Clear(Color.Black);
 
+            // Draws cells in that in the chunks that are in the camera's view
             DrawCells();
 
+            // Draws the selection box when you select and drag
             DrawSelection();
 
+            // Draws the units on screen
             DrawUnits();
 
+            // Calls the game's draw function
             base.Draw(gameTime);
         }
 
+        // Delegate that decides what tilecolor function should be called
         public delegate Color TileColourDelegate(WorldCellModel cell);
 
+        // Holds the function that is called when the delegate is called
         public TileColourDelegate TileColour;
 
+        // Draws the chunks in a Checkered pattern for easy debugging
         private Color ChunkCheckered(WorldCellModel cell) =>
             Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
             (Math.Abs(cell.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
                 ? Color.Gray
                 : Color.Pink;
 
+        // Draws the cells in a Checkered pattern for easy debugging
         private Color CellCheckered(WorldCellModel cell) =>
             Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
                 ? Color.Gray
                 : Color.Pink;
 
+        // Draws the chunks and cells in a Checkered pattern for easy debugging
         private Color CellChunkCheckered(WorldCellModel cell) =>
             Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
             (Math.Abs(cell.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
@@ -150,9 +166,11 @@ namespace kbs2.Desktop.View.MapView
                     ? Color.Green
                     : Color.Red;
 
+        // Draws a random pattern on the cells
         private Color RandomColour(WorldCellModel cell) =>
             new Random(cell.RealCoords.y * cell.RealCoords.x).Next(0, 2) == 1 ? Color.Gray : Color.Pink;
 
+        // Draws the cells on the screen according to the given chunks in the camera view
         private void DrawCells()
         {
             // Start spritebatch for drawing
@@ -163,22 +181,25 @@ namespace kbs2.Desktop.View.MapView
             {
                 foreach (WorldCellModel cell in chunkGrid.Value.WorldChunkModel.grid)
                 {
+                    // Sets the x and y for the current tile
                     int y = cell.RealCoords.y * TileSize;
                     int x = cell.RealCoords.x * TileSize;
 
+                    // Defines the Color of the cell (for debugging)
                     Color colour = TileColour != null ? TileColour(cell) : CellChunkCheckered(cell);
 
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, TileSize, TileSize),
-                        colour);
+                    // Draws the texture of the cell on the location coords with the size of the tile and the color
+                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, TileSize, TileSize), colour);
                 }
             }
-
+            // Close cells draw batch
             spriteBatch.End();
         }
 
         // Calculates wich chunks are in the camera's view and returns them in a list
         public Dictionary<Coords, WorldChunkController> GetChunksOnScreen()
         {
+            // This function is for testing and is still in progress
             Dictionary<Coords, WorldChunkController> chunksOnScreen = new Dictionary<Coords, WorldChunkController>();
             chunksOnScreen = World.WorldModel.ChunkGrid;
             float x = Camera.GetViewMatrix().M41;
@@ -188,8 +209,10 @@ namespace kbs2.Desktop.View.MapView
             return chunksOnScreen;
         }
 
+        // Draws the selection box arround the selected area
         public void DrawSelection()
         {
+            // Begin drawing without an offset
             spriteBatch.Begin();
 
             DrawHorizontalLine(Selection.View.Selection.Y);
@@ -197,6 +220,7 @@ namespace kbs2.Desktop.View.MapView
             DrawVerticalLine(Selection.View.Selection.X);
             DrawVerticalLine(Selection.View.Selection.X + Selection.View.Selection.Width);
 
+            // End drawing of the selection box
             spriteBatch.End();
         }
 
