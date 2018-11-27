@@ -4,7 +4,9 @@ VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kbs2.Desktop", "kbs2\kbs2.Desktop.csproj", "{905B6B3B-33B1-49FB-B691-AE30F88CB4F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{B58F3F4D-B592-41D4-A906-C604BE31124E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{B58F3F4D-B592-41D4-A906-C604BE31124E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathfindingConsoleApp", "PathfindingConsoleApp\PathfindingConsoleApp.csproj", "{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +22,10 @@ Global
 		{B58F3F4D-B592-41D4-A906-C604BE31124E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B58F3F4D-B592-41D4-A906-C604BE31124E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B58F3F4D-B592-41D4-A906-C604BE31124E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
