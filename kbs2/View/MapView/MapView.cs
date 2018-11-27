@@ -229,7 +229,8 @@ namespace kbs2.Desktop.View.MapView
             // End drawing of the selection box
             spriteBatch.End();
         }
-
+            
+        // Todo: Add comments from here on down
         public void DrawHorizontalLine(int PositionY)
         {
             Texture2D texture = Content.Load<Texture2D>(Selection.View.LineTexture);
