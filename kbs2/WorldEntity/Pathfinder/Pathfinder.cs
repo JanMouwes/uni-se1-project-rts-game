@@ -23,10 +23,9 @@ public class Pathfinder
         (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
 
 
-    public Pathfinder(WorldModel worldModel, int limit, WorldChunkModel chunkModel)
+    public Pathfinder(WorldModel worldModel, int limit)
     {
         this.worldModel = worldModel;
-        this.chunkModel = chunkModel;
         Limit = limit;
     }
 
