@@ -69,7 +69,7 @@ public class Pathfinder
             }
 
             // find weight of the nieghbours of the cell
-            CalculateWeight(lowestCoords, targetIntCoords, unit, weightDictionaries);
+            CalculateWeight(lowestCoords, targetIntCoords, unit, ref weightDictionaries);
             // remove cell from bordercells since the nieghbours are added it is no longer a border
             weightDictionaries.BorderCellsWithWeight.Remove(lowestCoords);
 
@@ -80,6 +80,7 @@ public class Pathfinder
                 break;
             }
         }
+
 
         List<FloatCoords> route = CellToFloatCoords(DefineRoute(weightDictionaries, targetIntCoords, unit));
 
@@ -127,16 +128,19 @@ public class Pathfinder
             for (int i = 0; i < 8; i++)
             {
                 Coords TempCoords = current + Neighbours[i];
-                if (CheckedCells.CellsWithWeight[TempCoords].Weight < lowest.Weight)
+                if (CheckedCells.CellsWithWeight.ContainsKey(TempCoords))
                 {
-                    lowestcoords = TempCoords;
-                }
-
-                if (CheckedCells.CellsWithWeight[TempCoords].Weight == lowest.Weight)
-                {
-                    if (CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit < lowest.DistanceToUnit)
+                    if (CheckedCells.CellsWithWeight[TempCoords].Weight < lowest.Weight)
                     {
                         lowestcoords = TempCoords;
+                    }
+
+                    if (CheckedCells.CellsWithWeight[TempCoords].Weight == lowest.Weight)
+                    {
+                        if (CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit < lowest.DistanceToUnit)
+                        {
+                            lowestcoords = TempCoords;
+                        }
                     }
                 }
             }
@@ -171,7 +175,7 @@ public class Pathfinder
 
     // sets the weightvalues of all the neighbours of a cell
     public void CalculateWeight(Coords currentCell, Coords TargetCoords, Location_Model unit,
-        WeightDictionarys weightDictionarys)
+        ref WeightDictionarys weightDictionarys)
     {
         Coords[] Neighbours = new Coords[8];
         GetHorizontalNeighbours().CopyTo(Neighbours, 0);
@@ -183,13 +187,17 @@ public class Pathfinder
             i++) // check non diagonal neighbours first to check if any of the diagonal neighbours are obstructed
         {
             Coords coords = currentCell + Neighbours[i];
-            SetWeightCell(currentCell, coords, TargetCoords, unit, weightDictionarys);
+            SetWeightCell(currentCell, coords, TargetCoords, unit, ref weightDictionarys);
         }
+    }
+
+    int mod(int x, int m){
+        return (x % m + m) % m;
     }
 
     // sets the weightvalues of a single cell and ads them to a dictionary
     public void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Location_Model unit,
-        WeightDictionarys weightDictionarys)
+        ref WeightDictionarys weightDictionarys)
     {
         if (weightDictionarys.ObstacleList.Contains(NeighbourCoords)) //check if cell is a known obstacle
         {
@@ -204,7 +212,7 @@ public class Pathfinder
             return;
         }
 
-        if (CheckDiagonalsBlocked(CurrentCoords, NeighbourCoords, weightDictionarys)
+        if (!CheckDiagonalsBlocked(CurrentCoords, NeighbourCoords, weightDictionarys)
         ) // check if the diagonal nieghbour is reachable from currnetcell
         {
             return;
@@ -217,8 +225,8 @@ public class Pathfinder
             y = NeighbourCoords.y / WorldChunkModel.ChunkSize
         };
         // get coords of the neighbourcell in relation to the chunk
-        int coordsInChunkx = NeighbourCoords.x % WorldChunkModel.ChunkSize;
-        int coordsInChunky = NeighbourCoords.y % WorldChunkModel.ChunkSize;
+        int coordsInChunkx = mod(NeighbourCoords.x , WorldChunkModel.ChunkSize);
+        int coordsInChunky = mod(NeighbourCoords.y , WorldChunkModel.ChunkSize);
 
         // get the actial cell from the worldmodel
         WorldCellModel cell = worldModel.ChunkGrid[chunkCoords].WorldChunkModel.grid[coordsInChunkx, coordsInChunky];
@@ -270,7 +278,7 @@ public class Pathfinder
     public bool CellIsObstacle(WorldCellModel Cell, Location_Model unit)
 
     {
-        bool r = !unit.UnwalkableTerrain.Contains(Cell.Terrain);
+        bool r = unit.UnwalkableTerrain.Contains(Cell.Terrain);
 
         // TODO check buildings
 

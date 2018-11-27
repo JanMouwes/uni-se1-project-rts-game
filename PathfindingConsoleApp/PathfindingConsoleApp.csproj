@@ -32,7 +32,12 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Pathfinder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\kbs2\kbs2.Desktop.csproj">
+      <Project>{905B6B3B-33B1-49FB-B691-AE30F88CB4F5}</Project>
+      <Name>kbs2.Desktop</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
