@@ -286,10 +286,10 @@ namespace kbs2.Desktop.View.MapView
             }
         }
 
-        private Unit_View Pichu = new Unit_View("unitview", 1, 1);
-
         public void DrawUnits()
         {
+            Unit_View Pichu = new Unit_View("unitview", 1, 1);
+
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
             spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),

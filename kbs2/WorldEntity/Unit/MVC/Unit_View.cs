@@ -10,7 +10,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-	public class Unit_View : Game
+	public class Unit_View
 	{
         public Unit_Model UnitModel { get; set; }
         public string ImageSrc { get; set; }
