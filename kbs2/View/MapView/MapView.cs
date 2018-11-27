@@ -289,14 +289,22 @@ namespace kbs2.Desktop.View.MapView
 
         public void DrawUnits()
         {
-            Unit_View Pichu = new Unit_View("unitview", 1, 1);
+            Unit_View Pichu = new Unit_View("pichu_idle", 0.3f, 0.3f);
+            Unit_View Pikachu = new Unit_View("pikachu_idle", 0.4f, 0.4f);
+            Unit_View Raichu = new Unit_View("raichu_idle", 0.8f, 0.8f);
+            Unit_View Rayquaza = new Unit_View("rayquaza_idle", 3.5f, 3.5f);
 
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
-            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
-                new Rectangle(20, 20, (int)(TileSize * Pichu.Height), (int)(TileSize * Pichu.Width)), Color.White);
+            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()), new Rectangle(20, 20, (int)(TileSize * Pichu.Height), (int)(TileSize * Pichu.Width)), Color.White);
+            spriteBatch.Draw(Content.Load<Texture2D>(Pikachu.Draw()), new Rectangle(40, 20, (int)(TileSize * Pikachu.Height), (int)(TileSize * Pikachu.Width)), Color.White);
+            spriteBatch.Draw(Content.Load<Texture2D>(Raichu.Draw()), new Rectangle(60, 20, (int)(TileSize * Raichu.Height), (int)(TileSize * Raichu.Width)), Color.White);
+            spriteBatch.Draw(Content.Load<Texture2D>(Rayquaza.Draw()), new Rectangle(120, 20, (int)(TileSize * Rayquaza.Height), (int)(TileSize * Rayquaza.Width)), Color.White);
 
             spriteBatch.End();
         }
+
+
+
     }
 }
