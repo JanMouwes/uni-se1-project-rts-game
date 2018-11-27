@@ -13,13 +13,25 @@ namespace kbs2.Desktop.View.Camera
 
         public CameraController(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
-            CameraModel = new CameraModel();
+            CameraModel = new CameraModel(this);
 
             base.MinimumZoom = CameraModel.MinimumZoom;
             base.MaximumZoom = CameraModel.MaximumZoom;
         }
 
-        public CameraController(ViewportAdapter viewportAdapter) : this(viewportAdapter.GraphicsDevice) { }
+        public new float Zoom
+        {
+            get => base.Zoom;
+            set
+            {
+                base.Zoom = value;
+                CameraModel.Zoom = base.Zoom;
+            }
+        }
+
+        public CameraController(ViewportAdapter viewportAdapter) : this(viewportAdapter.GraphicsDevice)
+        {
+        }
 
         /// <summary>
         /// Checks keys for moving the camera and updates the camera.
@@ -28,13 +40,21 @@ namespace kbs2.Desktop.View.Camera
         {
             Vector2 moveVelocity = Vector2.Zero;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) moveVelocity += new Vector2( CameraModel.MoveSpeed, 0);
-            if (Keyboard.GetState().IsKeyDown(Keys.Down)) moveVelocity += new Vector2(0, CameraModel.MoveSpeed);
-            if (Keyboard.GetState().IsKeyDown(Keys.Left)) moveVelocity += new Vector2(-CameraModel.MoveSpeed, 0);
-            if (Keyboard.GetState().IsKeyDown(Keys.Up)) moveVelocity += new Vector2(0, -CameraModel.MoveSpeed);
-            if (Keyboard.GetState().IsKeyDown(Keys.B)) CameraModel.Zoom = this.Zoom = 1;
-            if (Keyboard.GetState().IsKeyDown(Keys.G)) ZoomOut((float)0.05);
-            if (Keyboard.GetState().IsKeyDown(Keys.H)) ZoomIn((float)0.05);
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                moveVelocity += new Vector2((float) CameraModel.MoveSpeed, 0);
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                moveVelocity += new Vector2(0, (float) CameraModel.MoveSpeed);
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                moveVelocity += new Vector2((float) -CameraModel.MoveSpeed, 0);
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                moveVelocity += new Vector2(0, (float) -CameraModel.MoveSpeed);
+
+            Console.WriteLine($"Zoom: {CameraModel.Zoom}");
+            Console.WriteLine($"MSpeed: {CameraModel.MoveSpeed}");
+
+            if (Keyboard.GetState().IsKeyDown(Keys.B)) CameraModel.Zoom = 1;
+            if (Keyboard.GetState().IsKeyDown(Keys.G)) ZoomOut((float) 0.05);
+            if (Keyboard.GetState().IsKeyDown(Keys.H)) ZoomIn((float) 0.05);
 
             UpdateZoom();
 
@@ -50,7 +70,7 @@ namespace kbs2.Desktop.View.Camera
             int scrollChange = CameraModel.PreviousScrollWheelValue - currentScrollWheelValue;
             double zoomChange = scrollChange / 18000.0;
 
-            ZoomOut((float)zoomChange);
+            ZoomOut((float) zoomChange);
 
             CameraModel.PreviousScrollWheelValue = currentScrollWheelValue;
         }
