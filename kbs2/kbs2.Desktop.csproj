@@ -116,6 +116,7 @@
     <Compile Include="World\Enums\ViewMode.cs" />
     <Compile Include="GamePackage\Enums\GameState.cs" />
     <Compile Include="Faction\Interfaces\IHasFaction.cs" />
+    <Compile Include="World\Def\TerrainDef.cs" />
     <Compile Include="World\World\WorldController.cs" />
     <Compile Include="World\World\WorldFactory.cs" />
     <Compile Include="World\World\WorldModel.cs" />
@@ -130,7 +131,7 @@
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Extended.1.1.0\lib\portable-net45+win8+wpa81\MonoGame.Extended.dll</HintPath>
-	</Reference>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.CodeCoverage.Shim, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeCoverage.15.9.0\lib\net45\Microsoft.VisualStudio.CodeCoverage.Shim.dll</HintPath>
       <Private>True</Private>
@@ -140,7 +141,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-	</Reference>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -225,12 +226,7 @@
   <ItemGroup>
     <Content Include="World\.DS_Store" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Faction\CurrencyMVC\" />
-    <Folder Include="Factory\" />
-    <Folder Include="Factory\ResourceMVC\" />
-    <Folder Include="Factory\Enums\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

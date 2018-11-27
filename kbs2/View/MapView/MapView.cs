@@ -7,6 +7,7 @@ using kbs2.GamePackage;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.TerrainDef;
 using kbs2.World.World;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
@@ -59,6 +60,9 @@ namespace kbs2.Desktop.View.MapView
 
             // initialize selection
             Selection = new Selection_Controller("PurpleLine", Mouse.GetState());
+
+            // Sets the defenition of terraintextures
+            TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "Sand");
 
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
@@ -184,11 +188,14 @@ namespace kbs2.Desktop.View.MapView
                     int y = cell.RealCoords.y * TileSize;
                     int x = cell.RealCoords.x * TileSize;
 
+                    // Gets the texture according to the terrain type of the cell
+                    Texture2D texture = this.Content.Load<Texture2D>(TerrainDef.TerrainDictionairy[cell.Terrain]);
+
                     // Defines the Color of the cell (for debugging)
                     Color colour = TileColour != null ? TileColour(cell) : CellChunkCheckered(cell);
 
                     // Draws the texture of the cell on the location coords with the size of the tile and the color
-                    spriteBatch.Draw(this.Content.Load<Texture2D>("grass"), new Rectangle(x, y, TileSize, TileSize), colour);
+                    spriteBatch.Draw(texture, new Rectangle(x, y, TileSize, TileSize), colour);
                 }
             }
             // Close cells draw batch
@@ -279,10 +286,10 @@ namespace kbs2.Desktop.View.MapView
             }
         }
 
+        private Unit_View Pichu = new Unit_View("unitview", 1, 1);
+
         public void DrawUnits()
         {
-            Unit_View Pichu = new Unit_View("unitview", 1, 1);
-
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
             spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
