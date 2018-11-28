@@ -63,7 +63,7 @@ namespace kbs2.Desktop.View.MapView
             Selection = new Selection_Controller("PurpleLine", Mouse.GetState());
 
             // Sets the defenition of terraintextures
-            TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "Sand");
+            TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
 
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
@@ -170,7 +170,7 @@ namespace kbs2.Desktop.View.MapView
                     : Color.Yellow
                 : Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
                     ? Color.Green
-                    : Color.Red;
+                    : Color.Sienna;
 
         // Draws a random pattern on the cells
         private Color RandomColour(WorldCellModel cell) =>
