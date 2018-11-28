@@ -33,7 +33,7 @@ namespace Tests
 
             List<GameState> receivedStateEvents = new List<GameState>();
 
-            GameController controller = new GameController(gameSpeed, gameState);
+            GameController controller = new GameController(GameSpeed.Regular, GameState.Running);
 
             controller.GameSpeedChange += delegate (object sender, GameSpeedEventArgs e)
             {
@@ -45,8 +45,8 @@ namespace Tests
                 receivedStateEvents.Add(e.GameState);
             };
 
-            controller.GameSpeed = GameSpeed.Slow;
-            controller.GameState = GameState.Paused;
+            controller.GameSpeed = gameSpeed;
+            controller.GameState = gameState;
             Assert.AreEqual(receivedSpeedEvents[0], expectedGameSpeed);
             Assert.AreEqual(receivedStateEvents[0], expectedGameState);
         }
