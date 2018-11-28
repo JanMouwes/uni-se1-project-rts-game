@@ -170,8 +170,8 @@ namespace kbs2.Desktop.View.MapView
                     ? Color.Gray
                     : Color.Yellow
                 : Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
-                    ? Color.DarkCyan
-                    : Color.LightSeaGreen;
+                    ? Color.Green
+                    : Color.Sienna;
 
         // Draws a random pattern on the cells
         private Color RandomColour(WorldCellModel cell) =>
