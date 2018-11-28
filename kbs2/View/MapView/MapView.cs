@@ -29,6 +29,7 @@ namespace kbs2.Desktop.View.MapView
         private CameraController Camera;
         private WorldController World;
         private Selection_Controller Selection;
+        
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
