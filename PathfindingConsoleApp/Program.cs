@@ -37,8 +37,27 @@ namespace PathfindingConsoleApp
                     }
                 }
             }
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
 
+                    FloatCoords currentCoords = new FloatCoords();
+                    currentCoords.x = x;
+                    currentCoords.y = y;
+                    if (world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].Terrain == TerrainType.Water)
+                    {
+                        Console.Write("W ");
+                    }
+                    else
+                    {
+                        Console.Write("* ");
+                    }
 
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
 
 
             Pathfinder pathfinder = new Pathfinder(world.WorldModel, 150);
@@ -74,6 +93,37 @@ namespace PathfindingConsoleApp
                         if(world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].Terrain == TerrainType.Water){
                             Console.Write("W ");
                         }else{
+                            Console.Write("* ");
+                        }
+                    }
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine();
+
+             waypoints = pathfinder.FindPath2(floatCoords, locationModel);
+
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+
+                    FloatCoords currentCoords = new FloatCoords();
+                    currentCoords.x = x;
+                    currentCoords.y = y;
+                    if (waypoints.Contains(currentCoords))
+                    {
+                        Console.Write(waypoints.IndexOf(currentCoords) + " ");
+                    }
+                    else
+                    {
+                        if (world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].Terrain == TerrainType.Water)
+                        {
+                            Console.Write("W ");
+                        }
+                        else
+                        {
                             Console.Write("* ");
                         }
                     }

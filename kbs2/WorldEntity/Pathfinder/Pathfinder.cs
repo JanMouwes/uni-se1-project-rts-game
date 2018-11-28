@@ -65,7 +65,7 @@ public class Pathfinder
             if (!isset)
             {
                 // no path found
-                return null;
+                break;
             }
 
             // find weight of the nieghbours of the cell
@@ -84,10 +84,75 @@ public class Pathfinder
 
         List<FloatCoords> route = CellToFloatCoords(DefineRoute(weightDictionaries, targetIntCoords, unit));
 
-        route[0] = unit.floatCoords;
+        
         route[route.Count - 1] = TargetFloatCoords;
+        route[0] = unit.floatCoords;
 
-        route = MinimizeWaypoints(route);
+        route = MinimizeWaypoints(route,weightDictionaries);
+
+        return route;
+    }
+
+
+    public List<FloatCoords> FindPath2(FloatCoords TargetFloatCoords, Location_Model unit)
+    {
+        WeightDictionarys weightDictionaries = new WeightDictionarys(true);
+
+        Coords targetIntCoords = (Coords)TargetFloatCoords;
+
+        CellWeight unitLocation;
+        unitLocation.AbsoluteDistanceToTarget = getDistance2d(unit.coords, targetIntCoords);
+        unitLocation.AbsoluteDistanceToUnit = 0;
+        unitLocation.DistanceToUnit = 0;
+
+        weightDictionaries.CellsWithWeight.Add(unit.coords, unitLocation);
+        weightDictionaries.BorderCellsWithWeight.Add(unit.coords, unitLocation);
+
+
+        for (int i = 0; i < Limit * 2 * Limit * 2 * 2; i++) // backup plan to keep the search area within a limit
+        {
+            double lowestWeight = double.MaxValue;
+            Coords lowestCoords = new Coords();
+            bool isset = false;
+
+            // find the bordercell with the lowest weight this cell is the most likely to be in the path to the target
+            foreach (KeyValuePair<Coords, CellWeight> entry in weightDictionaries.BorderCellsWithWeight)
+            {
+                if (entry.Value.Weight < lowestWeight)
+                {
+                    lowestWeight = entry.Value.Weight;
+                    lowestCoords = entry.Key;
+                    isset = true;
+                }
+            }
+
+            if (!isset)
+            {
+                // no path found
+                break;
+            }
+
+            // find weight of the nieghbours of the cell
+            CalculateWeight(lowestCoords, targetIntCoords, unit, ref weightDictionaries);
+            // remove cell from bordercells since the nieghbours are added it is no longer a border
+            weightDictionaries.BorderCellsWithWeight.Remove(lowestCoords);
+
+
+            if (weightDictionaries.CellsWithWeight.ContainsKey(targetIntCoords)) // check if target cell has been found
+            {
+                // path found
+                break;
+            }
+        }
+
+
+        List<FloatCoords> route = CellToFloatCoords(DefineRoute(weightDictionaries, targetIntCoords, unit));
+
+
+        route[route.Count - 1] = TargetFloatCoords;
+        route[0] = unit.floatCoords;
+
+        
 
         return route;
     }
@@ -133,7 +198,9 @@ public class Pathfinder
                     if (CheckedCells.CellsWithWeight[TempCoords].Weight < lowest.Weight)
                     {
                         lowestcoords = TempCoords;
-                       // lowest.Weight = CheckedCells.CellsWithWeight[TempCoords].Weight;
+                        lowest.DistanceToUnit = CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit;
+                        lowest.AbsoluteDistanceToTarget = CheckedCells.CellsWithWeight[TempCoords].AbsoluteDistanceToTarget;
+
                     }
 
                     if (CheckedCells.CellsWithWeight[TempCoords].Weight == lowest.Weight)
@@ -141,6 +208,8 @@ public class Pathfinder
                         if (CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit < lowest.DistanceToUnit)
                         {
                             lowestcoords = TempCoords;
+                            lowest.DistanceToUnit = CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit;
+                            lowest.AbsoluteDistanceToTarget = CheckedCells.CellsWithWeight[TempCoords].AbsoluteDistanceToTarget;
                         }
                     }
                 }
@@ -149,7 +218,7 @@ public class Pathfinder
             RouteCells.Add(lowestcoords);
             CheckedCells.CellsWithWeight.Remove(lowestcoords);
         }
-
+        RouteCells.Reverse();
         return RouteCells;
     }
 
@@ -299,7 +368,8 @@ public class Pathfinder
         return floatCoords;
     }
 
-    public List<FloatCoords> MinimizeWaypoints(List<FloatCoords> RouteCoords)
+    public List<FloatCoords> MinimizeWaypoints(List<FloatCoords> RouteCoords,WeightDictionarys dictionarys
+        )
     {
         List<FloatCoords> WayPoints = new List<FloatCoords>
         {
@@ -308,13 +378,13 @@ public class Pathfinder
 
         while (!(WayPoints[WayPoints.Count - 1] == RouteCoords[RouteCoords.Count - 1]))
         {
-            WayPoints.Add(FindNextWayPoint(RouteCoords, WayPoints));
+            WayPoints.Add(FindNextWayPoint(RouteCoords, WayPoints,dictionarys));
         }
 
         return WayPoints;
     }
 
-    public FloatCoords FindNextWayPoint(List<FloatCoords> RouteCoords, List<FloatCoords> WayPoints)
+    public FloatCoords FindNextWayPoint(List<FloatCoords> RouteCoords, List<FloatCoords> WayPoints, WeightDictionarys dictionarys)
     {
         FloatCoords l1 = WayPoints[WayPoints.Count - 1]; // start from the last waypoint added
         FloatCoords l2;
@@ -329,10 +399,22 @@ public class Pathfinder
             {
                 return RouteCoords[RouteCoords.Count - 1]; //add target to the waypoints
             }
+            List<Coords> coords = FindCoordsOnLine(l1, l2);
 
+            foreach(Coords temp in coords)
+            {
+                if (dictionarys.ObstacleList.Contains(temp)) // check if distance is to big 0.71 is half sqrt2 rounded up
+                {
+                    return RouteCoords[RouteCoords.IndexOf(l2) - 1];
+                }
+            }
+            
+
+            /*
             // calculate the distance of the line between the two waypoints to all the points we will skip 
             for (int j = 0; j < i; j++)
             {
+
                 FloatCoords point = RouteCoords[RouteCoords.IndexOf(l1) + j];
 
                 // calculate distance between current point an the line
@@ -340,12 +422,74 @@ public class Pathfinder
                     Math.Abs((l2.x - l1.x) * (l1.y - point.y) - (l1.x - point.x) * (l2.y - l1.y)) /
                     Math.Sqrt(Math.Pow(l2.x - l1.x, 2) + Math.Pow(l2.y - l1.y, 2));
 
-                if (DistancePointToLine > 0.71) // check if distance is to big 0.71 is half sqrt2 rounded up
+                if (DistancePointToLine > 0.49) // check if distance is to big 0.71 is half sqrt2 rounded up
                 {
                     return RouteCoords[RouteCoords.IndexOf(l2) - 1];
                 }
             }
+            */
         }
+    }
+
+    public List<Coords> FindCoordsOnLine(FloatCoords p1, FloatCoords p2)
+    {
+        List<Coords> values = new List<Coords>();
+        if (p1.x > p2.x)
+        {
+            var x = p1;
+            p1 = p2;
+            p2 = x;
+        }
+
+        double m = (p1.y - p2.y) / (p1.x - p2.x);
+        double c = p1.y - p1.x * m;
+        
+
+        for (int i = ((Coords)p1).x; i+0.6 <= ((Coords)p2).x; i++)
+        {
+            FloatCoords temp = new FloatCoords();
+            temp.x = i+0.4f;
+            temp.y = (float)(m*(i+0.4) + c);
+            if (!values.Contains((Coords)temp))
+            {
+                values.Add((Coords)temp);
+            }
+            temp.x = i + 0.6f;
+            temp.y = (float)(m * (i + 0.6) + c);
+            if (!values.Contains((Coords)temp))
+            {
+                values.Add((Coords)temp);
+            }
+        }
+
+        if (p1.y > p2.y)
+        {
+            var x = p1;
+            p1 = p2;
+            p2 = x;
+        }
+
+        m = (p1.x - p2.x) / (p1.y - p2.y);
+        c = p1.x - p1.y * m;
+
+
+        for (int i = ((Coords)p1).y; i+0.6 <= ((Coords)p2).y; i++)
+        {
+            FloatCoords temp = new FloatCoords();
+            temp.y = i + 0.4f;
+            temp.x = (float)(m * (i + 0.4) + c);
+            if (!values.Contains((Coords)temp))
+            {
+                values.Add((Coords)temp);
+            }
+            temp.y = i + 0.6f;
+            temp.x = (float)(m * (i +0.6) + c);
+            if (!values.Contains((Coords)temp))
+            {
+                values.Add((Coords)temp);
+            }
+        }
+        return values;
     }
 
     // Checks if Diagonal move is possible/not blocked 
