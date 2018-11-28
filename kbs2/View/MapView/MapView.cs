@@ -29,6 +29,7 @@ namespace kbs2.Desktop.View.MapView
         private CameraController Camera;
         private WorldController World;
         private Selection_Controller Selection;
+        private List<Unit_Controller> UnitList;
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -52,6 +53,17 @@ namespace kbs2.Desktop.View.MapView
         protected override void Initialize()
         {
             // Add initialization logic here
+            UnitList = new List<Unit_Controller>();
+
+            Unit_Controller Pichu = new Unit_Controller("pichu_idle", 0.3f, 0.3f, 1f, 0.2f);
+            Unit_Controller Pikachu = new Unit_Controller("pikachu_idle", 0.6f, 0.6f, 2f, 0.4f);
+            Unit_Controller Raichu = new Unit_Controller("raichu_idle", 0.8f, 0.8f, 4f, 0.4f);
+            Unit_Controller Rayquaza = new Unit_Controller("rayquaza_idle", 3.5f, 3.5f, 8f, 0.4f);
+
+            UnitList.Add(Pichu);
+            UnitList.Add(Pikachu);
+            UnitList.Add(Raichu);
+            UnitList.Add(Rayquaza);
 
             // initialize world
             World = WorldFactory.GetNewWorld();
@@ -110,6 +122,15 @@ namespace kbs2.Desktop.View.MapView
 
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
+
+            //check for if a unit was clicked or not
+            MouseState dipshit = Mouse.GetState();
+
+            float x = Camera.GetViewMatrix().M41;
+            float y = Camera.GetViewMatrix().M42;
+
+            Selection.CheckClicked(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
+            
 
             // Draws a selection box according to the selected area
             Selection.DrawSelectionBox(Mouse.GetState());
@@ -238,10 +259,10 @@ namespace kbs2.Desktop.View.MapView
             // Begin drawing without an offset
             spriteBatch.Begin();
 
-            DrawHorizontalLine(Selection.View.Selection.Y);
-            DrawHorizontalLine(Selection.View.Selection.Y + Selection.View.Selection.Height);
-            DrawVerticalLine(Selection.View.Selection.X);
-            DrawVerticalLine(Selection.View.Selection.X + Selection.View.Selection.Width);
+            DrawHorizontalLine(Selection.View.SelectionBox.Y);
+            DrawHorizontalLine(Selection.View.SelectionBox.Y + Selection.View.SelectionBox.Height);
+            DrawVerticalLine(Selection.View.SelectionBox.X);
+            DrawVerticalLine(Selection.View.SelectionBox.X + Selection.View.SelectionBox.Width);
 
             // End drawing of the selection box
             spriteBatch.End();
@@ -251,24 +272,24 @@ namespace kbs2.Desktop.View.MapView
         public void DrawHorizontalLine(int PositionY)
         {
             Texture2D texture = Content.Load<Texture2D>(Selection.View.LineTexture);
-            if (Selection.View.Selection.Width > 0)
+            if (Selection.View.SelectionBox.Width > 0)
             {
-                for (int i = 0; i <= Selection.View.Selection.Width - 10; i += 10)
+                for (int i = 0; i <= Selection.View.SelectionBox.Width - 10; i += 10)
                 {
-                    if (Selection.View.Selection.Width - i >= 0)
+                    if (Selection.View.SelectionBox.Width - i >= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5),
+                        spriteBatch.Draw(texture, new Rectangle(Selection.View.SelectionBox.X + i, PositionY, 10, 5),
                             Color.White);
                     }
                 }
             }
-            else if (Selection.View.Selection.Width < 0)
+            else if (Selection.View.SelectionBox.Width < 0)
             {
-                for (int i = -10; i >= Selection.View.Selection.Width; i -= 10)
+                for (int i = -10; i >= Selection.View.SelectionBox.Width; i -= 10)
                 {
-                    if (Selection.View.Selection.Width - i <= 0)
+                    if (Selection.View.SelectionBox.Width - i <= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5),
+                        spriteBatch.Draw(texture, new Rectangle(Selection.View.SelectionBox.X + i, PositionY, 10, 5),
                             Color.White);
                     }
                 }
@@ -278,26 +299,26 @@ namespace kbs2.Desktop.View.MapView
         public void DrawVerticalLine(int PositionX)
         {
             Texture2D texture = Content.Load<Texture2D>(Selection.View.LineTexture);
-            if (Selection.View.Selection.Height > 0)
+            if (Selection.View.SelectionBox.Height > 0)
             {
-                for (int i = -2; i <= Selection.View.Selection.Height; i += 10)
+                for (int i = -2; i <= Selection.View.SelectionBox.Height; i += 10)
                 {
-                    if (Selection.View.Selection.Height - i >= 0)
+                    if (Selection.View.SelectionBox.Height - i >= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(PositionX, Selection.View.Selection.Y + i, 10, 5),
+                        spriteBatch.Draw(texture, new Rectangle(PositionX, Selection.View.SelectionBox.Y + i, 10, 5),
                             new Rectangle(0, 0, texture.Width, texture.Height), Color.White, MathHelper.ToRadians(90),
                             new Vector2(0, 0), SpriteEffects.None, 0);
                     }
                 }
             }
 
-            else if (Selection.View.Selection.Height < 0)
+            else if (Selection.View.SelectionBox.Height < 0)
             {
-                for (int i = 0; i >= Selection.View.Selection.Height; i -= 10)
+                for (int i = 0; i >= Selection.View.SelectionBox.Height; i -= 10)
                 {
-                    if (Selection.View.Selection.Height - i <= 0)
+                    if (Selection.View.SelectionBox.Height - i <= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(PositionX - 10, Selection.View.Selection.Y + i, 10, 5),
+                        spriteBatch.Draw(texture, new Rectangle(PositionX - 10, Selection.View.SelectionBox.Y + i, 10, 5),
                             Color.White);
                     }
                 }
@@ -306,36 +327,23 @@ namespace kbs2.Desktop.View.MapView
 
         public void DrawUnits()
         {
-            Unit_View Pichu = new Unit_View("pichu_idle", 0.3f, 0.3f);
-            Unit_View Pikachu = new Unit_View("pikachu_idle", 0.4f, 0.4f);
-            Unit_View Raichu = new Unit_View("raichu_idle", 0.8f, 0.8f);
-            Unit_View Rayquaza = new Unit_View("rayquaza_idle", 3.5f, 3.5f);
-
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
-
             Coords drawPos = CellDrawCoords(0.05f, 0.5f);
-            spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
+            int offsetX = 20;
+            int offsetY = 20;
+
+            
+
+            foreach(Unit_Controller unit in UnitList)
+            {
+                drawPos = CellDrawCoords(unit.UnitModel.LocationModel.floatCoords);
+                Console.WriteLine(unit.UnitView.Draw());
+                spriteBatch.Draw(Content.Load<Texture2D>(unit.UnitView.Draw()),
                 new Rectangle(
-                    (int)(drawPos.x - TileSize * Pichu.Width * .5), 
-                    (int)(drawPos.y - TileSize * Pichu.Height * .5), 
-                    (int) (TileSize * Pichu.Height), (int) (TileSize * Pichu.Width)), Color.White);
-            spriteBatch.Draw(Content.Load<Texture2D>(Pikachu.Draw()),
-                new Rectangle(
-                    CellDrawPosition(2),
-                    CellDrawPosition(1),
-                    (int) (TileSize * Pikachu.Height), (int) (TileSize * Pikachu.Width)),
-                Color.White);
-            spriteBatch.Draw(Content.Load<Texture2D>(Raichu.Draw()),
-                new Rectangle(
-                    CellDrawPosition(3),
-                    CellDrawPosition(1),
-                    (int) (TileSize * Raichu.Height), (int) (TileSize * Raichu.Width)), Color.White);
-            spriteBatch.Draw(Content.Load<Texture2D>(Rayquaza.Draw()),
-                new Rectangle(
-                    CellDrawPosition(6),
-                    CellDrawPosition(1),
-                    (int) (TileSize * Rayquaza.Height), (int) (TileSize * Rayquaza.Width)),
-                Color.White);
+                    (int)(drawPos.x - TileSize * unit.UnitModel.Width * .5),
+                    (int)(drawPos.y - TileSize * unit.UnitModel.Height * .5),
+                    (int)(TileSize * unit.UnitModel.Height), (int)(TileSize * unit.UnitModel.Width)), Color.White);
+            }
 
             spriteBatch.End();
         }

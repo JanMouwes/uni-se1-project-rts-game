@@ -11,12 +11,12 @@ namespace kbs2.GamePackage.Selection
     public class Selection_View
     {
         public string LineTexture { get; set; }
-        public Rectangle Selection { get; set; }
+        public Rectangle SelectionBox { get; set; }
 
         public Selection_View(string lineText)
         {
             LineTexture = lineText;
-            Selection = new Rectangle(-1, -1, 0, 0);
+            SelectionBox = new Rectangle(-1, -1, 0, 0);
         }
     }
 }

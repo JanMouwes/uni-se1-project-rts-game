@@ -12,15 +12,11 @@ namespace kbs2.WorldEntity.Unit.MVC
 {
 	public class Unit_View
 	{
-        public Unit_Model UnitModel { get; set; }
         public string ImageSrc { get; set; }
-        public float Height { get; set; }
-        public float Width { get; set; }
+        
 
-        public Unit_View(string imageSrc, float height, float width)
+        public Unit_View(string imageSrc)
         {
-            Height = height;
-            Width = width;
             ImageSrc = imageSrc;
         }
 

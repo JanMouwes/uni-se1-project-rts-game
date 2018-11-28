@@ -1,7 +1,9 @@
 ﻿using kbs2.GamePackage.Selection;
+using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
@@ -26,20 +28,41 @@ namespace kbs2.GamePackage
         {
             if(CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
             {
-                View.Selection = new Rectangle(CurMouseState.X, CurMouseState.Y, 0, 0);
+                View.SelectionBox = new Rectangle(CurMouseState.X, CurMouseState.Y, 0, 0);
             }
 
             if(CurMouseState.LeftButton == ButtonState.Pressed)
             {
-                View.Selection = new Rectangle(View.Selection.X, View.Selection.Y, CurMouseState.X - View.Selection.X, CurMouseState.Y - View.Selection.Y);
+                View.SelectionBox = new Rectangle(View.SelectionBox.X, View.SelectionBox.Y, CurMouseState.X - View.SelectionBox.X, CurMouseState.Y - View.SelectionBox.Y);
             }
 
             if(CurMouseState.LeftButton == ButtonState.Released)
             {
-                View.Selection = new Rectangle(-1, -1, 0, 0);
-            }
+                View.SelectionBox = new Rectangle(-1, -1, 0, 0);
+            }   
 
             Model.PreviousMouseState = CurMouseState;
+        }
+
+        public void CheckClicked(List<Unit_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
+        {
+            if(CurMouseState.LeftButton == ButtonState.Pressed)
+            {
+                Vector2 mousePosition = new Vector2(CurMouseState.X, CurMouseState.Y);
+                Vector2 worldPosition = Vector2.Transform(mousePosition, Matrix.Invert(viewMatrix));
+
+                foreach (Unit_Controller controller in List)
+                {
+                    RectangleF UnitClickBox = controller.CalcClickBox();
+                    
+                    RectangleF MouselickPosition = new RectangleF((worldPosition.X / tileSize), (worldPosition.Y / tileSize), 0.01f, 0.01f);
+                    if (MouselickPosition.Intersects(UnitClickBox))
+                    {
+                        controller.UnitView.ImageSrc = "pikachu_idle";
+                    }
+                }
+            }
+            
         }
     }
 }

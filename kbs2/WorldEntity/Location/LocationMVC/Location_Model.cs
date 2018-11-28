@@ -15,5 +15,11 @@ namespace kbs2.WorldEntity.Location
 		public Coords coords;
 		public FloatCoords floatCoords;
         public List<TerrainType> UnwalkableTerrain;
+
+        public Location_Model(float locationX, float locationY)
+        {
+            floatCoords.x = locationX;
+            floatCoords.y = locationY;
+        }
     }
 }

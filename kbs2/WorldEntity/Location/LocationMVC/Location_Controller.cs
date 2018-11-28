@@ -19,9 +19,9 @@ namespace kbs2.WorldEntity.Location
         static Func<double, double, double> getDistance = (x, y) => x > y ? x - y : y - x;
         Func<FloatCoords, FloatCoords, double> getDistance2d = (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
 
-        public Location_Controller()
+        public Location_Controller(float lx, float ly)
 		{
-
+            LocationModel = new Location_Model(lx, ly);
 		}
 		public void MoveTo(FloatCoords target) //[Review] This can be a Lambda expression
 		{
