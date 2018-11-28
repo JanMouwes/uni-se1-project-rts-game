@@ -28,7 +28,7 @@ namespace Tests
             controller.AddResource(type1, ResourceType.Wood);
 
             controller.ResourcesToCurrency();
-            //Assert.AreEqual(controller.model.currency, result);
+            // Assert.AreEqual(controller.model.currency, result);
         }
 
 
