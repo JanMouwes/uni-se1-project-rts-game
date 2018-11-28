@@ -65,7 +65,9 @@ public class Pathfinder
             if (!isset)
             {
                 // no path found
-                break;
+                List<FloatCoords> noPath = new List<FloatCoords>();
+                noPath.Add(unit.floatCoords);
+                return (noPath);
             }
 
             // find weight of the nieghbours of the cell
@@ -172,6 +174,7 @@ public class Pathfinder
                 CheckedCells.CellsWithWeight.Remove(cell.Key);
             }
         }
+        CheckedCells.CellsWithWeight.Remove(TargetCoords);
 
         //Makes the actual route by repeating while last coords in the routecells is not the unit location
         while (RouteCells[RouteCells.Count - 1] != unit.coords)
@@ -239,7 +242,7 @@ public class Pathfinder
         Coords[] DiagonalNeigbours = new Coords[4];
         DiagonalNeigbours[0] = new Coords {x = 1, y = 1};
         DiagonalNeigbours[1] = new Coords {x = -1, y = 1};
-        DiagonalNeigbours[2] = new Coords {x = -1, y = 1};
+        DiagonalNeigbours[2] = new Coords {x = 1, y = -1};
         DiagonalNeigbours[3] = new Coords {x = -1, y = -1};
         return DiagonalNeigbours;
     }
