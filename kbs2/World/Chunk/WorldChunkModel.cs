@@ -11,22 +11,19 @@ namespace kbs2.World.Chunk
     {
         public const int ChunkSize = 20;
 
-        public WorldCellModel[,] grid;
+        public WorldCellController[,] grid;
         public Coords ChunkCoords;
 
         public WorldChunkModel(Coords chunkCoords)
         {
-            this.grid = new WorldCellModel[ChunkSize, ChunkSize];
+            this.grid = new WorldCellController[ChunkSize, ChunkSize];
 
-
-            int relXIndex = 0;
-            int relYIndex = 0;
             //    Generates cells using chunk-relative X and Y to calculate World-relative coordinates for the cells.
             for (int i = 0; i < Math.Pow(ChunkSize, 2); i++)
             {
                 //    Calculate chunk-relative X and Y (between 0 and ChunkSize)
-                relXIndex = (int) i % ChunkSize;
-                relYIndex = (int) Math.Floor(i / (double) ChunkSize);
+                int relXIndex = (int) i % ChunkSize;
+                int relYIndex = (int) Math.Floor(i / (double) ChunkSize);
 
                 WorldCellModel worldCellModel = new WorldCellModel
                 {
@@ -36,7 +33,8 @@ namespace kbs2.World.Chunk
                         y = chunkCoords.y * ChunkSize + relYIndex
                     }
                 };
-                grid[relXIndex, relYIndex] = worldCellModel;
+                WorldCellController controller = new WorldCellController {worldCellModel = worldCellModel};
+                grid[relXIndex, relYIndex] = controller;
             }
 
             this.ChunkCoords = chunkCoords;

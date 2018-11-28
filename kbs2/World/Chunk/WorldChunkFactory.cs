@@ -9,8 +9,10 @@ namespace kbs2.World.Chunk
         {
             WorldChunkController controller = new WorldChunkController(chunkCoords);
 
-            foreach (WorldCellModel worldCellModel in controller.WorldChunkModel.grid)
+            foreach (WorldCellController worldCell in controller.WorldChunkModel.grid)
             {
+                WorldCellModel worldCellModel = worldCell.worldCellModel;
+
                 worldCellModel.BaseTerrain = worldCellModel.Terrain = terrainType;
                 worldCellModel.ParentChunk = controller.WorldChunkModel;
             }
