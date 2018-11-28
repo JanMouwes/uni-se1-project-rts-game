@@ -83,6 +83,8 @@
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
     <Compile Include="WorldEntity\HitBox.cs" />
+    <Compile Include="WorldEntity\Interfaces\CircleHitBox.cs" />
+    <Compile Include="WorldEntity\Interfaces\RectHitBox.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
     <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
