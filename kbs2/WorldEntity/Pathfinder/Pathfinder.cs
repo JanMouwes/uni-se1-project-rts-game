@@ -133,6 +133,7 @@ public class Pathfinder
                     if (CheckedCells.CellsWithWeight[TempCoords].Weight < lowest.Weight)
                     {
                         lowestcoords = TempCoords;
+                       // lowest.Weight = CheckedCells.CellsWithWeight[TempCoords].Weight;
                     }
 
                     if (CheckedCells.CellsWithWeight[TempCoords].Weight == lowest.Weight)
@@ -146,6 +147,7 @@ public class Pathfinder
             }
 
             RouteCells.Add(lowestcoords);
+            CheckedCells.CellsWithWeight.Remove(lowestcoords);
         }
 
         return RouteCells;
