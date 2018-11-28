@@ -226,11 +226,21 @@ namespace kbs2.Desktop.View.MapView
         {
             // This function is for testing and is still in progress
             Dictionary<Coords, WorldChunkController> chunksOnScreen = new Dictionary<Coords, WorldChunkController>();
-            chunksOnScreen = World.WorldModel.ChunkGrid;
-            float x = Camera.GetViewMatrix().M41;
-            float y = Camera.GetViewMatrix().M42;
-            Console.WriteLine($"X: {x}");
-            Console.WriteLine($"Y: {y}");
+            // chunksOnScreen = World.WorldModel.ChunkGrid;
+            float minX = Camera.GetViewMatrix().M41 / TileSize;
+            float minY = Camera.GetViewMatrix().M42 / TileSize;
+
+            float minChunkX = minX / WorldChunkModel.ChunkSize;
+            float minChunkY = minY / WorldChunkModel.ChunkSize;
+
+            int minChunkXInt = (int)Math.Floor(minChunkX * -1);
+            int minChunkYInt = (int)Math.Floor(minChunkY * -1);
+
+            Coords coords = new Coords();
+            coords.x = minChunkXInt;
+            coords.y = minChunkYInt;
+            if (World.WorldModel.ChunkGrid.ContainsKey(coords)) chunksOnScreen.Add(coords, World.WorldModel.ChunkGrid[coords]);
+
             return chunksOnScreen;
         }
 
