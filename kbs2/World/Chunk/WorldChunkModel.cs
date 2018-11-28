@@ -26,7 +26,7 @@ namespace kbs2.World.Chunk
             {
                 //    Calculate chunk-relative X and Y (between 0 and ChunkSize)
                 relXIndex = (int) i % ChunkSize;
-                relYIndex = (int) Math.Floor((double) (i / ChunkSize));
+                relYIndex = (int) Math.Floor(i / (double) ChunkSize);
 
                 WorldCellModel worldCellModel = new WorldCellModel
                 {
@@ -43,4 +43,3 @@ namespace kbs2.World.Chunk
         }
     }
 }
-
