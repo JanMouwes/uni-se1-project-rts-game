@@ -195,21 +195,24 @@ public class Pathfinder
                 Coords TempCoords = current + Neighbours[i];
                 if (CheckedCells.CellsWithWeight.ContainsKey(TempCoords))
                 {
-                    if (CheckedCells.CellsWithWeight[TempCoords].Weight < lowest.Weight)
+                    if (CheckDiagonalsBlocked(TempCoords, current, CheckedCells))
                     {
-                        lowestcoords = TempCoords;
-                        lowest.DistanceToUnit = CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit;
-                        lowest.AbsoluteDistanceToTarget = CheckedCells.CellsWithWeight[TempCoords].AbsoluteDistanceToTarget;
-
-                    }
-
-                    if (CheckedCells.CellsWithWeight[TempCoords].Weight == lowest.Weight)
-                    {
-                        if (CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit < lowest.DistanceToUnit)
+                        if (CheckedCells.CellsWithWeight[TempCoords].Weight < lowest.Weight)
                         {
                             lowestcoords = TempCoords;
                             lowest.DistanceToUnit = CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit;
                             lowest.AbsoluteDistanceToTarget = CheckedCells.CellsWithWeight[TempCoords].AbsoluteDistanceToTarget;
+
+                        }
+
+                        if (CheckedCells.CellsWithWeight[TempCoords].Weight == lowest.Weight)
+                        {
+                            if (CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit < lowest.DistanceToUnit)
+                            {
+                                lowestcoords = TempCoords;
+                                lowest.DistanceToUnit = CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit;
+                                lowest.AbsoluteDistanceToTarget = CheckedCells.CellsWithWeight[TempCoords].AbsoluteDistanceToTarget;
+                            }
                         }
                     }
                 }
@@ -238,7 +241,7 @@ public class Pathfinder
     {
         Coords[] DiagonalNeigbours = new Coords[4];
         DiagonalNeigbours[0] = new Coords {x = 1, y = 1};
-        DiagonalNeigbours[1] = new Coords {x = -1, y = 1};
+        DiagonalNeigbours[1] = new Coords {x = 1, y = -1};
         DiagonalNeigbours[2] = new Coords {x = -1, y = 1};
         DiagonalNeigbours[3] = new Coords {x = -1, y = -1};
         return DiagonalNeigbours;
