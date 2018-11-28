@@ -133,7 +133,7 @@ namespace kbs2.Desktop.View.MapView
             
 
             // Draws a selection box according to the selected area
-            Selection.DrawSelectionBox(Mouse.GetState());
+            Selection.DrawSelectionBox(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
 
             // Calls the game update
             base.Update(gameTime);

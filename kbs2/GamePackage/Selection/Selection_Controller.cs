@@ -24,11 +24,12 @@ namespace kbs2.GamePackage
             View = new Selection_View(lineTexture);
         }
 
-        public void DrawSelectionBox(MouseState CurMouseState)
+        public void DrawSelectionBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
         {
             if(CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
             {
                 View.SelectionBox = new Rectangle(CurMouseState.X, CurMouseState.Y, 0, 0);
+                CheckClicked(List, CurMouseState, viewMatrix, tileSize);
             }
 
             if(CurMouseState.LeftButton == ButtonState.Pressed)
