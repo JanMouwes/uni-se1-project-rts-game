@@ -14,6 +14,6 @@ namespace kbs2.GamePackage.Game
 		public List<Faction_Controller> Factions { get; set; }
 		public float Time { get; set; }
 		public GameState GameState { get; set; }
-		public Enum GameSpeed { get; set; }
+		public GameSpeed GameSpeed { get; set; }
 	}
 }
