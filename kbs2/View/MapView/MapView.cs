@@ -147,7 +147,7 @@ namespace kbs2.Desktop.View.MapView
         public TileColourDelegate TileColour;
 
         private Color NotCheckered => Color.White;
-        
+
         // Draws the chunks in a Checkered pattern for easy debugging
         private Color ChunkCheckered(WorldCellModel cell) =>
             Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
@@ -198,17 +198,19 @@ namespace kbs2.Desktop.View.MapView
             // draw each tile in the chunks in the chunkGrid
             foreach (KeyValuePair<Coords, WorldChunkController> chunkGrid in GetChunksOnScreen())
             {
-                foreach (WorldCellModel cell in chunkGrid.Value.WorldChunkModel.grid)
+                foreach (WorldCellController cell in chunkGrid.Value.WorldChunkModel.grid)
                 {
+                    WorldCellModel cellModel = cell.worldCellModel;
+                    
                     // Sets the x and y for the current tile
-                    int y = CellDrawPosition(cell.RealCoords.y);
-                    int x = CellDrawPosition(cell.RealCoords.x);
+                    int y = CellDrawPosition(cellModel.RealCoords.y);
+                    int x = CellDrawPosition(cellModel.RealCoords.x);
 
                     // Gets the texture according to the terrain type of the cell
-                    Texture2D texture = this.Content.Load<Texture2D>(TerrainDef.TerrainDictionairy[cell.Terrain]);
+                    Texture2D texture = this.Content.Load<Texture2D>(TerrainDef.TerrainDictionairy[cellModel.Terrain]);
 
                     // Defines the Color of the cell (for debugging)
-                    Color colour = TileColour != null ? TileColour(cell) : CellChunkCheckered(cell);
+                    Color colour = TileColour != null ? TileColour(cellModel) : CellChunkCheckered(cellModel);
 
                     // Draws the texture of the cell on the location coords with the size of the tile and the color
                     spriteBatch.Draw(texture, new Rectangle(x, y, TileSize, TileSize), colour);
@@ -316,8 +318,8 @@ namespace kbs2.Desktop.View.MapView
             Coords drawPos = CellDrawCoords(0.05f, 0.5f);
             spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
                 new Rectangle(
-                    (int)(drawPos.x - TileSize * Pichu.Width * .5), 
-                    (int)(drawPos.y - TileSize * Pichu.Height * .5), 
+                    (int) (drawPos.x - TileSize * Pichu.Width * .5),
+                    (int) (drawPos.y - TileSize * Pichu.Height * .5),
                     (int) (TileSize * Pichu.Height), (int) (TileSize * Pichu.Width)), Color.White);
             spriteBatch.Draw(Content.Load<Texture2D>(Pikachu.Draw()),
                 new Rectangle(
