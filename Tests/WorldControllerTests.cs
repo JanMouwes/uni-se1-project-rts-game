@@ -24,9 +24,9 @@ namespace Tests
 
 
             //    Assert
-            WorldCellModel cell = chunk.WorldChunkModel.grid[relativeCellCoords.x, relativeCellCoords.y];
+            WorldCellController cell = chunk.WorldChunkModel.grid[relativeCellCoords.x, relativeCellCoords.y];
 
-            Assert.AreEqual(cell.RealCoords, expectedCellCoords);
+            Assert.AreEqual(cell.worldCellModel.RealCoords, expectedCellCoords);
         }
     }
 }
