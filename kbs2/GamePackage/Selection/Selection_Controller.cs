@@ -1,4 +1,5 @@
 ﻿using kbs2.GamePackage.Selection;
+using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,6 +18,8 @@ namespace kbs2.GamePackage
     {
         public Selection_Model Model { get; set; }
         public Selection_View View { get; set; }
+
+        public List<Unit_Controller> SelectedUnits { get; set; }
 
         public Selection_Controller(string lineTexture, MouseState mouseState)
         {
@@ -63,7 +66,11 @@ namespace kbs2.GamePackage
                     }
                 }
             }
-            
+        }
+
+        public void CheckClicked(List<Building_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
+        {
+
         }
     }
 }
