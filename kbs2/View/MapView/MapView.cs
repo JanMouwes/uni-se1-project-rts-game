@@ -25,10 +25,12 @@ namespace kbs2.Desktop.View.MapView
     public class MapView : Game
     {
         private GraphicsDeviceManager graphics;
+        private SpriteFont font;
         private SpriteBatch spriteBatch;
         private CameraController Camera;
         private WorldController World;
         private Selection_Controller Selection;
+        
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -78,6 +80,10 @@ namespace kbs2.Desktop.View.MapView
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            font = Content.Load<SpriteFont>("Currency");
+
+            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -127,6 +133,9 @@ namespace kbs2.Desktop.View.MapView
 
             // Draws the selection box when you select and drag
             DrawSelection();
+
+            // Draws the currency
+            DrawCurrency();
 
             // Calls the game's draw function
             base.Draw(gameTime);
@@ -247,6 +256,19 @@ namespace kbs2.Desktop.View.MapView
             // End drawing of the selection box
             spriteBatch.End();
         }
+
+        public void DrawCurrency()
+        {
+            // Begin drawing without an offset
+            spriteBatch.Begin();
+
+            spriteBatch.DrawString(font, "TODO get link to currency", new Vector2(0,0), Color.White); //TODO
+
+            // End drawing of the selection box
+            spriteBatch.End();
+        }
+
+
 
         // Todo: Add comments from here on down
         public void DrawHorizontalLine(int PositionY)
