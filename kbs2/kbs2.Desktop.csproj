@@ -127,6 +127,7 @@
     <Compile Include="Factory\ResourceMVC\ResourceController.cs" />
     <Compile Include="Factory\ResourceMVC\ResourceModel.cs" />
     <Compile Include="Factory\Enums\ResourceType.cs" />
+    <Compile Include="WorldEntity\Building\BuildingMVC\BuildingView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
