@@ -1,4 +1,5 @@
 ﻿using kbs2.World;
+using kbs2.WorldEntity.Health;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,34 @@ namespace kbs2.WorldEntity.Building
         public string imageSrc { get; set; }
         public float height { get; set; }
         public float width { get; set; }
+
+        public HPDef HPDef { get; set; }
+
+        public void AddShapeFromString(string shape)
+        {
+            char[] array = shape.ToCharArray();
+            Coords coords = new Coords();
+            coords.x = 0;
+            coords.y = 0;
+            foreach(char c in array)
+            {
+                if(c == 'x')
+                {
+                    BuildingShape.Add(coords);
+                    coords.x++;
+                }
+                if(c == 'o')
+                {
+                    coords.x++;
+                }
+                if(c == ';')
+                {
+                    coords.x = 0;
+                    coords.y++;
+                }
+            }
+        }
+
 
     }
 }
