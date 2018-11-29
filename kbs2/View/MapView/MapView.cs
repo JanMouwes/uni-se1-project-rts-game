@@ -31,10 +31,7 @@ namespace kbs2.Desktop.View.MapView
         private Selection_Controller Selection;
 
         // Calculate the size (Width) of a tile
-        public int TileSize => (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
-
-        // Calculates the height of a cell
-        public int CellHeight => (int) (Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
+        public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
 
         // Constructor
         public MapView()
@@ -51,8 +48,6 @@ namespace kbs2.Desktop.View.MapView
         /// </summary>
         protected override void Initialize()
         {
-            // Add initialization logic here
-
             // initialize world
             World = WorldFactory.GetNewWorld();
 
@@ -83,8 +78,6 @@ namespace kbs2.Desktop.View.MapView
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -93,7 +86,6 @@ namespace kbs2.Desktop.View.MapView
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -229,15 +221,15 @@ namespace kbs2.Desktop.View.MapView
 
             float minChunkX = minX / WorldChunkModel.ChunkSize;
             float minChunkY = minY / WorldChunkModel.ChunkSize;
-
+            
             int minChunkXInt = (int)Math.Floor(minChunkX * -1);
             int minChunkYInt = (int)Math.Floor(minChunkY * -1);
 
             Coords coords = new Coords();
             coords.x = minChunkXInt;
             coords.y = minChunkYInt;
-            if (World.WorldModel.ChunkGrid.ContainsKey(coords)) chunksOnScreen.Add(coords, World.WorldModel.ChunkGrid[coords]);
-
+            //if (World.WorldModel.ChunkGrid.ContainsKey(coords)) chunksOnScreen.Add(coords, World.WorldModel.ChunkGrid[coords]);
+            chunksOnScreen = World.WorldModel.ChunkGrid;
             return chunksOnScreen;
         }
 
