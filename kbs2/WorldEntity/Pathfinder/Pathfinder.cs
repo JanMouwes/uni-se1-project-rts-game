@@ -355,9 +355,8 @@ public class Pathfinder
     public bool CellIsObstacle(WorldCellModel Cell, Location_Model unit)
 
     {
-        bool r = unit.UnwalkableTerrain.Contains(Cell.Terrain);
-
-        // TODO check buildings
+        bool r = unit.UnwalkableTerrain.Contains(Cell.Terrain)&&Cell.BuildingOnTop != null;
+        
 
         return r;
     }
