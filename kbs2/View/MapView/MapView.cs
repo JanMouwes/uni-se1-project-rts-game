@@ -10,6 +10,7 @@ using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
+using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
@@ -30,6 +31,7 @@ namespace kbs2.Desktop.View.MapView
         private CameraController Camera;
         private WorldController World;
         private Selection_Controller Selection;
+        public List<Building_Controller> buildings;
         
 
         // Calculate the size (Width) of a tile
@@ -66,6 +68,23 @@ namespace kbs2.Desktop.View.MapView
 
             // Sets the defenition of terraintextures
             TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
+
+            buildings = new List<Building_Controller>();
+
+            // Make temp building
+            BuildingDef def = new BuildingDef();
+            def.BuildingShape = new List<Coords>
+            {
+                new Coords { x = 0, y = 0 },
+                new Coords { x = 1, y = 0 },
+                new Coords { x = 1, y = -1 },
+                new Coords { x = 0, y = -1 }
+            };
+            def.height = 2f;
+            def.width = 2f;
+            def.imageSrc = "TrainingCenter";
+            buildings.Add(BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 }));
+
 
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
@@ -347,17 +366,22 @@ namespace kbs2.Desktop.View.MapView
 
         public void DrawBuilding()
         {
-            BuildingView TrainingCenter = new BuildingView("TrainingCenter", 2.0f, 2.0f);
 
-            spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
-            Coords drawPos = CellDrawCoords(1f, 1f);
-            spriteBatch.Draw(Content.Load<Texture2D>(TrainingCenter.Draw()),
-                new Rectangle(
-                    (int)(drawPos.x - TileSize * TrainingCenter.Width * .5),
-                    (int)(drawPos.y - TileSize * TrainingCenter.Height * .5),
-                    (int)(TileSize * TrainingCenter.Height), (int)(TileSize * TrainingCenter.Width)), Color.White);
-            spriteBatch.End();
+            foreach(Building_Controller building in buildings)
+            {
+                spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
+
+                Coords drawPos = CellDrawCoords(1f, 1f);
+                spriteBatch.Draw(Content.Load<Texture2D>(building.View.Draw()),
+                    new Rectangle(
+                        (int)(drawPos.x - TileSize * building.View.Width * .5),
+                        (int)(drawPos.y - TileSize * building.View.Height * .5),
+                        (int)(TileSize * building.View.Height), (int)(TileSize * building.View.Width)), Color.White);
+                spriteBatch.End();
+            }
+
+            
         }
 
     }
