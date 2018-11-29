@@ -25,7 +25,8 @@ namespace kbs2.Desktop.World.World
 
         public void AddBuilding(BuildingDef defenition, Coords TopLeft, Faction_Controller faction)
         {
-            Building_Controller building = new Building_Controller();
+            Building_Controller building = BuildingFactory.CreateNewBuilding(defenition, TopLeft);
+            faction.AddBuildingToFaction(building);
 
             foreach(Coords coords in defenition.BuildingShape)
             {
