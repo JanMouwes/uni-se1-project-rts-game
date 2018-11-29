@@ -165,10 +165,10 @@ namespace kbs2.Desktop.View.MapView
         private Color CellChunkCheckered(WorldCellModel cell) =>
             Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
             (Math.Abs(cell.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
-                ? Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                ? Math.Abs(cell.RealCoords.x) % 2 == (Math.Abs(cell.RealCoords.y) % 2 == 1 ? 1 : 0)
                     ? Color.Gray
                     : Color.Yellow
-                : Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                : Math.Abs(cell.RealCoords.x) % 2 == (Math.Abs(cell.RealCoords.y) % 2 == 1 ? 1 : 0)
                     ? Color.Green
                     : Color.Sienna;
 
@@ -177,17 +177,14 @@ namespace kbs2.Desktop.View.MapView
             new Random(cell.RealCoords.y * cell.RealCoords.x).Next(0, 2) == 1 ? Color.Gray : Color.Pink;
 
         //    Draw-position relative to x or y coordinate provided
-        private int CellDrawInt(double realCoord) => (int) Math.Round(realCoord * TileSize);
-
-        //    Draw-position relative to x or y coordinate provided
         private int CellDrawPosition(double realCoord) => (int) Math.Round(realCoord * TileSize);
 
         //    Draw-position relative to x or y coordinate provided
         private Coords CellDrawCoords(FloatCoords floatCoords) => CellDrawCoords(floatCoords.x, floatCoords.y);
 
         //    Draw-position relative to x or y coordinate provided
-        private Coords CellDrawCoords(float x, float y) => new Coords
-            {x = (int) Math.Round(x * TileSize), y = (int) Math.Round(y * TileSize)};
+        private Coords CellDrawCoords(float x, float y) =>
+            new Coords {x = CellDrawPosition(x), y = CellDrawPosition(y)};
 
         // Draws the cells on the screen according to the given chunks in the camera view
         private void DrawCells()
@@ -201,7 +198,7 @@ namespace kbs2.Desktop.View.MapView
                 foreach (WorldCellController cell in chunkGrid.Value.WorldChunkModel.grid)
                 {
                     WorldCellModel cellModel = cell.worldCellModel;
-                    
+
                     // Sets the x and y for the current tile
                     int y = CellDrawPosition(cellModel.RealCoords.y);
                     int x = CellDrawPosition(cellModel.RealCoords.x);
