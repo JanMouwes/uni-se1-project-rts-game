@@ -33,19 +33,20 @@ namespace kbs2.GamePackage
         {
             if(CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
             {
-                View.SelectionBox = new Rectangle(CurMouseState.X, CurMouseState.Y, 0, 0);
-                CheckClicked(List, CurMouseState, viewMatrix, tileSize);
+                View.SelectionBox = new RectangleF(CurMouseState.X, CurMouseState.Y, 0, 0);
             }
 
             if(CurMouseState.LeftButton == ButtonState.Pressed)
             {
-                View.SelectionBox = new Rectangle(View.SelectionBox.X, View.SelectionBox.Y, CurMouseState.X - View.SelectionBox.X, CurMouseState.Y - View.SelectionBox.Y);
+                View.SelectionBox = new RectangleF(View.SelectionBox.X, View.SelectionBox.Y, CurMouseState.X - View.SelectionBox.X, CurMouseState.Y - View.SelectionBox.Y);
+                CheckClickedBox(List, CurMouseState, viewMatrix, tileSize);
+                Console.WriteLine($"View.SelectionBox: {View.SelectionBox}");
             }
 
             if(CurMouseState.LeftButton == ButtonState.Released)
             {
-                View.SelectionBox = new Rectangle(-1, -1, 0, 0);
-            }   
+                View.SelectionBox = new RectangleF(-1f, -1f, 0f, 0f);
+            }
 
             Model.PreviousMouseState = CurMouseState;
         }
@@ -90,7 +91,51 @@ namespace kbs2.GamePackage
 			}
         }
 
-		public void CheckClicked(List<Building_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
+        public void CheckClickedBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
+        {
+            KeyboardState state = Keyboard.GetState();
+
+            if (CurMouseState.LeftButton == ButtonState.Pressed)
+            {
+                RectangleF boxDragPosition = new RectangleF(0, 0, 0, 0);
+
+                Vector2 boxPosition = new Vector2(View.SelectionBox.X, View.SelectionBox.Y);
+                Vector2 worldPosition = Vector2.Transform(boxPosition, Matrix.Invert(viewMatrix));
+
+                Vector2 boxPosition2 = new Vector2(View.SelectionBox.Width, View.SelectionBox.Height);
+                
+                if(boxPosition2.Y < 0 && boxPosition2.X > 0)
+                {
+                    boxDragPosition = new RectangleF((worldPosition.X / tileSize), ((worldPosition.Y + boxPosition2.Y) / tileSize), (boxPosition2.X / tileSize), ((boxPosition2.Y / tileSize) * -1));
+                }
+                else if(boxPosition2.Y > 0 && boxPosition2.X < 0)
+                {
+                    boxDragPosition = new RectangleF(((worldPosition.X + boxPosition2.X) / tileSize), (worldPosition.Y / tileSize), ((boxPosition2.X / tileSize) * -1), (boxPosition2.Y / tileSize));
+                }
+                else if(boxPosition2.Y < 0 && boxPosition2.X < 0)
+                {
+                    boxDragPosition = new RectangleF(((worldPosition.X + boxPosition2.X) / tileSize), ((worldPosition.Y + boxPosition2.Y) / tileSize), ((boxPosition2.X / tileSize) * -1), ((boxPosition2.Y / tileSize) * -1));
+                }
+                else 
+                {
+                    boxDragPosition = new RectangleF((worldPosition.X / tileSize), (worldPosition.Y / tileSize), (boxPosition2.X / tileSize), (boxPosition2.Y / tileSize));
+                }
+
+                Console.WriteLine($"boxDragPosition: {boxDragPosition}");
+
+                foreach (Unit_Controller unit in List)
+                {
+                    RectangleF UnitClickBox = unit.CalcClickBox();
+                    if (boxDragPosition.Intersects(UnitClickBox))
+                    {
+                        unit.UnitView.ImageSrc = "pikachu_idle";
+                        SelectedUnits.Add(unit);
+                    }
+                }
+            }
+        }
+
+        public void CheckClicked(List<Building_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
 		{
 
 		}

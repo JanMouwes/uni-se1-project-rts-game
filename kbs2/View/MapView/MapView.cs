@@ -259,10 +259,10 @@ namespace kbs2.Desktop.View.MapView
             // Begin drawing without an offset
             spriteBatch.Begin();
 
-            DrawHorizontalLine(Selection.View.SelectionBox.Y);
-            DrawHorizontalLine(Selection.View.SelectionBox.Y + Selection.View.SelectionBox.Height);
-            DrawVerticalLine(Selection.View.SelectionBox.X);
-            DrawVerticalLine(Selection.View.SelectionBox.X + Selection.View.SelectionBox.Width);
+            DrawHorizontalLine((int) Selection.View.SelectionBox.Y);
+            DrawHorizontalLine((int) (Selection.View.SelectionBox.Y + Selection.View.SelectionBox.Height));
+            DrawVerticalLine((int) (Selection.View.SelectionBox.X));
+            DrawVerticalLine((int) (Selection.View.SelectionBox.X + Selection.View.SelectionBox.Width));
 
             // End drawing of the selection box
             spriteBatch.End();
@@ -278,7 +278,7 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.SelectionBox.Width - i >= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(Selection.View.SelectionBox.X + i, PositionY, 10, 5),
+                        spriteBatch.Draw(texture, new Rectangle((int) (Selection.View.SelectionBox.X + i), PositionY, 10, 5),
                             Color.White);
                     }
                 }
@@ -289,7 +289,7 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.SelectionBox.Width - i <= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(Selection.View.SelectionBox.X + i, PositionY, 10, 5),
+                        spriteBatch.Draw(texture, new Rectangle((int) (Selection.View.SelectionBox.X + i), PositionY, 10, 5),
                             Color.White);
                     }
                 }
@@ -305,7 +305,7 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.SelectionBox.Height - i >= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(PositionX, Selection.View.SelectionBox.Y + i, 10, 5),
+                        spriteBatch.Draw(texture, new Rectangle(PositionX, (int) (Selection.View.SelectionBox.Y + i), 10, 5),
                             new Rectangle(0, 0, texture.Width, texture.Height), Color.White, MathHelper.ToRadians(90),
                             new Vector2(0, 0), SpriteEffects.None, 0);
                     }
@@ -318,7 +318,7 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.SelectionBox.Height - i <= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(PositionX - 10, Selection.View.SelectionBox.Y + i, 10, 5),
+                        spriteBatch.Draw(texture, new Rectangle(PositionX - 10, (int) (Selection.View.SelectionBox.Y + i), 10, 5),
                             Color.White);
                     }
                 }
