@@ -129,11 +129,11 @@ namespace kbs2.Desktop.View.MapView
             float x = Camera.GetViewMatrix().M41;
             float y = Camera.GetViewMatrix().M42;
 
-            Selection.CheckClicked(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
+            //Selection.CheckClicked(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
             
 
             // Draws a selection box according to the selected area
-            Selection.DrawSelectionBox(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
+            Selection.DrawSelectionBox(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize, Camera.CameraModel.Zoom);
 
             // Calls the game update
             base.Update(gameTime);
@@ -248,8 +248,8 @@ namespace kbs2.Desktop.View.MapView
             chunksOnScreen = World.WorldModel.ChunkGrid;
             float x = Camera.GetViewMatrix().M41;
             float y = Camera.GetViewMatrix().M42;
-            Console.WriteLine($"X: {x}");
-            Console.WriteLine($"Y: {y}");
+            //Console.WriteLine($"X: {x}");
+            //Console.WriteLine($"Y: {y}");
             return chunksOnScreen;
         }
 
