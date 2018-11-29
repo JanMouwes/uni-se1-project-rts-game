@@ -8,6 +8,7 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
         public float Height { get; set; }
         public float Width { get; set; }
 
+        // sets height, width and image for a buildingview
         public BuildingView(string imageSrc, float height, float width)
         {
             Height = height;
@@ -15,6 +16,7 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
             ImageSrc = imageSrc;
         }
 
+        //returns the image it should draw 
         public string Draw()
         {
             return ImageSrc;
