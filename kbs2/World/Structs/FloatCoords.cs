@@ -11,7 +11,6 @@ namespace kbs2.World.Structs
         public float x;
         public float y;
 
-
         public static FloatCoords operator +(FloatCoords value1, FloatCoords value2)
         {
             value1.x += value2.x;
@@ -40,28 +39,11 @@ namespace kbs2.World.Structs
             return value1;
         }
 
-        public static bool operator ==(FloatCoords value1, FloatCoords value2)
-        {
-            if (value1.x == value2.x && value1.y == value2.y)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        public static bool operator ==(FloatCoords value1, FloatCoords value2) =>
+            (value1.x == value2.x && value1.y == value2.y);
 
-        public static bool operator !=(FloatCoords value1, FloatCoords value2)
-        {
-            if (value1.x == value2.x && value1.y == value2.y)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
+
+        public static bool operator !=(FloatCoords value1, FloatCoords value2) =>
+            !(value1.x == value2.x && value1.y == value2.y);
     }
 }

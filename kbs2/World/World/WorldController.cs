@@ -16,8 +16,10 @@ namespace kbs2.Desktop.World.World
             //TODO
         }
 
+        //    Loads chunk at given coordinate
 		public void LoadChunk(Coords coords) => WorldModel.ChunkGrid[coords].Load();
 
+        //    Unloads chunk at given coordinate
 		public void UnloadChunk(Coords coords) => WorldModel.ChunkGrid[coords].UnLoad();
 	}
 }

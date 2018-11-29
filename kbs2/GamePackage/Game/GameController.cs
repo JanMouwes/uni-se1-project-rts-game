@@ -37,7 +37,7 @@ namespace kbs2.GamePackage.Game
 
         public event GameSpeedObserver GameSpeedChange;
 
-        //    GameSpeed and its event
+        //    GameState and its event
         private GameState gameState;
 
         public GameState GameState
