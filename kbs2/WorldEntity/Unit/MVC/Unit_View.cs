@@ -12,17 +12,13 @@ namespace kbs2.WorldEntity.Unit.MVC
 {
 	public class Unit_View
 	{
-        public string ImageSrc { get; set; }
-        
+        public string ImageSrcPri { get; set; }
+        public string ImageSrcSec { get; set; }
 
         public Unit_View(string imageSrc)
         {
-            ImageSrc = imageSrc;
-        }
-
-        public string Draw()
-        {
-            return ImageSrc;   
+            ImageSrcPri = imageSrc;
+            ImageSrcSec = "shadow";
         }
 	}
 }
