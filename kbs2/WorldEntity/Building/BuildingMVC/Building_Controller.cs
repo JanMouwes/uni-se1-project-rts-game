@@ -12,7 +12,5 @@ namespace kbs2.WorldEntity.Building
 	{
         public Building_Model Model { get; set; }
         public BuildingView View { get; set; }
-
-        
 	}
 }

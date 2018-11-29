@@ -9,7 +9,10 @@ namespace kbs2.WorldEntity.Building
 {
 	public class BuildingDef
 	{
+        // list of cells that contain the building
         public List<Coords> BuildingShape { get; set; }
+
+        // sprite info
         public string imageSrc { get; set; }
         public float height { get; set; }
         public float width { get; set; }

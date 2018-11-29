@@ -31,7 +31,6 @@ namespace kbs2.Desktop.View.MapView
         private CameraController Camera;
         private WorldController World;
         private Selection_Controller Selection;
-        public List<Building_Controller> buildings;
         
 
         // Calculate the size (Width) of a tile
@@ -69,7 +68,7 @@ namespace kbs2.Desktop.View.MapView
             // Sets the defenition of terraintextures
             TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
 
-            buildings = new List<Building_Controller>();
+            
 
             // Make temp building
             BuildingDef def = new BuildingDef();
@@ -83,7 +82,7 @@ namespace kbs2.Desktop.View.MapView
             def.height = 2f;
             def.width = 2f;
             def.imageSrc = "TrainingCenter";
-            buildings.Add(BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 }));
+            World.AddBuilding(def,BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 }));
 
 
             // Allows the user to resize the window
@@ -95,6 +94,8 @@ namespace kbs2.Desktop.View.MapView
             // Initalize game
             base.Initialize();
         }
+
+        
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -368,7 +369,7 @@ namespace kbs2.Desktop.View.MapView
         {
 
 
-            foreach(Building_Controller building in buildings)
+            foreach(Building_Controller building in World.WorldModel.buildings)
             {
                 spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
