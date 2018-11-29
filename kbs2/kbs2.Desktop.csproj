@@ -77,9 +77,10 @@
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Controller.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Model.cs" />
     <Compile Include="WorldEntity\Building\BuildingDef.cs" />
+    <Compile Include="WorldEntity\Building\BuildingFactory.cs" />
+    <Compile Include="WorldEntity\Building\BuildingMVC\BuildingView.cs" />
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Controller.cs" />
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Model.cs" />
-    <Compile Include="WorldEntity\Building\BuildingFactory.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />

@@ -10,6 +10,7 @@ using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
+using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -133,6 +134,9 @@ namespace kbs2.Desktop.View.MapView
 
             // Draws the units on screen
             DrawUnits();
+
+            // Draws the buildings on screen
+            DrawBuilding();
 
             // Draws the selection box when you select and drag
             DrawSelection();
@@ -340,5 +344,21 @@ namespace kbs2.Desktop.View.MapView
 
             spriteBatch.End();
         }
+
+        public void DrawBuilding()
+        {
+            BuildingView TrainingCenter = new BuildingView("TrainingCenter", 2.0f, 2.0f);
+
+            spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
+
+            Coords drawPos = CellDrawCoords(1f, 1f);
+            spriteBatch.Draw(Content.Load<Texture2D>(TrainingCenter.Draw()),
+                new Rectangle(
+                    (int)(drawPos.x - TileSize * TrainingCenter.Width * .5),
+                    (int)(drawPos.y - TileSize * TrainingCenter.Height * .5),
+                    (int)(TileSize * TrainingCenter.Height), (int)(TileSize * TrainingCenter.Width)), Color.White);
+            spriteBatch.End();
+        }
+
     }
 }
