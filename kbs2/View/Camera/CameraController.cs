@@ -22,11 +22,7 @@ namespace kbs2.Desktop.View.Camera
         public new float Zoom
         {
             get => base.Zoom;
-            set
-            {
-                base.Zoom = value;
-                CameraModel.Zoom = base.Zoom;
-            }
+            set => base.Zoom = value;
         }
 
         public CameraController(ViewportAdapter viewportAdapter) : this(viewportAdapter.GraphicsDevice)
