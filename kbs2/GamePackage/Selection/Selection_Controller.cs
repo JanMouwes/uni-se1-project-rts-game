@@ -166,16 +166,7 @@ namespace kbs2.GamePackage
 		{
 
 		}
-
-		public event EventHandler Clicky;
-
-		protected virtual void OnClicky(MouseEventArgs e)
-		{
-			EventHandler handler = Clicky;
-			if (handler != null)
-			{
-				handler(this, e);
-			}
-		}
+		
+		
 	}
 }

@@ -60,7 +60,6 @@
     <Compile Include="GamePackage\Enums\GameSpeed.cs" />
     <Compile Include="GamePackage\EventArgs\GameSpeedEventArgs.cs" />
     <Compile Include="GamePackage\EventArgs\GameStateEventArgs.cs" />
-    <Compile Include="GamePackage\EventArgs\MouseEventArgs.cs" />
     <Compile Include="GamePackage\Game\GameController.cs" />
     <Compile Include="GamePackage\Game\GameModel.cs" />
     <Compile Include="GamePackage\Game\GameView.cs" />
