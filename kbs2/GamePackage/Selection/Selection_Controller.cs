@@ -1,4 +1,5 @@
-﻿using kbs2.GamePackage.Selection;
+﻿using kbs2.GamePackage.EventArgs;
+using kbs2.GamePackage.Selection;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
@@ -116,6 +117,17 @@ namespace kbs2.GamePackage
         public void CheckClicked(List<Building_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
 		{
 
+		}
+
+		public event EventHandler Clicky;
+
+		protected virtual void OnClicky(MouseEventArgs e)
+		{
+			EventHandler handler = Clicky;
+			if (handler != null)
+			{
+				handler(this, e);
+			}
 		}
 	}
 }
