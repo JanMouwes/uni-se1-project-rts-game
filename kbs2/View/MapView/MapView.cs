@@ -337,12 +337,19 @@ namespace kbs2.Desktop.View.MapView
             foreach(Unit_Controller unit in UnitList)
             {
                 drawPos = CellDrawCoords(unit.UnitModel.LocationModel.floatCoords);
-                Console.WriteLine(unit.UnitView.Draw());
-                spriteBatch.Draw(Content.Load<Texture2D>(unit.UnitView.Draw()),
-                new Rectangle(
-                    (int)(drawPos.x - TileSize * unit.UnitModel.Width * .5),
-                    (int)(drawPos.y - TileSize * unit.UnitModel.Height * .5),
-                    (int)(TileSize * unit.UnitModel.Height), (int)(TileSize * unit.UnitModel.Width)), Color.White);
+                
+                spriteBatch.Draw(Content.Load<Texture2D>(unit.UnitView.ImageSrcSec),
+                   new Rectangle(
+                       (int)(drawPos.x - TileSize * unit.UnitModel.Width * .5),
+                       (int)(drawPos.y - TileSize * unit.UnitModel.Height * -.25),
+                       (int)(TileSize * unit.UnitModel.Width), (int)(TileSize * (unit.UnitModel.Height * 0.25))), Color.White
+                );
+                spriteBatch.Draw(Content.Load<Texture2D>(unit.UnitView.ImageSrcPri),
+                    new Rectangle(
+                        (int)(drawPos.x - TileSize * unit.UnitModel.Width * .5),
+                        (int)(drawPos.y - TileSize * unit.UnitModel.Height * .5),
+                        (int)(TileSize * unit.UnitModel.Width), (int)(TileSize * unit.UnitModel.Height)), Color.White
+                );
             }
 
             spriteBatch.End();

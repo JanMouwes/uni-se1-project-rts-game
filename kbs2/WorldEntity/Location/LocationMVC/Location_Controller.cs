@@ -47,7 +47,6 @@ namespace kbs2.WorldEntity.Location
                     float diagonaldifference = (float)pythagoras(xdifference, ydifference);
                     FloatCoords difference = new FloatCoords();
                     difference.x = diagonaldifference / speed * xdifference;
-                    difference.x = diagonaldifference / speed * xdifference;
                     
                     LocationModel.floatCoords += difference;
                 }
