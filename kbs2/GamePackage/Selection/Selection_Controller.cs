@@ -140,7 +140,7 @@ namespace kbs2.GamePackage
                 }
             }
         }
-
+        // Clears the SelectedUnit list and puts every selected unit on false
         public void ClearSelectedList()
         {
             foreach(Unit_Controller unit in SelectedUnits)
