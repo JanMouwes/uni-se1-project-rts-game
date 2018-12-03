@@ -73,7 +73,8 @@ namespace kbs2.GamePackage
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // ================ Game items == These items do not belong here ==================
+            // ================ Temp Game items == These items do not belong here but are for testing ==================
+
             TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
 
             // Temp view added to drawList for testing
@@ -81,6 +82,10 @@ namespace kbs2.GamePackage
             WorldCellView view = new WorldCellView(coords, "grass");
             DrawList.Add(view);
             DrawStaticList.Add(view);
+
+
+
+            // ================ End of Temp code =====================================
         }
 
         /// <summary>
