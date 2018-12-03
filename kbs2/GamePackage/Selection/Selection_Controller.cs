@@ -24,7 +24,9 @@ namespace kbs2.GamePackage
 		public Selection_Model Model { get; set; }
         public Selection_View View { get; set; }
 
-        public List<Unit_Controller> SelectedUnits { get; set; }
+		public MouseState CurMouseState { get; set; }
+
+		public List<Unit_Controller> SelectedUnits { get; set; }
 
 		public Selection_Controller(string lineTexture, MouseState mouseState)
         {
@@ -32,7 +34,8 @@ namespace kbs2.GamePackage
             View = new Selection_View(lineTexture);
 			SelectedUnits = new List<Unit_Controller>();
         }
-
+		
+		
         public void DrawSelectionBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
         {
             if(CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
@@ -158,7 +161,7 @@ namespace kbs2.GamePackage
 
 		// TODO: delegate eventargspayload toevoegen en shit
 
-		public event MouseActivity<MouseState> MouseStateChange;
+		//public event MouseActivity<MouseState> MouseStateChange;
 
 
 
