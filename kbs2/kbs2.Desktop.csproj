@@ -57,6 +57,7 @@
     <Compile Include="Faction\Interfaces\IHasFactionBuilding.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionRelationship.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionUnit.cs" />
+    <Compile Include="GamePackage\EventArgs\EventArgs_WithPayload.cs" />
     <Compile Include="GamePackage\Enums\GameSpeed.cs" />
     <Compile Include="GamePackage\EventArgs\GameSpeedEventArgs.cs" />
     <Compile Include="GamePackage\EventArgs\GameStateEventArgs.cs" />
@@ -85,12 +86,11 @@
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
     <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
-    <Compile Include="WorldEntity\Abstract\Hitbox.cs" />
     <Compile Include="WorldEntity\Enums\ElementType.cs" />
-    <Compile Include="WorldEntity\Interfaces\IClickable.cs" />
     <Compile Include="WorldEntity\Interfaces\IElemental.cs" />
     <Compile Include="WorldEntity\Interfaces\IHasPersonalSpace.cs" />
     <Compile Include="WorldEntity\Interfaces\IPurchasable.cs" />
+    <Compile Include="WorldEntity\Shapes\Circle.cs" />
     <Compile Include="WorldEntity\Structs\BattleValue.cs" />
     <Compile Include="WorldEntity\Structs\CostValue.cs" />
     <Compile Include="WorldEntity\Structs\Level.cs" />
@@ -135,6 +135,9 @@
     <Reference Include="Microsoft.VisualStudio.CodeCoverage.Shim, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeCoverage.15.9.0\lib\net45\Microsoft.VisualStudio.CodeCoverage.Shim.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="MonoGame.Extended.Graphics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Extended.Graphics.1.1.0\lib\portable-net45+win8+wpa81\MonoGame.Extended.Graphics.dll</HintPath>
     </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>

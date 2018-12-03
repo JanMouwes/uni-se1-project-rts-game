@@ -1,4 +1,5 @@
-﻿using kbs2.World;
+﻿using kbs2.Desktop.World.World;
+using kbs2.World;
 using kbs2.World.Structs;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,11 @@ namespace kbs2.WorldEntity.Location
         static Func<double, double, double> getDistance = (x, y) => x > y ? x - y : y - x;
         Func<FloatCoords, FloatCoords, double> getDistance2d = (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
 
-        public Location_Controller()
+        public Location_Controller(WorldModel worldModel, float lx, float ly)
 		{
-
+            LocationModel = new Location_Model(lx, ly);
+            pathfinder = new Pathfinder(worldModel, 500);
+            Waypoints = new List<FloatCoords>();
 		}
 		public void MoveTo(FloatCoords target) //[Review] This can be a Lambda expression
 		{
@@ -46,7 +49,6 @@ namespace kbs2.WorldEntity.Location
                     // calculate new coords
                     float diagonaldifference = (float)pythagoras(xdifference, ydifference);
                     FloatCoords difference = new FloatCoords();
-                    difference.x = diagonaldifference / speed * xdifference;
                     difference.x = diagonaldifference / speed * xdifference;
                     
                     LocationModel.floatCoords += difference;

@@ -92,7 +92,7 @@ namespace kbs2
                     while (reader.Read())
                     {
                         // Create and insert values into a new Unit_Model and add the Unit_Model to the Unit_Model list afterwards
-                        Unit_Model unit = new Unit_Model();
+                        Unit_Model unit = new Unit_Model(1, 1);
 
                         unit.BattleModel.Accuracy = (double)reader["Unit.Accuracy"];
                         unit.BattleModel.AttackModifier = (double)reader["Unit.AttackModifier"];
