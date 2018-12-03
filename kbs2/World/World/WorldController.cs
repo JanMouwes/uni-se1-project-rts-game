@@ -1,4 +1,5 @@
 using kbs2.World;
+using kbs2.World.World;
 
 namespace kbs2.Desktop.World.World
 {

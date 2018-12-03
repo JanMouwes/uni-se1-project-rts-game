@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 
-namespace kbs2.GamePackage.Game
+namespace kbs2.GamePackage
 {
 	class GameModel
 	{
