@@ -57,6 +57,7 @@
     <Compile Include="Faction\Interfaces\IHasFactionBuilding.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionRelationship.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionUnit.cs" />
+    <Compile Include="GamePackage\EventArgs\EventArgs_WithPayload.cs" />
     <Compile Include="GamePackage\Enums\GameSpeed.cs" />
     <Compile Include="GamePackage\EventArgs\GameSpeedEventArgs.cs" />
     <Compile Include="GamePackage\EventArgs\GameStateEventArgs.cs" />
