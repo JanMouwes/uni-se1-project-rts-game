@@ -35,6 +35,10 @@ namespace kbs2.GamePackage
 			SelectedUnits = new List<Unit_Controller>();
         }
 		
+		public MouseState MouseActivity()
+		{
+			return Mouse.GetState();
+		}
 		
         public void DrawSelectionBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
         {

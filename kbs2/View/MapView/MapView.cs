@@ -141,17 +141,19 @@ namespace kbs2.Desktop.View.MapView
             Camera.MoveCamera();
 
             //check for if a unit was clicked or not
-            MouseState dipshit = Mouse.GetState();
+            //MouseState dipshit = Mouse.GetState();
+
+
 
             float x = Camera.GetViewMatrix().M41;
             float y = Camera.GetViewMatrix().M42;
 
+			
+			//Selection.CheckClicked(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
 
-            //Selection.CheckClicked(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
 
-
-            // Draws a selection box according to the selected area
-            Selection.DrawSelectionBox(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize,
+			// Draws a selection box according to the selected area
+			Selection.DrawSelectionBox(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize,
                 Camera.CameraModel.Zoom);
 
             // Calls the game update
