@@ -20,6 +20,8 @@ namespace kbs2.WorldEntity.Location
         {
             floatCoords.x = locationX;
             floatCoords.y = locationY;
+
+            UnwalkableTerrain = new List<TerrainType>();
         }
     }
 }
