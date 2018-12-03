@@ -15,9 +15,13 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage
 {
-    public class Selection_Controller
+	public delegate void MouseEventObserver<TPayloadType>(object sender, EventArgs_WithPayload<TPayloadType> eventArgs);
+
+	public class Selection_Controller
     {
-        public Selection_Model Model { get; set; }
+		
+
+		public Selection_Model Model { get; set; }
         public Selection_View View { get; set; }
 
         public List<Unit_Controller> SelectedUnits { get; set; }
@@ -162,7 +166,14 @@ namespace kbs2.GamePackage
             SelectedUnits.Clear();
         }
 
-        public void CheckClicked(List<Building_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
+		// TODO: delegate eventargspayload toevoegen en shit
+
+		public event MouseActivity<MouseState> MouseStateChange;
+
+
+
+
+		public void CheckClicked(List<Building_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
 		{
 
 		}
