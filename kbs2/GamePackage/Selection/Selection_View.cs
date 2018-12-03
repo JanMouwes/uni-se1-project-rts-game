@@ -19,5 +19,5 @@ namespace kbs2.GamePackage.Selection
             LineTexture = lineText;
             SelectionBox = new RectangleF(-1, -1, 0, 0);
         }
-    }
+    }   
 }

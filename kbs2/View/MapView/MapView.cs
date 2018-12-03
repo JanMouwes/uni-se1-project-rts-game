@@ -53,17 +53,6 @@ namespace kbs2.Desktop.View.MapView
         protected override void Initialize()
         {
             // Add initialization logic here
-            UnitList = new List<Unit_Controller>();
-
-            Unit_Controller Pichu = new Unit_Controller("pichu_idle", 0.3f, 0.3f, 1f, 0.2f);
-            Unit_Controller Pikachu = new Unit_Controller("pikachu_idle", 0.6f, 0.6f, 2f, 0.4f);
-            Unit_Controller Raichu = new Unit_Controller("raichu_idle", 0.8f, 0.8f, 4f, 0.4f);
-            Unit_Controller Rayquaza = new Unit_Controller("rayquaza_idle", 3.5f, 3.5f, 8f, 0.4f);
-
-            UnitList.Add(Pichu);
-            UnitList.Add(Pikachu);
-            UnitList.Add(Raichu);
-            UnitList.Add(Rayquaza);
 
             // initialize world
             World = WorldFactory.GetNewWorld();
@@ -82,6 +71,19 @@ namespace kbs2.Desktop.View.MapView
 
             // Makes the mouse visible in the window
             base.IsMouseVisible = true;
+
+            // Add units to the game
+            UnitList = new List<Unit_Controller>();
+
+            Unit_Controller Pichu = new Unit_Controller(World.WorldModel, "pichu_idle", 0.3f, 0.3f, 1f, 0.2f);
+            Unit_Controller Pikachu = new Unit_Controller(World.WorldModel, "pikachu_idle", 0.6f, 0.6f, 2f, 0.4f);
+            Unit_Controller Raichu = new Unit_Controller(World.WorldModel, "raichu_idle", 0.8f, 0.8f, 4f, 0.4f);
+            Unit_Controller Rayquaza = new Unit_Controller(World.WorldModel, "rayquaza_idle", 3.5f, 3.5f, 8f, 0.4f);
+
+            UnitList.Add(Pichu);
+            UnitList.Add(Pikachu);
+            UnitList.Add(Raichu);
+            UnitList.Add(Rayquaza);
 
             // Initalize game
             base.Initialize();
@@ -153,6 +155,7 @@ namespace kbs2.Desktop.View.MapView
 
             // Draws the units on screen
             DrawUnits();
+            
 
             // Draws the selection box when you select and drag
             DrawSelection();
