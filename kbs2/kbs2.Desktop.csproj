@@ -63,6 +63,7 @@
     <Compile Include="GamePackage\Game\GameController.cs" />
     <Compile Include="GamePackage\Game\GameModel.cs" />
     <Compile Include="GamePackage\Game\GameView.cs" />
+    <Compile Include="GamePackage\Interfaces\IViewable.cs" />
     <Compile Include="GamePackage\Selection\Selection_Controller.cs" />
     <Compile Include="GamePackage\Selection\Selection_Model.cs" />
     <Compile Include="GamePackage\Selection\Selection_View.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="Factory\ResourceMVC\ResourceController.cs" />
     <Compile Include="Factory\ResourceMVC\ResourceModel.cs" />
     <Compile Include="Factory\Enums\ResourceType.cs" />
-    <Compile Include="World\World\WorldView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

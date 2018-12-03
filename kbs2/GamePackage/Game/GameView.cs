@@ -5,9 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
+using kbs2.GamePackage.Interfaces;
+using kbs2.World;
+using kbs2.World.Cell;
+using kbs2.World.Structs;
+using kbs2.World.TerrainDef;
+using kbs2.World.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 
 namespace kbs2.GamePackage
 {
@@ -16,6 +23,11 @@ namespace kbs2.GamePackage
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private CameraController Camera;
+
+        // List for drawing items with the camera offset
+        private List<IViewable> DrawList;
+        // List for drawing items without offset
+        private List<IViewable> DrawStaticList;
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -54,8 +66,21 @@ namespace kbs2.GamePackage
             // initialize camera
             Camera = new CameraController(GraphicsDevice);
 
+            // Initializes the lists that hold the views to draw
+            DrawList = new List<IViewable>();
+            DrawStaticList = new List<IViewable>();
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // ================ Game items == These items do not belong here ==================
+            TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
+
+            // Temp view added to drawList for testing
+            FloatCoords coords = new FloatCoords { x = 1, y = 1 };
+            WorldCellView view = new WorldCellView(coords, "grass");
+            DrawList.Add(view);
+            DrawStaticList.Add(view);
         }
 
         /// <summary>
@@ -94,8 +119,40 @@ namespace kbs2.GamePackage
             // Clears the GraphicsDevice to make room for the new draw items
             GraphicsDevice.Clear(Color.Black);
 
+            DrawMovable();
+
+            DrawStationairy();
+
             // Calls the game's draw function
             base.Draw(gameTime);
+        }
+
+        // Draws every item in the DrawList with camera offset
+        private void DrawMovable()
+        {
+            spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
+
+            foreach (IViewable DrawItem in DrawList)
+            {
+                Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
+                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
+            }
+
+            spriteBatch.End();
+        }
+
+        // Draws every item in the DrawList without offset
+        private void DrawStationairy()
+        {
+            spriteBatch.Begin();
+
+            foreach (IViewable DrawItem in DrawStaticList)
+            {
+                Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
+                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
+            }
+
+            spriteBatch.End();
         }
     }
 }
