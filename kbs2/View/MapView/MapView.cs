@@ -142,8 +142,15 @@ namespace kbs2.Desktop.View.MapView
 
             //check for if a unit was clicked or not
             //MouseState dipshit = Mouse.GetState();
+            if (Selection.SelectedUnits.Count > 0)
+            { 
+                Selection.SelectedUnits[0].LocationController.MoveTo(new FloatCoords() { x = 20f, y = 20f });
+            }
 
-
+            foreach(Unit_Controller u in UnitList)
+            {
+                u.LocationController.Ontick();
+            }
 
             float x = Camera.GetViewMatrix().M41;
             float y = Camera.GetViewMatrix().M42;
@@ -175,10 +182,7 @@ namespace kbs2.Desktop.View.MapView
             // Draws the units on screen
             DrawUnits();
 
-            if (Selection.SelectedUnits.Count > 0)
-            {
-                Selection.SelectedUnits[0].LocationController.MoveTo(new FloatCoords() { x = 50f, y = 50f });
-            }
+            
 
             // Draws the selection box when you select and drag
             DrawSelection();
