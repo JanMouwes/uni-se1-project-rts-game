@@ -70,91 +70,81 @@ namespace kbs2.GamePackage
 
             Vector2 boxPosition2 = new Vector2(View.SelectionBox.Width, View.SelectionBox.Height);
             // Makes a float rectangle according to which way you drag your box with your mouse
+            // Bottom left to Top right
             if(boxPosition2.Y < 0 && boxPosition2.X > 0)
             {
                 boxDragPosition = new RectangleF(
                     (worldPosition.X / tileSize), 
-                    ((worldPosition.Y + boxPosition2.Y) / tileSize), 
-                    (boxPosition2.X / tileSize), 
-                    ((boxPosition2.Y / tileSize) * -1)
+                    ((worldPosition.Y + (boxPosition2.Y / zoom)) / tileSize), 
+                    (boxPosition2.X / tileSize) / zoom, 
+                    ((boxPosition2.Y / tileSize) * -1) / zoom
                 );
             }
+            // Top right to Bottom left
             else if(boxPosition2.Y > 0 && boxPosition2.X < 0)
             {
                 boxDragPosition = new RectangleF(
-                    ((worldPosition.X + boxPosition2.X) / tileSize), 
+                    ((worldPosition.X + (boxPosition2.X / zoom)) / tileSize), 
                     (worldPosition.Y / tileSize), 
-                    ((boxPosition2.X / tileSize) * -1), 
-                    (boxPosition2.Y / tileSize)
+                    ((boxPosition2.X / tileSize) * -1) / zoom, 
+                    (boxPosition2.Y / tileSize) / zoom
                 );
             }
+            // Bottom right to Top left
             else if(boxPosition2.Y < 0 && boxPosition2.X < 0)
             {
                 boxDragPosition = new RectangleF(
-                    ((worldPosition.X + boxPosition2.X) / tileSize), 
-                    ((worldPosition.Y + boxPosition2.Y) / tileSize), 
-                    ((boxPosition2.X / tileSize) * -1), 
-                    ((boxPosition2.Y / tileSize) * -1)
+                    ((worldPosition.X + (boxPosition2.X / zoom)) / tileSize), 
+                    ((worldPosition.Y + (boxPosition2.Y / zoom)) / tileSize), 
+                    ((boxPosition2.X / tileSize) * -1) / zoom, 
+                    ((boxPosition2.Y / tileSize) * -1) / zoom
                 );
             }
+            // Top left to Bottom right
             else 
             {
                 boxDragPosition = new RectangleF(
                     (worldPosition.X / tileSize), 
                     (worldPosition.Y / tileSize), 
-                    (boxPosition2.X / tileSize), 
-                    (boxPosition2.Y / tileSize)
+                    (boxPosition2.X / tileSize) / zoom, 
+                    (boxPosition2.Y / tileSize) / zoom
                 );
             }
 
             Console.WriteLine($"boxDragPosition: {boxDragPosition}");
+            // Checks if the control key is not pressed and clears the selectedlist
+            if (!state.IsKeyDown(Keys.LeftControl))
+                ClearSelectedList();
 
-            int count = 0;
             // Goes by every unit in the map and checks if the selection box intersects with any of the unit's hitboxes
             foreach (Unit_Controller unit in List)
             {
                 // Check for the intersection between selection box and unit box (rectangles)
-                if (boxDragPosition.Intersects(unit.CalcClickBox()))
+                if (!boxDragPosition.Intersects(unit.CalcClickBox())) continue;
+                // Checks if you have pressed Left Ctrl
+                if (state.IsKeyDown(Keys.LeftControl))
                 {
-                    // Checks if you have pressed Left Ctrl
-                    if (state.IsKeyDown(Keys.LeftControl))
+                    // Checks if a unit is already selected and if so deletes it from the list otherwise it adds the unit to the list
+                    if (unit.UnitModel.Selected)
                     {
-                        // Checks if a unit is already selected and if so deletes it from the list otherwise it adds the unit to the list
-                        if (unit.UnitModel.Selected)
-                        {
-                            unit.UnitModel.Selected = false;
-                            unit.UnitView.ImageSrcSec = "shadow";
-                            SelectedUnits.Remove(unit);
-                            count++;
-                        } else
-                        {
-                            unit.UnitModel.Selected = true;
-                            unit.UnitView.ImageSrcSec = "shadowselected";
-                            SelectedUnits.Add(unit);
-                            count++;
-                        }
+                        SelectedUnits.Remove(unit);
                     } else
                     {
-                        // Clears the list and adds the selected unit
-                        
-
-                        unit.UnitModel.Selected = true;
-                        unit.UnitView.ImageSrcSec = "shadowselected";
                         SelectedUnits.Add(unit);
-
-                        count++;
                     }
+                    unit.UnitView.ImageSrcSec = unit.UnitModel.Selected ? "shadow" : "shadowselected";
+                    unit.UnitModel.Selected = !unit.UnitModel.Selected;
+                }
+                else
+                {
+                    // Clears the list and adds the selected unit
+                    unit.UnitModel.Selected = true;
+                    unit.UnitView.ImageSrcSec = "shadowselected";
+                    SelectedUnits.Add(unit);
                 }
             }
-
-            // If no unit is selected clears the entire selection list of units
-            if(count == 0)
-            {
-                // Deselects all units in the selected unit list
-                ClearSelectedList();
-            }
         }
-
+        // Clears the SelectedUnit list and puts every selected unit on false
         public void ClearSelectedList()
         {
             foreach(Unit_Controller unit in SelectedUnits)
