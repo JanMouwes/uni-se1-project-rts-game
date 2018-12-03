@@ -97,6 +97,14 @@
 /processorParam:TextureFormat=Color
 /build:rayquaza_idle.png
 
+
+#begin TestFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:TestFont.spritefont
+
 #begin shadow.png
 /importer:TextureImporter
 /processor:TextureProcessor

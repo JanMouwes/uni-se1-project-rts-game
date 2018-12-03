@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Model;
 using kbs2.WorldEntity.Battle;
@@ -23,11 +24,11 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public Unit_Model UnitModel;
         public Unit_View UnitView;
 
-		public Unit_Controller(string imageSrc, float height, float width, float lx, float ly)
+		public Unit_Controller(WorldModel worldModel, string imageSrc, float height, float width, float lx, float ly)
 		{
             UnitModel = new Unit_Model(height, width);
             UnitView = new Unit_View(imageSrc);
-            LocationController = new Location_Controller(lx, ly);
+            LocationController = new Location_Controller(worldModel, lx, ly);
             UnitModel.LocationModel = LocationController.LocationModel;
         }
         // Create a new unit and add it to a faction
