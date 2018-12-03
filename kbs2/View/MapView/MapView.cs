@@ -31,6 +31,8 @@ namespace kbs2.Desktop.View.MapView
         private Selection_Controller Selection;
         private List<Unit_Controller> UnitList;
 
+        private SpriteFont font;
+
         // Calculate the size (Width) of a tile
         public int TileSize => (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
 
@@ -43,6 +45,10 @@ namespace kbs2.Desktop.View.MapView
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
+
+        private void DrawCoord(FloatCoords coords, Vector2 screenLocation) =>
+            //Console.WriteLine($"X: {coords.x}, Y: {coords.y}");
+            spriteBatch.DrawString(font, $"X: {coords.x}, Y: {coords.y}", screenLocation, Color.White); //TODO 
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -96,6 +102,8 @@ namespace kbs2.Desktop.View.MapView
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            font = Content.Load<SpriteFont>("TestFont");
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -129,11 +137,13 @@ namespace kbs2.Desktop.View.MapView
             float x = Camera.GetViewMatrix().M41;
             float y = Camera.GetViewMatrix().M42;
 
+
             //Selection.CheckClicked(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
-            
+
 
             // Draws a selection box according to the selected area
-            Selection.DrawSelectionBox(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize, Camera.CameraModel.Zoom);
+            Selection.DrawSelectionBox(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize,
+                Camera.CameraModel.Zoom);
 
             // Calls the game update
             base.Update(gameTime);
@@ -161,6 +171,9 @@ namespace kbs2.Desktop.View.MapView
             base.Draw(gameTime);
         }
 
+        private void DrawMouseCoord(MouseState mouseState) =>
+            DrawCoord(new FloatCoords {x = mouseState.X, y = mouseState.Y}, new Vector2(mouseState.X, mouseState.Y));
+
         // Delegate that decides what tilecolor function should be called
         public delegate Color TileColourDelegate(WorldCellModel cell);
 
@@ -168,7 +181,7 @@ namespace kbs2.Desktop.View.MapView
         public TileColourDelegate TileColour;
 
         private Color NotCheckered => Color.White;
-        
+
         // Draws the chunks in a Checkered pattern for easy debugging
         private Color ChunkCheckered(WorldCellModel cell) =>
             Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
@@ -264,6 +277,9 @@ namespace kbs2.Desktop.View.MapView
             DrawVerticalLine((int) (Selection.View.SelectionBox.X));
             DrawVerticalLine((int) (Selection.View.SelectionBox.X + Selection.View.SelectionBox.Width));
 
+            //    FIXME
+            DrawMouseCoord(Mouse.GetState());
+            
             // End drawing of the selection box
             spriteBatch.End();
         }
@@ -278,7 +294,8 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.SelectionBox.Width - i >= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle((int) (Selection.View.SelectionBox.X + i), PositionY, 10, 5),
+                        spriteBatch.Draw(texture,
+                            new Rectangle((int) (Selection.View.SelectionBox.X + i), PositionY, 10, 5),
                             Color.White);
                     }
                 }
@@ -289,7 +306,8 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.SelectionBox.Width - i <= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle((int) (Selection.View.SelectionBox.X + i), PositionY, 10, 5),
+                        spriteBatch.Draw(texture,
+                            new Rectangle((int) (Selection.View.SelectionBox.X + i), PositionY, 10, 5),
                             Color.White);
                     }
                 }
@@ -305,7 +323,8 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.SelectionBox.Height - i >= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(PositionX, (int) (Selection.View.SelectionBox.Y + i), 10, 5),
+                        spriteBatch.Draw(texture,
+                            new Rectangle(PositionX, (int) (Selection.View.SelectionBox.Y + i), 10, 5),
                             new Rectangle(0, 0, texture.Width, texture.Height), Color.White, MathHelper.ToRadians(90),
                             new Vector2(0, 0), SpriteEffects.None, 0);
                     }
@@ -318,7 +337,8 @@ namespace kbs2.Desktop.View.MapView
                 {
                     if (Selection.View.SelectionBox.Height - i <= 0)
                     {
-                        spriteBatch.Draw(texture, new Rectangle(PositionX - 10, (int) (Selection.View.SelectionBox.Y + i), 10, 5),
+                        spriteBatch.Draw(texture,
+                            new Rectangle(PositionX - 10, (int) (Selection.View.SelectionBox.Y + i), 10, 5),
                             Color.White);
                     }
                 }
@@ -330,7 +350,7 @@ namespace kbs2.Desktop.View.MapView
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
             Coords drawPos = CellDrawCoords(0.05f, 0.5f);
 
-            foreach(Unit_Controller unit in UnitList)
+            foreach (Unit_Controller unit in UnitList)
             {
                 drawPos = CellDrawCoords(unit.UnitModel.LocationModel.floatCoords);
                 
