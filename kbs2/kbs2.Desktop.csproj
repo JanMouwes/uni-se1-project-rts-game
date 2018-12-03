@@ -67,7 +67,6 @@
     <Compile Include="GamePackage\Selection\Selection_Model.cs" />
     <Compile Include="GamePackage\Selection\Selection_View.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\Camera\CameraController.cs" />
     <Compile Include="View\Camera\CameraModel.cs" />

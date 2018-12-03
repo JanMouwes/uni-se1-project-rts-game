@@ -2,7 +2,7 @@ using System.Timers;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.GamePackage.EventArgs;
 
-namespace kbs2.GamePackage.Game
+namespace kbs2.GamePackage
 {
     public delegate void GameSpeedObserver(object sender, GameSpeedEventArgs eventArgs);
 
