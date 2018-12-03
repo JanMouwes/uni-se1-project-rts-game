@@ -47,9 +47,15 @@ namespace kbs2.Desktop.View.MapView
             Content.RootDirectory = "Content";
         }
 
-        private void DrawCoord(FloatCoords coords, Vector2 screenLocation) =>
+        private void DrawCoord(FloatCoords coords, Vector2 screenLocation)
+        {
+            Vector2 realPos = new Vector2(coords.x, coords.y);
+            Vector2 worldPosition = Vector2.Transform(realPos, Matrix.Invert(Camera.GetViewMatrix()));
+
             //Console.WriteLine($"X: {coords.x}, Y: {coords.y}");
-            spriteBatch.DrawString(font, $"X: {coords.x}, Y: {coords.y}", screenLocation, Color.White); //TODO 
+            spriteBatch.DrawString(font, $"X: {Math.Round(worldPosition.X / TileSize, 2)}, Y: {Math.Round(worldPosition.Y / TileSize, 2)}", screenLocation, Color.White); //TODO 
+        }
+            
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -168,7 +174,11 @@ namespace kbs2.Desktop.View.MapView
 
             // Draws the units on screen
             DrawUnits();
-            
+
+            if (Selection.SelectedUnits.Count > 0)
+            {
+                Selection.SelectedUnits[0].LocationController.MoveTo(new FloatCoords() { x = 50f, y = 50f });
+            }
 
             // Draws the selection box when you select and drag
             DrawSelection();
