@@ -30,6 +30,9 @@ namespace kbs2.WorldEntity.Unit.MVC
             UnitView = new Unit_View(imageSrc);
             LocationController = new Location_Controller(worldModel, lx, ly);
             UnitModel.LocationModel = LocationController.LocationModel;
+            UnitModel.UnitDef = new kbs2.Unit.Unit.UnitDef();
+            UnitModel.UnitDef.Speed = 0.01f;
+            UnitModel.LocationModel.parrent = this;
         }
         // Create a new unit and add it to a faction
         public void CreateUnit(Faction_Model faction)
