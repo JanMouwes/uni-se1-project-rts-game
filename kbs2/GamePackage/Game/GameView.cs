@@ -14,10 +14,8 @@ namespace kbs2.GamePackage
     class GameView : Game
     {
         private GraphicsDeviceManager graphics;
-        private SpriteFont font;
         private SpriteBatch spriteBatch;
         private CameraController Camera;
-
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
