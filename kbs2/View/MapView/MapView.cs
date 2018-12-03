@@ -349,20 +349,23 @@ namespace kbs2.Desktop.View.MapView
         {
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
             Coords drawPos = CellDrawCoords(0.05f, 0.5f);
-            int offsetX = 20;
-            int offsetY = 20;
-
 
             foreach (Unit_Controller unit in UnitList)
             {
                 drawPos = CellDrawCoords(unit.UnitModel.LocationModel.floatCoords);
-                //Console.WriteLine(unit.UnitView.Draw());
-                spriteBatch.Draw(Content.Load<Texture2D>(unit.UnitView.Draw()),
+                
+                spriteBatch.Draw(Content.Load<Texture2D>(unit.UnitView.ImageSrcSec),
+                   new Rectangle(
+                       (int)(drawPos.x - TileSize * unit.UnitModel.Width * .5),
+                       (int)(drawPos.y - TileSize * unit.UnitModel.Height * -.01),
+                       (int)(TileSize * unit.UnitModel.Width), (int)(TileSize * (unit.UnitModel.Height * 0.5))), Color.White
+                );
+                spriteBatch.Draw(Content.Load<Texture2D>(unit.UnitView.ImageSrcPri),
                     new Rectangle(
-                        (int) (drawPos.x - TileSize * unit.UnitModel.Width * .5),
-                        (int) (drawPos.y - TileSize * unit.UnitModel.Height * .5),
-                        (int) (TileSize * unit.UnitModel.Height), (int) (TileSize * unit.UnitModel.Width)),
-                    Color.White);
+                        (int)(drawPos.x - TileSize * unit.UnitModel.Width * .5),
+                        (int)(drawPos.y - TileSize * unit.UnitModel.Height * .5),
+                        (int)(TileSize * unit.UnitModel.Width), (int)(TileSize * unit.UnitModel.Height)), Color.White
+                );
             }
 
             spriteBatch.End();
