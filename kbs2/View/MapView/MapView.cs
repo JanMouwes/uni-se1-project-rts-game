@@ -74,7 +74,7 @@ namespace kbs2.Desktop.View.MapView
             Camera = new CameraController(GraphicsDevice);
 
             // initialize selection
-            Selection = new Selection_Controller("PurpleLine", Mouse.GetState());
+            Selection = new Selection_Controller("PurpleLine");
 
             // Sets the defenition of terraintextures
             TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
@@ -92,7 +92,7 @@ namespace kbs2.Desktop.View.MapView
             Unit_Controller Pikachu = new Unit_Controller(World.WorldModel, "pikachu_idle", 0.6f, 0.6f, 2f, 0.4f);
             Unit_Controller Raichu = new Unit_Controller(World.WorldModel, "raichu_idle", 0.8f, 0.8f, 4f, 0.4f);
             Unit_Controller Rayquaza = new Unit_Controller(World.WorldModel, "rayquaza_idle", 3.5f, 3.5f, 8f, 0.4f);
-            Unit_Controller Psyduck = new Unit_Controller(World.WorldModel, "psyduck_idle", 0.8f, 0.8f, 2f, 4f);
+            Unit_Controller Psyduck = new Unit_Controller(World.WorldModel, "psyduck_idle", 0.8f, 0.6f, 2f, 20f);
 
             UnitList.Add(Pichu);
             UnitList.Add(Pikachu);

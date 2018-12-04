@@ -29,9 +29,9 @@ namespace kbs2.GamePackage
 
 		public List<Unit_Controller> SelectedUnits { get; set; }
 
-		public Selection_Controller(string lineTexture, MouseState mouseState)
+		public Selection_Controller(string lineTexture)
         {
-            Model = new Selection_Model(mouseState);
+            Model = new Selection_Model();
             View = new Selection_View(lineTexture);
 			SelectedUnits = new List<Unit_Controller>();
         }
@@ -55,7 +55,7 @@ namespace kbs2.GamePackage
 
             if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Pressed)
             {
-                CheckClickedBox(List, CurMouseState, viewMatrix, tileSize, zoom);
+                CheckClickedBox(List, viewMatrix, tileSize, zoom);
             }
 
             if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Released)
@@ -66,7 +66,7 @@ namespace kbs2.GamePackage
             Model.PreviousMouseState = CurMouseState;
         }
         // Checks if the unit is selected on screen with the left mouse button (drag and click) and adds it to the SelectedUnits list
-        public void CheckClickedBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
+        public void CheckClickedBox(List<Unit_Controller> List, Matrix viewMatrix, int tileSize, float zoom)
         {
             // Gets the current stats of the keyboard
             KeyboardState state = Keyboard.GetState();
@@ -139,10 +139,6 @@ namespace kbs2.GamePackage
                     } else
                     {
                         SelectedUnits.Add(unit);
-                        if (SelectedUnits.Count > 0)
-                        {
-                            SelectedUnits[0].LocationController.MoveTo(new FloatCoords() { x = 20f, y = 20f });
-                        }
                     }
                     unit.UnitView.ImageSrcSec = unit.UnitModel.Selected ? "shadow" : "shadowselected";
                     unit.UnitModel.Selected = !unit.UnitModel.Selected;
@@ -153,6 +149,20 @@ namespace kbs2.GamePackage
                     unit.UnitModel.Selected = true;
                     unit.UnitView.ImageSrcSec = "shadowselected";
                     SelectedUnits.Add(unit);
+                }
+            }
+        }
+        // If RMB is clicked move units to mouse location
+        public void MoveAction(MouseState CurMouseState, int tileSize, float zoom)
+        {
+            if(CurMouseState.RightButton == ButtonState.Pressed)
+            {
+                if (SelectedUnits.Count > 0)
+                {
+                    foreach(Unit_Controller unit in SelectedUnits)
+                    {
+                        unit.LocationController.MoveTo(new FloatCoords() { x = CurMouseState.X, y = CurMouseState.Y });
+                    }
                 }
             }
         }
