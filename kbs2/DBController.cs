@@ -1,6 +1,7 @@
 ﻿using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Model;
 using kbs2.Unit.Unit;
+using kbs2.WorldEntity.Building;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -10,25 +11,54 @@ using System.Threading.Tasks;
 
 namespace kbs2
 {
-    class DBController
+    public static class DBController
     {
-        public SQLiteConnection DBConn { get; set; }
+        public static SQLiteConnection DBConn { get; set; }
 
         // Open a connection with the given database file
-        public void OpenConnection(string dbName)
+        public static void OpenConnection(string dbName)
         {
-            DBConn = new SQLiteConnection($"Data Source={dbName}.sqlite; Version=3;");
+            DBConn = new SQLiteConnection($"Data Source={dbName}.db; Version=3;");
             DBConn.Open();
         }
 
         // Close the current connection with the database
-        public void CloseConnection()
+        public static void CloseConnection()
         {
             DBConn.Close();
         }
+        // get the Def from a given building
+        public static BuildingDef GetDefinitionBuilding(int building)
+        {
+            BuildingDef BuildingDef = new BuildingDef();
 
-        // Get the Def(ault) from the given unit
-        public UnitDef GetDefaultFromUnit(int unit)
+            string query =
+                "SELECT * FROM BuildingDef WHERE Id=@i ";
+
+            using (SQLiteCommand cmd = new SQLiteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SQLiteParameter("@i", building));
+
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        BuildingDef.HPDef.CurrentHP = (int)reader["CurrentHP"];
+                        BuildingDef.HPDef.MaxHP = (int)reader["MaxHP"];
+                        BuildingDef.width = (float)reader["width"];
+                        BuildingDef.height = (float)reader["height"];
+                        BuildingDef.imageSrc = (string)reader["image"];
+                        BuildingDef.AddShapeFromString((string)reader["shape"]);
+                    }
+                }
+            }
+
+            return BuildingDef;
+        }
+
+
+        // Get the Def from the given unit
+        public static UnitDef GetDefinitionFromUnit(int unit)
         {
             UnitDef returnedUnitDef = new UnitDef();
 
@@ -69,7 +99,7 @@ namespace kbs2
             return returnedUnitDef;
         }
         // Retrieves all units assigned to the given faction    CHANGE int factionName to string factionName if easier
-        public List<Unit_Model> GetUnitsFromFaction(int factionName)
+        public static List<Unit_Model> GetUnitsFromFaction(int factionName)
         {
             // Creates a Unit_Model list to store all the retrieved units
             List<Unit_Model> units = new List<Unit_Model>();
