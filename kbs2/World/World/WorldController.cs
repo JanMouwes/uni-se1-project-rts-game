@@ -24,33 +24,6 @@ namespace kbs2.Desktop.World.World
 
 		public void UnloadChunk(Coords coords) => WorldModel.ChunkGrid[coords].UnLoad();
 
-<<<<<<< HEAD
-        public void AddBuilding(BuildingDef defenition, Building_Controller building)
-        {
-            
-            foreach(Coords coords in defenition.BuildingShape)
-            {
-                Coords actual = coords + building.Model.TopLeft;
-                // calc coordinates of chunk the cell is in
-                Coords chunkcoords = new Coords
-                {
-                    x = actual.x / WorldChunkModel.ChunkSize,
-                    y = actual.y / WorldChunkModel.ChunkSize
-                };
-                // calc location of cell within chunk
-                Coords relativecoords = new Coords
-                {
-                    x = ModulusUtils.mod( actual.x , WorldChunkModel.ChunkSize),
-                    y = ModulusUtils.mod( actual.y , WorldChunkModel.ChunkSize)
-                };
-                // add building to the cells its on
-                //WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].BuildingOnTop = building;
-                // add cells to the building
-                //building.Model.LocationCells.Add(WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y]);
-            }
-            // add building to buildinglist
-            WorldModel.buildings.Add(building);
-=======
         public void AddBuilding(BuildingDef defenition, Building_Controller building)
         {
             
@@ -76,7 +49,6 @@ namespace kbs2.Desktop.World.World
             }
             // add building to buildinglist
             WorldModel.buildings.Add(building);
->>>>>>> parent of a15a5c0... Merge pull request #22 from JanMouwes/LoadOnScreen
         }
 	}
 }

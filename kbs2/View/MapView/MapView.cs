@@ -69,7 +69,7 @@ namespace kbs2.Desktop.View.MapView
             TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
 
 
-            /*
+
             // Make temp building
             BuildingDef def = new BuildingDef();
             def.BuildingShape = new List<Coords>
@@ -82,12 +82,13 @@ namespace kbs2.Desktop.View.MapView
             def.height = 2f;
             def.width = 2f;
             def.imageSrc = "TrainingCenter";
-            */
+            /*
             DBController.OpenConnection("DefDex");
 
             BuildingDef def = DBController.GetDefinitionBuilding(1);
 
             DBController.CloseConnection();
+            */          
             World.AddBuilding(def,BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 }));
 
 
