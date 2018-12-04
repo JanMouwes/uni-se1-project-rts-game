@@ -76,12 +76,16 @@ namespace kbs2.GamePackage
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // ================ Temp Game items == These items do not belong here but are for testing ==================
-
-            TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
-
             // Temp view added to drawList for testing
             
-            DrawList.Add(gameModel.World.WorldModel.ChunkGrid.First().Value.WorldChunkModel.grid[1,1].worldCellView);
+            foreach(var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                foreach(var item2 in Chunk.Value.WorldChunkModel.grid)
+                {
+                    DrawList.Add(item2.worldCellView);
+                    Console.WriteLine(item2.worldCellView);
+                }
+            }
 
             // ================ End of Temp code =====================================
         }
@@ -139,7 +143,7 @@ namespace kbs2.GamePackage
             {
                 if (DrawItem == null) continue;
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
-                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
+                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x * TileSize, (int)DrawItem.Coords.y * TileSize, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
             }
 
             spriteBatch.End();

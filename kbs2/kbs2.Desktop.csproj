@@ -104,6 +104,7 @@
     <Compile Include="WorldEntity\XP\XPMVC\XP_Controller.cs" />
     <Compile Include="WorldEntity\XP\XPMVC\XP_Model.cs" />
     <Compile Include="World\Cell\WorldCellController.cs" />
+    <Compile Include="World\Cell\WorldCellFactory.cs" />
     <Compile Include="World\Cell\WorldCellModel.cs" />
     <Compile Include="World\Cell\WorldCellView.cs" />
     <Compile Include="World\Chunk\WorldChunkController.cs" />

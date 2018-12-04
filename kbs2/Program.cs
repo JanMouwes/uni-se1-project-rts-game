@@ -2,6 +2,8 @@
 using kbs2.Desktop.View.MapView;
 using System.Data.SQLite;
 using kbs2.GamePackage;
+using kbs2.World.TerrainDef;
+using kbs2.World;
 
 namespace kbs2.Desktop
 {
@@ -16,6 +18,9 @@ namespace kbs2.Desktop
         [STAThread]
         static void Main()
         {
+            // Fill the Dictionairy
+            TerrainDef.TerrainDictionairy.Add(TerrainType.Grass, "grass");
+
             GameController Controller = new GameController(GameSpeed.Regular, GameState.Running);
             using (Controller.gameView)
                 Controller.gameView.Run();

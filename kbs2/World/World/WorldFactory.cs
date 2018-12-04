@@ -30,7 +30,7 @@ namespace kbs2.World.World
                     Coords coords = new Coords { x = x, y = y };
 
                     // Initializes a new chunk with the set coords and a basic terrain type
-                    WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrainType(coords, TerrainType.Sand);
+                    WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrainType(coords, TerrainType.Grass);
 
                     // Adds the new chunk to the worldgrid
                     world.WorldModel.ChunkGrid.Add(coords, chunkController);
