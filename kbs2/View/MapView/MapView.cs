@@ -10,6 +10,8 @@ using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
+using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -79,6 +81,30 @@ namespace kbs2.Desktop.View.MapView
             // Sets the defenition of terraintextures
             TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
 
+
+
+            // Make temp building
+            BuildingDef def = new BuildingDef();
+            def.BuildingShape = new List<Coords>
+            {
+                new Coords { x = 0, y = 0 },
+                new Coords { x = 1, y = 0 },
+                new Coords { x = 1, y = -1 },
+                new Coords { x = 0, y = -1 }
+            };
+            def.height = 2f;
+            def.width = 2f;
+            def.imageSrc = "TrainingCenter";
+            /*
+            DBController.OpenConnection("DefDex");
+
+            BuildingDef def = DBController.GetDefinitionBuilding(1);
+
+            DBController.CloseConnection();
+            */          
+            World.AddBuilding(def,BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 }));
+
+
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
 
@@ -92,7 +118,7 @@ namespace kbs2.Desktop.View.MapView
             Unit_Controller Pikachu = new Unit_Controller(World.WorldModel, "pikachu_idle", 0.6f, 0.6f, 2f, 0.4f);
             Unit_Controller Raichu = new Unit_Controller(World.WorldModel, "raichu_idle", 0.8f, 0.8f, 4f, 0.4f);
             Unit_Controller Rayquaza = new Unit_Controller(World.WorldModel, "rayquaza_idle", 3.5f, 3.5f, 8f, 0.4f);
-            Unit_Controller Psyduck = new Unit_Controller(World.WorldModel, "psyduck_idle", 0.8f, 0.8f, 2f, 4f);
+            Unit_Controller Psyduck = new Unit_Controller(World.WorldModel, "psyduck_idle", 0.8f, 0.6f, 2f, 20f);
 
             UnitList.Add(Pichu);
             UnitList.Add(Pikachu);
@@ -103,6 +129,8 @@ namespace kbs2.Desktop.View.MapView
             // Initalize game
             base.Initialize();
         }
+
+        
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -177,7 +205,8 @@ namespace kbs2.Desktop.View.MapView
             // Draws the units on screen
             DrawUnits();
 
-            
+            // Draws the buildings on screen
+            DrawBuilding();
 
             // Draws the selection box when you select and drag
             DrawSelection();
@@ -385,5 +414,26 @@ namespace kbs2.Desktop.View.MapView
 
             spriteBatch.End();
         }
+
+        public void DrawBuilding()
+        {
+
+
+            foreach(Building_Controller building in World.WorldModel.buildings)
+            {
+                spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
+
+                Coords drawPos = CellDrawCoords(1f, 1f);
+                spriteBatch.Draw(Content.Load<Texture2D>(building.View.Draw()),
+                    new Rectangle(
+                        (int)(drawPos.x - TileSize * building.View.Width * .5),
+                        (int)(drawPos.y - TileSize * building.View.Height * .5),
+                        (int)(TileSize * building.View.Height), (int)(TileSize * building.View.Width)), Color.White);
+                spriteBatch.End();
+            }
+
+            
+        }
+
     }
 }

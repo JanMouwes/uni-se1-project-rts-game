@@ -131,10 +131,6 @@ namespace kbs2.GamePackage
                     } else
                     {
                         SelectedUnits.Add(unit);
-                        if (SelectedUnits.Count > 0)
-                        {
-                            SelectedUnits[0].LocationController.MoveTo(new FloatCoords() { x = 20f, y = 20f });
-                        }
                     }
                     unit.UnitView.ImageSrcSec = unit.UnitModel.Selected ? "shadow" : "shadowselected";
                     unit.UnitModel.Selected = !unit.UnitModel.Selected;
@@ -145,6 +141,20 @@ namespace kbs2.GamePackage
                     unit.UnitModel.Selected = true;
                     unit.UnitView.ImageSrcSec = "shadowselected";
                     SelectedUnits.Add(unit);
+                }
+            }
+        }
+        // If RMB is clicked move units to mouse location
+        public void MoveAction(MouseState CurMouseState, int tileSize, float zoom)
+        {
+            if(CurMouseState.RightButton == ButtonState.Pressed)
+            {
+                if (SelectedUnits.Count > 0)
+                {
+                    foreach(Unit_Controller unit in SelectedUnits)
+                    {
+                        unit.LocationController.MoveTo(new FloatCoords() { x = CurMouseState.X, y = CurMouseState.Y });
+                    }
                 }
             }
         }
