@@ -16,8 +16,9 @@ namespace kbs2.Desktop
         [STAThread]
         static void Main()
         {
-            using (var game = new GameView())
-                game.Run();
+            GameController Controller = new GameController(GameSpeed.Regular, GameState.Running);
+            using (Controller.gameView)
+                Controller.gameView.Run();
         }
     }
 }

@@ -8,7 +8,7 @@ using kbs2.Faction.FactionMVC;
 
 namespace kbs2.GamePackage
 {
-	class GameModel
+	public class GameModel
 	{
 		public WorldController World { get; set; }
 		public List<Faction_Controller> Factions { get; set; }
