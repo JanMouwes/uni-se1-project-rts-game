@@ -20,26 +20,17 @@ namespace kbs2.GamePackage
 
 	public class Selection_Controller
     {
-		
-
 		public Selection_Model Model { get; set; }
         public Selection_View View { get; set; }
-
-		public MouseState CurMouseState { get; set; }
 
 		public List<Unit_Controller> SelectedUnits { get; set; }
 
 		public Selection_Controller(string lineTexture)
         {
-            Model = new Selection_Model();
             View = new Selection_View(lineTexture);
 			SelectedUnits = new List<Unit_Controller>();
         }
 		
-		public MouseState MouseActivity()
-		{
-			return Mouse.GetState();
-		}
 		
         public void DrawSelectionBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
         {
@@ -187,19 +178,6 @@ namespace kbs2.GamePackage
 
             SelectedUnits.Clear();
         }
-
-		// TODO: delegate eventargspayload toevoegen en shit
-
-		//public event MouseActivity<MouseState> MouseStateChange;
-
-
-
-
-		public void CheckClicked(List<Building_Controller> List, MouseState CurMouseState, Matrix viewMatrix, int tileSize)
-		{
-
-		}
-		
 		
 	}
 }
