@@ -11,12 +11,10 @@ namespace kbs2.World.Cell
     {
         public WorldCellModel worldCellModel { get; set; }
 
-        public WorldCellView worldCellView { get; set; }
 
         // Changes the TerrainType of the current cell
         public void ChangeTerrain(TerrainType type)
         {
-            worldCellModel.Terrain = type;
         }
 
         // Linkes the building on top of the cell to the model

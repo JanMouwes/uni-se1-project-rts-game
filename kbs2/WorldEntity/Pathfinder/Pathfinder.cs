@@ -215,7 +215,6 @@ public class Pathfinder
                             {
                                 lowestcoords = TempCoords;
                                 lowest.DistanceToUnit = CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit;
-
                                 lowest.AbsoluteDistanceToTarget = CheckedCells.CellsWithWeight[TempCoords].AbsoluteDistanceToTarget;
                             }
                         }

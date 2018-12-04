@@ -7,8 +7,10 @@ namespace kbs2.Desktop.View.Camera
     public class CameraModel
     {
         // Defines the minimum and maximum zoom
-        public const float MaximumZoom = 4.0f;
+        public const float MaximumZoom = 6.0f;
         public const float MinimumZoom = (float) (1.0 / 4.0);
+
+        private Camera2D parentCamera;
 
         // Defines the default amount of tiles on screen
         public const int DefaultTiles = 30;
@@ -16,10 +18,7 @@ namespace kbs2.Desktop.View.Camera
         // Defines the speed the camera moves at
         private const float MoveSpeedBase = 4f;
 
-        // Reference to parent camera
-        private Camera2D parentCamera;
-
-        // Movement speed, adjusted to zoom levels
+        //    Movement speed, adjusted to zoom levels
         public double MoveSpeed => MoveSpeedBase / Math.Sqrt(parentCamera.Zoom);
 
         // Keeps track of the previous scrollwheel value to keep track of zoom
@@ -32,12 +31,14 @@ namespace kbs2.Desktop.View.Camera
             set => parentCamera.Zoom = value;
         }
 
-        // The current (horizontal) tileCount
         public float TileCount =>
             (float) Math.Ceiling((DefaultTiles / parentCamera.Zoom) > 1.0f ? (DefaultTiles) : 1.0);
 
-        // Constructor
-        public CameraModel(Camera2D parentCamera) => this.parentCamera = parentCamera;
-       
+        public CameraModel(Camera2D parentCamera)
+        {
+            this.parentCamera = parentCamera;
+            parentCamera.MaximumZoom = MaximumZoom;
+            parentCamera.MinimumZoom = MinimumZoom;
+        }
     }
 }

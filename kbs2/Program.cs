@@ -1,7 +1,6 @@
 ﻿using System;
 using kbs2.Desktop.View.MapView;
 using System.Data.SQLite;
-using kbs2.GamePackage;
 
 namespace kbs2.Desktop
 {
@@ -16,9 +15,8 @@ namespace kbs2.Desktop
         [STAThread]
         static void Main()
         {
-            GameController Controller = new GameController(GameSpeed.Regular, GameState.Running);
-            using (Controller.gameView)
-                Controller.gameView.Run();
+            using (var game = new MapView())
+                game.Run();
         }
     }
 }
