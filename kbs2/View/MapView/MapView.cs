@@ -27,6 +27,7 @@ namespace kbs2.Desktop.View.MapView
     public class MapView : Game
     {
         private GraphicsDeviceManager graphics;
+        private SpriteFont font;
         private SpriteBatch spriteBatch;
         private CameraController Camera;
         private WorldController World;
@@ -34,10 +35,7 @@ namespace kbs2.Desktop.View.MapView
         
 
         // Calculate the size (Width) of a tile
-        public int TileSize => (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
-
-        // Calculates the height of a cell
-        public int CellHeight => (int) (Camera.CameraModel.TileCount / GraphicsDevice.Viewport.AspectRatio);
+        public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
 
         // Constructor
         public MapView()
@@ -54,8 +52,6 @@ namespace kbs2.Desktop.View.MapView
         /// </summary>
         protected override void Initialize()
         {
-            // Add initialization logic here
-
             // initialize world
             World = WorldFactory.GetNewWorld();
 
@@ -112,6 +108,8 @@ namespace kbs2.Desktop.View.MapView
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            font = Content.Load<SpriteFont>("Currency");
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -121,7 +119,6 @@ namespace kbs2.Desktop.View.MapView
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -167,6 +164,9 @@ namespace kbs2.Desktop.View.MapView
             // Draws the selection box when you select and drag
             DrawSelection();
 
+            // Draws the currency
+            DrawCurrency();
+
             // Calls the game's draw function
             base.Draw(gameTime);
         }
@@ -178,7 +178,7 @@ namespace kbs2.Desktop.View.MapView
         public TileColourDelegate TileColour;
 
         private Color NotCheckered => Color.White;
-        
+
         // Draws the chunks in a Checkered pattern for easy debugging
         private Color ChunkCheckered(WorldCellModel cell) =>
             Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
@@ -196,10 +196,10 @@ namespace kbs2.Desktop.View.MapView
         private Color CellChunkCheckered(WorldCellModel cell) =>
             Math.Abs(cell.ParentChunk.ChunkCoords.x) % 2 ==
             (Math.Abs(cell.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
-                ? Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                ? Math.Abs(cell.RealCoords.x) % 2 == (Math.Abs(cell.RealCoords.y) % 2 == 1 ? 1 : 0)
                     ? Color.Gray
                     : Color.Yellow
-                : Math.Abs(cell.RealCoords.x) % 2 == ((Math.Abs(cell.RealCoords.y) % 2 == 1) ? 1 : 0)
+                : Math.Abs(cell.RealCoords.x) % 2 == (Math.Abs(cell.RealCoords.y) % 2 == 1 ? 1 : 0)
                     ? Color.Green
                     : Color.Sienna;
 
@@ -208,17 +208,14 @@ namespace kbs2.Desktop.View.MapView
             new Random(cell.RealCoords.y * cell.RealCoords.x).Next(0, 2) == 1 ? Color.Gray : Color.Pink;
 
         //    Draw-position relative to x or y coordinate provided
-        private int CellDrawInt(double realCoord) => (int) Math.Round(realCoord * TileSize);
-
-        //    Draw-position relative to x or y coordinate provided
         private int CellDrawPosition(double realCoord) => (int) Math.Round(realCoord * TileSize);
 
         //    Draw-position relative to x or y coordinate provided
         private Coords CellDrawCoords(FloatCoords floatCoords) => CellDrawCoords(floatCoords.x, floatCoords.y);
 
         //    Draw-position relative to x or y coordinate provided
-        private Coords CellDrawCoords(float x, float y) => new Coords
-            {x = (int) Math.Round(x * TileSize), y = (int) Math.Round(y * TileSize)};
+        private Coords CellDrawCoords(float x, float y) =>
+            new Coords {x = CellDrawPosition(x), y = CellDrawPosition(y)};
 
         // Draws the cells on the screen according to the given chunks in the camera view
         private void DrawCells()
@@ -229,17 +226,19 @@ namespace kbs2.Desktop.View.MapView
             // draw each tile in the chunks in the chunkGrid
             foreach (KeyValuePair<Coords, WorldChunkController> chunkGrid in GetChunksOnScreen())
             {
-                foreach (WorldCellModel cell in chunkGrid.Value.WorldChunkModel.grid)
+                foreach (WorldCellController cell in chunkGrid.Value.WorldChunkModel.grid)
                 {
+                    WorldCellModel cellModel = cell.worldCellModel;
+
                     // Sets the x and y for the current tile
-                    int y = CellDrawPosition(cell.RealCoords.y);
-                    int x = CellDrawPosition(cell.RealCoords.x);
+                    int y = CellDrawPosition(cellModel.RealCoords.y);
+                    int x = CellDrawPosition(cellModel.RealCoords.x);
 
                     // Gets the texture according to the terrain type of the cell
-                    Texture2D texture = this.Content.Load<Texture2D>(TerrainDef.TerrainDictionairy[cell.Terrain]);
+                    Texture2D texture = this.Content.Load<Texture2D>(TerrainDef.TerrainDictionairy[cellModel.Terrain]);
 
                     // Defines the Color of the cell (for debugging)
-                    Color colour = TileColour != null ? TileColour(cell) : CellChunkCheckered(cell);
+                    Color colour = TileColour != null ? TileColour(cellModel) : CellChunkCheckered(cellModel);
 
                     // Draws the texture of the cell on the location coords with the size of the tile and the color
                     spriteBatch.Draw(texture, new Rectangle(x, y, TileSize, TileSize), colour);
@@ -255,11 +254,21 @@ namespace kbs2.Desktop.View.MapView
         {
             // This function is for testing and is still in progress
             Dictionary<Coords, WorldChunkController> chunksOnScreen = new Dictionary<Coords, WorldChunkController>();
+            // chunksOnScreen = World.WorldModel.ChunkGrid;
+            float minX = Camera.GetViewMatrix().M41 / TileSize;
+            float minY = Camera.GetViewMatrix().M42 / TileSize;
+
+            float minChunkX = minX / WorldChunkModel.ChunkSize;
+            float minChunkY = minY / WorldChunkModel.ChunkSize;
+            
+            int minChunkXInt = (int)Math.Floor(minChunkX * -1);
+            int minChunkYInt = (int)Math.Floor(minChunkY * -1);
+
+            Coords coords = new Coords();
+            coords.x = minChunkXInt;
+            coords.y = minChunkYInt;
+            //if (World.WorldModel.ChunkGrid.ContainsKey(coords)) chunksOnScreen.Add(coords, World.WorldModel.ChunkGrid[coords]);
             chunksOnScreen = World.WorldModel.ChunkGrid;
-            float x = Camera.GetViewMatrix().M41;
-            float y = Camera.GetViewMatrix().M42;
-            Console.WriteLine($"X: {x}");
-            Console.WriteLine($"Y: {y}");
             return chunksOnScreen;
         }
 
@@ -277,6 +286,19 @@ namespace kbs2.Desktop.View.MapView
             // End drawing of the selection box
             spriteBatch.End();
         }
+
+        public void DrawCurrency()
+        {
+            // Begin drawing without an offset
+            spriteBatch.Begin();
+
+            spriteBatch.DrawString(font, "TODO get link to currency", new Vector2(0,0), Color.White); //TODO
+
+            // End drawing of the selection box
+            spriteBatch.End();
+        }
+
+
 
         // Todo: Add comments from here on down
         public void DrawHorizontalLine(int PositionY)
@@ -347,8 +369,8 @@ namespace kbs2.Desktop.View.MapView
             Coords drawPos = CellDrawCoords(0.05f, 0.5f);
             spriteBatch.Draw(Content.Load<Texture2D>(Pichu.Draw()),
                 new Rectangle(
-                    (int)(drawPos.x - TileSize * Pichu.Width * .5), 
-                    (int)(drawPos.y - TileSize * Pichu.Height * .5), 
+                    (int) (drawPos.x - TileSize * Pichu.Width * .5),
+                    (int) (drawPos.y - TileSize * Pichu.Height * .5),
                     (int) (TileSize * Pichu.Height), (int) (TileSize * Pichu.Width)), Color.White);
             spriteBatch.Draw(Content.Load<Texture2D>(Pikachu.Draw()),
                 new Rectangle(

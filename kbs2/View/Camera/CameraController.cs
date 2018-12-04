@@ -22,11 +22,7 @@ namespace kbs2.Desktop.View.Camera
         public new float Zoom
         {
             get => base.Zoom;
-            set
-            {
-                base.Zoom = value;
-                CameraModel.Zoom = base.Zoom;
-            }
+            set => base.Zoom = value;
         }
 
         public CameraController(ViewportAdapter viewportAdapter) : this(viewportAdapter.GraphicsDevice)
@@ -47,14 +43,7 @@ namespace kbs2.Desktop.View.Camera
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 moveVelocity += new Vector2((float) -CameraModel.MoveSpeed, 0);
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                moveVelocity += new Vector2(0, (float) -CameraModel.MoveSpeed);
-
-            Console.WriteLine($"Zoom: {CameraModel.Zoom}");
-            Console.WriteLine($"MSpeed: {CameraModel.MoveSpeed}");
-
-            if (Keyboard.GetState().IsKeyDown(Keys.B)) CameraModel.Zoom = 1;
-            if (Keyboard.GetState().IsKeyDown(Keys.G)) ZoomOut((float) 0.05);
-            if (Keyboard.GetState().IsKeyDown(Keys.H)) ZoomIn((float) 0.05);
+                moveVelocity += new Vector2(0, (float)-CameraModel.MoveSpeed);
 
             UpdateZoom();
 
@@ -66,6 +55,10 @@ namespace kbs2.Desktop.View.Camera
         /// </summary>
         public void UpdateZoom()
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.B)) CameraModel.Zoom = 1;
+            if (Keyboard.GetState().IsKeyDown(Keys.G)) ZoomOut((float)0.05);
+            if (Keyboard.GetState().IsKeyDown(Keys.H)) ZoomIn((float)0.05);
+
             int currentScrollWheelValue = Mouse.GetState().ScrollWheelValue;
             int scrollChange = CameraModel.PreviousScrollWheelValue - currentScrollWheelValue;
             double zoomChange = scrollChange / 18000.0;

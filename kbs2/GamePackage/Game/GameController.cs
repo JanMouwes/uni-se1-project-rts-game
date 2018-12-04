@@ -1,8 +1,10 @@
 using System.Timers;
 using kbs2.Desktop.GamePackage.EventArgs;
+using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
+using kbs2.World.World;
 
-namespace kbs2.GamePackage.Game
+namespace kbs2.GamePackage
 {
     public delegate void GameSpeedObserver(object sender, GameSpeedEventArgs eventArgs);
 
@@ -10,6 +12,10 @@ namespace kbs2.GamePackage.Game
 
     public class GameController
     {
+        public GameModel gameModel { get; set; } = new GameModel();
+
+        public GameView gameView { get; set; }
+
         public const int TicksPerSecond = 30;
 
         public static int TickIntervalMilliseconds => 1000 / TicksPerSecond;
@@ -37,7 +43,7 @@ namespace kbs2.GamePackage.Game
 
         public event GameSpeedObserver GameSpeedChange;
 
-        //    GameSpeed and its event
+        //    GameState and its event
         private GameState gameState;
 
         public GameState GameState
@@ -56,6 +62,11 @@ namespace kbs2.GamePackage.Game
         {
             this.GameSpeed = gameSpeed;
             this.GameState = gameState;
+
+            gameView = new GameView(gameModel);
+
+            gameModel.World = WorldFactory.GetNewWorld();
+            //gameModel.Factions = FactionFactory.GetNewFaction();
 
             GameTimer = new Timer(TickIntervalMilliseconds);
         }
