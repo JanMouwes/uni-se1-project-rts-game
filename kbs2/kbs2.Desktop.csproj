@@ -63,11 +63,11 @@
     <Compile Include="GamePackage\Game\GameController.cs" />
     <Compile Include="GamePackage\Game\GameModel.cs" />
     <Compile Include="GamePackage\Game\GameView.cs" />
+    <Compile Include="GamePackage\Interfaces\IViewable.cs" />
     <Compile Include="GamePackage\Selection\Selection_Controller.cs" />
     <Compile Include="GamePackage\Selection\Selection_Model.cs" />
     <Compile Include="GamePackage\Selection\Selection_View.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="View\Camera\CameraController.cs" />

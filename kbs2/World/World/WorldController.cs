@@ -46,9 +46,9 @@ namespace kbs2.Desktop.World.World
                     y = ModulusUtils.mod( actual.y , WorldChunkModel.ChunkSize)
                 };
                 // add building to the cells its on
-                WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].BuildingOnTop = building;
+                WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel.BuildingOnTop = building;
                 // add cells to the building
-                building.Model.LocationCells.Add(WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y]);
+                building.Model.LocationCells.Add(WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel);
             }
             // add building to buildinglist
             WorldModel.buildings.Add(building);

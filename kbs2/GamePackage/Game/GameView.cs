@@ -83,7 +83,6 @@ namespace kbs2.GamePackage
                 foreach(var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
                     DrawList.Add(item2.worldCellView);
-                    Console.WriteLine(item2.worldCellView);
                 }
             }
 
