@@ -67,7 +67,6 @@
     <Compile Include="GamePackage\Selection\Selection_Model.cs" />
     <Compile Include="GamePackage\Selection\Selection_View.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="View\Camera\CameraController.cs" />
@@ -130,6 +129,7 @@
     <Compile Include="Factory\ResourceMVC\ResourceController.cs" />
     <Compile Include="Factory\ResourceMVC\ResourceModel.cs" />
     <Compile Include="Factory\Enums\ResourceType.cs" />
+    <Compile Include="GamePackage\Interfaces\IViewable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
