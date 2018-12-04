@@ -7,18 +7,18 @@ namespace Tests
 	[TestFixture]
 	public class SelectionTests
 	{
+		private Selection_Controller select;
+		
 
 		[SetUp]
 		public void init()
 		{
-			Selection_Controller selection = new Selection_Controller("PurpleLine");
+			select = new Selection_Controller("PurpleLine");
 
 		}
 
-		[Test]
-		public void CheckClickedBox_CheckForClick(bool clicked, bool result)
-		{
-
-		}
+		// Ik kan hier geen Tests voor schrijven omdat die shit monogame.framework nodig heeft voor de verschillenden methods
+		// Dus weet iemand hoe je die monogame.Framework toevoegd als reference aan die tests file?
+		
 	}
 }
