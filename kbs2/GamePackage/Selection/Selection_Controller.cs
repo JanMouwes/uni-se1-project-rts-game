@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage
 {
-	public delegate void MouseEventObserver<TPayloadType>(object sender, EventArgs_WithPayload<TPayloadType> eventArgs);
+	//public delegate void MouseEventObserver<TPayloadType>(object sender, EventArgs_WithPayload<TPayloadType> eventArgs);
 
 	public class Selection_Controller
     {
@@ -153,18 +153,28 @@ namespace kbs2.GamePackage
             }
         }
         // If RMB is clicked move units to mouse location
-        public void MoveAction(MouseState CurMouseState, int tileSize, float zoom)
+        public void MoveAction(MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
         {
-            if(CurMouseState.RightButton == ButtonState.Pressed)
+            if (CurMouseState.RightButton == ButtonState.Pressed && Model.PreviousMouseState.RightButton == ButtonState.Pressed)
             {
                 if (SelectedUnits.Count > 0)
                 {
-                    foreach(Unit_Controller unit in SelectedUnits)
+                    Vector2 pointerPosition = new Vector2(CurMouseState.X, CurMouseState.Y);
+                    Vector2 realPointerPosition = Vector2.Transform(pointerPosition, Matrix.Invert(viewMatrix));
+
+                    Console.WriteLine($"{(realPointerPosition.X / tileSize)}, {(realPointerPosition.Y / tileSize)}");
+
+                    foreach (Unit_Controller unit in SelectedUnits)
                     {
-                        unit.LocationController.MoveTo(new FloatCoords() { x = CurMouseState.X, y = CurMouseState.Y });
+                        unit.LocationController.MoveTo(new FloatCoords() { x = (realPointerPosition.X / tileSize) / zoom, y = (realPointerPosition.Y / tileSize) / zoom});
                     }
                 }
+            } else
+            {
+                Console.WriteLine($"{CurMouseState.RightButton}, {Model.PreviousMouseState.RightButton}");
             }
+
+            
         }
         // Clears the SelectedUnit list and puts every selected unit on false
         public void ClearSelectedList()
