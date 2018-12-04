@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage
 {
-	public delegate void MouseEventObserver<TPayloadType>(object sender, EventArgs_WithPayload<TPayloadType> eventArgs);
+	//public delegate void MouseEventObserver<TPayloadType>(object sender, EventArgs_WithPayload<TPayloadType> eventArgs);
 
 	public class Selection_Controller
     {

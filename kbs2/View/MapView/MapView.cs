@@ -55,7 +55,7 @@ namespace kbs2.Desktop.View.MapView
             Vector2 worldPosition = Vector2.Transform(realPos, Matrix.Invert(Camera.GetViewMatrix()));
 
             //Console.WriteLine($"X: {coords.x}, Y: {coords.y}");
-            spriteBatch.DrawString(font, $"X: {Math.Round(worldPosition.X / TileSize, 2)}, Y: {Math.Round(worldPosition.Y / TileSize, 2)}", screenLocation, Color.White); //TODO 
+            //spriteBatch.DrawString(font, $"X: {Math.Round(worldPosition.X / TileSize, 2)}, Y: {Math.Round(worldPosition.Y / TileSize, 2)}", screenLocation, Color.White); //TODO 
         }
             
 
