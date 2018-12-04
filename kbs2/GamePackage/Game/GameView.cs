@@ -85,7 +85,6 @@ namespace kbs2.GamePackage
                     DrawList.Add(item2.worldCellView);
                 }
             }
-
             // ================ End of Temp code =====================================
         }
 

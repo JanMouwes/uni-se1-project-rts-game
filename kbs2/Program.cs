@@ -22,6 +22,9 @@ namespace kbs2.Desktop
             TerrainDef.TerrainDictionairy.Add(TerrainType.Grass, "grass");
 
             GameController Controller = new GameController(GameSpeed.Regular, GameState.Running);
+            Controller.CellChunkCheckered();
+            Controller.RandomPattern();
+
             using (Controller.gameView)
                 Controller.gameView.Run();
         }

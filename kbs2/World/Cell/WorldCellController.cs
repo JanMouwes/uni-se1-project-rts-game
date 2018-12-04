@@ -16,6 +16,7 @@ namespace kbs2.World.Cell
 
         public WorldCellController(FloatCoords coords, string texture)
         {
+            worldCellModel.RealCoords = (Coords)coords;
             worldCellView = new WorldCellView(coords, texture);
         }
 
