@@ -28,6 +28,7 @@ namespace kbs2.GamePackage
 		public Selection_Controller(string lineTexture)
         {
             View = new Selection_View(lineTexture);
+            Model = new Selection_Model();
 			SelectedUnits = new List<Unit_Controller>();
         }
 		
