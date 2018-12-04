@@ -13,9 +13,10 @@ namespace kbs2.GamePackage.Selection
     {
         public MouseState PreviousMouseState { get; set; }
 
-        public Selection_Model(MouseState mouseState)
+        public Selection_Model()
         {
-            PreviousMouseState = mouseState;
+            PreviousMouseState = new MouseState();
+
         }
     }
 }

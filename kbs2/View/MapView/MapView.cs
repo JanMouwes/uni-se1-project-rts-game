@@ -53,7 +53,7 @@ namespace kbs2.Desktop.View.MapView
             Vector2 worldPosition = Vector2.Transform(realPos, Matrix.Invert(Camera.GetViewMatrix()));
 
             //Console.WriteLine($"X: {coords.x}, Y: {coords.y}");
-            spriteBatch.DrawString(font, $"X: {Math.Round(worldPosition.X / TileSize, 2)}, Y: {Math.Round(worldPosition.Y / TileSize, 2)}", screenLocation, Color.White); //TODO 
+            //spriteBatch.DrawString(font, $"X: {Math.Round(worldPosition.X / TileSize, 2)}, Y: {Math.Round(worldPosition.Y / TileSize, 2)}", screenLocation, Color.White); //TODO Doesn't work for Binh
         }
             
 
@@ -74,7 +74,7 @@ namespace kbs2.Desktop.View.MapView
             Camera = new CameraController(GraphicsDevice);
 
             // initialize selection
-            Selection = new Selection_Controller("PurpleLine", Mouse.GetState());
+            Selection = new Selection_Controller("PurpleLine");
 
             // Sets the defenition of terraintextures
             TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
@@ -141,9 +141,7 @@ namespace kbs2.Desktop.View.MapView
 
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
-
-            //check for if a unit was clicked or not
-            //MouseState dipshit = Mouse.GetState();
+			
             
 
             foreach(Unit_Controller u in UnitList)
@@ -155,8 +153,6 @@ namespace kbs2.Desktop.View.MapView
             float y = Camera.GetViewMatrix().M42;
 
 			
-			//Selection.CheckClicked(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
-
 
 			// Draws a selection box according to the selected area
 			Selection.DrawSelectionBox(UnitList, Mouse.GetState(), Camera.GetViewMatrix(), TileSize,
