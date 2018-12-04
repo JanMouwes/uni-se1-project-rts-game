@@ -154,16 +154,11 @@ namespace kbs2.GamePackage
                     Vector2 pointerPosition = new Vector2(CurMouseState.X, CurMouseState.Y);
                     Vector2 realPointerPosition = Vector2.Transform(pointerPosition, Matrix.Invert(viewMatrix));
 
-                    Console.WriteLine($"{(realPointerPosition.X / tileSize)}, {(realPointerPosition.Y / tileSize)}");
-
                     foreach (Unit_Controller unit in SelectedUnits)
                     {
                         unit.LocationController.MoveTo(new FloatCoords() { x = (realPointerPosition.X / tileSize) / zoom, y = (realPointerPosition.Y / tileSize) / zoom});
                     }
                 }
-            } else
-            {
-                Console.WriteLine($"{CurMouseState.RightButton}, {Model.PreviousMouseState.RightButton}");
             }
 
             
