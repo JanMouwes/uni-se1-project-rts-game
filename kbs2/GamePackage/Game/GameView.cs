@@ -18,8 +18,9 @@ using MonoGame.Extended;
 
 namespace kbs2.GamePackage
 {
-    class GameView : Game
+    public class GameView : Game
     {
+        private GameModel gameModel;
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private CameraController Camera;
@@ -33,8 +34,9 @@ namespace kbs2.GamePackage
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
 
         // Constructor
-        public GameView()
+        public GameView(GameModel gameModel)
         {
+            this.gameModel = gameModel;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
@@ -74,16 +76,15 @@ namespace kbs2.GamePackage
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // ================ Temp Game items == These items do not belong here but are for testing ==================
-
-            TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
-
             // Temp view added to drawList for testing
-            FloatCoords coords = new FloatCoords { x = 1, y = 1 };
-            WorldCellView view = new WorldCellView(coords, "grass");
-            DrawList.Add(view);
-            DrawStaticList.Add(view);
-
-
+            
+            foreach(var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                foreach(var item2 in Chunk.Value.WorldChunkModel.grid)
+                {
+                    DrawList.Add(item2.worldCellView);
+                }
+            }
 
             // ================ End of Temp code =====================================
         }
@@ -139,8 +140,9 @@ namespace kbs2.GamePackage
 
             foreach (IViewable DrawItem in DrawList)
             {
+                if (DrawItem == null) continue;
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
-                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
+                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x * TileSize, (int)DrawItem.Coords.y * TileSize, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
             }
 
             spriteBatch.End();

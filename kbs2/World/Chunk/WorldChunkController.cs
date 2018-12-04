@@ -8,8 +8,7 @@ namespace kbs2.World.Chunk
 {
     public class WorldChunkController
     {
-        public WorldChunkModel WorldChunkModel { get; set; }
-
+        public WorldChunkModel WorldChunkModel { get; set; } = new WorldChunkModel();
 
         public void Load()
         {
@@ -25,7 +24,7 @@ namespace kbs2.World.Chunk
 
         public WorldChunkController(Coords coords)
         {
-            this.WorldChunkModel = new WorldChunkModel(coords);
+            WorldChunkModel.ChunkCoords = coords;
         }
     }
 }

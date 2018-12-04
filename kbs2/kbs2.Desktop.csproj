@@ -69,6 +69,7 @@
     <Compile Include="GamePackage\Selection\Selection_View.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="View\Camera\CameraController.cs" />
     <Compile Include="View\Camera\CameraModel.cs" />
     <Compile Include="View\EventArgs\ZoomEventArgs.cs" />
@@ -77,6 +78,8 @@
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Controller.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Model.cs" />
     <Compile Include="WorldEntity\Building\BuildingDef.cs" />
+    <Compile Include="WorldEntity\Building\BuildingFactory.cs" />
+    <Compile Include="WorldEntity\Building\BuildingMVC\BuildingView.cs" />
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Controller.cs" />
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Model.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
@@ -104,6 +107,7 @@
     <Compile Include="WorldEntity\XP\XPMVC\XP_Controller.cs" />
     <Compile Include="WorldEntity\XP\XPMVC\XP_Model.cs" />
     <Compile Include="World\Cell\WorldCellController.cs" />
+    <Compile Include="World\Cell\WorldCellFactory.cs" />
     <Compile Include="World\Cell\WorldCellModel.cs" />
     <Compile Include="World\Cell\WorldCellView.cs" />
     <Compile Include="World\Chunk\WorldChunkController.cs" />
