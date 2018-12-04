@@ -9,6 +9,6 @@ namespace kbs2.Faction.Interfaces
 {
     public interface IHasFactionBuilding
     {
-        List<Building_Model> Buildings { get; }
+        List<Building_Controller> Buildings { get; }
     }
 }

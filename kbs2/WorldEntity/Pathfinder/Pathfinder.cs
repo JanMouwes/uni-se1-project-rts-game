@@ -8,6 +8,7 @@ using kbs2.WorldEntity.Structs;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Location;
 using kbs2.World.Chunk;
+using kbs2.utils;
 
 public class Pathfinder
 {
@@ -214,6 +215,7 @@ public class Pathfinder
                             {
                                 lowestcoords = TempCoords;
                                 lowest.DistanceToUnit = CheckedCells.CellsWithWeight[TempCoords].DistanceToUnit;
+
                                 lowest.AbsoluteDistanceToTarget = CheckedCells.CellsWithWeight[TempCoords].AbsoluteDistanceToTarget;
                             }
                         }
@@ -268,9 +270,7 @@ public class Pathfinder
         }
     }
 
-    int mod(int x, int m){
-        return (x % m + m) % m;
-    }
+    
 
     // sets the weightvalues of a single cell and ads them to a dictionary
     public void SetWeightCell(Coords CurrentCoords, Coords NeighbourCoords, Coords TargetCoords, Location_Model unit,
@@ -302,11 +302,11 @@ public class Pathfinder
             y = NeighbourCoords.y / WorldChunkModel.ChunkSize
         };
         // get coords of the neighbourcell in relation to the chunk
-        int coordsInChunkx = mod(NeighbourCoords.x , WorldChunkModel.ChunkSize);
-        int coordsInChunky = mod(NeighbourCoords.y , WorldChunkModel.ChunkSize);
+        int coordsInChunkx = ModulusUtils.mod(NeighbourCoords.x , WorldChunkModel.ChunkSize);
+        int coordsInChunky = ModulusUtils.mod(NeighbourCoords.y , WorldChunkModel.ChunkSize);
 
         // get the actial cell from the worldmodel
-        WorldCellModel cell = worldModel.ChunkGrid[chunkCoords].WorldChunkModel.grid[coordsInChunkx, coordsInChunky].worldCellModel;
+        WorldCellModel cell = worldModel.ChunkGrid[chunkCoords].WorldChunkModel.grid[coordsInChunkx, coordsInChunky];
 
         if (CellIsObstacle(cell, unit)) // check if cell is obstacle for this unit
         {
@@ -355,9 +355,8 @@ public class Pathfinder
     public bool CellIsObstacle(WorldCellModel Cell, Location_Model unit)
 
     {
-        bool r = unit.UnwalkableTerrain.Contains(Cell.Terrain);
-
-        // TODO check buildings
+        bool r = unit.UnwalkableTerrain.Contains(Cell.Terrain)||Cell.BuildingOnTop != null;
+        
 
         return r;
     }
