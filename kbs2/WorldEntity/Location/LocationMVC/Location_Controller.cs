@@ -54,7 +54,6 @@ namespace kbs2.WorldEntity.Location
                     LocationModel.floatCoords += difference;
                 }
                 
-                LocationModel.coords = (Coords)LocationModel.floatCoords;
             }
         }
 	}

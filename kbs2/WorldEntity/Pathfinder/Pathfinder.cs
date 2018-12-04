@@ -257,7 +257,7 @@ public class Pathfinder
         Coords[] Neighbours = new Coords[8];
         GetHorizontalNeighbours().CopyTo(Neighbours, 0);
         GetDiagonalNeighbours().CopyTo(Neighbours, 4);
-
+        Console.WriteLine(currentCell.x+" "+currentCell.y );
 
         for (int i = 0;
             i < 8;
