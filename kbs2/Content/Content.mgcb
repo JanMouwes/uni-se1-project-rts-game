@@ -49,6 +49,18 @@
 /processorParam:TextureFormat=Color
 /build:pikachu_idle.png
 
+#begin psyduck_idle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:psyduck_idle.png
+
 #begin PurpleLine.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -111,7 +123,7 @@
 
 #begin TestFont.spritefont
 /importer:FontDescriptionImporter
-/processor:LocalizedFontProcessor
+/processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:TestFont.spritefont

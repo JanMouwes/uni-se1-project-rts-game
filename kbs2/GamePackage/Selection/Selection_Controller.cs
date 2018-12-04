@@ -1,5 +1,6 @@
 ﻿using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Selection;
+using kbs2.World.Structs;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
@@ -138,6 +139,10 @@ namespace kbs2.GamePackage
                     } else
                     {
                         SelectedUnits.Add(unit);
+                        if (SelectedUnits.Count > 0)
+                        {
+                            SelectedUnits[0].LocationController.MoveTo(new FloatCoords() { x = 20f, y = 20f });
+                        }
                     }
                     unit.UnitView.ImageSrcSec = unit.UnitModel.Selected ? "shadow" : "shadowselected";
                     unit.UnitModel.Selected = !unit.UnitModel.Selected;

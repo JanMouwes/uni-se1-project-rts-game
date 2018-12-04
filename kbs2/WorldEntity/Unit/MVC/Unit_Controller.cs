@@ -29,10 +29,9 @@ namespace kbs2.WorldEntity.Unit.MVC
             UnitModel = new Unit_Model(height, width);
             UnitView = new Unit_View(imageSrc);
             LocationController = new Location_Controller(worldModel, lx, ly);
-            UnitModel.LocationModel = LocationController.LocationModel;
             UnitModel.UnitDef = new kbs2.Unit.Unit.UnitDef();
-            UnitModel.UnitDef.Speed = 0.01f;
-            UnitModel.LocationModel.parrent = this;
+            UnitModel.UnitDef.Speed = 0.04f;
+            LocationController.LocationModel.parrent = this;
         }
         // Create a new unit and add it to a faction
         public void CreateUnit(Faction_Model faction)
@@ -42,7 +41,7 @@ namespace kbs2.WorldEntity.Unit.MVC
 
         public RectangleF CalcClickBox()
         {
-            return new RectangleF(UnitModel.LocationModel.floatCoords.x - UnitModel.Width/2, UnitModel.LocationModel.floatCoords.y - UnitModel.Height/2, UnitModel.Width, UnitModel.Height);
+            return new RectangleF(LocationController.LocationModel.floatCoords.x - UnitModel.Width/2, LocationController.LocationModel.floatCoords.y - UnitModel.Height/2, UnitModel.Width, UnitModel.Height);
         }
 	}
 }

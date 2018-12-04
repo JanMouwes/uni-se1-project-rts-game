@@ -48,13 +48,15 @@ namespace kbs2.WorldEntity.Location
                     float ydifference = (float)getDistance(LocationModel.floatCoords.y, Waypoints[0].y);
                     // calculate new coords
                     float diagonaldifference = (float)pythagoras(xdifference, ydifference);
+                    float v = diagonaldifference / speed;
+       
                     FloatCoords difference = new FloatCoords();
-                    difference.x = diagonaldifference / speed * xdifference;
+                    difference.x = xdifference / v;
+                    difference.y = ydifference / v;
                     
                     LocationModel.floatCoords += difference;
                 }
                 
-                LocationModel.coords = (Coords)LocationModel.floatCoords;
             }
         }
 	}

@@ -21,7 +21,6 @@ namespace kbs2.Unit.Model
 		public HP_Model HPModel;
 		public XP_Model XPModel;
 		public Battle_Model BattleModel;
-		public Location_Model LocationModel;
 
         public float Height { get; set; }
         public float Width { get; set; }

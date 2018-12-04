@@ -92,11 +92,13 @@ namespace kbs2.Desktop.View.MapView
             Unit_Controller Pikachu = new Unit_Controller(World.WorldModel, "pikachu_idle", 0.6f, 0.6f, 2f, 0.4f);
             Unit_Controller Raichu = new Unit_Controller(World.WorldModel, "raichu_idle", 0.8f, 0.8f, 4f, 0.4f);
             Unit_Controller Rayquaza = new Unit_Controller(World.WorldModel, "rayquaza_idle", 3.5f, 3.5f, 8f, 0.4f);
+            Unit_Controller Psyduck = new Unit_Controller(World.WorldModel, "psyduck_idle", 0.8f, 0.8f, 2f, 4f);
 
             UnitList.Add(Pichu);
             UnitList.Add(Pikachu);
             UnitList.Add(Raichu);
             UnitList.Add(Rayquaza);
+            UnitList.Add(Psyduck);
 
             // Initalize game
             base.Initialize();
@@ -142,10 +144,7 @@ namespace kbs2.Desktop.View.MapView
 
             //check for if a unit was clicked or not
             //MouseState dipshit = Mouse.GetState();
-            if (Selection.SelectedUnits.Count > 0)
-            { 
-                Selection.SelectedUnits[0].LocationController.MoveTo(new FloatCoords() { x = 20f, y = 20f });
-            }
+            
 
             foreach(Unit_Controller u in UnitList)
             {
@@ -372,7 +371,7 @@ namespace kbs2.Desktop.View.MapView
 
             foreach (Unit_Controller unit in UnitList)
             {
-                drawPos = CellDrawCoords(unit.UnitModel.LocationModel.floatCoords);
+                drawPos = CellDrawCoords(unit.LocationController.LocationModel.floatCoords);
                 
                 spriteBatch.Draw(Content.Load<Texture2D>(unit.UnitView.ImageSrcSec),
                    new Rectangle(

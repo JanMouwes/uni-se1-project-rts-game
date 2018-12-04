@@ -107,8 +107,8 @@ namespace kbs2
                         unit.XPModel.LvlModel.XPNeed = (int)reader["Unit.XPNeed"];
                         unit.XPModel.XP = (int)reader["Unit.XP"];
 
-                        unit.LocationModel.floatCoords.x = (float)reader["UnitLocation.FloatCoordX"];
-                        unit.LocationModel.floatCoords.y = (float)reader["UnitLocation.FloatCoordY"];
+                        //unit.LocationModel.floatCoords.x = (float)reader["UnitLocation.FloatCoordX"];
+                        //unit.LocationModel.floatCoords.y = (float)reader["UnitLocation.FloatCoordY"];
 
                         units.Add(unit);
                     } 
