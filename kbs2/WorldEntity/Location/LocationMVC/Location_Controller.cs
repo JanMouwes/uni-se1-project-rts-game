@@ -36,7 +36,7 @@ namespace kbs2.WorldEntity.Location
             {
                 float speed = LocationModel.parrent.UnitModel.UnitDef.Speed;
 
-                if (getDistance2d(Waypoints[0], LocationModel.floatCoords) < speed)
+                if (getDistance2d(Waypoints[0], LocationModel.floatCoords) < speed + 0.001)
                 {
                     LocationModel.floatCoords = Waypoints[0];
                     Waypoints.RemoveAt(0);
@@ -49,11 +49,13 @@ namespace kbs2.WorldEntity.Location
                     // calculate new coords
                     float diagonaldifference = (float)pythagoras(xdifference, ydifference);
                     float v = diagonaldifference / speed;
-       
-                    FloatCoords difference = new FloatCoords();
-                    difference.x = xdifference / v;
-                    difference.y = ydifference / v;
-                    
+
+                    FloatCoords difference = new FloatCoords
+                    {
+                        x = xdifference / v,
+                        y = ydifference / v
+                    };
+
                     LocationModel.floatCoords += difference;
                 }
                 
