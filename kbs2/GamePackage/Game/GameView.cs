@@ -8,6 +8,7 @@ using kbs2.Desktop.World.World;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
+using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
@@ -74,18 +75,6 @@ namespace kbs2.GamePackage
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // ================ Temp Game items == These items do not belong here but are for testing ==================
-            // Temp view added to drawList for testing
-            
-            foreach(var Chunk in gameModel.World.WorldModel.ChunkGrid)
-            {
-                foreach(var item2 in Chunk.Value.WorldChunkModel.grid)
-                {
-                    DrawList.Add(item2.worldCellView);
-                }
-            }
-            // ================ End of Temp code =====================================
         }
 
         /// <summary>
@@ -110,6 +99,9 @@ namespace kbs2.GamePackage
 
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
+
+            // Updates cells on screen
+            GetChunksOnScreen();
 
             // Calls the game update
             base.Update(gameTime);
@@ -160,5 +152,57 @@ namespace kbs2.GamePackage
 
             spriteBatch.End();
         }
+
+        // Gets the cells that are in the view 
+        public void GetCellsOnScreen()
+        {
+            Vector2 CameraPosition = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
+            Vector2 realCameraPosition = Vector2.Transform(CameraPosition, Camera.GetInverseViewMatrix());
+
+            Vector2 CameraBottomPosition = new Vector2(GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height);
+            Vector2 RealCameraPos2 = Vector2.Transform(CameraBottomPosition, Camera.GetInverseViewMatrix());
+
+            DrawList.Clear();
+
+            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
+                {
+                    if (item2.worldCellView.Coords.x < (realCameraPosition.X / TileSize) - 1
+                        || item2.worldCellView.Coords.y < (realCameraPosition.Y / TileSize) - 1
+                        || item2.worldCellView.Coords.x > RealCameraPos2.X / TileSize
+                        || item2.worldCellView.Coords.y > RealCameraPos2.Y / TileSize
+                        ) continue;
+                    DrawList.Add(item2.worldCellView);
+                }
+            }
+        }
+
+        // Gets the chunks that are in the view 
+        public void GetChunksOnScreen()
+        {
+            Vector2 CameraPosition = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
+            Vector2 realCameraPosition = Vector2.Transform(CameraPosition, Camera.GetInverseViewMatrix());
+
+            Vector2 CameraBottomPosition = new Vector2(GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height);
+            Vector2 RealCameraPos2 = Vector2.Transform(CameraBottomPosition, Camera.GetInverseViewMatrix());
+
+            DrawList.Clear();
+
+            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                if (Chunk.Key.x < (realCameraPosition.X / TileSize / WorldChunkModel.ChunkSize) - 1
+                        || Chunk.Key.y < (realCameraPosition.Y / TileSize / WorldChunkModel.ChunkSize) - 1
+                        || Chunk.Key.x > RealCameraPos2.X / TileSize / WorldChunkModel.ChunkSize
+                        || Chunk.Key.y > RealCameraPos2.Y / TileSize / WorldChunkModel.ChunkSize
+                        ) continue;
+
+                foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
+                {
+                    DrawList.Add(item2.worldCellView);
+                }
+            }
+        }
+
     }
 }
