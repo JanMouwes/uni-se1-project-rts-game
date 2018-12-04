@@ -1,4 +1,5 @@
-﻿using kbs2.World;
+﻿using kbs2.Desktop.World.World;
+using kbs2.World;
 using kbs2.World.Structs;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,11 @@ namespace kbs2.WorldEntity.Location
         static Func<double, double, double> getDistance = (x, y) => x > y ? x - y : y - x;
         Func<FloatCoords, FloatCoords, double> getDistance2d = (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
 
-        public Location_Controller()
+        public Location_Controller(WorldModel worldModel, float lx, float ly)
 		{
-
+            LocationModel = new Location_Model(lx, ly);
+            pathfinder = new Pathfinder(worldModel, 500);
+            Waypoints = new List<FloatCoords>();
 		}
 		public void MoveTo(FloatCoords target) //[Review] This can be a Lambda expression
 		{
@@ -33,7 +36,7 @@ namespace kbs2.WorldEntity.Location
             {
                 float speed = LocationModel.parrent.UnitModel.UnitDef.Speed;
 
-                if (getDistance2d(Waypoints[0], LocationModel.floatCoords) < speed)
+                if (getDistance2d(Waypoints[0], LocationModel.floatCoords) < speed + 0.001)
                 {
                     LocationModel.floatCoords = Waypoints[0];
                     Waypoints.RemoveAt(0);
@@ -45,14 +48,17 @@ namespace kbs2.WorldEntity.Location
                     float ydifference = (float)getDistance(LocationModel.floatCoords.y, Waypoints[0].y);
                     // calculate new coords
                     float diagonaldifference = (float)pythagoras(xdifference, ydifference);
-                    FloatCoords difference = new FloatCoords();
-                    difference.x = diagonaldifference / speed * xdifference;
-                    difference.x = diagonaldifference / speed * xdifference;
-                    
+                    float v = diagonaldifference / speed;
+
+                    FloatCoords difference = new FloatCoords
+                    {
+                        x = xdifference / v,
+                        y = ydifference / v
+                    };
+
                     LocationModel.floatCoords += difference;
                 }
                 
-                LocationModel.coords = (Coords)LocationModel.floatCoords;
             }
         }
 	}
