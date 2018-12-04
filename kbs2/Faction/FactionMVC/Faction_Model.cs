@@ -15,7 +15,7 @@ namespace kbs2.Faction.FactionMVC
         public string Name { get; set; }
         public Dictionary<Faction_Model, Faction_Relations> FactionRelationships { get; set; }
         public List<Unit_Model> Units { get; }
-        public List<Building_Model> Buildings { get; }
+        public List<Building_Controller> Buildings { get; }
 
         public Faction_Model(string name)
         {
