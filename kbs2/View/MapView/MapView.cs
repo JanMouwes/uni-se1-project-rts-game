@@ -255,7 +255,7 @@ namespace kbs2.Desktop.View.MapView
                     // Sets the x and y for the current tile
                     int y = CellDrawPosition(cell.RealCoords.y);
                     int x = CellDrawPosition(cell.RealCoords.x);
-
+					 
                     // Gets the texture according to the terrain type of the cell
                     Texture2D texture = this.Content.Load<Texture2D>(TerrainDef.TerrainDictionairy[cell.Terrain]);
 
