@@ -3,20 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using kbs2.Desktop.View.Camera;
-using kbs2.Desktop.World.World;
-using kbs2.GamePackage.Interfaces;
-using kbs2.World;
-using kbs2.World.Cell;
-using kbs2.World.Structs;
-using kbs2.World.TerrainDef;
-using kbs2.World.World;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 
-namespace kbs2.GamePackage
+namespace kbs2.GamePackage.Game
 {
     public class GameView : Game
     {

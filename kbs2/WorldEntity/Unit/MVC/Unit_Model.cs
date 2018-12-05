@@ -9,19 +9,23 @@ using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Location;
 using kbs2.WorldEntity.XP.XPMVC;
 using kbs2.Unit.Interfaces;
-using kbs2.Unit.Abstract;
 using kbs2.Faction.Interfaces;
+using kbs2.WorldEntity;
 
 namespace kbs2.Unit.Model
 {
-    public class Unit_Model : IHasPersonalSpace, IPurchasable, IClickable, IElemental, IHasFaction
+    public class Unit_Model : IHasPersonalSpace, IPurchasable, IElemental, IHasFaction
     {
         public Faction_Model Faction { get; set; }
         public UnitDef UnitDef;
 		public HP_Model HPModel;
 		public XP_Model XPModel;
 		public Battle_Model BattleModel;
-		public Location_Model LocationModel;
+
+        public float Height { get; set; }
+        public float Width { get; set; }
+
+        public bool Selected { get; set; }
 
         public List<TerrainType> UnwalkableTerrain { get; set; }
 
@@ -29,9 +33,12 @@ namespace kbs2.Unit.Model
 
         public CostValue CostValue { get; set; }
 
-        public Hitbox Clickbox { get; set; }
-
-        public Unit_Model() { }
+        public Unit_Model(float height, float width)
+        {
+            Height = height;
+            Width = width;
+            Selected = false;
+        }
 
         public void InsertUnitDef(int id)
         {

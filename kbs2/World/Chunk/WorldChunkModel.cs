@@ -11,7 +11,8 @@ namespace kbs2.World.Chunk
     {
         public const int ChunkSize = 20;
 
-        public WorldCellController[,] grid;
+        public WorldCellModel[,] grid;
         public Coords ChunkCoords;
     }
 }
+

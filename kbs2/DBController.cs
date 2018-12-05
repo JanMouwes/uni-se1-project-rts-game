@@ -122,7 +122,7 @@ namespace kbs2
                     while (reader.Read())
                     {
                         // Create and insert values into a new Unit_Model and add the Unit_Model to the Unit_Model list afterwards
-                        Unit_Model unit = new Unit_Model();
+                        Unit_Model unit = new Unit_Model(1, 1);
 
                         unit.BattleModel.Accuracy = (double)reader["Unit.Accuracy"];
                         unit.BattleModel.AttackModifier = (double)reader["Unit.AttackModifier"];
@@ -137,8 +137,8 @@ namespace kbs2
                         unit.XPModel.LvlModel.XPNeed = (int)reader["Unit.XPNeed"];
                         unit.XPModel.XP = (int)reader["Unit.XP"];
 
-                        unit.LocationModel.floatCoords.x = (float)reader["UnitLocation.FloatCoordX"];
-                        unit.LocationModel.floatCoords.y = (float)reader["UnitLocation.FloatCoordY"];
+                        //unit.LocationModel.floatCoords.x = (float)reader["UnitLocation.FloatCoordX"];
+                        //unit.LocationModel.floatCoords.y = (float)reader["UnitLocation.FloatCoordY"];
 
                         units.Add(unit);
                     } 
