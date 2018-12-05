@@ -88,9 +88,7 @@
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
     <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
-    <Compile Include="WorldEntity\Abstract\Hitbox.cs" />
     <Compile Include="WorldEntity\Enums\ElementType.cs" />
-    <Compile Include="WorldEntity\Interfaces\IClickable.cs" />
     <Compile Include="WorldEntity\Interfaces\IElemental.cs" />
     <Compile Include="WorldEntity\Interfaces\IHasPersonalSpace.cs" />
     <Compile Include="WorldEntity\Interfaces\IPurchasable.cs" />

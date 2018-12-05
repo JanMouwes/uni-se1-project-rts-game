@@ -7,6 +7,9 @@ namespace kbs2.World.Chunk
     {
         public static WorldChunkController ChunkOfTerrainType(Coords chunkCoords, TerrainType terrainType)
         {
+            Func<int, int, int> rowIndex = (d2Index, rowSize) => d2Index % rowSize;
+            Func<int, int, int> colIndex = (d2Index, rowSize) => (int) Math.Floor((double) (d2Index / rowSize));
+
             WorldChunkController controller = new WorldChunkController(chunkCoords);
             controller.WorldChunkModel.grid = new WorldCellController[WorldChunkModel.ChunkSize, WorldChunkModel.ChunkSize];
 
@@ -19,10 +22,9 @@ namespace kbs2.World.Chunk
                 controller.WorldChunkModel.grid[relXIndex, relYIndex] = WorldCellFactory.GetNewCell(new Structs.FloatCoords { x = chunkCoords.x * WorldChunkModel.ChunkSize + relXIndex, y = chunkCoords.y * WorldChunkModel.ChunkSize + relYIndex }, TerrainDef.TerrainDef.TerrainDictionairy[terrainType]);
             }
 
-            foreach (WorldCellController worldCell in controller.WorldChunkModel.grid)
+            //int xIndex = 0, yIndex = 0; 
+            foreach (WorldCellModel worldCellModel in controller.WorldChunkModel.grid)
             {
-                WorldCellModel worldCellModel = worldCell.worldCellModel;
-
                 worldCellModel.BaseTerrain = worldCellModel.Terrain = terrainType;
                 worldCellModel.ParentChunk = controller.WorldChunkModel;
             }

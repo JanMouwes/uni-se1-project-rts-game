@@ -10,7 +10,6 @@ namespace Tests
     {
         [TestCase(1, 1, 3, 4, 23, 24)]
         [TestCase(1, 2, 3, 4, 23, 44)]
-        [TestCase(3, 2, 3, 4, 63, 44)]
         public void Test_Chunk_Generates_CorrectCellCoords(int chunkX, int chunkY, int relativeCellX, int relativeCellY,
             int expectedCellX, int expectedCellY)
         {
@@ -25,9 +24,9 @@ namespace Tests
 
 
             //    Assert
-            WorldCellController cell = chunk.WorldChunkModel.grid[relativeCellCoords.x, relativeCellCoords.y];
+            WorldCellModel cell = chunk.worldChunkModel.grid[relativeCellCoords.x, relativeCellCoords.y];
 
-            Assert.AreEqual(cell.worldCellModel.RealCoords, expectedCellCoords);
+            Assert.AreEqual(cell.RealCoords, expectedCellCoords);
         }
     }
 }

@@ -1,7 +1,6 @@
 using kbs2.Faction.FactionMVC;
 using kbs2.utils;
 using kbs2.World;
-using kbs2.World.World;
 using kbs2.World.Chunk;
 using kbs2.WorldEntity.Building;
 
@@ -21,10 +20,8 @@ namespace kbs2.Desktop.World.World
             //TODO
         }
 
-        //    Loads chunk at given coordinate
 		public void LoadChunk(Coords coords) => WorldModel.ChunkGrid[coords].Load();
 
-        //    Unloads chunk at given coordinate
 		public void UnloadChunk(Coords coords) => WorldModel.ChunkGrid[coords].UnLoad();
 
         public void AddBuilding(BuildingDef defenition, Building_Controller building)
