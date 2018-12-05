@@ -19,8 +19,8 @@ namespace kbs2.World
         public static explicit operator Coords(FloatCoords value1)
         {
             Coords value2;
-            value2.x = (int) Math.Round(value1.x, 0);
-            value2.y = (int) Math.Round(value1.y, 0);
+            value2.x = (int) value1.x;
+            value2.y = (int) value1.y;
             return value2;
         }
 
