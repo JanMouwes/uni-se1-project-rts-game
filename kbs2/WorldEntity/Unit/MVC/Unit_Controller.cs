@@ -8,6 +8,7 @@ using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Model;
 using kbs2.WorldEntity.Battle;
 using kbs2.WorldEntity.Health;
+using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Location;
 using kbs2.WorldEntity.XP.XPMVC;
 using Microsoft.Xna.Framework;
@@ -15,7 +16,7 @@ using MonoGame.Extended;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-	public class Unit_Controller
+	public class Unit_Controller : ISelectable
 	{
 		public HP_Controller HPController;
 		public XP_Controller XPController;

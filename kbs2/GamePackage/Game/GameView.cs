@@ -13,6 +13,8 @@ using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
+using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Building.BuildingMVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -28,9 +30,9 @@ namespace kbs2.GamePackage
         private CameraController Camera;
 
         // List for drawing items with the camera offset
-        private List<IViewable> DrawList;
+        public List<IViewable> DrawList;
         // List for drawing items without offset
-        private List<IViewable> DrawStaticList;
+        public List<IViewable> DrawStaticList;
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -76,6 +78,28 @@ namespace kbs2.GamePackage
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+
+            //TESTCODE
+            BuildingDef def = new BuildingDef();
+            def.BuildingShape = new List<Coords>
+            {
+                new Coords { x = 0, y = 0 },
+                new Coords { x = 1, y = 0 },
+                new Coords { x = 1, y = -1 },
+                new Coords { x = 0, y = -1 }
+            };
+            def.height = 2f;
+            def.width = 2f;
+            def.imageSrc = "TrainingCenter";
+
+            //DBController.OpenConnection("DefDex");
+            //BuildingDef def = DBController.GetDefinitionBuilding(1);
+            //DBController.CloseConnection();
+
+            Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 });
+            gameModel.World.AddBuilding(def, building);
+            //TESTCODE
         }
 
         /// <summary>
@@ -101,8 +125,19 @@ namespace kbs2.GamePackage
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
 
-            // Updates cells on screen ================================================================================= <>
-            GetChunksOnScreen();
+            // ============== Temp Code ===================================================================
+            // Updates cells on screen
+            GetCellsOnScreen();
+
+            // Update Buildings on screen
+            List<IViewable> buildings = new List<IViewable>();
+            foreach(Building_Controller building in gameModel.World.WorldModel.buildings)
+            {
+                buildings.Add(building.View);
+            }
+            DrawList.AddRange( GetOnScreen(buildings,GraphicsDevice.Viewport,Camera.GetInverseViewMatrix()));
+
+            // ======================================================================================
 
             gameModel.Selection.DrawSelectionBox(gameModel.World.WorldModel.Units, Mouse.GetState(), Camera.GetViewMatrix(), TileSize, Camera.Zoom);
 
@@ -151,7 +186,11 @@ namespace kbs2.GamePackage
         {
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
-            foreach (IViewable DrawItem in DrawList)
+            var DrawItems = from Item in DrawList
+                            orderby Item.ZIndex ascending
+                            select Item;
+
+            foreach (IViewable DrawItem in DrawItems)
             {
                 if (DrawItem == null) continue;
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
@@ -166,7 +205,11 @@ namespace kbs2.GamePackage
         {
             spriteBatch.Begin();
 
-            foreach (IViewable DrawItem in DrawStaticList)
+            var DrawItems = from Item in DrawStaticList
+                            orderby Item.ZIndex ascending
+                            select Item;
+
+            foreach (IViewable DrawItem in DrawItems)
             {
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
                 spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
@@ -181,21 +224,21 @@ namespace kbs2.GamePackage
         public List<IViewable> GetOnScreen(List<IViewable> totalList, Viewport viewport, Matrix inverseMatrix)
         {
             List<IViewable> drawList = new List<IViewable>();
-            
+
             Vector2 TopLeft = Vector2.Transform(new Vector2(viewport.X, viewport.Y), inverseMatrix);
-            
+
             Vector2 BottomRight = Vector2.Transform(new Vector2(viewport.X + viewport.Width, viewport.Y + viewport.Height), inverseMatrix);
 
             foreach (var item in totalList)
             {
-                if ( item.Coords.x < (TopLeft.X / TileSize) - 1 || item.Coords.y < (TopLeft.Y / TileSize) - 1 || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize ) continue;
+                if ( item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize ) continue;
                 drawList.Add(item);
             }
 
             return drawList;
         }
 
-        // Gets the cells that are in the view 
+        // Gets the cells that are in the view
         public void GetCellsOnScreen()
         {
             Vector2 CameraPosition = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
@@ -220,7 +263,7 @@ namespace kbs2.GamePackage
             }
         }
 
-        // Gets the chunks that are in the view 
+        // Gets the chunks that are in the view
         public void GetChunksOnScreen()
         {
             Vector2 CameraPosition = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
