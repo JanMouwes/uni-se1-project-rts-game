@@ -13,6 +13,7 @@ using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Building.BuildingMVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -92,7 +93,6 @@ namespace kbs2.GamePackage
             def.imageSrc = "TrainingCenter";
             Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 });
             gameModel.World.AddBuilding(def, building);
-            DrawList.Add(building.View);
             //TESTCODE
         }
 
@@ -120,7 +120,16 @@ namespace kbs2.GamePackage
             Camera.MoveCamera();
 
             // Updates cells on screen ================================================================================= <>
-            GetChunksOnScreen();
+            GetCellsOnScreen();
+
+
+            // Update Buildings on screen
+            List<IViewable> buildings = new List<IViewable>();
+            foreach(Building_Controller building in gameModel.World.WorldModel.buildings)
+            {
+                buildings.Add(building.View);
+            }
+            DrawList.AddRange( GetOnScreen(buildings,GraphicsDevice.Viewport,Camera.GetInverseViewMatrix()));
 
             // Calls the game update
             base.Update(gameTime);
@@ -148,7 +157,11 @@ namespace kbs2.GamePackage
         {
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
-            foreach (IViewable DrawItem in DrawList)
+            var DrawItems = from Item in DrawList
+                            orderby Item.ZIndex ascending
+                            select Item;
+
+            foreach (IViewable DrawItem in DrawItems)
             {
                 if (DrawItem == null) continue;
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
@@ -189,7 +202,7 @@ namespace kbs2.GamePackage
 
             foreach (var item in totalList)
             {
-                if ( item.Coords.x < (TopLeft.X / TileSize) - 1 || item.Coords.y < (TopLeft.Y / TileSize) - 1 || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize ) continue;
+                if ( item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize ) continue;
                 drawList.Add(item);
             }
 
