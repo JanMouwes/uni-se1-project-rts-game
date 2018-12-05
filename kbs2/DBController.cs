@@ -119,6 +119,7 @@ namespace kbs2
 
                 using(SQLiteDataReader reader = cmd.ExecuteReader())
                 {
+                    /*
                     while (reader.Read())
                     {
                         // Create and insert values into a new Unit_Model and add the Unit_Model to the Unit_Model list afterwards
@@ -142,6 +143,7 @@ namespace kbs2
 
                         units.Add(unit);
                     } 
+                    */
                 }
             }
 

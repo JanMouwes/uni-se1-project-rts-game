@@ -94,6 +94,7 @@
     <Compile Include="WorldEntity\Interfaces\IElemental.cs" />
     <Compile Include="WorldEntity\Interfaces\IHasPersonalSpace.cs" />
     <Compile Include="WorldEntity\Interfaces\IPurchasable.cs" />
+    <Compile Include="WorldEntity\Shapes\Circle.cs" />
     <Compile Include="WorldEntity\Structs\BattleValue.cs" />
     <Compile Include="WorldEntity\Structs\CostValue.cs" />
     <Compile Include="WorldEntity\Structs\Level.cs" />

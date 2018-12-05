@@ -59,7 +59,7 @@ namespace kbs2.Desktop.View.MapView
             Camera = new CameraController(GraphicsDevice);
 
             // initialize selection
-            Selection = new Selection_Controller("PurpleLine", Mouse.GetState());
+            //Selection = new Selection_Controller("PurpleLine", Mouse.GetState());
 
             // Sets the defenition of terraintextures
             TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
@@ -137,7 +137,7 @@ namespace kbs2.Desktop.View.MapView
             Camera.MoveCamera();
 
             // Draws a selection box according to the selected area
-            Selection.DrawSelectionBox(Mouse.GetState());
+            //Selection.DrawSelectionBox(Mouse.GetState());
 
             // Calls the game update
             base.Update(gameTime);
@@ -154,7 +154,7 @@ namespace kbs2.Desktop.View.MapView
 
             // Draws cells in that in the chunks that are in the camera's view
             DrawCells();
-
+            /*
             // Draws the units on screen
             DrawUnits();
 
@@ -163,7 +163,7 @@ namespace kbs2.Desktop.View.MapView
 
             // Draws the selection box when you select and drag
             DrawSelection();
-
+            */
             // Draws the currency
             DrawCurrency();
 
@@ -277,12 +277,12 @@ namespace kbs2.Desktop.View.MapView
         {
             // Begin drawing without an offset
             spriteBatch.Begin();
-
+            /*
             DrawHorizontalLine(Selection.View.Selection.Y);
             DrawHorizontalLine(Selection.View.Selection.Y + Selection.View.Selection.Height);
             DrawVerticalLine(Selection.View.Selection.X);
             DrawVerticalLine(Selection.View.Selection.X + Selection.View.Selection.Width);
-
+            */
             // End drawing of the selection box
             spriteBatch.End();
         }
@@ -301,6 +301,7 @@ namespace kbs2.Desktop.View.MapView
 
 
         // Todo: Add comments from here on down
+        /*
         public void DrawHorizontalLine(int PositionY)
         {
             Texture2D texture = Content.Load<Texture2D>(Selection.View.LineTexture);
@@ -412,6 +413,6 @@ namespace kbs2.Desktop.View.MapView
 
             
         }
-
+        */
     }
 }
