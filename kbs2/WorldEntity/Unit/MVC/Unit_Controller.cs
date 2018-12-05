@@ -36,7 +36,7 @@ namespace kbs2.WorldEntity.Unit.MVC
         // Create a new unit and add it to a faction
         public void CreateUnit(Faction_Model faction)
         {
-            faction.Units.Add(UnitModel);
+            faction.Units.Add(this);
         }
 
         public RectangleF CalcClickBox()

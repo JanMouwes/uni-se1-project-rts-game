@@ -70,6 +70,8 @@ namespace kbs2.GamePackage
             gameModel.World = WorldFactory.GetNewWorld();
             //gameModel.Factions = FactionFactory.GetNewFaction();
 
+            gameModel.Selection = new Selection_Controller("PurpleLine");
+
             GameTimer = new Timer(TickIntervalMilliseconds);
         }
 

@@ -2,6 +2,7 @@
 using kbs2.Faction.Interfaces;
 using kbs2.Unit.Model;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Unit.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,8 @@ namespace kbs2.Faction.FactionMVC
     {
         public string Name { get; set; }
         public Dictionary<Faction_Model, Faction_Relations> FactionRelationships { get; set; }
-        public List<Unit_Model> Units { get; }
-        public List<Building_Controller> Buildings { get; }
+        public List<Unit_Controller> Units { get; set; }
+        public List<Building_Controller> Buildings { get; set; }
 
         public Faction_Model(string name)
         {

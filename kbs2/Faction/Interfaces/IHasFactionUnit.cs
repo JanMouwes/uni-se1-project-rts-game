@@ -1,4 +1,5 @@
 ﻿using kbs2.Unit.Model;
+using kbs2.WorldEntity.Unit.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace kbs2.Faction.Interfaces
 {
     public interface IHasFactionUnit
     {
-        List<Unit_Model> Units { get; }
+        List<Unit_Controller> Units { get; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using kbs2.GamePackage.Interfaces;
+using kbs2.World.Structs;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using System;
@@ -9,15 +11,23 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage.Selection
 {
-    public class Selection_View
+    public class Selection_View : IViewable
     {
-        public string LineTexture { get; set; }
-        public RectangleF SelectionBox { get; set; }
+        public FloatCoords Coords { get; set; }
+        public float Width { get; set; }
+        public float Height { get; set; }
+        public string Texture { get; set; }
+        public Color Color { get; set; }
+        public int ZIndex { get; set; }
 
-        public Selection_View(string lineText)
+        public Selection_View(string lineText, FloatCoords loc, float width, float height)
         {
-            LineTexture = lineText;
-            SelectionBox = new RectangleF(-1, -1, 0, 0);
+            Texture = lineText;
+            Coords = loc;
+            Width = width;
+            Height = height;
+            Color = Color.White;
+            ZIndex = 1000;
         }
     }   
 }
