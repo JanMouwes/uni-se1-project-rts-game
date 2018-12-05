@@ -53,8 +53,24 @@ namespace kbs2.WorldEntity.Location
                     FloatCoords difference = new FloatCoords();
                     difference.x = xdifference / v;
                     difference.y = ydifference / v;
+
+                    if(Waypoints[0].x< LocationModel.floatCoords.x)
+                    {
+                        LocationModel.floatCoords.x -= difference.x;
+                    } else
+                    {
+                        LocationModel.floatCoords.x += difference.x;
+                    }
+
+                    if (Waypoints[0].y < LocationModel.floatCoords.y)
+                    {
+                        LocationModel.floatCoords.y -= difference.y;
+                    }
+                    else
+                    {
+                        LocationModel.floatCoords.y += difference.y;
+                    }
                     
-                    LocationModel.floatCoords += difference;
                 }
                 
             }
