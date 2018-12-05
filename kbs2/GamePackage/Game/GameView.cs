@@ -125,9 +125,9 @@ namespace kbs2.GamePackage
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
 
-            // Updates cells on screen ================================================================================= <>
+            // ============== Temp Code ===================================================================
+            // Updates cells on screen
             GetCellsOnScreen();
-
 
             // Update Buildings on screen
             List<IViewable> buildings = new List<IViewable>();
@@ -136,6 +136,9 @@ namespace kbs2.GamePackage
                 buildings.Add(building.View);
             }
             DrawList.AddRange( GetOnScreen(buildings,GraphicsDevice.Viewport,Camera.GetInverseViewMatrix()));
+
+            // ======================================================================================
+
             // Calls the game update
             base.Update(gameTime);
         }
@@ -200,9 +203,9 @@ namespace kbs2.GamePackage
         public List<IViewable> GetOnScreen(List<IViewable> totalList, Viewport viewport, Matrix inverseMatrix)
         {
             List<IViewable> drawList = new List<IViewable>();
-            
+
             Vector2 TopLeft = Vector2.Transform(new Vector2(viewport.X, viewport.Y), inverseMatrix);
-            
+
             Vector2 BottomRight = Vector2.Transform(new Vector2(viewport.X + viewport.Width, viewport.Y + viewport.Height), inverseMatrix);
 
             foreach (var item in totalList)
@@ -214,7 +217,7 @@ namespace kbs2.GamePackage
             return drawList;
         }
 
-        // Gets the cells that are in the view 
+        // Gets the cells that are in the view
         public void GetCellsOnScreen()
         {
             Vector2 CameraPosition = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
@@ -239,7 +242,7 @@ namespace kbs2.GamePackage
             }
         }
 
-        // Gets the chunks that are in the view 
+        // Gets the chunks that are in the view
         public void GetChunksOnScreen()
         {
             Vector2 CameraPosition = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
