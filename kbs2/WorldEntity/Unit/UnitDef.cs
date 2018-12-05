@@ -3,7 +3,6 @@ using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.XP;
 using System;
 using System.Data;
-using System.Data.SQLite;
 
 namespace kbs2.Unit.Unit
 {

@@ -1,24 +1,29 @@
-﻿using kbs2.Faction.FactionMVC;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using kbs2.Unit.Model;
 using kbs2.Unit.Unit;
 using kbs2.WorldEntity.Building;
-using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using kbs2.WorldEntity.Health;
+using Mono.Data.Sqlite;
 
 namespace kbs2
 {
     public static class DBController
     {
-        public static SQLiteConnection DBConn { get; set; }
+        public static SqliteConnection DBConn { get; set; }
 
         // Open a connection with the given database file
         public static void OpenConnection(string dbName)
         {
-            DBConn = new SQLiteConnection($"Data Source={dbName}.db; Version=3;");
+            //TODO: Tempfix so we can continue copied DefDex.db to bin/DesktopGL/AnyCPU/debug/
+
+            string directoryName = Path.GetFullPath("DefDex.db");
+            // gives /Users/Username/Github/Project/bin/DesktopGL/AnyCPU/debug/Defdex.db
+            // Should give /Users/Username/Github/Project/DefDex.db
+
+            DBConn = new SqliteConnection(
+                "Data Source= " + directoryName + "; Version=3;");
             DBConn.Open();
         }
 
@@ -27,28 +32,42 @@ namespace kbs2
         {
             DBConn.Close();
         }
+
         // get the Def from a given building
         public static BuildingDef GetDefinitionBuilding(int building)
         {
-            BuildingDef BuildingDef = new BuildingDef();
+            BuildingDef BuildingDef = new BuildingDef
+            {
+                HPDef = new HPDef()
+            };
 
             string query =
-                "SELECT * FROM BuildingDef WHERE Id=@i ";
+                "SELECT * FROM BuildingDef";
 
-            using (SQLiteCommand cmd = new SQLiteCommand(query, DBConn))
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
             {
-                cmd.Parameters.Add(new SQLiteParameter("@i", building));
+                cmd.Parameters.Add(new SqliteParameter("@i", building));
 
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                using (SqliteDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        BuildingDef.HPDef.CurrentHP = (int)reader["CurrentHP"];
-                        BuildingDef.HPDef.MaxHP = (int)reader["MaxHP"];
-                        BuildingDef.width = (float)reader["width"];
-                        BuildingDef.height = (float)reader["height"];
-                        BuildingDef.imageSrc = (string)reader["image"];
-                        BuildingDef.AddShapeFromString((string)reader["shape"]);
+                        Console.WriteLine(reader);
+                        Console.WriteLine($"{reader["CurrentHp"]}, {reader["CurrentHp"].GetType()}");
+                        Console.WriteLine($"{reader["MaxHp"]}, {reader["MaxHp"].GetType()}");
+                        Console.WriteLine($"{reader["width"]}, {reader["width"].GetType()}");
+                        Console.WriteLine($"{reader["height"]}, {reader["height"].GetType()}");
+                        Console.WriteLine($"{reader["image"]}, {reader["image"].GetType()}");
+                        Console.WriteLine($"{reader["shape"]}, {reader["shape"].GetType()}");
+
+                        BuildingDef.HPDef.CurrentHP = int.Parse(reader["CurrentHp"].ToString());
+                        BuildingDef.HPDef.MaxHP = int.Parse(reader["MaxHp"].ToString());
+
+                        BuildingDef.width = float.Parse(reader["width"].ToString());
+                        BuildingDef.height = float.Parse(reader["height"].ToString());
+
+                        BuildingDef.imageSrc = reader["image"].ToString();
+                        BuildingDef.AddShapeFromString(reader["shape"].ToString());
                     }
                 }
             }
@@ -70,15 +89,15 @@ namespace kbs2
                 "JOIN HPDef ON Id = HPDef.UnitDefId " +
                 "JOIN LevelXPDef ON Id = LevelXPDef.UnitDefID";
 
-            using (SQLiteCommand cmd = new SQLiteCommand(query, DBConn))
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
             {
-                cmd.Parameters.Add(new SQLiteParameter("@i", unit));
+                cmd.Parameters.Add(new SqliteParameter("@i", unit));
 
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                using (SqliteDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        returnedUnitDef.Speed = (float) reader["Speed"];
+                        returnedUnitDef.Speed = (float)reader["Speed"];
 
                         returnedUnitDef.BattleDef.AttackModifier = (double)reader["BattleDef.AttackModifier"];
                         returnedUnitDef.BattleDef.DefenseModifier = (double)reader["BattleDef.DefenseModifier"];
@@ -98,57 +117,56 @@ namespace kbs2
 
             return returnedUnitDef;
         }
-        // Retrieves all units assigned to the given faction    CHANGE int factionName to string factionName if easier
-        public static List<Unit_Model> GetUnitsFromFaction(int factionName)
-        {
-            // Creates a Unit_Model list to store all the retrieved units
-            List<Unit_Model> units = new List<Unit_Model>();
-            
-            // Query to select all units from the given faction
-            string query = 
-                "SELECT * " +
-                "FROM Faction_Unit " +
-                "WHERE Faction_Unit.Faction_Id = @name " + // CHANGE @name to @id
-                "JOIN Unit ON Factoin_Unit.UnitId = Unit.Id " +
-                "JOIN UnitLocation ON UnitLocation.UnitId = Faction_Unit.UnitId";
 
-            using(SQLiteCommand cmd = new SQLiteCommand(query, DBConn))
-            {
-                // Add the faction's name parameter
-                cmd.Parameters.Add(new SQLiteParameter("@name", factionName));
+        //// Retrieves all units assigned to the given faction    CHANGE int factionName to string factionName if easier
+        //public static List<Unit_Model> GetUnitsFromFaction(int factionName)
+        //{
+        //    // Creates a Unit_Model list to store all the retrieved units
+        //    List<Unit_Model> units = new List<Unit_Model>();
 
-                using(SQLiteDataReader reader = cmd.ExecuteReader())
-                {
-                    /*
-                    while (reader.Read())
-                    {
-                        // Create and insert values into a new Unit_Model and add the Unit_Model to the Unit_Model list afterwards
-                        Unit_Model unit = new Unit_Model();
+        //    // Query to select all units from the given faction
+        //    string query =
+        //        "SELECT * " +
+        //        "FROM Faction_Unit " +
+        //        "WHERE Faction_Unit.Faction_Id = @name " + // CHANGE @name to @id
+        //        "JOIN Unit ON Factoin_Unit.UnitId = Unit.Id " +
+        //        "JOIN UnitLocation ON UnitLocation.UnitId = Faction_Unit.UnitId";
 
-                        unit.BattleModel.Accuracy = (double)reader["Unit.Accuracy"];
-                        unit.BattleModel.AttackModifier = (double)reader["Unit.AttackModifier"];
-                        unit.BattleModel.DefenseModifier = (double)reader["Unit.DefenseModifier"];
-                        unit.BattleModel.DodgeChance = (double)reader["Unit.DodgeChance"];
-                        unit.BattleModel.RangeModifier = (double)reader["Unit.RangeModifier"];
+        //    using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+        //    {
+        //        // Add the faction's name parameter
+        //        cmd.Parameters.Add(new SqliteParameter("@name", factionName));
 
-                        unit.HPModel.CurrentHP = (int)reader["Unit.CurrentHP"];
-                        unit.HPModel.MaxHP = (int)reader["Unit.MaxHP"];
+        //        using (SqliteDataReader reader = cmd.ExecuteReader())
+        //        {
+        //            while (reader.Read())
+        //            {
+        //                // Create and insert values into a new Unit_Model and add the Unit_Model to the Unit_Model list afterwards
+        //                Unit_Model unit = new Unit_Model(2,2);
 
-                        unit.XPModel.LvlModel.Level = (int)reader["Unit.Level"];
-                        unit.XPModel.LvlModel.XPNeed = (int)reader["Unit.XPNeed"];
-                        unit.XPModel.XP = (int)reader["Unit.XP"];
+        //                unit.BattleModel.Accuracy = (double)reader["Unit.Accuracy"];
+        //                unit.BattleModel.AttackModifier = (double)reader["Unit.AttackModifier"];
+        //                unit.BattleModel.DefenseModifier = (double)reader["Unit.DefenseModifier"];
+        //                unit.BattleModel.DodgeChance = (double)reader["Unit.DodgeChance"];
+        //                unit.BattleModel.RangeModifier = (double)reader["Unit.RangeModifier"];
 
-                        unit.LocationModel.floatCoords.x = (float)reader["UnitLocation.FloatCoordX"];
-                        unit.LocationModel.floatCoords.y = (float)reader["UnitLocation.FloatCoordY"];
+        //                unit.HPModel.CurrentHP = (int)reader["Unit.CurrentHP"];
+        //                unit.HPModel.MaxHP = (int)reader["Unit.MaxHP"];
 
-                        units.Add(unit);
-                    } 
-                    */
-                }
-            }
+        //                unit.XPModel.LvlModel.Level = (int)reader["Unit.Level"];
+        //                unit.XPModel.LvlModel.XPNeed = (int)reader["Unit.XPNeed"];
+        //                unit.XPModel.XP = (int)reader["Unit.XP"];
 
-            // Return the Unit_Model list
-            return units;
-        }
+        //                unit.LocationModel.floatCoords.x = (float)reader["UnitLocation.FloatCoordX"];
+        //                unit.LocationModel.floatCoords.y = (float)reader["UnitLocation.FloatCoordY"];
+
+        //                units.Add(unit);
+        //            }
+        //        }
+        //    }
+
+        //    // Return the Unit_Model list
+        //    return units;
+        //}
     }
 }
