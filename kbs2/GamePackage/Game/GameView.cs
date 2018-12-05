@@ -119,9 +119,9 @@ namespace kbs2.GamePackage
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
 
-            // Updates cells on screen ================================================================================= <>
+            // ============== Temp Code ===================================================================
+            // Updates cells on screen 
             GetCellsOnScreen();
-
 
             // Update Buildings on screen
             List<IViewable> buildings = new List<IViewable>();
@@ -130,6 +130,8 @@ namespace kbs2.GamePackage
                 buildings.Add(building.View);
             }
             DrawList.AddRange( GetOnScreen(buildings,GraphicsDevice.Viewport,Camera.GetInverseViewMatrix()));
+
+            // ======================================================================================
 
             // Calls the game update
             base.Update(gameTime);
