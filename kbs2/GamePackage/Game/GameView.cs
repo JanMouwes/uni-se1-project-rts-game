@@ -12,6 +12,7 @@ using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
+using kbs2.WorldEntity.Building;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -27,9 +28,9 @@ namespace kbs2.GamePackage
         private CameraController Camera;
 
         // List for drawing items with the camera offset
-        private List<IViewable> DrawList;
+        public List<IViewable> DrawList;
         // List for drawing items without offset
-        private List<IViewable> DrawStaticList;
+        public List<IViewable> DrawStaticList;
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -75,6 +76,24 @@ namespace kbs2.GamePackage
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+
+            //TESTCODE
+            BuildingDef def = new BuildingDef();
+            def.BuildingShape = new List<Coords>
+            {
+                new Coords { x = 0, y = 0 },
+                new Coords { x = 1, y = 0 },
+                new Coords { x = 1, y = -1 },
+                new Coords { x = 0, y = -1 }
+            };
+            def.height = 2f;
+            def.width = 2f;
+            def.imageSrc = "TrainingCenter";
+            Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 });
+            gameModel.World.AddBuilding(def, building);
+            DrawList.Add(building.View);
+            //TESTCODE
         }
 
         /// <summary>
@@ -144,7 +163,11 @@ namespace kbs2.GamePackage
         {
             spriteBatch.Begin();
 
-            foreach (IViewable DrawItem in DrawStaticList)
+            var DrawItems = from Item in DrawStaticList
+                            orderby Item.ZIndex ascending
+                            select Item;
+
+            foreach (IViewable DrawItem in DrawItems)
             {
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
                 spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
