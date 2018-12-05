@@ -100,7 +100,7 @@ namespace kbs2.GamePackage
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
 
-            // Updates cells on screen
+            // Updates cells on screen ================================================================================= <>
             GetChunksOnScreen();
 
             // Calls the game update
@@ -151,6 +151,26 @@ namespace kbs2.GamePackage
             }
 
             spriteBatch.End();
+        }
+
+        // ====================================================================================================== V
+
+        // Returns everything that is in the view
+        public List<IViewable> GetOnScreen(List<IViewable> totalList, Viewport viewport, Matrix inverseMatrix)
+        {
+            List<IViewable> drawList = new List<IViewable>();
+            
+            Vector2 TopLeft = Vector2.Transform(new Vector2(viewport.X, viewport.Y), inverseMatrix);
+            
+            Vector2 BottomRight = Vector2.Transform(new Vector2(viewport.X + viewport.Width, viewport.Y + viewport.Height), inverseMatrix);
+
+            foreach (var item in totalList)
+            {
+                if ( item.Coords.x < (TopLeft.X / TileSize) - 1 || item.Coords.y < (TopLeft.Y / TileSize) - 1 || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize ) continue;
+                drawList.Add(item);
+            }
+
+            return drawList;
         }
 
         // Gets the cells that are in the view 
