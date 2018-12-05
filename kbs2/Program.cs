@@ -1,6 +1,5 @@
 ﻿using System;
 using kbs2.Desktop.View.MapView;
-using System.Data.SQLite;
 using kbs2.GamePackage;
 using kbs2.World.TerrainDef;
 using kbs2.World;
