@@ -306,7 +306,7 @@ public class Pathfinder
         int coordsInChunky = ModulusUtils.mod(NeighbourCoords.y , WorldChunkModel.ChunkSize);
 
         // get the actial cell from the worldmodel
-        WorldCellModel cell = worldModel.ChunkGrid[chunkCoords].WorldChunkModel.grid[coordsInChunkx, coordsInChunky];
+        WorldCellModel cell = worldModel.ChunkGrid[chunkCoords].WorldChunkModel.grid[coordsInChunkx, coordsInChunky].worldCellModel;
 
         if (CellIsObstacle(cell, unit)) // check if cell is obstacle for this unit
         {

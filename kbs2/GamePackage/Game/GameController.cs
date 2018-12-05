@@ -1,6 +1,9 @@
+using System;
 using System.Timers;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.GamePackage.EventArgs;
+using kbs2.World.World;
+using Microsoft.Xna.Framework;
 
 namespace kbs2.GamePackage.Game
 {
@@ -58,6 +61,40 @@ namespace kbs2.GamePackage.Game
             this.GameState = gameState;
 
             GameTimer = new Timer(TickIntervalMilliseconds);
+        }
+
+        // ===========================================================================================================================
+        // Draws the chunks and cells in a Checkered pattern for easy debugging
+        public void CellChunkCheckered()
+        {
+            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
+                {
+                    item2.worldCellView.Color =  Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.x) % 2 ==
+                    (Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
+                        ? Math.Abs(item2.worldCellModel.RealCoords.x) % 2 == (Math.Abs(item2.worldCellModel.RealCoords.y) % 2 == 1 ? 1 : 0)
+                            ? Color.Gray
+                            : Color.Yellow
+                        : Math.Abs(item2.worldCellModel.RealCoords.x) % 2 == (Math.Abs(item2.worldCellModel.RealCoords.y) % 2 == 1 ? 1 : 0)
+                            ? Color.Green
+                            : Color.Sienna;
+                }
+            }
+        }
+
+        // Draws a random pattern on the cells
+        public void RandomPattern()
+        {
+            Random random = new Random();
+
+            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
+                {
+                    item2.worldCellView.Color = random.Next(0, 3) == 1 ? Color.Gray : Color.Pink;
+                }
+            }
         }
     }
 }

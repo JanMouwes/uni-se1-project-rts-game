@@ -4,13 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using kbs2.World.Interfaces;
+using kbs2.World.Structs;
 
 namespace kbs2.World.Cell
 {
     public class WorldCellController
     {
-        public WorldCellModel worldCellModel { get; set; }
+        public WorldCellModel worldCellModel { get; set; } = new WorldCellModel();
 
+
+        public WorldCellController(FloatCoords coords, string texture)
+        {
+            worldCellModel.RealCoords = (Coords)coords;
+            worldCellView = new WorldCellView(coords, texture);
+        }
 
         // Changes the TerrainType of the current cell
         public void ChangeTerrain(TerrainType type)
