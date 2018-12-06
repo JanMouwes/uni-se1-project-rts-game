@@ -196,7 +196,7 @@ namespace kbs2.GamePackage
             {
                 if (DrawItem == null) continue;
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
-                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x * TileSize, (int)DrawItem.Coords.y * TileSize, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
+                spriteBatch.Draw(texture, new Rectangle((int)(DrawItem.Coords.x * TileSize), (int)(DrawItem.Coords.y * TileSize), (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
             }
 
             spriteBatch.End();
