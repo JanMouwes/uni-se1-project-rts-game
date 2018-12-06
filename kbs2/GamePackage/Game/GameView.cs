@@ -29,10 +29,14 @@ namespace kbs2.GamePackage
         private SpriteBatch spriteBatch;
         private CameraController Camera;
 
+        // List For everything
+        public List<IViewable> ItemList;
+        // List For everything
+        public List<IViewable> GuiItemList;
         // List for drawing items with the camera offset
         public List<IViewable> DrawList;
         // List for drawing items without offset
-        public List<IViewable> DrawStaticList;
+        public List<IViewable> DrawGuiList;
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -59,6 +63,12 @@ namespace kbs2.GamePackage
             // Makes the mouse visible in the window
             base.IsMouseVisible = true;
 
+            // Initializes the lists that hold the views to draw
+            ItemList = new List<IViewable>();
+            GuiItemList = new List<IViewable>();
+            DrawList = new List<IViewable>();
+            DrawGuiList = new List<IViewable>();
+
             // Initalize game
             base.Initialize();
         }
@@ -72,27 +82,10 @@ namespace kbs2.GamePackage
             // initialize camera
             Camera = new CameraController(GraphicsDevice);
 
-            // Initializes the lists that hold the views to draw
-            DrawList = new List<IViewable>();
-            DrawStaticList = new List<IViewable>();
-
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-
             //TESTCODE
-            /*BuildingDef def = new BuildingDef();
-            def.BuildingShape = new List<Coords>
-            {
-                new Coords { x = 0, y = 0 },
-                new Coords { x = 1, y = 0 },
-                new Coords { x = 1, y = -1 },
-                new Coords { x = 0, y = -1 }
-            };
-            def.height = 2f;
-            def.width = 2f;
-            def.imageSrc = "TrainingCenter";*/
-
             DBController.OpenConnection("DefDex");
             BuildingDef def = DBController.GetDefinitionBuilding(1);
             DBController.CloseConnection();
@@ -126,16 +119,23 @@ namespace kbs2.GamePackage
             Camera.MoveCamera();
 
             // ============== Temp Code ===================================================================
-            // Updates cells on screen
-            GetCellsOnScreen();
-
             // Update Buildings on screen
             List<IViewable> buildings = new List<IViewable>();
             foreach(Building_Controller building in gameModel.World.WorldModel.buildings)
             {
                 buildings.Add(building.View);
             }
-            DrawList.AddRange( GetOnScreen(buildings,GraphicsDevice.Viewport,Camera.GetInverseViewMatrix()));
+            ItemList.AddRange(buildings);
+
+            List<IViewable> Cells = new List<IViewable>();
+            foreach(KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                foreach(WorldCellController cell in chunk.Value.WorldChunkModel.grid)
+                {
+                    Cells.Add(cell.worldCellView);
+                }
+            }
+            ItemList.AddRange(Cells);
 
             // ======================================================================================
 
@@ -147,7 +147,7 @@ namespace kbs2.GamePackage
             gameModel.Selection.DrawVerticalLine((int) (gameModel.Selection.View.Coords.x + gameModel.Selection.View.Width));
 
             for (int i = 0; i < gameModel.Selection.Model.Box.Count; i++){
-                DrawStaticList.Add(gameModel.Selection.Model.Box[i]);
+                DrawGuiList.Add(gameModel.Selection.Model.Box[i]);
             }*/
             
             // Calls the game update
@@ -163,8 +163,12 @@ namespace kbs2.GamePackage
             // Clears the GraphicsDevice to make room for the new draw items
             GraphicsDevice.Clear(Color.Black);
 
-            DrawMovable();
+            // Updates everything on screen
+            UpdateOnScreen();
 
+            DrawNonGui();
+            
+            // Temp Code ==========================
             spriteBatch.Begin();
 
             // Is niets niet kijken
@@ -175,41 +179,35 @@ namespace kbs2.GamePackage
 
             spriteBatch.End();
 
-            DrawStationairy();
+            // End temp code ==========================================
+            
+            DrawGui();
 
             // Calls the game's draw function
             base.Draw(gameTime);
         }
 
         // Draws every item in the DrawList with camera offset
-        private void DrawMovable()
+        private void DrawNonGui()
         {
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
-            var DrawItems = from Item in DrawList
-                            orderby Item.ZIndex ascending
-                            select Item;
-
-            foreach (IViewable DrawItem in DrawItems)
+            foreach (IViewable DrawItem in DrawList)
             {
                 if (DrawItem == null) continue;
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
-                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x * TileSize, (int)DrawItem.Coords.y * TileSize, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
+                spriteBatch.Draw(texture, new Rectangle((int)(DrawItem.Coords.x * TileSize), (int)(DrawItem.Coords.y * TileSize), (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
             }
 
             spriteBatch.End();
         }
 
         // Draws every item in the DrawList without offset
-        private void DrawStationairy()
+        private void DrawGui()
         {
             spriteBatch.Begin();
 
-            var DrawItems = from Item in DrawStaticList
-                            orderby Item.ZIndex ascending
-                            select Item;
-
-            foreach (IViewable DrawItem in DrawItems)
+            foreach (IViewable DrawItem in DrawGuiList)
             {
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
                 spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
@@ -218,76 +216,42 @@ namespace kbs2.GamePackage
             spriteBatch.End();
         }
 
+        // Returns everything that is in the view
+        public void UpdateOnScreen()
+        {
+            DrawList.Clear();
+            DrawGuiList.Clear();
+
+            Vector2 TopLeft = Vector2.Transform(new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y), Camera.GetInverseViewMatrix());
+
+            Vector2 BottomRight = Vector2.Transform(new Vector2(GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height), Camera.GetInverseViewMatrix());
+
+            foreach (var item in ItemList)
+            {
+                if (item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize) continue;
+                DrawList.Add(item);
+            }
+
+            DrawList = (from Item in DrawList
+                        orderby Item.ZIndex ascending
+                        select Item).ToList();
+
+            foreach (var item in GuiItemList)
+            {
+                if (item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize) continue;
+                DrawGuiList.Add(item);
+            }
+
+            DrawGuiList = (from Item in DrawGuiList
+                              orderby Item.ZIndex ascending
+                        select Item).ToList();
+
+            ItemList.Clear();
+            GuiItemList.Clear();
+        }
+
         // ====================================================================================================== V
 
-        // Returns everything that is in the view
-        public List<IViewable> GetOnScreen(List<IViewable> totalList, Viewport viewport, Matrix inverseMatrix)
-        {
-            List<IViewable> drawList = new List<IViewable>();
-
-            Vector2 TopLeft = Vector2.Transform(new Vector2(viewport.X, viewport.Y), inverseMatrix);
-
-            Vector2 BottomRight = Vector2.Transform(new Vector2(viewport.X + viewport.Width, viewport.Y + viewport.Height), inverseMatrix);
-
-            foreach (var item in totalList)
-            {
-                if ( item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize ) continue;
-                drawList.Add(item);
-            }
-
-            return drawList;
-        }
-
-        // Gets the cells that are in the view
-        public void GetCellsOnScreen()
-        {
-            Vector2 CameraPosition = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
-            Vector2 realCameraPosition = Vector2.Transform(CameraPosition, Camera.GetInverseViewMatrix());
-
-            Vector2 CameraBottomPosition = new Vector2(GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height);
-            Vector2 RealCameraPos2 = Vector2.Transform(CameraBottomPosition, Camera.GetInverseViewMatrix());
-
-            DrawList.Clear();
-
-            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
-            {
-                foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
-                {
-                    if (item2.worldCellView.Coords.x < (realCameraPosition.X / TileSize) - 1
-                        || item2.worldCellView.Coords.y < (realCameraPosition.Y / TileSize) - 1
-                        || item2.worldCellView.Coords.x > RealCameraPos2.X / TileSize
-                        || item2.worldCellView.Coords.y > RealCameraPos2.Y / TileSize
-                        ) continue;
-                    DrawList.Add(item2.worldCellView);
-                }
-            }
-        }
-
-        // Gets the chunks that are in the view
-        public void GetChunksOnScreen()
-        {
-            Vector2 CameraPosition = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
-            Vector2 realCameraPosition = Vector2.Transform(CameraPosition, Camera.GetInverseViewMatrix());
-
-            Vector2 CameraBottomPosition = new Vector2(GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height);
-            Vector2 RealCameraPos2 = Vector2.Transform(CameraBottomPosition, Camera.GetInverseViewMatrix());
-
-            DrawList.Clear();
-
-            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
-            {
-                if (Chunk.Key.x < (realCameraPosition.X / TileSize / WorldChunkModel.ChunkSize) - 1
-                        || Chunk.Key.y < (realCameraPosition.Y / TileSize / WorldChunkModel.ChunkSize) - 1
-                        || Chunk.Key.x > RealCameraPos2.X / TileSize / WorldChunkModel.ChunkSize
-                        || Chunk.Key.y > RealCameraPos2.Y / TileSize / WorldChunkModel.ChunkSize
-                        ) continue;
-
-                foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
-                {
-                    DrawList.Add(item2.worldCellView);
-                }
-            }
-        }
 
         public void DrawHorizontalLine(int PositionY)
         {

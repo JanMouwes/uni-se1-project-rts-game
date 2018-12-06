@@ -52,14 +52,6 @@ namespace kbs2
                 {
                     while (reader.Read())
                     {
-                        Console.WriteLine(reader);
-                        Console.WriteLine($"{reader["CurrentHp"]}, {reader["CurrentHp"].GetType()}");
-                        Console.WriteLine($"{reader["MaxHp"]}, {reader["MaxHp"].GetType()}");
-                        Console.WriteLine($"{reader["width"]}, {reader["width"].GetType()}");
-                        Console.WriteLine($"{reader["height"]}, {reader["height"].GetType()}");
-                        Console.WriteLine($"{reader["image"]}, {reader["image"].GetType()}");
-                        Console.WriteLine($"{reader["shape"]}, {reader["shape"].GetType()}");
-
                         BuildingDef.HPDef.CurrentHP = int.Parse(reader["CurrentHp"].ToString());
                         BuildingDef.HPDef.MaxHP = int.Parse(reader["MaxHp"].ToString());
 
