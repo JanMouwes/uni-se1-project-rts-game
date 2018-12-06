@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.WorldEntity.Building
 {
-	public class Building_Controller : ISelectable
+	public class Building_Controller : ISelectable , IBlockCells
     {
         public Building_Model Model { get; set; }
         public BuildingView View { get; set; }

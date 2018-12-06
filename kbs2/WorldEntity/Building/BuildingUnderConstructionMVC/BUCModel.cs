@@ -7,13 +7,14 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 {
     public class BUCModel
     {
+        public BUCModel BucModel { get; set; }
         public int Time { get; set; }
         public BuildingDef BuildingDef { get; set; }
         public Coords TopLeft { get; set; }
         public List<WorldCellModel> LocationCells { get; set; }
 
 
-        public BUCModel()
+        public BUCModel(Coords topleft)
         {
         }
     }
