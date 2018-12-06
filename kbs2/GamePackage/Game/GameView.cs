@@ -81,21 +81,9 @@ namespace kbs2.GamePackage
 
 
             //TESTCODE
-            BuildingDef def = new BuildingDef();
-            def.BuildingShape = new List<Coords>
-            {
-                new Coords { x = 0, y = 0 },
-                new Coords { x = 1, y = 0 },
-                new Coords { x = 1, y = -1 },
-                new Coords { x = 0, y = -1 }
-            };
-            def.height = 2f;
-            def.width = 2f;
-            def.imageSrc = "TrainingCenter";
-
-            //DBController.OpenConnection("DefDex");
-            //BuildingDef def = DBController.GetDefinitionBuilding(1);
-            //DBController.CloseConnection();
+            DBController.OpenConnection("DefDex");
+            BuildingDef def = DBController.GetDefinitionBuilding(1);
+            DBController.CloseConnection();
 
             Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 });
             gameModel.World.AddBuilding(def, building);
