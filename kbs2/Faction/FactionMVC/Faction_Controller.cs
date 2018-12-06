@@ -2,6 +2,7 @@
 using kbs2.Faction.Interfaces;
 using kbs2.Unit.Model;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Unit.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace kbs2.Faction.FactionMVC
             FactionModel = new Faction_Model(name);
         }
         // Adds a unit to the faction units list
-        public void AddUnitToFaction(Unit_Model unit) => FactionModel.Units.Add(unit);
+        public void AddUnitToFaction(Unit_Controller unit) => FactionModel.Units.Add(unit);
 
         public void AddBuildingToFaction(Building_Controller building) => FactionModel.Buildings.Add(building);
         // Checks if the given faction is hostile to this faction

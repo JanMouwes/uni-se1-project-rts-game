@@ -13,7 +13,7 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
         public FloatCoords Coords { get { return (FloatCoords)BuildingModel.TopLeft; } set {; } }
         public string Texture { get { return ImageSrc; } set {; } }
         public Color Color { get { return Color.White; } set {; } }
-        public int ZIndex { get { return 0; } set {; } }
+        public int ZIndex { get { return 2; } set {; } }
 
         // sets height, width and image for a buildingview
         public BuildingView(string imageSrc, float height, float width)

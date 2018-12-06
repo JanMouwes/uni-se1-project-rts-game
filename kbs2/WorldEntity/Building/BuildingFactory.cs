@@ -13,10 +13,12 @@ namespace kbs2.WorldEntity.Building
         public static Building_Controller CreateNewBuilding(BuildingDef def, Coords TopLeft)
         {
             Building_Controller building_Controller = new Building_Controller();
-            BuildingView view = new BuildingView(def.imageSrc, def.height, def.width);
+
             Building_Model model = new Building_Model(TopLeft);
-            building_Controller.View = view;
             building_Controller.Model = model;
+            BuildingView view = new BuildingView(def.imageSrc, def.height, def.width);
+            view.BuildingModel = model;
+            building_Controller.View = view;
             
 
             return building_Controller;

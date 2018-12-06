@@ -22,11 +22,14 @@ namespace kbs2.WorldEntity.Building
 
         public void AddShapeFromString(string shape)
         {
+            BuildingShape = new List<Coords>();
             char[] array = shape.ToCharArray();
-            Coords coords = new Coords();
-            coords.x = 0;
-            coords.y = 0;
-            foreach(char c in array)
+            Coords coords = new Coords
+            {
+                x = 0,
+                y = 0
+            };
+            foreach (char c in array)
             {
                 if(c == 'x')
                 {

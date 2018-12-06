@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Timers;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
+using kbs2.World;
 using kbs2.World.World;
+using kbs2.WorldEntity.Building;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.GamePackage
@@ -69,6 +72,11 @@ namespace kbs2.GamePackage
 
             gameModel.World = WorldFactory.GetNewWorld();
             //gameModel.Factions = FactionFactory.GetNewFaction();
+
+
+            
+
+            gameModel.Selection = new Selection_Controller("PurpleLine");
 
             GameTimer = new Timer(TickIntervalMilliseconds);
         }
