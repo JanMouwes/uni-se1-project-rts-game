@@ -14,13 +14,24 @@ namespace kbs2.GamePackage.Selection
     {
         public MouseState PreviousMouseState { get; set; }
         public RectangleF SelectionBox { get; set; }
-        public List<Selection_View> Box { get; set; }
+        public RectangleF Top { get; set; }
+        public RectangleF Left { get; set; }
+        public RectangleF Right { get; set; }
+        public RectangleF Bottom { get; set; }
+        public List<Selection_View> ViewList { get; set; }
 
         public Selection_Model()
         {
             PreviousMouseState = new MouseState();
+
             SelectionBox = new RectangleF(-1, -1, 0, 0);
-            Box = new List<Selection_View>();
+
+            ViewList = new List<Selection_View>();
+
+            Top = new RectangleF(-1, -1, 0, 0);
+            Left = new RectangleF(-1, -1, 0, 0);
+            Right = new RectangleF(-1, -1, 0, 0);
+            Bottom = new RectangleF(-1, -1, 0, 0);
         }
     }
 }
