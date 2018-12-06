@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
+using kbs2.GamePackage.Interfaces;
 
 namespace kbs2.GamePackage
 {
@@ -16,5 +17,10 @@ namespace kbs2.GamePackage
 		public float Time { get; set; }
 		public GameState GameState { get; set; }
 		public GameSpeed GameSpeed { get; set; }
-	}
+
+        // List For everything
+        public List<IViewable> ItemList = new List<IViewable>();
+        // List For everything in the gui
+        public List<IViewable> GuiItemList = new List<IViewable>();
+    }
 }
