@@ -4,6 +4,7 @@ using kbs2.World;
 using kbs2.World.World;
 using kbs2.World.Chunk;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 
 namespace kbs2.Desktop.World.World
 {
@@ -53,5 +54,32 @@ namespace kbs2.Desktop.World.World
             // add building to buildinglist
             WorldModel.buildings.Add(building);
         }
-	}
+        public void AddBuildingUnderCunstruction(BuildingDef defenition, BUCController building)
+        {
+
+            foreach (Coords coords in defenition.BuildingShape)
+            {
+                Coords actual = coords + building.BUCModel.TopLeft;
+                // calc coordinates of chunk the cell is in
+                Coords chunkcoords = new Coords
+                {
+                    x = actual.x / WorldChunkModel.ChunkSize,
+                    y = actual.y / WorldChunkModel.ChunkSize
+                };
+                // calc location of cell within chunk
+                Coords relativecoords = new Coords
+                {
+                    x = ModulusUtils.mod(actual.x, WorldChunkModel.ChunkSize),
+                    y = ModulusUtils.mod(actual.y, WorldChunkModel.ChunkSize)
+                };
+                // add building to the cells its on
+                WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel.BuildingOnTop = building;
+                // add cells to the building
+                building.BUCModel.LocationCells.Add(WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel);
+            }
+            // add building to buildinglist
+            WorldModel.UnderConstruction.Add(building);
+        }
+
+    }
 }
