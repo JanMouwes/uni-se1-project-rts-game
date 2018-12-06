@@ -170,16 +170,9 @@ namespace kbs2.GamePackage
 
             // ======================================================================================
 
-            gameModel.Selection.DrawSelectionBox(gameModel.World.WorldModel.Units, Mouse.GetState(), camera.GetViewMatrix(), TileSize, camera.Zoom);
+            gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
 
-            /*gameModel.Selection.DrawHorizontalLine((int) gameModel.Selection.View.Coords.y);
-            gameModel.Selection.DrawHorizontalLine((int) (gameModel.Selection.View.Coords.y + gameModel.Selection.View.Height));
-            gameModel.Selection.DrawVerticalLine((int) gameModel.Selection.View.Coords.x);
-            gameModel.Selection.DrawVerticalLine((int) (gameModel.Selection.View.Coords.x + gameModel.Selection.View.Width));
-
-            for (int i = 0; i < gameModel.Selection.Model.Box.Count; i++){
-                DrawGuiList.Add(gameModel.Selection.Model.Box[i]);
-            }*/
+            gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
 
             // Calls the game update
             base.Update(gameTime);
