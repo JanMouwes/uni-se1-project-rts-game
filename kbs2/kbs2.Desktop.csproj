@@ -106,6 +106,7 @@
     <Compile Include="WorldEntity\Unit\MVC\Unit_Model.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_View.cs" />
     <Compile Include="WorldEntity\Unit\UnitDef.cs" />
+    <Compile Include="WorldEntity\Unit\UnitFactory.cs" />
     <Compile Include="WorldEntity\XP\LevelEventArgs.cs" />
     <Compile Include="WorldEntity\XP\LevelXPDef.cs" />
     <Compile Include="WorldEntity\XP\XPMVC\Lvl_Model.cs" />
@@ -230,9 +231,7 @@
     <Content Include="World\.DS_Store" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="WorldEntity\Building\BuildingUnderConstructionMVC\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
