@@ -25,7 +25,7 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public Unit_Controller(WorldModel worldModel, string imageSrc, float height, float width, float lx, float ly)
 		{
             UnitModel = new Unit_Model(height, width);
-            UnitView = new Unit_View(imageSrc);
+            UnitView = new Unit_View(imageSrc, width, height, imageSrc);
             LocationController = new Location_Controller(worldModel, lx, ly);
             UnitModel.UnitDef = new kbs2.Unit.Unit.UnitDef();
             UnitModel.UnitDef.Speed = 0.04f;
