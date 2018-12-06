@@ -15,6 +15,7 @@ using kbs2.World.TerrainDef;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingMVC;
+using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -82,15 +83,8 @@ namespace kbs2.GamePackage
 
             Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 });
             gameModel.World.AddBuilding(def, building);
-            //TESTCODE
-
-
-			//==========Test Code Units====================
+			//TESTCODE
 			
-
-
-
-			//==========End Test Code Units ===============
 
         }
 
@@ -136,9 +130,14 @@ namespace kbs2.GamePackage
             }
             gameModel.ItemList.AddRange(Cells);
 
-            // ======================================================================================
+			// Hard Coded Unit
+			Unit_Controller unit = new Unit_Controller(gameModel.World.WorldModel, "pikachu_idle", 2, 2, 0, 0 );
 
-            gameModel.Selection.DrawSelectionBox(gameModel.World.WorldModel.Units, Mouse.GetState(), Camera.GetViewMatrix(), TileSize, Camera.Zoom);
+			gameModel.ItemList.Add(unit.UnitView);
+
+			// ======================================================================================
+
+			gameModel.Selection.DrawSelectionBox(gameModel.World.WorldModel.Units, Mouse.GetState(), Camera.GetViewMatrix(), TileSize, Camera.Zoom);
 
             /*gameModel.Selection.DrawHorizontalLine((int) gameModel.Selection.View.Coords.y);
             gameModel.Selection.DrawHorizontalLine((int) (gameModel.Selection.View.Coords.y + gameModel.Selection.View.Height));

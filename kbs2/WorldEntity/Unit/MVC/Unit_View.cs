@@ -20,17 +20,20 @@ namespace kbs2.WorldEntity.Unit.MVC
         public string ImageSrcSec { get; set; }
 
 		public FloatCoords Coords { get; set; }
+		
+		public float Width { get; set; }
+		public float Height { get; set; }
+		public string Texture { get; set; }
+		public Color Color { get; set; } = Color.White;
+		public int ZIndex { get; set; } = 2;
 
-		public float Width { get => UnitModel.Width; set => Width = UnitModel.Width; }
-		public float Height { get => UnitModel.Height; set => Height = UnitModel.Height; }
-		public string Texture { get => UnitModel.Texture; set => Texture = UnitModel.Texture; }
-		public Color Color { get => UnitModel.Color; set => Color = UnitModel.Color; }
-		public int ZIndex { get => UnitModel.ZIndex; set => ZIndex = UnitModel.ZIndex; } 
-
-		public Unit_View(string imageSrc)
+		public Unit_View(string imageSrc, float width, float height, string texture)
         {
             ImageSrcPri = imageSrc;
             ImageSrcSec = "shadow";
+			Width = width;
+			Height = height;
+			Texture = texture;
         }
 	}
 }
