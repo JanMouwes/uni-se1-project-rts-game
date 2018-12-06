@@ -29,14 +29,10 @@ namespace kbs2.GamePackage
         private SpriteBatch spriteBatch;
         private CameraController Camera;
 
-        // List For everything
-        public List<IViewable> ItemList;
-        // List For everything
-        public List<IViewable> GuiItemList;
         // List for drawing items with the camera offset
-        public List<IViewable> DrawList;
+        public List<IViewable> DrawList = new List<IViewable>();
         // List for drawing items without offset
-        public List<IViewable> DrawGuiList;
+        public List<IViewable> DrawGuiList = new List<IViewable>();
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -63,12 +59,6 @@ namespace kbs2.GamePackage
             // Makes the mouse visible in the window
             base.IsMouseVisible = true;
 
-            // Initializes the lists that hold the views to draw
-            ItemList = new List<IViewable>();
-            GuiItemList = new List<IViewable>();
-            DrawList = new List<IViewable>();
-            DrawGuiList = new List<IViewable>();
-
             // Initalize game
             base.Initialize();
         }
@@ -93,6 +83,15 @@ namespace kbs2.GamePackage
             Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 });
             gameModel.World.AddBuilding(def, building);
             //TESTCODE
+
+
+			//==========Test Code Units====================
+			
+
+
+
+			//==========End Test Code Units ===============
+
         }
 
         /// <summary>
@@ -125,7 +124,7 @@ namespace kbs2.GamePackage
             {
                 buildings.Add(building.View);
             }
-            ItemList.AddRange(buildings);
+            gameModel.ItemList.AddRange(buildings);
 
             List<IViewable> Cells = new List<IViewable>();
             foreach(KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)
@@ -135,7 +134,7 @@ namespace kbs2.GamePackage
                     Cells.Add(cell.worldCellView);
                 }
             }
-            ItemList.AddRange(Cells);
+            gameModel.ItemList.AddRange(Cells);
 
             // ======================================================================================
 
@@ -226,7 +225,7 @@ namespace kbs2.GamePackage
 
             Vector2 BottomRight = Vector2.Transform(new Vector2(GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height), Camera.GetInverseViewMatrix());
 
-            foreach (var item in ItemList)
+            foreach (var item in gameModel.ItemList)
             {
                 if (item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize) continue;
                 DrawList.Add(item);
@@ -236,7 +235,7 @@ namespace kbs2.GamePackage
                         orderby Item.ZIndex ascending
                         select Item).ToList();
 
-            foreach (var item in GuiItemList)
+            foreach (var item in gameModel.GuiItemList)
             {
                 if (item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize) continue;
                 DrawGuiList.Add(item);
@@ -246,8 +245,8 @@ namespace kbs2.GamePackage
                               orderby Item.ZIndex ascending
                         select Item).ToList();
 
-            ItemList.Clear();
-            GuiItemList.Clear();
+            gameModel.ItemList.Clear();
+            gameModel.GuiItemList.Clear();
         }
 
         // ====================================================================================================== V

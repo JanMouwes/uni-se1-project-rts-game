@@ -71,10 +71,6 @@ namespace kbs2.GamePackage
             gameView = new GameView(gameModel);
 
             gameModel.World = WorldFactory.GetNewWorld();
-            //gameModel.Factions = FactionFactory.GetNewFaction();
-
-
-            
 
             gameModel.Selection = new Selection_Controller("PurpleLine");
 
