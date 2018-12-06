@@ -137,17 +137,10 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(Cells);
 
             // ======================================================================================
+            gameModel.ItemList.Add(gameModel.Selection.Model.SelectionBox.BoxView);
 
-            gameModel.Selection.DrawSelectionBox(gameModel.World.WorldModel.Units, Mouse.GetState(), Camera.GetViewMatrix(), TileSize, Camera.Zoom);
-
-            /*gameModel.Selection.DrawHorizontalLine((int) gameModel.Selection.View.Coords.y);
-            gameModel.Selection.DrawHorizontalLine((int) (gameModel.Selection.View.Coords.y + gameModel.Selection.View.Height));
-            gameModel.Selection.DrawVerticalLine((int) gameModel.Selection.View.Coords.x);
-            gameModel.Selection.DrawVerticalLine((int) (gameModel.Selection.View.Coords.x + gameModel.Selection.View.Width));
-
-            for (int i = 0; i < gameModel.Selection.Model.Box.Count; i++){
-                DrawGuiList.Add(gameModel.Selection.Model.Box[i]);
-            }*/
+            gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), Camera.GetViewMatrix(), TileSize);
+            gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, Camera.GetViewMatrix(), TileSize, Camera.Zoom);
             
             // Calls the game update
             base.Update(gameTime);
@@ -166,19 +159,6 @@ namespace kbs2.GamePackage
             UpdateOnScreen();
 
             DrawNonGui();
-            
-            // Temp Code ==========================
-            spriteBatch.Begin();
-
-            // Is niets niet kijken
-            DrawHorizontalLine((int) gameModel.Selection.View.Coords.y);
-            DrawHorizontalLine((int) (gameModel.Selection.View.Coords.y + gameModel.Selection.View.Height));
-            DrawVerticalLine((int)gameModel.Selection.View.Coords.x);
-            DrawVerticalLine((int) (gameModel.Selection.View.Coords.x + gameModel.Selection.View.Width));
-
-            spriteBatch.End();
-
-            // End temp code ==========================================
             
             DrawGui();
 
@@ -249,63 +229,6 @@ namespace kbs2.GamePackage
             gameModel.GuiItemList.Clear();
         }
 
-        // ====================================================================================================== V
-
-
-        public void DrawHorizontalLine(int PositionY)
-        {
-            Texture2D texture = Content.Load<Texture2D>(gameModel.Selection.View.Texture);
-            if (gameModel.Selection.View.Width > 0)
-            {
-                for (int i = 0; i <= gameModel.Selection.View.Width - 10; i += 10)
-                {
-                    if (gameModel.Selection.View.Width - i >= 0)
-                    {
-                        spriteBatch.Draw(texture, new Rectangle((int) (gameModel.Selection.View.Coords.x + i), PositionY, 10, 5),
-                            Color.White);
-                    }
-                }
-            }
-            else if (gameModel.Selection.View.Width < 0)
-            {
-                for (int i = -10; i >= gameModel.Selection.View.Width; i -= 10)
-                {
-                    if (gameModel.Selection.View.Width - i <= 0)
-                    {
-                        spriteBatch.Draw(texture, new Rectangle((int) (gameModel.Selection.View.Coords.x + i), PositionY, 10, 5),
-                            Color.White);
-                    }
-                }
-            }
-        }
-
-        public void DrawVerticalLine(int PositionX)
-        {
-            Texture2D texture = Content.Load<Texture2D>(gameModel.Selection.View.Texture);
-            if (gameModel.Selection.View.Height > 0)
-            {
-                for (int i = -2; i <= gameModel.Selection.View.Height; i += 10)
-                {
-                    if (gameModel.Selection.View.Height - i >= 0)
-                    {
-                        spriteBatch.Draw(texture, new Rectangle(PositionX, (int) (gameModel.Selection.View.Coords.y + i), 10, 5),
-                            new Rectangle(0, 0, texture.Width, texture.Height), Color.White, MathHelper.ToRadians(90),
-                            new Vector2(0, 0), SpriteEffects.None, 0);
-                    }
-                }
-            }
-
-            else if (gameModel.Selection.View.Height < 0)
-            {
-                for (int i = 0; i >= gameModel.Selection.View.Height; i -= 10)
-                {
-                    if (gameModel.Selection.View.Height - i <= 0)
-                    {
-                        spriteBatch.Draw(texture, new Rectangle(PositionX - 10, (int) (gameModel.Selection.View.Coords.y + i), 10, 5),
-                            Color.White);
-                    }
-                }
-            }
-        }
+        // ====================================================================================================== 
     }
 }

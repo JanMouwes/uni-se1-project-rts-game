@@ -14,14 +14,12 @@ namespace kbs2.GamePackage.SelectionBoxMVC
     public class SelectionBoxModel
     {
         public MouseState PreviousMouseState { get; set; }
-        public FloatCoords InitXYCoord { get; set; }
         public RectangleF SelectionBox { get; set; }
 
         public SelectionBoxModel()
         {
             PreviousMouseState = new MouseState();
-            InitXYCoord = new FloatCoords { x = -1, y = -1 };
-            SelectionBox = new RectangleF(-1, -1, 0, 0);
+            SelectionBox = new RectangleF(1, 1, 0, 0);
         }
     }
 }

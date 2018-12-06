@@ -73,7 +73,7 @@ namespace kbs2.Desktop.World.World
                     y = ModulusUtils.mod(actual.y, WorldChunkModel.ChunkSize)
                 };
                 // add building to the cells its on
-                WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel.BuildingOnTop = building;
+                //WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel.BuildingOnTop = building;
                 // add cells to the building
                 building.BUCModel.LocationCells.Add(WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel);
             }
