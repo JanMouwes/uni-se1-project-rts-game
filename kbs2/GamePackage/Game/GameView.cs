@@ -127,6 +127,16 @@ namespace kbs2.GamePackage
             }
             ItemList.AddRange(buildings);
 
+            List<IViewable> Cells = new List<IViewable>();
+            foreach(KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                foreach(WorldCellController cell in chunk.Value.WorldChunkModel.grid)
+                {
+                    Cells.Add(cell.worldCellView);
+                }
+            }
+            ItemList.AddRange(Cells);
+
             // ======================================================================================
 
             gameModel.Selection.DrawSelectionBox(gameModel.World.WorldModel.Units, Mouse.GetState(), Camera.GetViewMatrix(), TileSize, Camera.Zoom);
@@ -157,7 +167,7 @@ namespace kbs2.GamePackage
             UpdateOnScreen();
 
             DrawMovable();
-
+            
             // Temp Code ==========================
             spriteBatch.Begin();
 
@@ -170,7 +180,7 @@ namespace kbs2.GamePackage
             spriteBatch.End();
 
             // End temp code ==========================================
-
+            
             DrawStationairy();
 
             // Calls the game's draw function
@@ -209,6 +219,9 @@ namespace kbs2.GamePackage
         // Returns everything that is in the view
         public void UpdateOnScreen()
         {
+            DrawList.Clear();
+            DrawStaticList.Clear();
+
             Vector2 TopLeft = Vector2.Transform(new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y), Camera.GetInverseViewMatrix());
 
             Vector2 BottomRight = Vector2.Transform(new Vector2(GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height), Camera.GetInverseViewMatrix());
@@ -232,6 +245,9 @@ namespace kbs2.GamePackage
             DrawStaticList = (from Item in DrawStaticList
                               orderby Item.ZIndex ascending
                         select Item).ToList();
+
+            ItemList.Clear();
+            StaticItemList.Clear();
         }
 
         // ====================================================================================================== V
