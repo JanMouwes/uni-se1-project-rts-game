@@ -13,15 +13,17 @@ using Microsoft.Xna.Framework;
 namespace kbs2.Unit.Model
 {
     public class Unit_Model : IHasPersonalSpace, IPurchasable, IElemental, IHasFaction
-		// properties voor iviewable setten enzp
     {
         public Faction_Model Faction { get; set; }
         public UnitDef UnitDef;
 
+		public float Width { get; set; }
 		public float Height { get; set; }
-        public float Width { get; set; }
+		public string Texture { get; set; }
+		public Color Color { get; set; }
+		public int ZIndex { get; set; } = 2;
 
-        public bool Selected { get; set; }
+		public bool Selected { get; set; }
 
         public List<TerrainType> UnwalkableTerrain { get; set; }
 

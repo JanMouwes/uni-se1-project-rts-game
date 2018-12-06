@@ -100,6 +100,15 @@ namespace kbs2.GamePackage
             Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 });
             gameModel.World.AddBuilding(def, building);
             //TESTCODE
+
+
+			//==========Test Code Units====================
+			
+
+
+
+			//==========End Test Code Units ===============
+
         }
 
         /// <summary>

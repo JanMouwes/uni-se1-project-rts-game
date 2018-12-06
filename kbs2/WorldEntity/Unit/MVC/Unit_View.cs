@@ -14,15 +14,18 @@ namespace kbs2.WorldEntity.Unit.MVC
 {
 	public class Unit_View : IViewable
 	{
+		public Unit_Model UnitModel { get; set; }
+
         public string ImageSrcPri { get; set; }
         public string ImageSrcSec { get; set; }
 
 		public FloatCoords Coords { get; set; }
-		public float Width { get; set; }
-		public float Height { get; set; }
-		public string Texture { get; set; }
-		public Color Color { get; set; }
-		public int ZIndex { get; set; } = 2;
+
+		public float Width { get => UnitModel.Width; set => Width = UnitModel.Width; }
+		public float Height { get => UnitModel.Height; set => Height = UnitModel.Height; }
+		public string Texture { get => UnitModel.Texture; set => Texture = UnitModel.Texture; }
+		public Color Color { get => UnitModel.Color; set => Color = UnitModel.Color; }
+		public int ZIndex { get => UnitModel.ZIndex; set => ZIndex = UnitModel.ZIndex; } 
 
 		public Unit_View(string imageSrc)
         {
