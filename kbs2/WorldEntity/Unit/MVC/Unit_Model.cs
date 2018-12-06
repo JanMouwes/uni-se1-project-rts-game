@@ -19,9 +19,6 @@ namespace kbs2.Unit.Model
 
 		public float Width { get; set; }
 		public float Height { get; set; }
-		public string Texture { get; set; }
-		public Color Color { get; set; }
-		public int ZIndex { get; set; } = 2;
 
 		public bool Selected { get; set; }
 

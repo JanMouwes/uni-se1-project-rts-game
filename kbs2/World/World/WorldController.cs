@@ -54,6 +54,17 @@ namespace kbs2.Desktop.World.World
             // add building to buildinglist
             WorldModel.buildings.Add(building);
         }
+
+        public void RemoveBuilding(Building_Controller building)
+        {
+            WorldModel.buildings.Remove(building);
+        }
+
+        public void RemoveBUC(BUCController building)
+        {
+            WorldModel.UnderConstruction.Remove(building);
+        }
+
         public void AddBuildingUnderCunstruction(BuildingDef defenition, BUCController building)
         {
 
