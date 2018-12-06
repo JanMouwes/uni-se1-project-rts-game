@@ -29,7 +29,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
     <WarningLevel>4</WarningLevel>
     <LangVersion>default</LangVersion>
   </PropertyGroup>
