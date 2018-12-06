@@ -17,9 +17,6 @@ namespace kbs2.WorldEntity.Unit.MVC
 {
 	public class Unit_Controller
 	{
-		public HP_Controller HPController;
-		public XP_Controller XPController;
-		public Battle_Controller BattleController;
 		public Location_Controller LocationController;
 		public Unit_Model UnitModel;
         public Unit_View UnitView;
