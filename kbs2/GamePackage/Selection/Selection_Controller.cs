@@ -38,9 +38,12 @@ namespace kbs2.GamePackage
             if(CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
             {
                 Model.SelectionBox = new RectangleF(CurMouseState.X, CurMouseState.Y, 0, 0);
-                View.Coords = new FloatCoords() { x = CurMouseState.X, y = CurMouseState.Y };
+                Vector2 boxPosition = new Vector2(CurMouseState.X, CurMouseState.Y);
+                Vector2 worldPosition = Vector2.Transform(boxPosition, Matrix.Invert(viewMatrix));
+                View.Coords = new FloatCoords() { x = worldPosition.X, y = worldPosition.Y };
                 View.Width = 0;
                 View.Height = 0;
+                AdjustViewBox(CurMouseState, viewMatrix, tileSize, zoom);
             }
 
             if(CurMouseState.LeftButton == ButtonState.Pressed)
@@ -49,12 +52,11 @@ namespace kbs2.GamePackage
                 View.Coords = new FloatCoords() { x = Model.SelectionBox.X, y = Model.SelectionBox.Y };
                 View.Width = CurMouseState.X - Model.SelectionBox.X;
                 View.Height = CurMouseState.Y - Model.SelectionBox.Y;
+                AdjustViewBox(CurMouseState, viewMatrix, tileSize, zoom);
             }
 
             if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Pressed)
-            {
                 CheckClickedBox(List, viewMatrix, tileSize, zoom);
-            }
 
             if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Released)
             {
@@ -62,6 +64,7 @@ namespace kbs2.GamePackage
                 View.Coords = new FloatCoords() { x = -1, y = -1 };
                 View.Width = 0;
                 View.Height = 0;
+                AdjustViewBox(CurMouseState, viewMatrix, tileSize, zoom);
             }
 
             Model.PreviousMouseState = CurMouseState;
@@ -184,35 +187,37 @@ namespace kbs2.GamePackage
             SelectedUnits.Clear();
         }
 
+        public void AdjustViewBox(MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
+        {
+            Model.ViewList.Clear();
+
+            Vector2 boxPosition = new Vector2(CurMouseState.X, CurMouseState.Y);
+            Vector2 worldPositionXY = Vector2.Transform(boxPosition, Matrix.Invert(viewMatrix));
+
+            Vector2 boxPositionWH = new Vector2(View.Width, View.Height);
+
+            Model.Top = new RectangleF(((worldPositionXY.X - View.Width) / tileSize), ((worldPositionXY.Y - View.Height) / tileSize), boxPositionWH.X / tileSize, 0.2f);
+            Model.Left = new RectangleF(((worldPositionXY.X - View.Width) / tileSize), ((worldPositionXY.Y - View.Height) / tileSize), 0.2f, boxPositionWH.Y / tileSize);
+            Model.Right = new RectangleF(worldPositionXY.X / tileSize, ((worldPositionXY.Y - View.Height) / tileSize), 0.2f, boxPositionWH.Y / tileSize);
+            Model.Bottom = new RectangleF(worldPositionXY.X / tileSize, worldPositionXY.Y / tileSize, boxPositionWH.X / tileSize, 0.2f);
+
+
+            
+
+            Model.ViewList.Add(new Selection_View(View.Texture, new FloatCoords() { x = ((worldPositionXY.X - View.Width) / tileSize), y = ((worldPositionXY.Y - View.Height) / tileSize) }, (boxPositionWH.X / tileSize), 0.2f));
+            Model.ViewList.Add(new Selection_View(View.Texture, new FloatCoords() { x = ((worldPositionXY.X - View.Width) / tileSize), y = ((worldPositionXY.Y - View.Height) / tileSize) }, 0.2f, (boxPositionWH.Y / tileSize)));
+            Model.ViewList.Add(new Selection_View(View.Texture, new FloatCoords() { x = worldPositionXY.X / tileSize, y = ((worldPositionXY.Y - View.Height) / tileSize) }, 0.2f, (boxPositionWH.Y / tileSize)));
+            Model.ViewList.Add(new Selection_View(View.Texture, new FloatCoords() { x = (worldPositionXY.X - View.Width) / tileSize, y = worldPositionXY.Y / tileSize }, (boxPositionWH.X / tileSize), 0.2f));
+
+
+            Console.WriteLine(Model.Top);
+            Console.WriteLine(Model.Left);
+            Console.WriteLine(Model.Right);
+            Console.WriteLine(Model.Bottom);
+        }
+
         //Drawing the horizontal and vertical selectionbox
         public void DrawHorizontalLine(int PositionY)
-        {
-            Model.Box.Clear();
-            if (View.Width > 0)
-            {
-                for (int i = 0; i <= View.Width - 10; i += 10)
-                {
-                    if (View.Width - i >= 0)
-                    {
-                        Model.Box.Add(new Selection_View(View.Texture, new FloatCoords() { x = View.Coords.x + i, y = PositionY }, 10, 5));
-                    }
-                }
-            }
-            else if (View.Width < 0)
-            {
-                for (int i = -10; i >= View.Width; i -= 10)
-                {
-                    if (View.Width - i <= 0)
-                    {
-                        Model.Box.Add(new Selection_View(View.Texture, new FloatCoords() { x = View.Coords.x + i, y = PositionY }, 10, 5));
-                        //spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5),
-                        //    Color.White);
-                    }
-                }
-            }
-        }
-        
-        public void DrawVerticalLine(int PositionX)
         {
             if (View.Height > 0)
             {
@@ -220,7 +225,7 @@ namespace kbs2.GamePackage
                 {
                     if (View.Height - i >= 0)
                     {
-                        Model.Box.Add(new Selection_View(View.Texture, new FloatCoords() { x = PositionX, y = View.Coords.y + i }, 10, 5));
+                        //Model.Box.Add(new Selection_View(View.Texture, new FloatCoords() { x = PositionY, y = View.Coords.y + i }, 10, 5));
                         //spriteBatch.Draw(texture, new Rectangle(PositionX, View.Coords.y + i, 10, 5),
                         //    new Rectangle(0, 0, texture.Width, texture.Height), Color.White, MathHelper.ToRadians(90),
                         //    new Vector2(0, 0), SpriteEffects.None, 0);
@@ -234,8 +239,34 @@ namespace kbs2.GamePackage
                 {
                     if (View.Height - i <= 0)
                     {
-                        Model.Box.Add(new Selection_View(View.Texture, new FloatCoords() { x = PositionX - 10, y = View.Coords.y + i }, 10, 5));
+                        //Model.Box.Add(new Selection_View(View.Texture, new FloatCoords() { x = PositionY - 10, y = View.Coords.y + i }, 10, 5));
                         //spriteBatch.Draw(texture, new Rectangle(PositionX - 10, Selection.View.Selection.Y + i, 10, 5),
+                        //    Color.White);
+                    }
+                }
+            }
+        }
+        
+        public void DrawVerticalLine(int PositionX)
+        {
+            if (View.Width > 0)
+            {
+                for (int i = 0; i <= View.Width - 10; i += 10)
+                {
+                    if (View.Width - i >= 0)
+                    {
+                        //Model.Box.Add(new RectangleF(View.Texture, new FloatCoords() { x = View.Coords.x + i, y = PositionX }, 10, 5));
+                    }
+                }
+            }
+            else if (View.Width < 0)
+            {
+                for (int i = -10; i >= View.Width; i -= 10)
+                {
+                    if (View.Width - i <= 0)
+                    {
+                        //Model.Box.Add(new Selection_View(View.Texture, new FloatCoords() { x = View.Coords.x + i, y = PositionX }, 10, 5));
+                        //spriteBatch.Draw(texture, new Rectangle(Selection.View.Selection.X + i, PositionY, 10, 5),
                         //    Color.White);
                     }
                 }
