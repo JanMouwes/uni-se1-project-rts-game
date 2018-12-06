@@ -137,7 +137,7 @@ namespace kbs2.GamePackage
 
 			// ======================================================================================
 
-			gameModel.Selection.DrawSelectionBox(gameModel.World.WorldModel.Units, Mouse.GetState(), Camera.GetViewMatrix(), TileSize, Camera.Zoom);
+			//gameModel.Selection.DrawSelectionBox(gameModel.World.WorldModel.Units, Mouse.GetState(), Camera.GetViewMatrix(), TileSize, Camera.Zoom);
 
             /*gameModel.Selection.DrawHorizontalLine((int) gameModel.Selection.View.Coords.y);
             gameModel.Selection.DrawHorizontalLine((int) (gameModel.Selection.View.Coords.y + gameModel.Selection.View.Height));

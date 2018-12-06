@@ -1,11 +1,12 @@
 ﻿using System;
 using kbs2.Desktop.World.World;
 using kbs2.World.Cell;
+using kbs2.WorldEntity.Interfaces;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 {
-    public class BUCController
+    public class BUCController : IBlockCells
     {
 
         public BUCModel BUCModel { get; set; }
