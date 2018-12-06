@@ -32,11 +32,11 @@ namespace kbs2.GamePackage
         // List For everything
         public List<IViewable> ItemList;
         // List For everything
-        public List<IViewable> StaticItemList;
+        public List<IViewable> GuiItemList;
         // List for drawing items with the camera offset
         public List<IViewable> DrawList;
         // List for drawing items without offset
-        public List<IViewable> DrawStaticList;
+        public List<IViewable> DrawGuiList;
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
@@ -65,9 +65,9 @@ namespace kbs2.GamePackage
 
             // Initializes the lists that hold the views to draw
             ItemList = new List<IViewable>();
-            StaticItemList = new List<IViewable>();
+            GuiItemList = new List<IViewable>();
             DrawList = new List<IViewable>();
-            DrawStaticList = new List<IViewable>();
+            DrawGuiList = new List<IViewable>();
 
             // Initalize game
             base.Initialize();
@@ -147,7 +147,7 @@ namespace kbs2.GamePackage
             gameModel.Selection.DrawVerticalLine((int) (gameModel.Selection.View.Coords.x + gameModel.Selection.View.Width));
 
             for (int i = 0; i < gameModel.Selection.Model.Box.Count; i++){
-                DrawStaticList.Add(gameModel.Selection.Model.Box[i]);
+                DrawGuiList.Add(gameModel.Selection.Model.Box[i]);
             }*/
             
             // Calls the game update
@@ -166,7 +166,7 @@ namespace kbs2.GamePackage
             // Updates everything on screen
             UpdateOnScreen();
 
-            DrawMovable();
+            DrawNonGui();
             
             // Temp Code ==========================
             spriteBatch.Begin();
@@ -181,14 +181,14 @@ namespace kbs2.GamePackage
 
             // End temp code ==========================================
             
-            DrawStationairy();
+            DrawGui();
 
             // Calls the game's draw function
             base.Draw(gameTime);
         }
 
         // Draws every item in the DrawList with camera offset
-        private void DrawMovable()
+        private void DrawNonGui()
         {
             spriteBatch.Begin(transformMatrix: Camera.GetViewMatrix());
 
@@ -203,11 +203,11 @@ namespace kbs2.GamePackage
         }
 
         // Draws every item in the DrawList without offset
-        private void DrawStationairy()
+        private void DrawGui()
         {
             spriteBatch.Begin();
 
-            foreach (IViewable DrawItem in DrawStaticList)
+            foreach (IViewable DrawItem in DrawGuiList)
             {
                 Texture2D texture = this.Content.Load<Texture2D>(DrawItem.Texture);
                 spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
@@ -220,7 +220,7 @@ namespace kbs2.GamePackage
         public void UpdateOnScreen()
         {
             DrawList.Clear();
-            DrawStaticList.Clear();
+            DrawGuiList.Clear();
 
             Vector2 TopLeft = Vector2.Transform(new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y), Camera.GetInverseViewMatrix());
 
@@ -236,18 +236,18 @@ namespace kbs2.GamePackage
                         orderby Item.ZIndex ascending
                         select Item).ToList();
 
-            foreach (var item in StaticItemList)
+            foreach (var item in GuiItemList)
             {
                 if (item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize) continue;
-                DrawStaticList.Add(item);
+                DrawGuiList.Add(item);
             }
 
-            DrawStaticList = (from Item in DrawStaticList
+            DrawGuiList = (from Item in DrawGuiList
                               orderby Item.ZIndex ascending
                         select Item).ToList();
 
             ItemList.Clear();
-            StaticItemList.Clear();
+            GuiItemList.Clear();
         }
 
         // ====================================================================================================== V
