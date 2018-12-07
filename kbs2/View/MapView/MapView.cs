@@ -7,6 +7,7 @@ using kbs2.GamePackage;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.Enums;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;

@@ -8,6 +8,7 @@ using kbs2.Unit.Interfaces;
 using kbs2.Faction.Interfaces;
 using kbs2.WorldEntity;
 using kbs2.GamePackage.Interfaces;
+using kbs2.World.Enums;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.Unit.Model

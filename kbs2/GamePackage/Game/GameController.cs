@@ -9,6 +9,7 @@ using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.Enums;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
@@ -140,6 +141,16 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void UnloadContent()
         {
+        }
+
+
+        private bool chunkExists(Coords chunkCoords) => gameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
+
+        private void loadChunkIfUnloaded(Coords chunkCoords)
+        {
+            if (chunkExists(chunkCoords)) return;
+
+            gameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
         }
 
         /// <summary>

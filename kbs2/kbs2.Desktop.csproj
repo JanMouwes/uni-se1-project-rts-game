@@ -119,6 +119,7 @@
     <Compile Include="World\Cell\WorldCellView.cs" />
     <Compile Include="World\Chunk\WorldChunkController.cs" />
     <Compile Include="World\Chunk\WorldChunkFactory.cs" />
+    <Compile Include="World\Chunk\WorldChunkLoader.cs" />
     <Compile Include="World\Chunk\WorldChunkModel.cs" />
     <Compile Include="World\Interfaces\IConstructable.cs" />
     <Compile Include="World\Structs\FloatCoords.cs" />

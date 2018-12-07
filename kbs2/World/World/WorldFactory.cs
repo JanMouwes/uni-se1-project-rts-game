@@ -22,15 +22,15 @@ namespace kbs2.World.World
             };
 
             // For loop to add chunks from -2 to +2 in both x and y directions. this makes for a 5x5 chunkmap.
-            for(int x = -2; x <= 2; x++)
+            for (int x = -2; x <= 2; x++)
             {
                 for (int y = -2; y <= 2; y++)
                 {
                     // Sets the coords for the new chunk
-                    Coords coords = new Coords { x = x, y = y };
+                    Coords coords = new Coords {x = x, y = y};
 
                     // Initializes a new chunk with the set coords and a basic terrain type
-                    WorldChunkController chunkController = WorldChunkFactory.ChunkOfTerrain(coords);
+                    WorldChunkController chunkController = WorldChunkFactory.ChunkOfDefaultTerrain(coords);
 
                     // Adds the new chunk to the worldgrid
                     world.WorldModel.ChunkGrid.Add(coords, chunkController);
