@@ -14,8 +14,10 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public List<WorldCellModel> LocationCells { get; set; }
 
 
-        public BUCModel(Coords topleft)
+        public BUCModel(Coords topLeft)
         {
+            TopLeft = topLeft;
+            LocationCells = new List<WorldCellModel>();
         }
     }
 }
