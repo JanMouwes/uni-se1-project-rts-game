@@ -154,7 +154,7 @@ namespace kbs2.GamePackage
 
         public RectangleF CalcSelectionBox(MouseState mouse, Matrix matrix, int tileSize)
         {
-            // Bottom Left to Top Right
+            // Bottom Left to Top Right 
             if(mouse.Y < 0 && mouse.X > 0)
             {
                 Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
