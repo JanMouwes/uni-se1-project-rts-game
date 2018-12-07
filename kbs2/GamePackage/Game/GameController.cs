@@ -6,10 +6,12 @@ using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
+using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
 using kbs2.World.Enums;
+using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
@@ -143,8 +145,36 @@ namespace kbs2.GamePackage
         {
         }
 
+        private void mouseChunkLoadUpdate(GameTime gameTime)
+        {
+            MouseState mouseState = Mouse.GetState();
 
-        private bool chunkExists(Coords chunkCoords) => gameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
+            Coords windowCoords = new Coords
+            {
+                x = mouseState.X,
+                y = mouseState.Y
+            };
+
+            FloatCoords cellCoords = (FloatCoords) WorldPositionCalculator.DrawCoordsToCellCoords(
+                WorldPositionCalculator.TransformWindowCoords(
+                    windowCoords,
+                    camera.GetViewMatrix()
+                ),
+                gameView.TileSize
+            );
+
+
+            loadChunkIfUnloaded(cellCoordsToChunkCoords(cellCoords));
+        }
+
+        private Coords cellCoordsToChunkCoords(FloatCoords cellCoords) => new Coords
+        {
+            x = (int) Math.Floor((double) cellCoords.x / WorldChunkModel.ChunkSize),
+            y = (int) Math.Floor((double) cellCoords.y / WorldChunkModel.ChunkSize)
+        };
+
+        private bool chunkExists(Coords chunkCoords) => gameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
+                                                        gameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
 
         private void loadChunkIfUnloaded(Coords chunkCoords)
         {
@@ -196,6 +226,8 @@ namespace kbs2.GamePackage
 
             gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(),
                 gameView.TileSize, camera.Zoom);
+
+            mouseChunkLoadUpdate(gameTime);
 
             // Calls the game update
             base.Update(gameTime);
