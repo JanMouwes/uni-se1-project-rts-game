@@ -11,7 +11,7 @@ namespace kbs2.WorldEntity.Unit
 {
 	public static class UnitFactory
 	{
-
+        /*
 		public static Unit_Controller CreateNewUnit(UnitDef def, Coords TopLeft)
 		{
 			Unit_Controller UnitController = new Unit_Controller();
@@ -30,5 +30,6 @@ namespace kbs2.WorldEntity.Unit
 
 			return UnitController;
 		}
+        */
 	}
 }

@@ -11,6 +11,7 @@ using kbs2.World.Cell;
 using kbs2.World.Chunk;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -21,6 +22,8 @@ namespace kbs2.GamePackage
     public delegate void GameSpeedObserver(object sender, GameSpeedEventArgs eventArgs);
 
     public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
+
+    public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
 
     public class GameController : Game
     {
@@ -54,6 +57,8 @@ namespace kbs2.GamePackage
         }
 
         public event GameSpeedObserver GameSpeedChange;
+
+        public event OnTick onTick;
 
         //    GameState and its event
         private GameState gameState;
@@ -121,8 +126,8 @@ namespace kbs2.GamePackage
             BuildingDef def = DBController.GetDefinitionBuilding(1);
             DBController.CloseConnection();
 
-            Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 });
-            gameModel.World.AddBuilding(def, building);
+            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 30 );
+            gameModel.World.AddBuildingUnderCunstruction(def, building);
             //TESTCODE
         }
 
@@ -173,6 +178,11 @@ namespace kbs2.GamePackage
             gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
 
             gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
+
+            // fire Ontick event
+            OnTickEventArgs args = new OnTickEventArgs(gameTime);
+            onTick?.Invoke(this,args);
+            
 
             // Calls the game update
             base.Update(gameTime);
