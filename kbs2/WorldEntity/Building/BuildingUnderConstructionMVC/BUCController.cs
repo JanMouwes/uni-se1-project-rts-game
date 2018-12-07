@@ -24,6 +24,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             counter.BUCController = this;
         }
 
+        // check if timer has run out and update counter
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
             if(eventArgs.GameTime.TotalGameTime.TotalSeconds > BUCModel.Time)
@@ -33,18 +34,20 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             counter.Text = ((int)(BUCModel.Time - eventArgs.GameTime.TotalGameTime.TotalSeconds)).ToString();
         }
 
-
+        // replace buc with building
         private void SetBuilding()
         {
-
             World.RemoveBUC(this);
+            // romove refrences to this from cells
             foreach(WorldCellModel cell in BUCModel.LocationCells)
             {
                 cell.BuildingOnTop = null;
             }
-
+            // make building
             Building_Controller building = BuildingFactory.CreateNewBuilding(BUCModel.BuildingDef, BUCModel.TopLeft);
             World.AddBuilding(BUCModel.BuildingDef, building);
+
+            // unsub from ontick event
             gameController.onTick -= Update;
         }
     }

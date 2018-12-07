@@ -24,7 +24,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             set => throw new NotImplementedException(); }
         public string SpriteFont { get { return "BuildingTimer"; } set => throw new NotImplementedException(); }
         public string Text { get; set; }
-        public Color Color { get { return Color.Black; } set => throw new NotImplementedException(); }
+        public Color Color { get { return Color.Blue; } set => throw new NotImplementedException(); }
         public int ZIndex { get { return 1; } set => throw new NotImplementedException(); }
     }
 }
