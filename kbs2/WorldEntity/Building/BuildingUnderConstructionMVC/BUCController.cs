@@ -13,6 +13,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public BUCModel BUCModel { get; set; }
         public BUCView BUCView { get; set; }
         public WorldController World { get; set; }
+        public int TimerView  {get; set; }
 
 
         public BUCController()
@@ -25,6 +26,8 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             {
                 SetBuilding();
             }
+            TimerView = BUCModel.Time - eventArgs.GameTime.TotalGameTime.Seconds;
+            Console.WriteLine(TimerView);
         }
 
 
