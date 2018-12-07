@@ -128,8 +128,11 @@ namespace kbs2.GamePackage
             BuildingDef def = DBController.GetDefinitionBuilding(1);
             DBController.CloseConnection();
 
-            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 30 );
+            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 5 );
             gameModel.World.AddBuildingUnderCunstruction(def, building);
+            building.World = gameModel.World;
+            building.gameController = this;
+            onTick += building.Update;
             //TESTCODE
         }
 
@@ -165,6 +168,14 @@ namespace kbs2.GamePackage
             }
 
             gameModel.ItemList.AddRange(buildings);
+
+            List<IViewable> BUCs = new List<IViewable>();
+            foreach (BUCController BUC in gameModel.World.WorldModel.UnderConstruction)
+            {
+                BUCs.Add(BUC.BUCView);
+            }
+
+            gameModel.ItemList.AddRange(BUCs);
 
             List<IViewable> Cells = new List<IViewable>();
             foreach (KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)
