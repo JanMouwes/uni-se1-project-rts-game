@@ -70,25 +70,18 @@ namespace kbs2.GamePackage
 
         public event GameStateObserver GameStateChange;
 
+        private readonly GraphicsDeviceManager graphicsDeviceManager;
+
         private CameraController camera;
 
         public GameController(GameSpeed gameSpeed, GameState gameState)
         {
             this.GameSpeed = gameSpeed;
             this.GameState = gameState;
-            
+
+            graphicsDeviceManager = new GraphicsDeviceManager(this);
+
             Content.RootDirectory = "Content";
-
-            gameModel.World = WorldFactory.GetNewWorld();
-
-            gameModel.Selection = new Selection_Controller("PurpleLine");
-
-            SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
-            camera = new CameraController(GraphicsDevice);
-            GraphicsDeviceManager graphicsDeviceManager = new GraphicsDeviceManager(this);
-            gameView = new GameView(gameModel, graphicsDeviceManager, spriteBatch, camera, GraphicsDevice, Content);
-
-            GameTimer = new Timer(TickIntervalMilliseconds);
         }
 
         /// <summary>
@@ -99,6 +92,16 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void Initialize()
         {
+            gameModel.World = WorldFactory.GetNewWorld();
+
+            gameModel.Selection = new Selection_Controller("PurpleLine");
+
+            SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
+            camera = new CameraController(GraphicsDevice);
+            gameView = new GameView(gameModel, graphicsDeviceManager, spriteBatch, camera, GraphicsDevice, Content);
+
+            GameTimer = new Timer(TickIntervalMilliseconds);
+
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
 
@@ -115,13 +118,12 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void LoadContent()
         {
-
             //TESTCODE
             DBController.OpenConnection("DefDex");
             BuildingDef def = DBController.GetDefinitionBuilding(1);
             DBController.CloseConnection();
 
-            Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 });
+            Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords {x = 0, y = 0});
             gameModel.World.AddBuilding(def, building);
             //TESTCODE
         }
@@ -156,6 +158,7 @@ namespace kbs2.GamePackage
             {
                 buildings.Add(building.View);
             }
+
             gameModel.ItemList.AddRange(buildings);
 
             List<IViewable> Cells = new List<IViewable>();
@@ -166,13 +169,16 @@ namespace kbs2.GamePackage
                     Cells.Add(cell.worldCellView);
                 }
             }
+
             gameModel.ItemList.AddRange(Cells);
 
             // ======================================================================================
 
-            gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
+            gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(),
+                gameView.TileSize);
 
-            gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
+            gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(),
+                gameView.TileSize, camera.Zoom);
 
             // Calls the game update
             base.Update(gameTime);
@@ -190,7 +196,6 @@ namespace kbs2.GamePackage
             base.Draw(gameTime);
         }
 
-        
 
         // ===========================================================================================================================
         // Draws the chunks and cells in a Checkered pattern for easy debugging
@@ -200,12 +205,16 @@ namespace kbs2.GamePackage
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    item2.worldCellView.Color =  Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.x) % 2 ==
-                    (Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.y) % 2 == 1 ? 1 : 0)
-                        ? Math.Abs(item2.worldCellModel.RealCoords.x) % 2 == (Math.Abs(item2.worldCellModel.RealCoords.y) % 2 == 1 ? 1 : 0)
+                    item2.worldCellView.Color = Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.x) % 2 ==
+                                                (Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.y) % 2 == 1
+                                                    ? 1
+                                                    : 0)
+                        ? Math.Abs(item2.worldCellModel.RealCoords.x) % 2 ==
+                          (Math.Abs(item2.worldCellModel.RealCoords.y) % 2 == 1 ? 1 : 0)
                             ? Color.Gray
                             : Color.Yellow
-                        : Math.Abs(item2.worldCellModel.RealCoords.x) % 2 == (Math.Abs(item2.worldCellModel.RealCoords.y) % 2 == 1 ? 1 : 0)
+                        : Math.Abs(item2.worldCellModel.RealCoords.x) % 2 ==
+                          (Math.Abs(item2.worldCellModel.RealCoords.y) % 2 == 1 ? 1 : 0)
                             ? Color.Green
                             : Color.Sienna;
                 }
