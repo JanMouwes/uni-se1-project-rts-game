@@ -9,6 +9,7 @@ using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.TerrainDef;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using Microsoft.Xna.Framework;
@@ -92,6 +93,10 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void Initialize()
         {
+            // Fill the Dictionairy
+            TerrainDef.TerrainDictionairy.Add(TerrainType.Grass, "grass");
+
+            // Generate world
             gameModel.World = WorldFactory.GetNewWorld();
             CellChunkCheckered();
 
