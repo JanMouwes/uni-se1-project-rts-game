@@ -34,6 +34,7 @@ namespace kbs2.World.Chunk
         {
             WorldChunkController controller = new WorldChunkController(chunkCoords);
             controller.WorldChunkModel.grid = new WorldCellController[WorldChunkModel.ChunkSize, WorldChunkModel.ChunkSize];
+            TerrainType terrain = TerrainType.Grass;
 
             for (int i = 0; i < Math.Pow(WorldChunkModel.ChunkSize, 2); i++)
             {
@@ -41,14 +42,14 @@ namespace kbs2.World.Chunk
                 int relXIndex = (int)i % WorldChunkModel.ChunkSize;
                 int relYIndex = (int)Math.Floor(i / (double)WorldChunkModel.ChunkSize);
 
-                controller.WorldChunkModel.grid[relXIndex, relYIndex] = WorldCellFactory.GetNewCell(new Structs.FloatCoords { x = chunkCoords.x * WorldChunkModel.ChunkSize + relXIndex, y = chunkCoords.y * WorldChunkModel.ChunkSize + relYIndex }, TerrainDef.TerrainDef.TerrainDictionairy[terrainType]);
+                controller.WorldChunkModel.grid[relXIndex, relYIndex] = WorldCellFactory.GetNewCell(new Structs.FloatCoords { x = chunkCoords.x * WorldChunkModel.ChunkSize + relXIndex, y = chunkCoords.y * WorldChunkModel.ChunkSize + relYIndex }, TerrainDef.TerrainDef.TerrainDictionairy[terrain]);
             }
 
             foreach (WorldCellController worldCell in controller.WorldChunkModel.grid)
             {
                 WorldCellModel worldCellModel = worldCell.worldCellModel;
 
-                worldCellModel.Terrain = worldCellModel.BaseTerrain = TerrainType.Grass;
+                worldCellModel.Terrain = worldCellModel.BaseTerrain = terrain;
                 worldCellModel.ParentChunk = controller.WorldChunkModel;
             }
 
