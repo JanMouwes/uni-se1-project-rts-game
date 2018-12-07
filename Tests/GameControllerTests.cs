@@ -1,11 +1,8 @@
 ﻿using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.GamePackage;
 using kbs2.GamePackage.EventArgs;
-using kbs2.GamePackage.Game;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Tests
 {

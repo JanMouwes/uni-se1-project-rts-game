@@ -59,6 +59,7 @@
     <Compile Include="Faction\Interfaces\IHasFactionRelationship.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionUnit.cs" />
     <Compile Include="GamePackage\Enums\GameSpeed.cs" />
+    <Compile Include="GamePackage\EventArgs\OnTickEventArgs.cs" />
     <Compile Include="GamePackage\EventArgs\GameSpeedEventArgs.cs" />
     <Compile Include="GamePackage\EventArgs\GameStateEventArgs.cs" />
     <Compile Include="GamePackage\Game\GameController.cs" />

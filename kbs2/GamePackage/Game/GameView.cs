@@ -111,7 +111,6 @@ namespace kbs2.GamePackage
             gameModel.ItemList.Clear();
             gameModel.GuiItemList.Clear();
         }
-
-        // ====================================================================================================== 
+        
     }
 }
