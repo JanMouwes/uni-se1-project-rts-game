@@ -1,4 +1,5 @@
 ﻿using kbs2.World.Structs;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
@@ -20,16 +21,42 @@ namespace kbs2.GamePackage.SelectionBoxMVC
             BoxView = new SelectionBoxView();
         }
 
-        public void DrawSelectionBox(MouseState CurMouseState)
+        public void DrawSelectionBox(MouseState CurMouseState, Matrix matrix, int tileSize)
         {
             if(CurMouseState.LeftButton == ButtonState.Pressed && BoxModel.PreviousMouseState.LeftButton == ButtonState.Released)
             {
-                BoxModel.InitXYCoord = new FloatCoords() { x = CurMouseState.X, y = CurMouseState.Y };
+                BoxView.Coords = new FloatCoords()
+                {
+                    x =
+                    CalcMapPosOf(
+                        new Vector2(CurMouseState.X, CurMouseState.Y),
+                        matrix,
+                        tileSize
+                    ).X,
+                    y =
+                   CalcMapPosOf(
+                        new Vector2(CurMouseState.X, CurMouseState.Y),
+                        matrix,
+                        tileSize
+                    ).Y
+                };
+                    
             }
 
             if (CurMouseState.LeftButton == ButtonState.Pressed && BoxModel.PreviousMouseState.LeftButton == ButtonState.Pressed)
             {
-                SetSelectionBoxWH(CurMouseState.X, CurMouseState.Y);
+                SetSelectionBoxWH(
+                    CalcMapPosOf(
+                        new Vector2(CurMouseState.X, CurMouseState.Y), 
+                        matrix, 
+                        tileSize
+                    ).X, 
+                    CalcMapPosOf(
+                        new Vector2(CurMouseState.X, CurMouseState.Y),
+                        matrix, 
+                        tileSize
+                    ).Y
+                );
             }
 
             if(CurMouseState.LeftButton == ButtonState.Released && BoxModel.PreviousMouseState.LeftButton == ButtonState.Pressed)
@@ -58,43 +85,12 @@ namespace kbs2.GamePackage.SelectionBoxMVC
             BoxView.Height = height;
         }
 
-        public RectangleF ReturnSelectionBox() => new RectangleF(BoxModel.InitXYCoord.x, BoxModel.InitXYCoord.y, BoxView.Width, BoxView.Height);
-
-        /*public void DrawSelectionBox()
+        public Vector2 CalcMapPosOf(Vector2 position, Matrix matrix, int tileSize)
         {
-            if (CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
-            {
-                Model.SelectionBox = new RectangleF(CurMouseState.X, CurMouseState.Y, 0, 0);
-                Vector2 boxPosition = new Vector2(CurMouseState.X, CurMouseState.Y);
-                Vector2 worldPosition = Vector2.Transform(boxPosition, Matrix.Invert(viewMatrix));
-                View.Coords = new FloatCoords() { x = worldPosition.X, y = worldPosition.Y };
-                View.Width = 0;
-                View.Height = 0;
-                AdjustViewBox(CurMouseState, viewMatrix, tileSize, zoom);
-            }
+            Vector2 vector = Vector2.Transform(position, Matrix.Invert(matrix)) / tileSize;
+            return vector;
+        }
 
-            if (CurMouseState.LeftButton == ButtonState.Pressed)
-            {
-                Model.SelectionBox = new RectangleF(Model.SelectionBox.X, Model.SelectionBox.Y, CurMouseState.X - Model.SelectionBox.X, CurMouseState.Y - Model.SelectionBox.Y);
-                View.Coords = new FloatCoords() { x = Model.SelectionBox.X, y = Model.SelectionBox.Y };
-                View.Width = CurMouseState.X - Model.SelectionBox.X;
-                View.Height = CurMouseState.Y - Model.SelectionBox.Y;
-                AdjustViewBox(CurMouseState, viewMatrix, tileSize, zoom);
-            }
-
-            if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Pressed)
-                CheckClickedBox(List, viewMatrix, tileSize, zoom);
-
-            if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Released)
-            {
-                Model.SelectionBox = new RectangleF(-1f, -1f, 0f, 0f);
-                View.Coords = new FloatCoords() { x = -1, y = -1 };
-                View.Width = 0;
-                View.Height = 0;
-                AdjustViewBox(CurMouseState, viewMatrix, tileSize, zoom);
-            }
-
-            Model.PreviousMouseState = CurMouseState;
-        }*/
+        public RectangleF ReturnSelectionBox() => new RectangleF(BoxModel.SelectionBox.X, BoxModel.SelectionBox.Y, BoxView.Width, BoxView.Height);
     }
 }

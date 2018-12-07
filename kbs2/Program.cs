@@ -20,12 +20,12 @@ namespace kbs2.Desktop
             // Fill the Dictionairy
             TerrainDef.TerrainDictionairy.Add(TerrainType.Grass, "grass");
 
-            GameController Controller = new GameController(GameSpeed.Regular, GameState.Running);
-            Controller.CellChunkCheckered();
-            Controller.RandomPattern();
+            GameController game = new GameController(GameSpeed.Regular, GameState.Running);
+            game.CellChunkCheckered();
+            game.RandomPattern();
 
-            using (Controller.gameView)
-                Controller.gameView.Run();
+            using (game)
+                game.Run();
         }
     }
 }
