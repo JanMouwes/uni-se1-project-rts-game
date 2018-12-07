@@ -86,7 +86,7 @@ namespace kbs2.GamePackage
                 spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
             }
 
-            foreach (IText DrawItem in DrawText)
+            foreach (IText DrawItem in DrawGuiText)
             {
                 if (DrawItem == null) continue;
                 SpriteFont font = content.Load<SpriteFont>(DrawItem.SpriteFont);
