@@ -93,6 +93,7 @@ namespace kbs2.GamePackage
         protected override void Initialize()
         {
             gameModel.World = WorldFactory.GetNewWorld();
+            CellChunkCheckered();
 
             gameModel.Selection = new Selection_Controller("PurpleLine");
 
