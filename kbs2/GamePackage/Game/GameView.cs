@@ -69,7 +69,7 @@ namespace kbs2.GamePackage
             {
                 if (DrawItem == null) continue;
                 SpriteFont font = content.Load<SpriteFont>(DrawItem.SpriteFont);
-                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x, DrawItem.Coords.y), DrawItem.Color);
+                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x * TileSize, DrawItem.Coords.y * TileSize), DrawItem.Color);
             }
 
             spriteBatch.End();
@@ -83,7 +83,7 @@ namespace kbs2.GamePackage
             foreach (IViewable DrawItem in DrawGuiList)
             {
                 Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
-                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
+                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x * TileSize, (int)DrawItem.Coords.y * TileSize, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
             }
 
             foreach (IText DrawItem in DrawGuiText)

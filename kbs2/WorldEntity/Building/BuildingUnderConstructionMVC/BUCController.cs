@@ -26,11 +26,11 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
-            if(eventArgs.GameTime.TotalGameTime.Seconds > BUCModel.Time)
+            if(eventArgs.GameTime.TotalGameTime.TotalSeconds > BUCModel.Time)
             {
                 SetBuilding();
             }
-            counter.Text = (BUCModel.Time - eventArgs.GameTime.TotalGameTime.Seconds).ToString();
+            counter.Text = ((int)(BUCModel.Time - eventArgs.GameTime.TotalGameTime.TotalSeconds)).ToString();
         }
 
 
