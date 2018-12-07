@@ -65,6 +65,7 @@
     <Compile Include="GamePackage\Game\GameController.cs" />
     <Compile Include="GamePackage\Game\GameModel.cs" />
     <Compile Include="GamePackage\Game\GameView.cs" />
+    <Compile Include="GamePackage\Interfaces\IText.cs" />
     <Compile Include="GamePackage\Interfaces\IViewable.cs" />
     <Compile Include="GamePackage\Selection\Selection_Controller.cs" />
     <Compile Include="GamePackage\Selection\Selection_Model.cs" />
