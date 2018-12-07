@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+/*using System.Text;
 using System.Threading.Tasks;
 using kbs2.Unit.Unit;
 using kbs2.World;
@@ -32,3 +32,5 @@ namespace kbs2.WorldEntity.Unit
 		}
 	}
 }
+*/
+
