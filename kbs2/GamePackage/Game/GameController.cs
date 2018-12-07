@@ -128,9 +128,10 @@ namespace kbs2.GamePackage
             BuildingDef def = DBController.GetDefinitionBuilding(1);
             DBController.CloseConnection();
 
-            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 10 );
+            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 5 );
             gameModel.World.AddBuildingUnderCunstruction(def, building);
             building.World = gameModel.World;
+            building.gameController = this;
             onTick += building.Update;
             //TESTCODE
         }

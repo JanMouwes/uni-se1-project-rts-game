@@ -1,6 +1,7 @@
 ﻿using System;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.World.World;
+using kbs2.GamePackage;
 using kbs2.World.Cell;
 using kbs2.WorldEntity.Interfaces;
 using Microsoft.Xna.Framework;
@@ -13,6 +14,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public BUCModel BUCModel { get; set; }
         public BUCView BUCView { get; set; }
         public WorldController World { get; set; }
+        public GameController gameController { get; set; }
 
 
         public BUCController()
@@ -39,6 +41,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
             Building_Controller building = BuildingFactory.CreateNewBuilding(BUCModel.BuildingDef, BUCModel.TopLeft);
             World.AddBuilding(BUCModel.BuildingDef, building);
+            gameController.onTick -= Update;
         }
     }
 }
