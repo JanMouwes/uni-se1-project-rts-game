@@ -1,5 +1,4 @@
-﻿using kbs2.GamePackage.SelectionBoxMVC;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -13,11 +12,13 @@ namespace kbs2.GamePackage.Selection
 {
     public class Selection_Model
     {
-        public SelectionBoxController SelectionBox { get; set; } 
+        public RectangleF SelectionBox { get; set; }
+        public MouseState PreviousMouseState { get; set; }
 
         public Selection_Model()
         {
-            SelectionBox = new SelectionBoxController();
+            SelectionBox = new RectangleF();
+            PreviousMouseState = new MouseState();
         }
     }
 }
