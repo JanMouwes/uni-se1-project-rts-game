@@ -1,5 +1,7 @@
 ﻿using System;
+using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.World.World;
+using kbs2.GamePackage;
 using kbs2.World.Cell;
 using kbs2.WorldEntity.Interfaces;
 using Microsoft.Xna.Framework;
@@ -12,23 +14,27 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public BUCModel BUCModel { get; set; }
         public BUCView BUCView { get; set; }
         public WorldController World { get; set; }
+        public GameController gameController { get; set; }
+        public CunstructionCounter counter { get; set; }
 
 
         public BUCController()
         {
+            counter = new CunstructionCounter();
+            counter.BUCController = this;
         }
 
-        public void Update(GameTime gameTime)//todo sub ontick
+        public void Update(object sender, OnTickEventArgs eventArgs)
         {
-            if(gameTime.TotalGameTime.Seconds < BUCModel.Time)
+            if(eventArgs.GameTime.TotalGameTime.TotalSeconds > BUCModel.Time)
             {
                 SetBuilding();
             }
-
+            counter.Text = ((int)(BUCModel.Time - eventArgs.GameTime.TotalGameTime.TotalSeconds)).ToString();
         }
 
 
-        public void SetBuilding()
+        private void SetBuilding()
         {
 
             World.RemoveBUC(this);
@@ -39,6 +45,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
             Building_Controller building = BuildingFactory.CreateNewBuilding(BUCModel.BuildingDef, BUCModel.TopLeft);
             World.AddBuilding(BUCModel.BuildingDef, building);
+            gameController.onTick -= Update;
         }
     }
 }
