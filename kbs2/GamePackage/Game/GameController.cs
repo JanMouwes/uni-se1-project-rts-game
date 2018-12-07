@@ -11,6 +11,7 @@ using kbs2.World.Cell;
 using kbs2.World.Chunk;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -25,7 +26,7 @@ namespace kbs2.GamePackage
     public class GameController : Game
     {
         public GameModel gameModel { get; set; } = new GameModel();
-
+		public Unit_Controller unit { get; set; }
         public GameView gameView { get; set; }
 
         public const int TicksPerSecond = 30;
@@ -92,7 +93,9 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void Initialize()
         {
-            gameModel.World = WorldFactory.GetNewWorld();
+			gameModel.World = WorldFactory.GetNewWorld();
+			// "Is this really necessary?", I asked myself...
+			gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
 
             gameModel.Selection = new Selection_Controller("PurpleLine");
 
@@ -171,6 +174,12 @@ namespace kbs2.GamePackage
             }
 
             gameModel.ItemList.AddRange(Cells);
+
+			unit = new Unit_Controller("purpleline", 1, 1);
+
+			unit.UnitModel = new Unit.Model.Unit_Model( new World.Coords { x=5 , y=5 });
+
+			gameModel.ItemList.Add(unit.UnitView);
 
             // ======================================================================================
 

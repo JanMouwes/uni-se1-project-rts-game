@@ -13,6 +13,9 @@ namespace kbs2.Unit.Unit
         public HPDef HPDef { get; set; }
         public LevelXPDef LevelXPDef { get; set; }
 
-        public UnitDef() { }
+        public UnitDef()
+		{
+
+		}
     }
 }

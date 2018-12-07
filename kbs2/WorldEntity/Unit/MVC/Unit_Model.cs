@@ -17,8 +17,7 @@ namespace kbs2.Unit.Model
         public Faction_Model Faction { get; set; }
         public UnitDef UnitDef;
 
-		public float Width { get; set; }
-		public float Height { get; set; }
+		public Coords coords { get; set; } 
 
 		public bool Selected { get; set; }
 
@@ -28,10 +27,9 @@ namespace kbs2.Unit.Model
 
         public CostValue CostValue { get; set; }
 
-		public Unit_Model(float height, float width)
+		public Unit_Model(Coords locCoords)
         {
-            Height = height;
-            Width = width;
+			coords = locCoords;
             Selected = false;
         }
 

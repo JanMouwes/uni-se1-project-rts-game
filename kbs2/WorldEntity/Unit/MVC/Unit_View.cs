@@ -16,24 +16,25 @@ namespace kbs2.WorldEntity.Unit.MVC
 	{
 		public Unit_Model UnitModel { get; set; }
 
-        public string ImageSrcPri { get; set; }
-        public string ImageSrcSec { get; set; }
+        public string ImageSrc { get; set; }
+		public string ImageSrcShad { get; set; }
 
-		public FloatCoords Coords { get; set; }
-		
+		public FloatCoords Coords { get { return (FloatCoords)UnitModel.coords; } set {; } }
+
 		public float Width { get; set; }
 		public float Height { get; set; }
-		public string Texture { get; set; }
-		public Color Color { get; set; } = Color.White;
-		public int ZIndex { get; set; } = 2;
 
-		public Unit_View(string imageSrc, float width, float height, string texture)
+		public string Texture { get { return ImageSrc; } set {; } }
+		public Color Color { get { return Color.White; } set {; } }
+		public int ZIndex { get { return 2; } set {; } }
+
+		public Unit_View(string imageSrc, float width, float height)
         {
-            ImageSrcPri = imageSrc;
-            ImageSrcSec = "shadow";
+            ImageSrc = imageSrc;
+            ImageSrcShad = "shadow";
 			Width = width;
 			Height = height;
-			Texture = texture;
+			Coords =  (FloatCoords) UnitModel.coords;
         }
 	}
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Model;
+using kbs2.World.Structs;
 using kbs2.WorldEntity.Battle;
 using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
@@ -22,14 +23,13 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public Unit_Model UnitModel;
         public Unit_View UnitView;
 
-		public Unit_Controller(WorldModel worldModel, string imageSrc, float height, float width, float lx, float ly)
+		public Unit_Controller(string imageSrc, float height, float width)
 		{
-            UnitModel = new Unit_Model(height, width);
-            UnitView = new Unit_View(imageSrc, width, height, imageSrc);
-            LocationController = new Location_Controller(worldModel, lx, ly);
+            UnitModel = new Unit_Model(new World.Coords { x=5, y=5 });
+            UnitView = new Unit_View(imageSrc, width, height);
+			UnitView.UnitModel = UnitModel;
             UnitModel.UnitDef = new kbs2.Unit.Unit.UnitDef();
             UnitModel.UnitDef.Speed = 0.04f;
-            LocationController.LocationModel.parrent = this;
         }
         // Create a new unit and add it to a faction
         public void CreateUnit(Faction_Model faction)
@@ -39,7 +39,7 @@ namespace kbs2.WorldEntity.Unit.MVC
 
         public RectangleF CalcClickBox()
         {
-            return new RectangleF(LocationController.LocationModel.floatCoords.x - UnitModel.Width/2, LocationController.LocationModel.floatCoords.y - UnitModel.Height/2, UnitModel.Width, UnitModel.Height);
+            return new RectangleF(LocationController.LocationModel.floatCoords.x - UnitView.Width/2, LocationController.LocationModel.floatCoords.y - UnitView.Height/2, UnitView.Width, UnitView.Height);
         }
 	}
 }

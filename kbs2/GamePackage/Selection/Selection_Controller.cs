@@ -103,14 +103,14 @@ namespace kbs2.GamePackage
                     {
                         SelectedUnits.Add(unit);
                     }
-                    unit.UnitView.ImageSrcSec = unit.UnitModel.Selected ? "shadow" : "shadowselected";
+                    unit.UnitView.ImageSrcShad = unit.UnitModel.Selected ? "shadow" : "shadowselected";
                     unit.UnitModel.Selected = !unit.UnitModel.Selected;
                 }
                 else
                 {
                     // Clears the list and adds the selected unit
                     unit.UnitModel.Selected = true;
-                    unit.UnitView.ImageSrcSec = "shadowselected";
+                    unit.UnitView.ImageSrcShad = "shadowselected";
                     SelectedUnits.Add(unit);
                 }
             }
@@ -140,7 +140,7 @@ namespace kbs2.GamePackage
             foreach(Unit_Controller unit in SelectedUnits)
             {
                 unit.UnitModel.Selected = false;
-                unit.UnitView.ImageSrcSec = "shadow";
+                unit.UnitView.ImageSrcShad = "shadow";
             }
 
             SelectedUnits.Clear();
