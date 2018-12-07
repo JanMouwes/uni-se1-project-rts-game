@@ -1,4 +1,5 @@
 ﻿using System;
+using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.World.World;
 using kbs2.World.Cell;
 using kbs2.WorldEntity.Interfaces;
@@ -18,17 +19,16 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         {
         }
 
-        public void Update(GameTime gameTime)//todo sub ontick
+        public void Update(object sender, OnTickEventArgs eventArgs)
         {
-            if(gameTime.TotalGameTime.Seconds < BUCModel.Time)
+            if(eventArgs.GameTime.TotalGameTime.Seconds > BUCModel.Time)
             {
                 SetBuilding();
             }
-
         }
 
 
-        public void SetBuilding()
+        private void SetBuilding()
         {
 
             World.RemoveBUC(this);
