@@ -164,14 +164,8 @@ namespace kbs2.GamePackage
             );
 
 
-            loadChunkIfUnloaded(cellCoordsToChunkCoords(cellCoords));
+            loadChunkIfUnloaded(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
         }
-
-        private Coords cellCoordsToChunkCoords(FloatCoords cellCoords) => new Coords
-        {
-            x = (int) Math.Floor((double) cellCoords.x / WorldChunkModel.ChunkSize),
-            y = (int) Math.Floor((double) cellCoords.y / WorldChunkModel.ChunkSize)
-        };
 
         private bool chunkExists(Coords chunkCoords) => gameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
                                                         gameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;

@@ -1,4 +1,7 @@
+using System;
 using kbs2.World;
+using kbs2.World.Chunk;
+using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.utils
@@ -20,6 +23,12 @@ namespace kbs2.utils
         {
             x = drawCoords.x / tileSize,
             y = drawCoords.y / tileSize
+        };
+
+        public static Coords ChunkCoordsOfCellCoords(FloatCoords cellCoords) => new Coords
+        {
+            x = (int) Math.Floor((double) cellCoords.x / WorldChunkModel.ChunkSize),
+            y = (int) Math.Floor((double) cellCoords.y / WorldChunkModel.ChunkSize)
         };
     }
 }
