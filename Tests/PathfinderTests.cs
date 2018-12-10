@@ -84,18 +84,18 @@ namespace Tests
 
         
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        public void MinimizeWaypointTest(int index)
-        {
-            List < FloatCoords > x = pathfinder.MinimizeWaypoints(input[index]);
-
-            for(int i =0; i<output[index].Count ; i++)
-            {
-                Assert.IsTrue(x[i] == output[index][i]);
-            }
-        }
+//        [Test]
+//        [TestCase(0)]
+//        [TestCase(1)]
+//        public void MinimizeWaypointTest(int index)
+//        {
+//            List < FloatCoords > x = pathfinder.MinimizeWaypoints(input[index]);
+//
+//            for(int i =0; i<output[index].Count ; i++)
+//            {
+//                Assert.IsTrue(x[i] == output[index][i]);
+//            }
+//        }
 
         [Test]
         [TestCase(0)]
