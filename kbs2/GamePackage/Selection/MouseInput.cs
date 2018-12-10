@@ -4,8 +4,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.GamePackage
 {
+	//public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> e);
+
 	public class MouseInput
 	{
+		
 		public MouseState PreviousMouseState { get; set; }
 		public ButtonState MouseInputStatus { get; set; } 
 
@@ -14,6 +17,8 @@ namespace kbs2.GamePackage
 			
 			PreviousMouseState = new MouseState();
 		}
+
+
 
 		public void OnMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
 		{

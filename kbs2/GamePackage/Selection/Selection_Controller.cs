@@ -31,6 +31,10 @@ namespace kbs2.GamePackage
 			SelectedUnits = new List<Unit_Controller>();
         }
 
+		public void onMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
+		{
+
+		}
 		// Checks if the unit is selected on screen with the left mouse button (drag and click) and adds it to the SelectedUnits list
 		public void CheckClickedBox(List<Unit_Controller> List, Matrix viewMatrix, int tileSize, float zoom)
         {

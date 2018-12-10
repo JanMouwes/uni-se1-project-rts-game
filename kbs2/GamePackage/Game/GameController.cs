@@ -25,7 +25,7 @@ namespace kbs2.GamePackage
 
     public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
 
-	public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> eventArgsWithPayload);
+	public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> e);
 
     public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
 
