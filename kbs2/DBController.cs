@@ -73,7 +73,7 @@ namespace kbs2
         {
             UnitDef returnedUnitDef = new UnitDef();
 
-            string query = $"SELECT * FROM UnitDef JOIN BattleDef ON Id = BattleDef.UnitDefId JOIN HPDef ON Id = HPDef.UnitDefId JOIN LevelXPDef ON Id = LevelXPDef.UnitDefID WHERE Id=@i";
+            string query = $"SELECT * FROM UnitDef WHERE Id=@i";
                 
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
@@ -89,7 +89,7 @@ namespace kbs2
                         returnedUnitDef.Width = float.Parse(reader["Width"].ToString());
                         returnedUnitDef.Height = float.Parse(reader["Height"].ToString());
 
-                        returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());
+                        /*returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());
                         returnedUnitDef.BattleDef.DefenseModifier = double.Parse(reader["BattleDef.DefenseModifier"].ToString());
                         returnedUnitDef.BattleDef.Accuracy = double.Parse(reader["BattleDef.Accuracy"].ToString());
                         returnedUnitDef.BattleDef.DodgeChance = double.Parse(reader["BattleDef.DodgeChance"].ToString());
@@ -100,7 +100,7 @@ namespace kbs2
 
                         returnedUnitDef.LevelXPDef.Level = int.Parse(reader["LevelXPDef.Level"].ToString());
                         returnedUnitDef.LevelXPDef.XP = int.Parse(reader["LevelXPDef.XP"].ToString());
-                        returnedUnitDef.LevelXPDef.XPNeed = int.Parse(reader["LevelXPDef.XPNeed"].ToString());
+                        returnedUnitDef.LevelXPDef.XPNeed = int.Parse(reader["LevelXPDef.XPNeed"].ToString());*/
                     }
                 }
             }
