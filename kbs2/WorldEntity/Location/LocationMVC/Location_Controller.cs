@@ -34,7 +34,7 @@ namespace kbs2.WorldEntity.Location
         {
             if(Waypoints.Count > 0)
             {
-                float speed = LocationModel.parrent.UnitModel.UnitDef.Speed;
+                float speed = LocationModel.parrent.UnitModel.Speed;
 
                 if (getDistance2d(Waypoints[0], LocationModel.floatCoords) < speed)
                 {

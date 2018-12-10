@@ -6,6 +6,7 @@ using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
+using kbs2.Unit.Unit;
 using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
@@ -16,6 +17,8 @@ using kbs2.World.TerrainDef;
 using kbs2.UserInterface;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Unit;
+using kbs2.WorldEntity.Unit.MVC;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -33,7 +36,6 @@ namespace kbs2.GamePackage
     public class GameController : Game
     {
         public GameModel gameModel { get; set; } = new GameModel();
-
         public GameView gameView { get; set; }
 
         public const int TicksPerSecond = 30;
@@ -104,6 +106,10 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void Initialize()
         {
+			      gameModel.World = WorldFactory.GetNewWorld();
+			      // "Is this really necessary?", I asked myself...
+			      gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
+      
             // Fill the Dictionairy
             TerrainDef.TerrainDictionary.Add(TerrainType.Grass, "grass");
 
@@ -137,7 +143,13 @@ namespace kbs2.GamePackage
             //TESTCODE
             DBController.OpenConnection("DefDex");
             BuildingDef def = DBController.GetDefinitionBuilding(1);
+            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
             DBController.CloseConnection();
+
+            Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords {x = 0, y = 0});
+            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords {x = 5, y = 5});
+            
+            gameModel.World.AddBuilding(def, building);
 
             BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 10 );
             gameModel.World.AddBuildingUnderCunstruction(def, building);
@@ -244,6 +256,14 @@ namespace kbs2.GamePackage
 
 
             gameModel.ItemList.AddRange(Cells);
+
+            DBController.OpenConnection("DefDex");
+            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
+            DBController.CloseConnection();
+
+            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords { x = 5, y = 5 });
+
+            gameModel.ItemList.Add(unit.UnitView);
 
 
             if (Keyboard.GetState().IsKeyDown(Keys.R)) RandomPattern2();
