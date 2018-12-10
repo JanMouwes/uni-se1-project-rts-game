@@ -222,7 +222,7 @@ namespace kbs2.GamePackage
                 {
                     Cells.Add(cell.worldCellView);
                 }
-            }
+            }   
 
             gameModel.ItemList.AddRange(Cells);
 
@@ -241,8 +241,6 @@ namespace kbs2.GamePackage
 
             // Calls the game update
             base.Update(gameTime);
-
-
 			
         }
 

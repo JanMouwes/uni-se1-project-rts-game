@@ -21,8 +21,8 @@ namespace kbs2.View.GUI.ActionBox
         public ActionBoxView(FloatCoords loc)
         {
             Coords = loc;
-            Width = 76;
-            Height = 30;
+            Width = 2;
+            Height = 1;
             Texture = "unittrainbalkje";
             Color = Color.White;
             ZIndex = 500;
