@@ -98,7 +98,8 @@ namespace kbs2.GamePackage
         protected override void Initialize()
         {
             gameModel.World = WorldFactory.GetNewWorld();
-            CellChunkCheckered();
+            //CellChunkCheckered();
+            RandomPattern2();
 
             gameModel.Selection = new Selection_Controller("PurpleLine");
 
@@ -129,7 +130,7 @@ namespace kbs2.GamePackage
             BuildingDef def = DBController.GetDefinitionBuilding(1);
             DBController.CloseConnection();
 
-            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 110 );
+            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 10 );
             gameModel.World.AddBuildingUnderCunstruction(def, building);
             building.World = gameModel.World;
             building.gameController = this;
@@ -254,6 +255,29 @@ namespace kbs2.GamePackage
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
                     item2.worldCellView.Color = random.Next(0, 3) == 1 ? Color.Gray : Color.Pink;
+                }
+            }
+        }
+
+        public void RandomPattern2()
+        {
+            Random random = new Random();
+
+            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
+                {
+                    switch (random.Next(0, 3))
+                    {
+                        case 0:
+                            item2.worldCellView.Color = Color.Gray;
+                            break;
+                        case 1:
+                            item2.worldCellView.Color = Color.Pink;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
