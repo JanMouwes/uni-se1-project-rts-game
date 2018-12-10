@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using kbs2.World;
 using kbs2.World.Chunk;
@@ -16,6 +17,8 @@ namespace kbs2.Desktop.World.World
         public List<Building_Controller> buildings { get; set; }
         public List<BUCController> UnderConstruction { get; set; }
         public List<Unit_Controller> Units { get; set; }
+
+        public readonly int seed = new Random().Next(0, 10000);
 
         public WorldModel()
         {
