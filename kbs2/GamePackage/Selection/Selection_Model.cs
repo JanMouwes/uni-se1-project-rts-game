@@ -13,12 +13,10 @@ namespace kbs2.GamePackage.Selection
     public class Selection_Model
     {
         public RectangleF SelectionBox { get; set; }
-        public MouseState PreviousMouseState { get; set; }
 
         public Selection_Model()
         {
             SelectionBox = new RectangleF();
-            PreviousMouseState = new MouseState();
         }
     }
 }

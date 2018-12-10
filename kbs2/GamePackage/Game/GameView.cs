@@ -83,7 +83,9 @@ namespace kbs2.GamePackage
             foreach (IViewable DrawItem in DrawGuiList)
             {
                 Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
+
                 spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)DrawItem.Width, (int)DrawItem.Height), DrawItem.Color);
+
             }
 
             foreach (IText DrawItem in DrawGuiText)
