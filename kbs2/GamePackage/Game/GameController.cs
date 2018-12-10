@@ -6,9 +6,11 @@ using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
+using kbs2.View.GUI.ActionBox;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
@@ -117,6 +119,7 @@ namespace kbs2.GamePackage
             CellChunkCheckered();
 
             gameModel.Selection = new Selection_Controller("PurpleLine");
+            gameModel.ActionBox = new ActionBoxController(new FloatCoords() { x = 50, y = 50 });
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
             camera = new CameraController(GraphicsDevice);
@@ -201,6 +204,8 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.AddRange(BUCs);
             gameModel.TextList.AddRange(Counters);
+            gameModel.GuiItemList.Add(gameModel.ActionBox.BoxView);
+            gameModel.GuiTextList.Add(gameModel.ActionBox.BoxModel.Text);
 
             List<IViewable> Cells = new List<IViewable>();
             foreach (KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)

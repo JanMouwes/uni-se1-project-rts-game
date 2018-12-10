@@ -9,23 +9,22 @@ using System.Threading.Tasks;
 
 namespace kbs2.View.GUI.ActionBox
 {
-    public class ActionBoxView : IViewable
+    public class ActionBoxTextView : IText
     {
         public FloatCoords Coords { get; set; }
-        public float Width { get; set; }
-        public float Height { get; set; }
-        public string Texture { get; set; }
+        public string SpriteFont { get; set; }
+        public string Text { get; set; }
         public Color Color { get; set; }
         public int ZIndex { get; set; }
 
-        public ActionBoxView(FloatCoords loc)
+        public ActionBoxTextView(FloatCoords loc)
         {
             Coords = loc;
-            Width = 76;
-            Height = 30;
-            Texture = "unittrainbalkje";
-            Color = Color.White;
-            ZIndex = 500;
+            SpriteFont = "BuildingTimer";
+            Text = "Raichu";
+            Color = Color.LightGreen;
+            ZIndex = 501;
         }
+
     }
 }

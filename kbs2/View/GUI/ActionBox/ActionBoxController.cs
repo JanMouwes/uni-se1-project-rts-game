@@ -14,7 +14,7 @@ namespace kbs2.View.GUI.ActionBox
 
         public ActionBoxController(FloatCoords loc)
         {
-            BoxModel = new ActionBoxModel();
+            BoxModel = new ActionBoxModel(loc);
             BoxView = new ActionBoxView(loc);
         }
     }
