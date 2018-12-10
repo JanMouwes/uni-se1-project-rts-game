@@ -32,7 +32,8 @@ namespace kbs2.World.Cell
             }
             else if(currentNoise < 0.5)
             {
-                textureType = (currentNoise < 0.45 && currentNoise > 0.35 && new Random().Next(1, 5) > 2)? TerrainType.Trees: TerrainType.Grass;
+                double treeChance = ((currentNoise - 0.4) * 10) + 0.5;
+                textureType = (currentNoise < 0.55 && currentNoise > 0.25 && treeChance > 0.5)? TerrainType.Trees: TerrainType.Grass;
             }
             else if(currentNoise < 0.70)
             {
