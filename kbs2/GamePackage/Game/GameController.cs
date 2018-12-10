@@ -23,6 +23,8 @@ namespace kbs2.GamePackage
 
     public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
 
+	public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> eventArgsWithPayload);
+
     public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
 
     public class GameController : Game
@@ -57,6 +59,20 @@ namespace kbs2.GamePackage
         }
 
         public event GameSpeedObserver GameSpeedChange;
+
+		public event MouseStateObserver MouseStateChange;
+
+		private MouseState mouseStatus;
+
+		public MouseState MouseStatus
+		{
+			get => mouseStatus;
+			set
+			{
+				mouseStatus = value;
+				MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(mouseStatus));
+			}
+		}
 
         public event OnTick onTick;
 
@@ -134,7 +150,12 @@ namespace kbs2.GamePackage
             building.World = gameModel.World;
             building.gameController = this;
             onTick += building.Update;
-            //TESTCODE
+			//TESTCODE
+
+			//============= More TestCode ===============
+
+			MouseStateChange += gameModel.Selection.OnMouseStateChange;
+
         }
 
         /// <summary>
@@ -201,10 +222,17 @@ namespace kbs2.GamePackage
             // fire Ontick event
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this,args);
-            
 
-            // Calls the game update
-            base.Update(gameTime);
+			//======= Fire MOUSESTATE ================
+			EventArgsWithPayload<MouseState> mouse = new EventArgsWithPayload<MouseState>(mouseStatus);
+			MouseStateChange?.Invoke(this, mouse);
+
+			
+			// Calls the game update
+			base.Update(gameTime);
+
+
+			
         }
 
         /// <summary>
