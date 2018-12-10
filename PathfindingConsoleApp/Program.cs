@@ -22,31 +22,37 @@ namespace PathfindingConsoleApp
             coords.y = 0;
 
 
-            for (int x = 0; x < 10;x++){
-                for (int y = 0; y < 10; y++)
-                {
-                    if(x==0&&y==0){
-                        continue;
-                    }
-                    if (x == 9 && y == 9)
-                    {
-                        continue;
-                    }
-                    if(random.Next(3)==0){
-
-                        world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].Terrain = TerrainType.Water;
-                    }
-                }
-            }
             for (int x = 0; x < 10; x++)
             {
                 for (int y = 0; y < 10; y++)
                 {
+                    if (x == 0 && y == 0)
+                    {
+                        continue;
+                    }
 
+                    if (x == 9 && y == 9)
+                    {
+                        continue;
+                    }
+
+                    if (random.Next(3) == 0)
+                    {
+                        world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].worldCellModel.Terrain =
+                            TerrainType.Water;
+                    }
+                }
+            }
+
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
                     FloatCoords currentCoords = new FloatCoords();
                     currentCoords.x = x;
                     currentCoords.y = y;
-                    if (world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].Terrain == TerrainType.Water)
+                    if (world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].worldCellModel.Terrain ==
+                        TerrainType.Water)
                     {
                         Console.Write("W ");
                     }
@@ -54,25 +60,22 @@ namespace PathfindingConsoleApp
                     {
                         Console.Write("* ");
                     }
-
                 }
+
                 Console.WriteLine();
             }
+
             Console.WriteLine();
 
 
             Pathfinder pathfinder = new Pathfinder(world.WorldModel, 150);
-            
 
 
-
-            Location_Model locationModel = new Location_Model();
+            Location_Model locationModel = new Location_Model(0, 0);
             locationModel.UnwalkableTerrain = new List<TerrainType>();
             locationModel.UnwalkableTerrain.Add(TerrainType.Water);
             locationModel.floatCoords.x = 0;
             locationModel.floatCoords.y = 0;
-            locationModel.coords.x = 0;
-            locationModel.coords.y = 0;
 
             FloatCoords floatCoords = new FloatCoords();
             floatCoords.x = 9;
@@ -84,32 +87,6 @@ namespace PathfindingConsoleApp
             {
                 for (int y = 0; y < 10; y++)
                 {
-
-                    FloatCoords currentCoords = new FloatCoords();
-                    currentCoords.x = x;
-                    currentCoords.y = y;
-                    if(waypoints.Contains(currentCoords)){
-                        Console.Write(waypoints.IndexOf(currentCoords)+" ");
-                    } else {
-                        if(world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].Terrain == TerrainType.Water){
-                            Console.Write("W ");
-                        }else{
-                            Console.Write("* ");
-                        }
-                    }
-                }
-                Console.WriteLine();
-            }
-
-            Console.WriteLine();
-
-             waypoints = pathfinder.FindPath2(floatCoords, locationModel);
-
-            for (int x = 0; x < 10; x++)
-            {
-                for (int y = 0; y < 10; y++)
-                {
-
                     FloatCoords currentCoords = new FloatCoords();
                     currentCoords.x = x;
                     currentCoords.y = y;
@@ -119,7 +96,8 @@ namespace PathfindingConsoleApp
                     }
                     else
                     {
-                        if (world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].Terrain == TerrainType.Water)
+                        if (world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].worldCellModel.Terrain ==
+                            TerrainType.Water)
                         {
                             Console.Write("W ");
                         }
@@ -129,11 +107,43 @@ namespace PathfindingConsoleApp
                         }
                     }
                 }
+
+                Console.WriteLine();
+            }
+
+            Console.WriteLine();
+
+            waypoints = pathfinder.FindPath2(floatCoords, locationModel);
+
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    FloatCoords currentCoords = new FloatCoords();
+                    currentCoords.x = x;
+                    currentCoords.y = y;
+                    if (waypoints.Contains(currentCoords))
+                    {
+                        Console.Write(waypoints.IndexOf(currentCoords) + " ");
+                    }
+                    else
+                    {
+                        if (world.WorldModel.ChunkGrid[coords].WorldChunkModel.grid[x, y].worldCellModel.Terrain ==
+                            TerrainType.Water)
+                        {
+                            Console.Write("W ");
+                        }
+                        else
+                        {
+                            Console.Write("* ");
+                        }
+                    }
+                }
+
                 Console.WriteLine();
             }
 
             Console.Read();
-
         }
     }
 }
