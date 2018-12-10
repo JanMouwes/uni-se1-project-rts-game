@@ -40,6 +40,7 @@ namespace kbs2.GamePackage
         private Timer GameTimer; //TODO
 
         public ActionInterface ActionInterface { get; set; }// testcode ===============
+        public bool QPressed { get; set; }
 
         public event ElapsedEventHandler GameTick
         {
@@ -121,6 +122,8 @@ namespace kbs2.GamePackage
 
             // Initalize game
             base.Initialize();
+
+
         }
 
         /// <summary>
@@ -130,15 +133,9 @@ namespace kbs2.GamePackage
         protected override void LoadContent()
         {
             //TESTCODE
-            DBController.OpenConnection("DefDex");
-            BuildingDef def = DBController.GetDefinitionBuilding(1);
-            DBController.CloseConnection();
+            QPressed = false;
 
-            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 10 );
-            gameModel.World.AddBuildingUnderCunstruction(def, building);
-            building.World = gameModel.World;
-            building.gameController = this;
-            onTick += building.Update;
+            
 
             UIView ui = new UIView(this);
 
@@ -172,6 +169,8 @@ namespace kbs2.GamePackage
 
             // Updates camera according to the pressed buttons
             camera.MoveCamera();
+
+            SetBuilding();// testcode
 
             // ============== Temp Code ===================================================================
             // Update Buildings on screen
@@ -220,6 +219,32 @@ namespace kbs2.GamePackage
             // Calls the game update
             base.Update(gameTime);
         }
+
+        //testcode
+        public void SetBuilding()
+        {
+            if (!QPressed && Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                DBController.OpenConnection("DefDex");
+                BuildingDef def = DBController.GetDefinitionBuilding(1);
+                DBController.CloseConnection();
+
+                MouseState temp = Mouse.GetState();
+
+
+                BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = temp.X/gameView.TileSize, y = temp.Y / gameView.TileSize }, 20);
+                gameModel.World.AddBuildingUnderCunstruction(def, building);
+                building.World = gameModel.World;
+                building.gameController = this;
+                onTick += building.Update;
+            }
+            if (!Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                QPressed = false;
+            }
+        }
+        //testcode
+
 
         /// <summary>
         /// This is called when the game should draw itself.
