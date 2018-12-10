@@ -16,7 +16,9 @@ namespace kbs2.World.Cell
         {
             myNoise.SetNoiseType(FastNoise.NoiseType.Perlin); // Set the desired noise type
 
+            // Todo add all terain types and such
             TerrainType textureType = (myNoise.GetNoise(coords.x, coords.y) > 0) ? TerrainType.Grass: TerrainType.Water;
+
             string texture = TerrainDef.TerrainDef.TerrainDictionary[textureType];
             return new WorldCellController(coords, texture);
         }
