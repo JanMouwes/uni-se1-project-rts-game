@@ -11,7 +11,8 @@ namespace kbs2.utils
         //    Transforms window-coords in pixels to map-coords in pixels (draw-coords)
         public static Coords TransformWindowCoords(Coords windowCoordsInPixels, Matrix matrix)
         {
-            Vector2 transformed = Vector2.Transform(new Vector2(windowCoordsInPixels.x, windowCoordsInPixels.y), Matrix.Invert(matrix));
+            Vector2 transformed = Vector2.Transform(new Vector2(windowCoordsInPixels.x, windowCoordsInPixels.y),
+                Matrix.Invert(matrix));
 
             return new Coords
             {
@@ -23,8 +24,8 @@ namespace kbs2.utils
         //    Calculates cell-coords from draw-coords.
         public static Coords DrawCoordsToCellCoords(Coords drawCoords, int tileSize) => new Coords
         {
-            x = drawCoords.x / tileSize,
-            y = drawCoords.y / tileSize
+            x = drawCoords.x / tileSize - (drawCoords.x < 0 ? 1 : 0),
+            y = drawCoords.y / tileSize - (drawCoords.y < 0 ? 1 : 0)
         };
 
         //    Calculates chunk-coords from cell-coords  
