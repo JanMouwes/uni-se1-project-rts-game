@@ -6,11 +6,14 @@ using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
-using kbs2.UserInterface;
+using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.Enums;
 using kbs2.World.Structs;
+using kbs2.World.TerrainDef;
+using kbs2.UserInterface;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
@@ -101,6 +104,10 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void Initialize()
         {
+            // Fill the Dictionairy
+            TerrainDef.TerrainDictionary.Add(TerrainType.Grass, "grass");
+
+            // Generate world
             gameModel.World = WorldFactory.GetNewWorld();
 
             gameModel.Selection = new Selection_Controller("PurpleLine");
@@ -156,6 +163,39 @@ namespace kbs2.GamePackage
         {
         }
 
+        //    Loads chunk at mouse coordinates if not already loaded
+        private void mouseChunkLoadUpdate(GameTime gameTime)
+        {
+            MouseState mouseState = Mouse.GetState();
+
+            Coords windowCoords = new Coords
+            {
+                x = mouseState.X,
+                y = mouseState.Y
+            };
+
+            FloatCoords cellCoords = (FloatCoords) WorldPositionCalculator.DrawCoordsToCellCoords(
+                WorldPositionCalculator.TransformWindowCoords(
+                    windowCoords,
+                    camera.GetViewMatrix()
+                ),
+                gameView.TileSize
+            );
+
+
+            loadChunkIfUnloaded(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
+        }
+
+        private bool chunkExists(Coords chunkCoords) => gameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
+                                                        gameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
+
+        private void loadChunkIfUnloaded(Coords chunkCoords)
+        {
+            if (chunkExists(chunkCoords)) return;
+
+            gameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
+        }
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -201,6 +241,7 @@ namespace kbs2.GamePackage
                     Cells.Add(cell.worldCellView);
                 }
             }
+
 
             gameModel.ItemList.AddRange(Cells);
 
