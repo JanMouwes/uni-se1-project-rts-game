@@ -12,27 +12,16 @@ namespace kbs2.WorldEntity.Unit
 {
 	public static class UnitFactory
 	{
-		//public static Unit_Controller CreateNewUnit(UnitDef def, Coords TopLeft)
-		//{
-			//WorldModel world = new WorldModel();
-			//Unit_Controller UnitController = new Unit_Controller();
-
-			//Algemene pathfinder maken en die meegeven als referentie in deze factory
-			// Waar moet ik nu een pathfinder aanmaken?
-
-
-			//Unit_Model model = new Unit_Model(TopLeft);
-			//building_Controller.Model = model;
-			//BuildingView view = new BuildingView(def.imageSrc, def.height, def.width)
-			//{
-			//	BuildingModel = model
-			//};
-			//building_Controller.View = view;
-			// nog niet werkend
-
-			//return UnitController;
-		//}
-	}
+		public static Unit_Controller CreateNewUnit(UnitDef def, Coords TopLeft)
+        {
+            Unit_Controller UnitController = new Unit_Controller(TopLeft);
+            UnitController.UnitView.Texture = def.Image;
+            UnitController.UnitView.Width = def.Width;
+            UnitController.UnitView.Height = def.Height;
+            UnitController.UnitModel.Speed = def.Speed;
+            return UnitController;
+        }
+    }
 }
 
 

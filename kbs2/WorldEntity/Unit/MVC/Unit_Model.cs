@@ -15,7 +15,6 @@ namespace kbs2.Unit.Model
     public class Unit_Model : IHasPersonalSpace, IPurchasable, IElemental, IHasFaction
     {
         public Faction_Model Faction { get; set; }
-        public UnitDef UnitDef;
 
 		public Coords coords { get; set; } 
 
@@ -27,20 +26,12 @@ namespace kbs2.Unit.Model
 
         public CostValue CostValue { get; set; }
 
+        public float Speed { get; set; }
+
 		public Unit_Model(Coords locCoords)
         {
 			coords = locCoords;
             Selected = false;
         }
-
-        public void InsertUnitDef(int id)
-        {
-            DBController.OpenConnection("DefDex");
-
-            UnitDef = DBController.GetDefinitionFromUnit(1);
-
-            DBController.CloseConnection();
-        }
-
     }
 }

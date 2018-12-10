@@ -73,13 +73,8 @@ namespace kbs2
         {
             UnitDef returnedUnitDef = new UnitDef();
 
-            string query =
-                "SELECT * " +
-                "FROM UnitDef " +
-                "WHERE Id=@i " + // CHANGE to Name or Id
-                "JOIN BattleDef ON Id = BattleDef.UnitDefId " +
-                "JOIN HPDef ON Id = HPDef.UnitDefId " +
-                "JOIN LevelXPDef ON Id = LevelXPDef.UnitDefID";
+            string query = $"SELECT * FROM UnitDef JOIN BattleDef ON Id = BattleDef.UnitDefId JOIN HPDef ON Id = HPDef.UnitDefId JOIN LevelXPDef ON Id = LevelXPDef.UnitDefID WHERE Id=@i";
+                
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
             {
@@ -89,20 +84,23 @@ namespace kbs2
                 {
                     while (reader.Read())
                     {
-                        returnedUnitDef.Speed = (float)reader["Speed"];
+                        returnedUnitDef.Speed = float.Parse(reader["Speed"].ToString());
+                        returnedUnitDef.Image = reader["Image"].ToString();
+                        returnedUnitDef.Width = float.Parse(reader["Width"].ToString());
+                        returnedUnitDef.Height = float.Parse(reader["Height"].ToString());
 
-                        returnedUnitDef.BattleDef.AttackModifier = (double)reader["BattleDef.AttackModifier"];
-                        returnedUnitDef.BattleDef.DefenseModifier = (double)reader["BattleDef.DefenseModifier"];
-                        returnedUnitDef.BattleDef.Accuracy = (double)reader["BattleDef.Accuracy"];
-                        returnedUnitDef.BattleDef.DodgeChance = (double)reader["BattleDef.DodgeChance"];
-                        returnedUnitDef.BattleDef.RangeModifier = (double)reader["BattleDef.RangeModifier"];
+                        returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());
+                        returnedUnitDef.BattleDef.DefenseModifier = double.Parse(reader["BattleDef.DefenseModifier"].ToString());
+                        returnedUnitDef.BattleDef.Accuracy = double.Parse(reader["BattleDef.Accuracy"].ToString());
+                        returnedUnitDef.BattleDef.DodgeChance = double.Parse(reader["BattleDef.DodgeChance"].ToString());
+                        returnedUnitDef.BattleDef.RangeModifier = double.Parse(reader["BattleDef.RangeModifier"].ToString());
 
-                        returnedUnitDef.HPDef.CurrentHP = (int)reader["HPDef.CurrentHP"];
-                        returnedUnitDef.HPDef.MaxHP = (int)reader["HPDef.MaxHP"];
+                        returnedUnitDef.HPDef.CurrentHP = int.Parse(reader["HPDef.CurrentHP"].ToString());
+                        returnedUnitDef.HPDef.MaxHP = int.Parse(reader["HPDef.MaxHP"].ToString());
 
-                        returnedUnitDef.LevelXPDef.Level = (int)reader["LevelXPDef.Level"];
-                        returnedUnitDef.LevelXPDef.XP = (int)reader["LevelXPDef.XP"];
-                        returnedUnitDef.LevelXPDef.XPNeed = (int)reader["LevelXPDef.XPNeed"];
+                        returnedUnitDef.LevelXPDef.Level = int.Parse(reader["LevelXPDef.Level"].ToString());
+                        returnedUnitDef.LevelXPDef.XP = int.Parse(reader["LevelXPDef.XP"].ToString());
+                        returnedUnitDef.LevelXPDef.XPNeed = int.Parse(reader["LevelXPDef.XPNeed"].ToString());
                     }
                 }
             }

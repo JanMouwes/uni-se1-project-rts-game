@@ -14,27 +14,21 @@ namespace kbs2.WorldEntity.Unit.MVC
 {
 	public class Unit_View : IViewable
 	{
-		public Unit_Model UnitModel { get; set; }
+        public string ImageSrcShad { get; set; }
 
-        public string ImageSrc { get; set; }
-		public string ImageSrcShad { get; set; }
-
-		public FloatCoords Coords { get { return (FloatCoords)UnitModel.coords; } set {; } }
+		public FloatCoords Coords { get; set; }
 
 		public float Width { get; set; }
 		public float Height { get; set; }
 
-		public string Texture { get { return ImageSrc; } set {; } }
+		public string Texture { get; set; }
 		public Color Color { get { return Color.White; } set {; } }
 		public int ZIndex { get { return 2; } set {; } }
 
-		public Unit_View(string imageSrc, float width, float height)
+		public Unit_View(FloatCoords coords)
         {
-            ImageSrc = imageSrc;
             ImageSrcShad = "shadow";
-			Width = width;
-			Height = height;
-			Coords =  (FloatCoords) UnitModel.coords;
+            Coords = coords;
         }
 	}
 }

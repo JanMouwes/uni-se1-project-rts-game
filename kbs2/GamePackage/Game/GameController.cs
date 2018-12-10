@@ -6,11 +6,13 @@ using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
+using kbs2.Unit.Unit;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Unit;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,7 +28,6 @@ namespace kbs2.GamePackage
     public class GameController : Game
     {
         public GameModel gameModel { get; set; } = new GameModel();
-		public Unit_Controller unit { get; set; }
         public GameView gameView { get; set; }
 
         public const int TicksPerSecond = 30;
@@ -124,9 +125,12 @@ namespace kbs2.GamePackage
             //TESTCODE
             DBController.OpenConnection("DefDex");
             BuildingDef def = DBController.GetDefinitionBuilding(1);
+            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
             DBController.CloseConnection();
 
             Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords {x = 0, y = 0});
+            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords {x = 5, y = 5});
+            
             gameModel.World.AddBuilding(def, building);
             //TESTCODE
         }
@@ -175,11 +179,13 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.AddRange(Cells);
 
-			unit = new Unit_Controller("purpleline", 1, 1);
+            DBController.OpenConnection("DefDex");
+            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
+            DBController.CloseConnection();
 
-			unit.UnitModel = new Unit.Model.Unit_Model( new World.Coords { x=5 , y=5 });
+            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords { x = 5, y = 5 });
 
-			gameModel.ItemList.Add(unit.UnitView);
+            gameModel.ItemList.Add(unit.UnitView);
 
             // ======================================================================================
 
