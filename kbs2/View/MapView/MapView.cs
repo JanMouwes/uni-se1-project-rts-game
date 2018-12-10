@@ -63,7 +63,7 @@ namespace kbs2.Desktop.View.MapView
             //Selection = new Selection_Controller("PurpleLine", Mouse.GetState());
 
             // Sets the defenition of terraintextures
-            TerrainDef.TerrainDictionairy.Add(TerrainType.Sand, "grass");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Sand, "grass");
 
 
             /*
@@ -236,7 +236,7 @@ namespace kbs2.Desktop.View.MapView
                     int x = CellDrawPosition(cellModel.RealCoords.x);
 
                     // Gets the texture according to the terrain type of the cell
-                    Texture2D texture = this.Content.Load<Texture2D>(TerrainDef.TerrainDictionairy[cellModel.Terrain]);
+                    Texture2D texture = this.Content.Load<Texture2D>(TerrainDef.TerrainDictionary[cellModel.Terrain]);
 
                     // Defines the Color of the cell (for debugging)
                     Color colour = TileColour != null ? TileColour(cellModel) : CellChunkCheckered(cellModel);

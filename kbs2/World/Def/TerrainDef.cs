@@ -9,6 +9,6 @@ namespace kbs2.World.TerrainDef
 {
     public class TerrainDef
     {
-        public static Dictionary<TerrainType, string> TerrainDictionairy = new Dictionary<TerrainType, string>();
+        public static Dictionary<TerrainType, string> TerrainDictionary = new Dictionary<TerrainType, string>();
     }
 }

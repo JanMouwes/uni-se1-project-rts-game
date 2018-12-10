@@ -97,7 +97,7 @@ namespace kbs2.GamePackage
         protected override void Initialize()
         {
             // Fill the Dictionairy
-            TerrainDef.TerrainDictionairy.Add(TerrainType.Grass, "grass");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Grass, "grass");
 
             // Generate world
             gameModel.World = WorldFactory.GetNewWorld();

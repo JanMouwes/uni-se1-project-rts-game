@@ -25,7 +25,7 @@ namespace kbs2.World.Chunk
                     {
                         x = chunkCoords.x * WorldChunkModel.ChunkSize + relXIndex,
                         y = chunkCoords.y * WorldChunkModel.ChunkSize + relYIndex
-                    }, TerrainDef.TerrainDef.TerrainDictionairy[terrainType]);
+                    }, TerrainDef.TerrainDef.TerrainDictionary[terrainType]);
             }
 
             foreach (WorldCellController worldCell in controller.WorldChunkModel.grid)
