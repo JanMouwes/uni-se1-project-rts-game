@@ -78,6 +78,9 @@
     <Compile Include="View\Camera\CameraController.cs" />
     <Compile Include="View\Camera\CameraModel.cs" />
     <Compile Include="View\EventArgs\ZoomEventArgs.cs" />
+    <Compile Include="View\GUI\ActionBox\ActionBoxController.cs" />
+    <Compile Include="View\GUI\ActionBox\ActionBoxModel.cs" />
+    <Compile Include="View\GUI\ActionBox\ActionBoxView.cs" />
     <Compile Include="View\MapView\MapView.cs" />
     <Compile Include="WorldEntity\Battle\BattleDef.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Controller.cs" />
