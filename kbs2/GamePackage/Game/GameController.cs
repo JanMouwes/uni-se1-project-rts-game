@@ -35,6 +35,8 @@ namespace kbs2.GamePackage
 
     public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
 
+    public delegate void ShaderDelegate();
+
     public class GameController : Game
     {
         public GameModel gameModel { get; set; } = new GameModel();
@@ -93,12 +95,16 @@ namespace kbs2.GamePackage
 
         private CameraController camera;
 
+        private ShaderDelegate shader;
+
         public GameController(GameSpeed gameSpeed, GameState gameState)
         {
             this.GameSpeed = gameSpeed;
             this.GameState = gameState;
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
+
+            shader = DefaultPattern;
 
             Content.RootDirectory = "Content";
         }
@@ -277,11 +283,12 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.Add(unit.UnitView);
 
-            mouseChunkLoadUpdate(gameTime);
+            if (Keyboard.GetState().IsKeyDown(Keys.R)) shader = RandomPattern2;
+            if (Keyboard.GetState().IsKeyDown(Keys.C)) shader = CellChunkCheckered;
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) shader = DefaultPattern;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.R)) RandomPattern2();
-            if (Keyboard.GetState().IsKeyDown(Keys.C)) CellChunkCheckered();
-            if (Keyboard.GetState().IsKeyDown(Keys.D)) DefaultPattern();
+            mouseChunkLoadUpdate(gameTime);
+            shader.Invoke();
 
             // ======================================================================================
 
