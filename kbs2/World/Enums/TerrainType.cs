@@ -6,6 +6,9 @@
         Soil,
         Water,
         Sand,
+        Snow,
+        Rock,
+        Trees,
         Default = Grass
     }
 }

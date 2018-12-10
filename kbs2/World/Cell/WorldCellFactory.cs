@@ -14,11 +14,37 @@ namespace kbs2.World.Cell
 
         public static WorldCellController GetNewCell(FloatCoords coords)
         {
-            myNoise.SetNoiseType(FastNoise.NoiseType.Perlin); // Set the desired noise type
+            myNoise.SetNoiseType(FastNoise.NoiseType.Simplex); // Set the desired noise type
+            float currentNoise = myNoise.GetNoise(coords.x, coords.y);
 
-            // Todo add all terain types and such
-            TerrainType textureType = (myNoise.GetNoise(coords.x, coords.y) > 0) ? TerrainType.Grass: TerrainType.Water;
+            TerrainType textureType;
+            if (currentNoise < -0.45)
+            {
+                textureType = TerrainType.Water;
+            }
+            else if (currentNoise < -0.2)
+            {
+                textureType = TerrainType.Sand;
+            }
+            else if(currentNoise < 0)
+            {
+                textureType = TerrainType.Soil;
+            }
+            else if(currentNoise < 0.5)
+            {
+                textureType = (currentNoise < 0.45 && currentNoise > 0.35 && new Random().Next(1, 5) > 2)? TerrainType.Trees: TerrainType.Grass;
+            }
+            else if(currentNoise < 0.70)
+            {
+                textureType = TerrainType.Rock;
+            }
+            else
+            {
+                textureType = TerrainType.Snow;
+            }
 
+            
+            
             string texture = TerrainDef.TerrainDef.TerrainDictionary[textureType];
             return new WorldCellController(coords, texture);
         }

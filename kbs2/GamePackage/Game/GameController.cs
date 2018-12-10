@@ -143,6 +143,11 @@ namespace kbs2.GamePackage
             // Fill the Dictionairy
             TerrainDef.TerrainDictionary.Add(TerrainType.Grass, "grass");
             TerrainDef.TerrainDictionary.Add(TerrainType.Water, "Water-MiracleSea");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Sand, "Sand");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Soil, "Soil");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Snow, "Snow");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Rock, "Rock");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Trees, "Tree-2");
 
             // Generate world
             gameModel.World = WorldFactory.GetNewWorld();
