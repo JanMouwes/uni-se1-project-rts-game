@@ -161,6 +161,7 @@ namespace kbs2.GamePackage
 			//============= More TestCode ===============
 
 			MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
+            MouseStateChange += gameModel.ActionBox.OnRightClick;
 
         }
 
@@ -207,8 +208,12 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.AddRange(BUCs);
             gameModel.TextList.AddRange(Counters);
-            gameModel.GuiItemList.Add(gameModel.ActionBox.BoxView);
-            gameModel.GuiTextList.Add(gameModel.ActionBox.BoxModel.Text);
+
+            if (gameModel.ActionBox.BoxModel.Show)
+            {
+                gameModel.ItemList.Add(gameModel.ActionBox.BoxView);
+                gameModel.TextList.Add(gameModel.ActionBox.BoxModel.Text);
+            }
 
             List<IViewable> Cells = new List<IViewable>();
             foreach (KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)
