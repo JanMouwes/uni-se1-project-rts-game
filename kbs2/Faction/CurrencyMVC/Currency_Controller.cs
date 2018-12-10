@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.Enums;
+using kbs2.GamePackage.DayCycle;
 
 namespace kbs2.Faction.CurrencyMVC
 {

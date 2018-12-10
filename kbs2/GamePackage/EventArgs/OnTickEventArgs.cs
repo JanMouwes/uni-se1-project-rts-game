@@ -7,6 +7,7 @@ namespace kbs2.Desktop.GamePackage.EventArgs
     public class OnTickEventArgs : System.EventArgs
     {
         public GameTime GameTime { get; }
+        public int Day;
 
         public OnTickEventArgs(GameTime gameTime)
         {
