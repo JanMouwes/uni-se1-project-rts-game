@@ -31,6 +31,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using System.Linq;
 
 namespace kbs2.GamePackage
 {
@@ -307,10 +308,20 @@ namespace kbs2.GamePackage
                 gameModel.TextList.Add(gameModel.ActionBox.BoxModel.Text);
             }
 
+            int TileSize = (int)(GraphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
+
             List<IViewable> Cells = new List<IViewable>();
-            foreach (KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)
+            List<WorldChunkController> chunks = (from chunk in gameModel.World.WorldModel.ChunkGrid
+                                                 let rightBound = chunk.Key.x + (TileSize * WorldChunkModel.ChunkSize)
+                                                 let bottomBound = chunk.Key.y + (TileSize * WorldChunkModel.ChunkSize)
+                                                 let leftBound = chunk.Key.x
+                                                 let topBound = chunk.Key.y
+                                                 where rightBound < GraphicsDevice.Viewport.X && leftBound > GraphicsDevice.Viewport.Width + GraphicsDevice.Viewport.X && bottomBound < GraphicsDevice.Viewport.Height + GraphicsDevice.Viewport.Y && topBound > GraphicsDevice.Viewport.Height
+                                                 select chunk.Value).ToList();
+
+            foreach (WorldChunkController chunk in chunks)
             {
-                foreach (WorldCellController cell in chunk.Value.WorldChunkModel.grid)
+                foreach (WorldCellController cell in chunk.WorldChunkModel.grid)
                 {
                     Cells.Add(cell.worldCellView);
                 }
