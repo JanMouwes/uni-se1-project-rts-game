@@ -106,9 +106,6 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void Initialize()
         {
-			      gameModel.World = WorldFactory.GetNewWorld();
-			      // "Is this really necessary?", I asked myself...
-			      gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
       
             // Fill the Dictionairy
             TerrainDef.TerrainDictionary.Add(TerrainType.Grass, "grass");
@@ -116,7 +113,10 @@ namespace kbs2.GamePackage
             // Generate world
             gameModel.World = WorldFactory.GetNewWorld();
 
-            gameModel.Selection = new Selection_Controller("PurpleLine");
+			// Pathfinder 
+			gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
+
+			gameModel.Selection = new Selection_Controller("PurpleLine");
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
             camera = new CameraController(GraphicsDevice);
@@ -151,11 +151,11 @@ namespace kbs2.GamePackage
             
             gameModel.World.AddBuilding(def, building);
 
-            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 10 );
-            gameModel.World.AddBuildingUnderCunstruction(def, building);
-            building.World = gameModel.World;
-            building.gameController = this;
-            onTick += building.Update;
+            BUCController building2 = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 10 );
+            gameModel.World.AddBuildingUnderCunstruction(def, building2);
+            building2.World = gameModel.World;
+            building2.gameController = this;
+            onTick += building2.Update;
 
             UIView ui = new UIView(this);
 
