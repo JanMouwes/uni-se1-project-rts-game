@@ -15,6 +15,7 @@ namespace kbs2.UserInterface
     {
         public List<ActionController> Actions { get; set; }
 
+        // generate test actionlist
         public BuildActions(GameController Controller)
         {
             Actions = new List<ActionController>();

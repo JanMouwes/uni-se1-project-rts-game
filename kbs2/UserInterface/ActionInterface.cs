@@ -15,10 +15,11 @@ namespace kbs2.UserInterface
 {
     public class ActionInterface
     {
+        // List for actions in groups of nine
         private List<ActionView[]> currentActions;
         public GameController gameController { get; set; }
         
-
+        // index for the groups of nine
         public int actionIndex;
 
         public ActionInterface(GameController gameController)
@@ -27,6 +28,7 @@ namespace kbs2.UserInterface
             currentActions = new List<ActionView[]>();
         }
 
+        // switch to next group of nine
         public void Next()
         {
             if(actionIndex+1 < currentActions.Count)
@@ -37,6 +39,7 @@ namespace kbs2.UserInterface
             }
         }
 
+        // switch to previous group of nine
         public void Previous()
         {
             if (actionIndex < 0)
@@ -47,7 +50,7 @@ namespace kbs2.UserInterface
             }
         }
 
-
+        // set all actions from IHasActions in CurrentActions
         public void SetActions(IHasActions hasActions)
         {
             RemoveActions();
@@ -71,6 +74,7 @@ namespace kbs2.UserInterface
             SetActions(0);
         }
 
+        // Set actiongroup on screen
         private void SetActions(int index)
         {
             foreach (ActionView actionView in currentActions[index])
@@ -79,6 +83,7 @@ namespace kbs2.UserInterface
             }
         }
 
+        // remove all actions
         private void RemoveActions()
         {
             foreach (ActionView[] actionViews in currentActions)
@@ -95,6 +100,7 @@ namespace kbs2.UserInterface
             currentActions.Clear();
         }
 
+        // remove group of nine from screen
         private void RemoveActions(int index)
         {
             foreach (ActionView actionView in currentActions[index])
