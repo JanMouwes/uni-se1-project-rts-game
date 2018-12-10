@@ -3,7 +3,8 @@ namespace kbs2.GamePackage.DayCycle
 {
     public class DayModel
     {
-        public const int day = 144;
+        // day is 144 seconds 
+        public const int day = 14;
 
         public int currentDay;
     }

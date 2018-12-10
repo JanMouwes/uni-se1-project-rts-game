@@ -5,6 +5,7 @@ using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
 using kbs2.Faction.CurrencyMVC;
+using kbs2.GamePackage.DayCycle;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World;
@@ -58,6 +59,9 @@ namespace kbs2.GamePackage
         }
 
         public event GameSpeedObserver GameSpeedChange;
+
+        DayController f = new DayController();
+        Currency_Controller currency = new Currency_Controller();
 
         public event OnTick onTick;
 
@@ -138,8 +142,6 @@ namespace kbs2.GamePackage
 
             onTick += f.UpdateTime;
 
-            Currency_Controller c = new Currency_Controller();
-            onTick += c.DailyReward;
 
             //TESTCODE
         }
@@ -166,6 +168,7 @@ namespace kbs2.GamePackage
 
             // Updates camera according to the pressed buttons
             camera.MoveCamera();
+
 
             // ============== Temp Code ===================================================================
             // Update Buildings on screen
@@ -199,11 +202,15 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.AddRange(Cells);
 
+            gameModel.GuiTextList.Add(currency.view);
+            onTick += currency.DailyReward;
+
+
             // ======================================================================================
 
-          //  gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
+            //  gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
 
-           // gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
+            // gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
 
             // fire Ontick event
             OnTickEventArgs args = new OnTickEventArgs(gameTime);

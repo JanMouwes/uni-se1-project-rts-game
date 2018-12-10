@@ -14,6 +14,7 @@ namespace kbs2.GamePackage.DayCycle
         public int min;
         public int hrs;
 
+        // updates the gametime 
         public void UpdateTime(object sender, OnTickEventArgs eventArgs)
         {
             if ((int)eventArgs.GameTime.TotalGameTime.TotalSeconds > past)
@@ -25,6 +26,7 @@ namespace kbs2.GamePackage.DayCycle
             }
         }
 
+        // minute is passed
         private void MinutePassed()
         {
             ++currentMin;
@@ -32,7 +34,6 @@ namespace kbs2.GamePackage.DayCycle
             {
                 // Next day 
                 ++dayModel.currentDay;
-                //Console.WriteLine(dayModel.currentDay + "dayss passed");
                 currentMin = 0;
             }
             min = currentMin % 6;
@@ -40,9 +41,5 @@ namespace kbs2.GamePackage.DayCycle
 
             Console.WriteLine("Minuut " + hrs.ToString() + "   :   " + min.ToString());
         }
-
-
-
-
     }
 }
