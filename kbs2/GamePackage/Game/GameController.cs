@@ -102,8 +102,6 @@ namespace kbs2.GamePackage
         protected override void Initialize()
         {
             gameModel.World = WorldFactory.GetNewWorld();
-            //CellChunkCheckered();
-            RandomPattern2();
 
             gameModel.Selection = new Selection_Controller("PurpleLine");
 
@@ -206,11 +204,17 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.AddRange(Cells);
 
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R)) RandomPattern2();
+            if (Keyboard.GetState().IsKeyDown(Keys.C)) CellChunkCheckered();
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) DefaultPattern();
+
+
             // ======================================================================================
 
-          //  gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
+            //  gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
 
-           // gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
+            // gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
 
             // fire Ontick event
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
@@ -259,22 +263,20 @@ namespace kbs2.GamePackage
         }
 
         // Draws a random pattern on the cells
-        public void RandomPattern()
+        public void DefaultPattern()
         {
-            Random random = new Random();
-
             foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    item2.worldCellView.Color = random.Next(0, 3) == 1 ? Color.Gray : Color.Pink;
+                    item2.worldCellView.Color = Color.White;
                 }
             }
         }
 
         public void RandomPattern2()
         {
-            Random random = new Random();
+            Random random = new Random(1999);
 
             foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
             {
@@ -289,6 +291,7 @@ namespace kbs2.GamePackage
                             item2.worldCellView.Color = Color.Pink;
                             break;
                         default:
+                            item2.worldCellView.Color = Color.White;
                             break;
                     }
                 }
