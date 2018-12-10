@@ -1,6 +1,7 @@
 using kbs2.Desktop.View.Camera;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace Tests
 {

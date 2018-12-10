@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using kbs2.World.Chunk;
+using kbs2.World.Enums;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
 

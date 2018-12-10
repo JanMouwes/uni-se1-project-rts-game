@@ -17,9 +17,6 @@ namespace kbs2.Desktop
         [STAThread]
         static void Main()
         {
-            // Fill the Dictionairy
-            TerrainDef.TerrainDictionairy.Add(TerrainType.Grass, "grass");
-
             GameController game = new GameController(GameSpeed.Regular, GameState.Running);
 
             using (game)

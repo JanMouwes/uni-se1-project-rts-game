@@ -9,10 +9,11 @@ namespace kbs2.Unit.Unit
     public class UnitDef
     {
         public float Speed;
+        public string Image;
+        public float Width;
+        public float Height;
         public BattleDef BattleDef { get; set; }
         public HPDef HPDef { get; set; }
         public LevelXPDef LevelXPDef { get; set; }
-
-        public UnitDef() { }
     }
 }

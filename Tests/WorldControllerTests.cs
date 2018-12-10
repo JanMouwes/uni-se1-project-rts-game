@@ -1,6 +1,7 @@
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.Enums;
 using NUnit.Framework;
 
 namespace Tests
