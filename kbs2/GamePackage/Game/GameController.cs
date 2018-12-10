@@ -145,6 +145,7 @@ namespace kbs2.GamePackage
         {
         }
 
+        //    Loads chunk at mouse coordinates if not already loaded
         private void mouseChunkLoadUpdate(GameTime gameTime)
         {
             MouseState mouseState = Mouse.GetState();
