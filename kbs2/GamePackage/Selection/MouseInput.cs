@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using kbs2.GamePackage.EventArgs;
 using Microsoft.Xna.Framework.Input;
 
-namespace kbs2.GamePackage.MouseInput
+namespace kbs2.GamePackage
 {
 	public class MouseInput
 	{
-
 		public MouseState PreviousMouseState { get; set; }
+		public ButtonState MouseInputStatus { get; set; } 
 
 		public MouseInput()
 		{
+			
 			PreviousMouseState = new MouseState();
 		}
 
@@ -24,11 +21,13 @@ namespace kbs2.GamePackage.MouseInput
 
 			if (mouseEvent.Value.LeftButton == ButtonState.Pressed && PreviousMouseState.LeftButton == ButtonState.Released)
 			{
+				MouseInputStatus = mouseEvent.Value.LeftButton;
 				Console.WriteLine("=================================> DIPSHIT PRESSED <================================");
 
 			}
 			if (mouseEvent.Value.RightButton == ButtonState.Released && PreviousMouseState.RightButton == ButtonState.Pressed)
 			{
+				MouseInputStatus = mouseEvent.Value.RightButton;
 				Console.WriteLine("=================================> DIPSHIT <================================");
 
 			}

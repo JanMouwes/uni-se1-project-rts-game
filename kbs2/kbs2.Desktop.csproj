@@ -68,7 +68,7 @@
     <Compile Include="GamePackage\Game\GameView.cs" />
     <Compile Include="GamePackage\Interfaces\IText.cs" />
     <Compile Include="GamePackage\Interfaces\IViewable.cs" />
-    <Content Include="GamePackage\MouseInput\MouseInput.cs" />
+    <Compile Include="GamePackage\Selection\MouseInput.cs" />
     <Compile Include="GamePackage\Selection\Selection_Controller.cs" />
     <Compile Include="GamePackage\Selection\Selection_Model.cs" />
     <Compile Include="GamePackage\Selection\Selection_View.cs" />

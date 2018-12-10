@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage.Interfaces;
-using kbs2.GamePackage.MouseInput;
 
 namespace kbs2.GamePackage
 {

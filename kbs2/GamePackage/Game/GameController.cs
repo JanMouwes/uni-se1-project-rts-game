@@ -33,6 +33,8 @@ namespace kbs2.GamePackage
 
         public GameView gameView { get; set; }
 
+		public MouseInput MouseInput { get; set; }
+
         public const int TicksPerSecond = 30;
 
         public static int TickIntervalMilliseconds => 1000 / TicksPerSecond;
@@ -116,6 +118,7 @@ namespace kbs2.GamePackage
             gameModel.World = WorldFactory.GetNewWorld();
             CellChunkCheckered();
 
+			gameModel.MouseInput = new MouseInput();
             gameModel.Selection = new Selection_Controller("PurpleLine");
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
