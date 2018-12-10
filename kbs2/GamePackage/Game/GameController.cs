@@ -13,8 +13,10 @@ using kbs2.World.Chunk;
 using kbs2.World.Enums;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
+using kbs2.UserInterface;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -25,6 +27,8 @@ namespace kbs2.GamePackage
     public delegate void GameSpeedObserver(object sender, GameSpeedEventArgs eventArgs);
 
     public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
+
+    public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
 
     public class GameController : Game
     {
@@ -37,6 +41,8 @@ namespace kbs2.GamePackage
         public static int TickIntervalMilliseconds => 1000 / TicksPerSecond;
 
         private Timer GameTimer; //TODO
+
+        public ActionInterface ActionInterface { get; set; }// testcode ===============
 
         public event ElapsedEventHandler GameTick
         {
@@ -58,6 +64,8 @@ namespace kbs2.GamePackage
         }
 
         public event GameSpeedObserver GameSpeedChange;
+
+        public event OnTick onTick;
 
         //    GameState and its event
         private GameState gameState;
@@ -101,7 +109,6 @@ namespace kbs2.GamePackage
 
             // Generate world
             gameModel.World = WorldFactory.GetNewWorld();
-            CellChunkCheckered();
 
             gameModel.Selection = new Selection_Controller("PurpleLine");
 
@@ -132,8 +139,19 @@ namespace kbs2.GamePackage
             BuildingDef def = DBController.GetDefinitionBuilding(1);
             DBController.CloseConnection();
 
-            Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords {x = 0, y = 0});
-            gameModel.World.AddBuilding(def, building);
+            BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 10 );
+            gameModel.World.AddBuildingUnderCunstruction(def, building);
+            building.World = gameModel.World;
+            building.gameController = this;
+            onTick += building.Update;
+
+            UIView ui = new UIView(this);
+
+            gameModel.GuiItemList.Add(ui);
+
+            ActionInterface = new ActionInterface(this);
+            ActionInterface.SetActions(new BuildActions(this));
+
             //TESTCODE
         }
 
@@ -203,6 +221,18 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.AddRange(buildings);
 
+
+            List<IViewable> BUCs = new List<IViewable>();
+            List<IText> Counters = new List<IText>();
+            foreach (BUCController BUC in gameModel.World.WorldModel.UnderConstruction)
+            {
+                BUCs.Add(BUC.BUCView);
+                Counters.Add(BUC.counter);
+            }
+
+            gameModel.ItemList.AddRange(BUCs);
+            gameModel.TextList.AddRange(Counters);
+
             List<IViewable> Cells = new List<IViewable>();
             foreach (KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)
             {
@@ -212,17 +242,25 @@ namespace kbs2.GamePackage
                 }
             }
 
+
             gameModel.ItemList.AddRange(Cells);
+
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R)) RandomPattern2();
+            if (Keyboard.GetState().IsKeyDown(Keys.C)) CellChunkCheckered();
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) DefaultPattern();
+
 
             // ======================================================================================
 
-            gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(),
-                gameView.TileSize);
+            //  gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
 
-            gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(),
-                gameView.TileSize, camera.Zoom);
+            // gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
 
-            mouseChunkLoadUpdate(gameTime);
+            // fire Ontick event
+            OnTickEventArgs args = new OnTickEventArgs(gameTime);
+            onTick?.Invoke(this,args);
+            
 
             // Calls the game update
             base.Update(gameTime);
@@ -266,15 +304,37 @@ namespace kbs2.GamePackage
         }
 
         // Draws a random pattern on the cells
-        public void RandomPattern()
+        public void DefaultPattern()
         {
-            Random random = new Random();
+            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            {
+                foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
+                {
+                    item2.worldCellView.Color = Color.White;
+                }
+            }
+        }
+
+        public void RandomPattern2()
+        {
+            Random random = new Random(gameModel.World.WorldModel.seed);
 
             foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    item2.worldCellView.Color = random.Next(0, 3) == 1 ? Color.Gray : Color.Pink;
+                    switch (random.Next(0, 3))
+                    {
+                        case 0:
+                            item2.worldCellView.Color = Color.Gray;
+                            break;
+                        case 1:
+                            item2.worldCellView.Color = Color.Pink;
+                            break;
+                        default:
+                            item2.worldCellView.Color = Color.White;
+                            break;
+                    }
                 }
             }
         }

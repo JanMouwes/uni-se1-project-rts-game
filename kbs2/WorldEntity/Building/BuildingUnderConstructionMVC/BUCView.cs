@@ -27,13 +27,6 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             Width = width;
             ImageSrc = imageSrc;
         }
-
-        // draws the img
-        public string Draw()
-        {
-            return ImageSrc;
-        }
-
     }
 
 }
