@@ -114,7 +114,7 @@ namespace kbs2.GamePackage
             // Add sorted items to the drawlist in the correct z-index order
             foreach (var item in gameModel.ItemList)
             {
-                if (item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize) continue;
+                if (!(item.Coords.x > (TopLeft.X / TileSize) - item.Width && item.Coords.y > (TopLeft.Y / TileSize) - item.Height && item.Coords.x < BottomRight.X / TileSize && item.Coords.y < BottomRight.Y / TileSize)) continue;
                 DrawList.Add(item);
             }
             
