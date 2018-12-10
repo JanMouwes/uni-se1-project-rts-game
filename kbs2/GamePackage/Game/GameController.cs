@@ -140,19 +140,12 @@ namespace kbs2.GamePackage
             building.gameController = this;
             onTick += building.Update;
 
-            UIView ui = new UIView
-            {
-                Width = GraphicsDevice.Viewport.Width
-            };
-            int test = GraphicsDevice.Viewport.Height - (int)ui.Height;
-            ui.coords = new Coords {
-                x = 0, 
-                y = test };
+            UIView ui = new UIView(this);
 
             gameModel.GuiItemList.Add(ui);
 
             ActionInterface = new ActionInterface(this);
-            ActionInterface.SetActions(new BuildActions());
+            ActionInterface.SetActions(new BuildActions(this));
 
             //TESTCODE
         }
