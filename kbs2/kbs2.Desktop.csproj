@@ -141,6 +141,7 @@
     <Compile Include="World\Chunk\WorldChunkLoader.cs" />
     <Compile Include="World\Chunk\WorldChunkModel.cs" />
     <Compile Include="World\Interfaces\IConstructable.cs" />
+    <Compile Include="World\Noise\FastNoise.cs" />
     <Compile Include="World\Structs\FloatCoords.cs" />
     <Compile Include="World\Structs\Coords.cs" />
     <Compile Include="World\Enums\TerrainType.cs" />
