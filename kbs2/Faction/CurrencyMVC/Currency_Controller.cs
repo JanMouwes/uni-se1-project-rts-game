@@ -36,7 +36,7 @@ namespace kbs2.Faction.CurrencyMVC
             {
                 reward = (float)(12 + (temp * 0.33)); //TODO Find a propper way/formula
                 AddCurrency(reward);
-                temp = eventArgs.Day;
+                temp++;
             }
         }
 
