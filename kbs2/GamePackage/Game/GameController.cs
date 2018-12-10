@@ -4,6 +4,7 @@ using System.Timers;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
+using kbs2.Faction.CurrencyMVC;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World;
@@ -134,6 +135,12 @@ namespace kbs2.GamePackage
             building.World = gameModel.World;
             building.gameController = this;
             onTick += building.Update;
+
+            onTick += f.UpdateTime;
+
+            Currency_Controller c = new Currency_Controller();
+            onTick += c.DailyReward;
+
             //TESTCODE
         }
 
