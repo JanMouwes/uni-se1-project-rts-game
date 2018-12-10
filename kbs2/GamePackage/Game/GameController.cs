@@ -17,6 +17,11 @@ using kbs2.World.Enums;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.UserInterface;
+using kbs2.View.GUI.ActionBox;
+using kbs2.World;
+using kbs2.World.Cell;
+using kbs2.World.Chunk;
+using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit;
@@ -33,12 +38,16 @@ namespace kbs2.GamePackage
 
     public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
 
+	public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> e);
+
     public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
 
     public class GameController : Game
     {
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
+
+		public MouseInput MouseInput { get; set; }
 
         public const int TicksPerSecond = 30;
 
@@ -71,6 +80,20 @@ namespace kbs2.GamePackage
 
         DayController f = new DayController();
         Currency_Controller currency = new Currency_Controller();
+        
+		public event MouseStateObserver MouseStateChange;
+
+		private MouseState mouseStatus;
+
+		public MouseState MouseStatus
+		{
+			get => mouseStatus;
+			set
+			{
+				mouseStatus = value;
+				MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(mouseStatus));
+			}
+		}
 
         public event OnTick onTick;
 
@@ -122,6 +145,11 @@ namespace kbs2.GamePackage
 			gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
 
 			gameModel.Selection = new Selection_Controller("PurpleLine");
+            CellChunkCheckered();
+
+			gameModel.MouseInput = new MouseInput();
+            gameModel.Selection = new Selection_Controller("PurpleLine");
+            gameModel.ActionBox = new ActionBoxController(new FloatCoords() { x = 50, y = 50 });
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
             camera = new CameraController(GraphicsDevice);
@@ -173,6 +201,12 @@ namespace kbs2.GamePackage
 
 
             //TESTCODE
+
+
+			//============= More TestCode ===============
+
+			      MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
+            MouseStateChange += gameModel.ActionBox.OnRightClick;
         }
 
         /// <summary>
@@ -253,6 +287,12 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(BUCs);
             gameModel.TextList.AddRange(Counters);
 
+            if (gameModel.ActionBox.BoxModel.Show)
+            {
+                gameModel.ItemList.Add(gameModel.ActionBox.BoxView);
+                gameModel.TextList.Add(gameModel.ActionBox.BoxModel.Text);
+            }
+
             List<IViewable> Cells = new List<IViewable>();
             foreach (KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)
             {
@@ -260,7 +300,7 @@ namespace kbs2.GamePackage
                 {
                     Cells.Add(cell.worldCellView);
                 }
-            }
+            }   
 
 
             gameModel.ItemList.AddRange(Cells);
@@ -295,7 +335,21 @@ namespace kbs2.GamePackage
             
 
             // Calls the game update
+            
+          //  gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
+
+           // gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
+
+            // fire Ontick event
+            OnTickEventArgs args = new OnTickEventArgs(gameTime);
+            onTick?.Invoke(this,args);
+
+			//======= Fire MOUSESTATE ================
+			MouseStatus = Mouse.GetState();
+
+            // Calls the game update
             base.Update(gameTime);
+			
         }
 
         /// <summary>

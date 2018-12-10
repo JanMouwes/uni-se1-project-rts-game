@@ -20,17 +20,23 @@ namespace kbs2.GamePackage
     {
 		public Selection_Model Model { get; set; }
         public Selection_View View { get; set; }
+		public MouseInput MouseInput { get; set; }
 
 		public List<Unit_Controller> SelectedUnits { get; set; }
 
 		public Selection_Controller(string lineTexture)
         {
             Model = new Selection_Model();
+			MouseInput = new MouseInput();
 			SelectedUnits = new List<Unit_Controller>();
         }
 
-        // Checks if the unit is selected on screen with the left mouse button (drag and click) and adds it to the SelectedUnits list
-        public void CheckClickedBox(List<Unit_Controller> List, Matrix viewMatrix, int tileSize, float zoom)
+		public void onMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
+		{
+
+		}
+		// Checks if the unit is selected on screen with the left mouse button (drag and click) and adds it to the SelectedUnits list
+		public void CheckClickedBox(List<Unit_Controller> List, Matrix viewMatrix, int tileSize, float zoom)
         {
             // Gets the current stats of the keyboard
             KeyboardState state = Keyboard.GetState();
@@ -119,30 +125,30 @@ namespace kbs2.GamePackage
         // Draws selection box
         public void DrawSelectionBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix matrix, int tileSize, float zoom)
         {
-            if (CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
+            if (CurMouseState.LeftButton == ButtonState.Pressed && MouseInput.PreviousMouseState.LeftButton == ButtonState.Released)
             {
                 Model.SelectionBox = new RectangleF(CurMouseState.X, CurMouseState.Y, 0, 0);
                 View.Coords = new FloatCoords() { x = CurMouseState.X, y = CurMouseState.Y};
             }
 
-            if (CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Pressed)
+            if (CurMouseState.LeftButton == ButtonState.Pressed && MouseInput.PreviousMouseState.LeftButton == ButtonState.Pressed)
             {
                 View.Coords = new FloatCoords() { x = CalcSelectionBox(CurMouseState, matrix, tileSize).X, y = CalcSelectionBox(CurMouseState, matrix, tileSize).Y };
                 View.Width = CalcSelectionBox(CurMouseState, matrix, tileSize).Width - Model.SelectionBox.X;
                 View.Height = CalcSelectionBox(CurMouseState, matrix, tileSize).Height - Model.SelectionBox.Y;
             }
 
-            if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Pressed)
+            if (CurMouseState.LeftButton == ButtonState.Released && MouseInput.PreviousMouseState.LeftButton == ButtonState.Pressed)
             {
                 CheckClickedBox(List, matrix, tileSize, zoom);
             }
 
-            if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Released)
+            if (CurMouseState.LeftButton == ButtonState.Released && MouseInput.PreviousMouseState.LeftButton == ButtonState.Released)
             {
                 ResetSelectionBox();
             }
 
-            Model.PreviousMouseState = CurMouseState;
+            MouseInput.PreviousMouseState = CurMouseState;
         }
 
         public void ResetSelectionBox()
@@ -154,7 +160,7 @@ namespace kbs2.GamePackage
 
         public RectangleF CalcSelectionBox(MouseState mouse, Matrix matrix, int tileSize)
         {
-            // Bottom Left to Top Right
+            // Bottom Left to Top Right 
             if(mouse.Y < 0 && mouse.X > 0)
             {
                 Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
@@ -208,7 +214,7 @@ namespace kbs2.GamePackage
         // If RMB is clicked move units to mouse location
         public void MoveAction(MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
         {
-            if (CurMouseState.RightButton == ButtonState.Pressed && Model.PreviousMouseState.RightButton == ButtonState.Pressed)
+            if (CurMouseState.RightButton == ButtonState.Pressed && MouseInput.PreviousMouseState.RightButton == ButtonState.Pressed)
             {
                 if (SelectedUnits.Count > 0)
                 {
