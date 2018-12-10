@@ -20,8 +20,8 @@ namespace kbs2.UserInterface
         public Coords Corner => new Coords { x= gameController.GraphicsDevice.Viewport.Width, y = gameController.GraphicsDevice.Viewport.Height };
         public int actionIndex;
 
-        public const int ButtonSize = 60;
-        public const int ButtonSpace = 10;
+        public const int ButtonSize = 40;
+        public const int ButtonSpace = 5;
         public Coords[] ButtonCoords = new Coords[9] {
             new Coords{x = (ButtonSize + ButtonSpace)*3, y = (ButtonSize + ButtonSpace)*3},
             new Coords{x = (ButtonSize + ButtonSpace)*2, y = (ButtonSize + ButtonSpace)*3},
@@ -74,11 +74,15 @@ namespace kbs2.UserInterface
                 {
                     if(hasActions.Actions.Count > i * 9 + j)
                     {
+                        hasActions.Actions[(i * 9 + j)].View.Coords = (FloatCoords)(Corner - ButtonCoords[j]);
+                        hasActions.Actions[(i * 9 + j)].View.Height = ButtonSize;
+                        hasActions.Actions[(i * 9 + j)].View.Width = ButtonSize;
                         actionViews[j] = hasActions.Actions[(i * 9 + j)].View;
                     }
                 }
                 currentActions.Add(actionViews);
             }
+            SetActions(0);
         }
 
         private void SetActions(int index)

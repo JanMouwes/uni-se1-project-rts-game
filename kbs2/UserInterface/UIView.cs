@@ -17,7 +17,7 @@ namespace kbs2.UserInterface
         };
         
         public FloatCoords Coords { get { return (FloatCoords)coords; } set {; } }
-        public float Height { get { return 120; } set {; } }
+        public float Height { get { return 140; } set {; } }
         public float Width { get; set; }
         public string Texture { get { return "UITexture"; } set {; } }
         public Color Color { get { return Color.White; } set {; } }

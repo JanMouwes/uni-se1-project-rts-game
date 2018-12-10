@@ -39,6 +39,8 @@ namespace kbs2.GamePackage
 
         private Timer GameTimer; //TODO
 
+        public ActionInterface ActionInterface { get; set; }// testcode ===============
+
         public event ElapsedEventHandler GameTick
         {
             add => GameTimer.Elapsed += value;
@@ -148,6 +150,10 @@ namespace kbs2.GamePackage
                 y = test };
 
             gameModel.GuiItemList.Add(ui);
+
+            ActionInterface = new ActionInterface(this);
+            ActionInterface.SetActions(new BuildActions());
+
             //TESTCODE
         }
 

@@ -76,6 +76,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInterface\ActionInterface.cs" />
+    <Compile Include="UserInterface\BuildActions.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="View\Camera\CameraController.cs" />
     <Compile Include="View\Camera\CameraModel.cs" />
