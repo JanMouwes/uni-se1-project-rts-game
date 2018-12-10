@@ -19,6 +19,7 @@ namespace kbs2.GamePackage
 	public class Selection_Controller
     {
 		public Selection_Model Model { get; set; }
+        public Selection_View View { get; set; }
 
 		public List<Unit_Controller> SelectedUnits { get; set; }
 
@@ -37,9 +38,9 @@ namespace kbs2.GamePackage
             RectangleF boxDragPosition = new RectangleF(0, 0, 0, 0);
 
             // Transforms the mouse cursor's position on the screen to the map matrix's position
-            Vector2 boxPosition = new Vector2(Model.SelectionBox.BoxModel.SelectionBox.X, Model.SelectionBox.BoxModel.SelectionBox.Y);
+            Vector2 boxPosition = new Vector2(Model.SelectionBox.X, Model.SelectionBox.Y);
             Vector2 worldPosition = Vector2.Transform(boxPosition, Matrix.Invert(viewMatrix));
-            Vector2 boxWH = new Vector2(Model.SelectionBox.BoxModel.SelectionBox.Width, Model.SelectionBox.BoxModel.SelectionBox.Height);
+            Vector2 boxWH = new Vector2(View.Width, View.Height);
 
             // Bottom left to Top right
             if(boxWH.Y < 0 && boxWH.X > 0)
@@ -115,10 +116,99 @@ namespace kbs2.GamePackage
                 }
             }
         }
+        // Draws selection box
+        public void DrawSelectionBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix matrix, int tileSize, float zoom)
+        {
+            if (CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
+            {
+                Model.SelectionBox = new RectangleF(CurMouseState.X, CurMouseState.Y, 0, 0);
+                View.Coords = new FloatCoords() { x = CurMouseState.X, y = CurMouseState.Y};
+            }
+
+            if (CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Pressed)
+            {
+                View.Coords = new FloatCoords() { x = CalcSelectionBox(CurMouseState, matrix, tileSize).X, y = CalcSelectionBox(CurMouseState, matrix, tileSize).Y };
+                View.Width = CalcSelectionBox(CurMouseState, matrix, tileSize).Width - Model.SelectionBox.X;
+                View.Height = CalcSelectionBox(CurMouseState, matrix, tileSize).Height - Model.SelectionBox.Y;
+            }
+
+            if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Pressed)
+            {
+                CheckClickedBox(List, matrix, tileSize, zoom);
+            }
+
+            if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Released)
+            {
+                ResetSelectionBox();
+            }
+
+            Model.PreviousMouseState = CurMouseState;
+        }
+
+        public void ResetSelectionBox()
+        {
+            View.Coords = new FloatCoords() { x = -1, y = -1 };
+            View.Width = 0;
+            View.Height = 0;
+        }
+
+        public RectangleF CalcSelectionBox(MouseState mouse, Matrix matrix, int tileSize)
+        {
+            // Bottom Left to Top Right
+            if(mouse.Y < 0 && mouse.X > 0)
+            {
+                Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
+
+                return new RectangleF(
+                    View.Coords.x / tileSize,
+                    View.Coords.y + (temp.Y / tileSize),
+                    temp.X / tileSize,
+                    (temp.Y / tileSize) * -1
+                );
+            }
+            // Top Right to Bottom Left
+            else if(mouse.Y > 0 && mouse.X < 0)
+            {
+                Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
+
+                return new RectangleF(
+                    View.Coords.x + (temp.X / tileSize),
+                    View.Coords.y  / tileSize,
+                    (temp.X / tileSize) * -1,
+                    temp.Y / tileSize
+                );
+            }
+            // Bottom Right to Top Left
+            else if(mouse.X < 0 && mouse.Y < 0)
+            {
+                Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
+
+                return new RectangleF(
+                    View.Coords.x + (temp.X / tileSize),
+                    View.Coords.y + (temp.Y / tileSize),
+                    (temp.X / tileSize) * -1,
+                    (temp.Y / tileSize) * -1
+                );
+            }
+            // Top Left to Bottom Right
+            else
+            {
+                Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
+
+                return new RectangleF(
+                    View.Coords.x / tileSize,
+                    View.Coords.y / tileSize,
+                    temp.X / tileSize,
+                    temp.Y / tileSize
+                );
+            }
+            
+        }
+
         // If RMB is clicked move units to mouse location
         public void MoveAction(MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
         {
-            if (CurMouseState.RightButton == ButtonState.Pressed && Model.SelectionBox.BoxModel.PreviousMouseState.RightButton == ButtonState.Pressed)
+            if (CurMouseState.RightButton == ButtonState.Pressed && Model.PreviousMouseState.RightButton == ButtonState.Pressed)
             {
                 if (SelectedUnits.Count > 0)
                 {
@@ -131,8 +221,6 @@ namespace kbs2.GamePackage
                     }
                 }
             }
-
-            
         }
         // Clears the SelectedUnit list and puts every selected unit on false
         public void ClearSelectedList()

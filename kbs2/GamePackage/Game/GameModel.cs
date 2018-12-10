@@ -23,5 +23,9 @@ namespace kbs2.GamePackage
         public List<IViewable> ItemList = new List<IViewable>();
         // List For everything in the gui
         public List<IViewable> GuiItemList = new List<IViewable>();
+        // List For everything
+        public List<IText> TextList = new List<IText>();
+        // List For everything in the gui
+        public List<IText> GuiTextList = new List<IText>();
     }
 }
