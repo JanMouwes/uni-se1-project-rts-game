@@ -7,11 +7,15 @@ namespace kbs2.Faction.CurrencyMVC
     public class Currency_Controller
     {
         public Currency_Model model = new Currency_Model();
+        public DayController dayController = new DayController();
+        int temp;
+        float reward;
 
         // Adds amount to currency
         public void AddCurrency(float amount)
         {
-            if(amount>0){
+            if (amount > 0)
+            {
                 model.currency += amount;
             }
         }
@@ -25,10 +29,17 @@ namespace kbs2.Faction.CurrencyMVC
             }
         }
 
-        public void OnTick() //TODO subscribe to onTick event
+        public void DailyReward(object sender, OnTickEventArgs eventArgs)
         {
-            //todo this
+            if (eventArgs.Day > temp)
+            {
+                reward = (float)(12 + (temp * 0.33));
+                AddCurrency(reward);
+                temp = eventArgs.Day;
+                Console.WriteLine(model.currency);
+            }
         }
+
 
     }
 }
