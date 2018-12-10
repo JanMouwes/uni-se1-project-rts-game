@@ -31,6 +31,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using kbs2.Faction.FactionMVC;
 
 namespace kbs2.GamePackage
 {
@@ -81,7 +82,7 @@ namespace kbs2.GamePackage
         public event GameSpeedObserver GameSpeedChange;
 
         DayController f = new DayController();
-        Currency_Controller currency = new Currency_Controller();
+        Faction_Controller faction_Controller = new Faction_Controller("PlayerFaction");
         
 		public event MouseStateObserver MouseStateChange;
 
@@ -312,8 +313,8 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(Cells);
 
 
-            gameModel.GuiTextList.Add(currency.view);
-            onTick += currency.DailyReward;
+            gameModel.GuiTextList.Add(faction_Controller.currency_Controller.view);
+            onTick += faction_Controller.currency_Controller.DailyReward;
             
             DBController.OpenConnection("DefDex");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);

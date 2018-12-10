@@ -1,4 +1,5 @@
-﻿using kbs2.Faction.Enums;
+﻿using kbs2.Faction.CurrencyMVC;
+using kbs2.Faction.Enums;
 using kbs2.Faction.Interfaces;
 using kbs2.Unit.Model;
 using kbs2.WorldEntity.Building;
@@ -14,10 +15,12 @@ namespace kbs2.Faction.FactionMVC
     public class Faction_Controller : IHasFactionRelationship 
     {
         public Faction_Model FactionModel { get; set; }
+        public Currency_Controller currency_Controller;
 
         public Faction_Controller(string name)
         {
             FactionModel = new Faction_Model(name);
+            currency_Controller = new Currency_Controller();
         }
         // Adds a unit to the faction units list
         public void AddUnitToFaction(Unit_Controller unit) => FactionModel.Units.Add(unit);
