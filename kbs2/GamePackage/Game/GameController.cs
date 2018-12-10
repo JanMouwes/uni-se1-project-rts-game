@@ -6,9 +6,11 @@ using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
+using kbs2.UserInterface;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
@@ -135,6 +137,17 @@ namespace kbs2.GamePackage
             building.World = gameModel.World;
             building.gameController = this;
             onTick += building.Update;
+
+            UIView ui = new UIView
+            {
+                Width = GraphicsDevice.Viewport.Width
+            };
+            int test = GraphicsDevice.Viewport.Height - (int)ui.Height;
+            ui.coords = new Coords {
+                x = 0, 
+                y = test };
+
+            gameModel.GuiItemList.Add(ui);
             //TESTCODE
         }
 
@@ -170,6 +183,7 @@ namespace kbs2.GamePackage
             }
 
             gameModel.ItemList.AddRange(buildings);
+
 
             List<IViewable> BUCs = new List<IViewable>();
             List<IText> Counters = new List<IText>();

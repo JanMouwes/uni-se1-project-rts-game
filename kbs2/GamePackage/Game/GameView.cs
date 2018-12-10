@@ -83,7 +83,7 @@ namespace kbs2.GamePackage
             foreach (IViewable DrawItem in DrawGuiList)
             {
                 Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
-                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x * TileSize, (int)DrawItem.Coords.y * TileSize, (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
+                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)DrawItem.Width, (int)DrawItem.Height), DrawItem.Color);
             }
 
             foreach (IText DrawItem in DrawGuiText)
@@ -146,7 +146,7 @@ namespace kbs2.GamePackage
                            select Item).ToList();
 
             gameModel.ItemList.Clear();
-            gameModel.GuiItemList.Clear();
+            //gameModel.GuiItemList.Clear();
 
             gameModel.TextList.Clear();
             gameModel.GuiTextList.Clear();

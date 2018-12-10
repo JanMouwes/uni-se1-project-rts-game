@@ -148,6 +148,7 @@
     <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCView.cs" />
     <Compile Include="WorldEntity\Building\BUCFactory.cs" />
     <Compile Include="WorldEntity\Interfaces\IBlockCells.cs" />
+    <Compile Include="UserInterface\UIView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
