@@ -20,6 +20,18 @@
 /processorParam:TextureFormat=Compressed
 /build:BuildingTimer.spritefont
 
+#begin button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:button.png
+
 #begin Construction.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -111,6 +123,18 @@
 /processorParam:TextureFormat=Color
 /build:rayquaza_idle.png
 
+#begin rechtsondering.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:rechtsondering.png
+
 #begin TrainingCenter.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -122,4 +146,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:TrainingCenter.png
+
+#begin UITexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UITexture.png
 

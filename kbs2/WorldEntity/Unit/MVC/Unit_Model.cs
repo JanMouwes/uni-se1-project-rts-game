@@ -8,6 +8,7 @@ using kbs2.Unit.Interfaces;
 using kbs2.Faction.Interfaces;
 using kbs2.WorldEntity;
 using kbs2.GamePackage.Interfaces;
+using kbs2.World.Enums;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.Unit.Model
@@ -15,10 +16,8 @@ namespace kbs2.Unit.Model
     public class Unit_Model : IHasPersonalSpace, IPurchasable, IElemental, IHasFaction
     {
         public Faction_Model Faction { get; set; }
-        public UnitDef UnitDef;
 
-		public float Width { get; set; }
-		public float Height { get; set; }
+		public Coords coords { get; set; } 
 
 		public bool Selected { get; set; }
 
@@ -28,21 +27,12 @@ namespace kbs2.Unit.Model
 
         public CostValue CostValue { get; set; }
 
-		public Unit_Model(float height, float width)
+        public float Speed { get; set; }
+
+		public Unit_Model(Coords locCoords)
         {
-            Height = height;
-            Width = width;
+			coords = locCoords;
             Selected = false;
         }
-
-        public void InsertUnitDef(int id)
-        {
-            DBController.OpenConnection("DefDex");
-
-            UnitDef = DBController.GetDefinitionFromUnit(1);
-
-            DBController.CloseConnection();
-        }
-
     }
 }
