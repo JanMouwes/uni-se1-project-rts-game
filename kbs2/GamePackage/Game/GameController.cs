@@ -231,7 +231,6 @@ namespace kbs2.GamePackage
             // Updates camera according to the pressed buttons
             camera.MoveCamera();
 
-
             // ============== Temp Code ===================================================================
             // Update Buildings on screen
             List<IViewable> buildings = new List<IViewable>();
@@ -278,6 +277,7 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.Add(unit.UnitView);
 
+            mouseChunkLoadUpdate(gameTime);
 
             if (Keyboard.GetState().IsKeyDown(Keys.R)) RandomPattern2();
             if (Keyboard.GetState().IsKeyDown(Keys.C)) CellChunkCheckered();
