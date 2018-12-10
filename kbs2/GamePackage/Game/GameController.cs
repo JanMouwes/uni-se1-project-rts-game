@@ -316,7 +316,7 @@ namespace kbs2.GamePackage
                                                  let bottomBound = chunk.Key.y + (TileSize * WorldChunkModel.ChunkSize)
                                                  let leftBound = chunk.Key.x
                                                  let topBound = chunk.Key.y
-                                                 where rightBound < GraphicsDevice.Viewport.X && leftBound > GraphicsDevice.Viewport.Width + GraphicsDevice.Viewport.X && bottomBound < GraphicsDevice.Viewport.Height + GraphicsDevice.Viewport.Y && topBound > GraphicsDevice.Viewport.Height
+                                                 where !(rightBound < GraphicsDevice.Viewport.X && leftBound > GraphicsDevice.Viewport.Width + GraphicsDevice.Viewport.X && bottomBound < GraphicsDevice.Viewport.Height + GraphicsDevice.Viewport.Y && topBound > GraphicsDevice.Viewport.Height)
                                                  select chunk.Value).ToList();
 
             foreach (WorldChunkController chunk in chunks)
