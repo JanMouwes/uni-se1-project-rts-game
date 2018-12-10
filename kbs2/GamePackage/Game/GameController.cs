@@ -135,7 +135,7 @@ namespace kbs2.GamePackage
             //TESTCODE
             QPressed = false;
 
-            
+            onTick += SetBuilding;
 
             UIView ui = new UIView(this);
 
@@ -169,8 +169,7 @@ namespace kbs2.GamePackage
 
             // Updates camera according to the pressed buttons
             camera.MoveCamera();
-
-            SetBuilding();// testcode
+            
 
             // ============== Temp Code ===================================================================
             // Update Buildings on screen
@@ -221,7 +220,7 @@ namespace kbs2.GamePackage
         }
 
         //testcode
-        public void SetBuilding()
+        public void SetBuilding(object sender, OnTickEventArgs eventArgs)
         {
             if (!QPressed && Keyboard.GetState().IsKeyDown(Keys.Q))
             {
@@ -230,13 +229,16 @@ namespace kbs2.GamePackage
                 DBController.CloseConnection();
 
                 MouseState temp = Mouse.GetState();
+                Coords coords = new Coords { x = temp.X / gameView.TileSize, y = temp.Y / gameView.TileSize };
+                Coords chunkcoords = new Coords { x = coords.x / 20, y = coords.y / 20 };
 
-
-                BUCController building = BUCFactory.CreateNewBUC(def, new Coords { x = temp.X/gameView.TileSize, y = temp.Y / gameView.TileSize }, 20);
-                gameModel.World.AddBuildingUnderCunstruction(def, building);
-                building.World = gameModel.World;
-                building.gameController = this;
-                onTick += building.Update;
+                if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[coords.x % 20,coords.y % 20].worldCellModel.BuildingOnTop == null) {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 20 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
+                    gameModel.World.AddBuildingUnderCunstruction(def, building);
+                    building.World = gameModel.World;
+                    building.gameController = this;
+                    onTick += building.Update;
+                }
             }
             if (!Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
