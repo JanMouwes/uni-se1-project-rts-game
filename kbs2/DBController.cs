@@ -89,6 +89,7 @@ namespace kbs2
                         returnedUnitDef.Width = float.Parse(reader["Width"].ToString());
                         returnedUnitDef.Height = float.Parse(reader["Height"].ToString());
 
+                        // This is for the different defs not implemented yet
                         /*returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());
                         returnedUnitDef.BattleDef.DefenseModifier = double.Parse(reader["BattleDef.DefenseModifier"].ToString());
                         returnedUnitDef.BattleDef.Accuracy = double.Parse(reader["BattleDef.Accuracy"].ToString());
