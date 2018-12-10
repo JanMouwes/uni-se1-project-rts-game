@@ -223,13 +223,11 @@ namespace kbs2.GamePackage
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this,args);
 
-			//======= Fire MOUSESTATE ================
-			EventArgsWithPayload<MouseState> mouse = new EventArgsWithPayload<MouseState>(mouseStatus);
-			MouseStateChange?.Invoke(this, mouse);
+            //======= Fire MOUSESTATE ================
+            MouseStatus = Mouse.GetState();
 
-			
-			// Calls the game update
-			base.Update(gameTime);
+            // Calls the game update
+            base.Update(gameTime);
 
 
 			

@@ -31,12 +31,21 @@ namespace kbs2.GamePackage
 
 		public void OnMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
 		{
-			if (mouseEvent.Value.LeftButton == ButtonState.Pressed)
+            Console.WriteLine(mouseEvent.Value.LeftButton);
+
+			if (mouseEvent.Value.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
 			{
-				Console.WriteLine("=================================> DIPSHIT <================================");
+				Console.WriteLine("=================================> DIPSHIT PRESSED <================================");
 
 			}
-		}
+            if (mouseEvent.Value.RightButton == ButtonState.Released && Model.PreviousMouseState.RightButton == ButtonState.Pressed)
+            {
+                Console.WriteLine("=================================> DIPSHIT <================================");
+
+            }
+
+            Model.PreviousMouseState = mouseEvent.Value;
+        }
 
 		// Checks if the unit is selected on screen with the left mouse button (drag and click) and adds it to the SelectedUnits list
 		public void CheckClickedBox(List<Unit_Controller> List, Matrix viewMatrix, int tileSize, float zoom)
