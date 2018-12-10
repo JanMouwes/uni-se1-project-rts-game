@@ -38,7 +38,7 @@ namespace kbs2.GamePackage
 
     public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
 
-	public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> e);
+    public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> e);
 
     public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
 
@@ -49,7 +49,7 @@ namespace kbs2.GamePackage
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
 
-		public MouseInput MouseInput { get; set; }
+        public MouseInput MouseInput { get; set; }
 
         public const int TicksPerSecond = 30;
 
@@ -57,7 +57,7 @@ namespace kbs2.GamePackage
 
         private Timer GameTimer; //TODO
 
-        public ActionInterface ActionInterface { get; set; }// testcode ===============
+        public ActionInterface ActionInterface { get; set; } // testcode ===============
 
         public event ElapsedEventHandler GameTick
         {
@@ -82,20 +82,20 @@ namespace kbs2.GamePackage
 
         DayController f = new DayController();
         Currency_Controller currency = new Currency_Controller();
-        
-		public event MouseStateObserver MouseStateChange;
 
-		private MouseState mouseStatus;
+        public event MouseStateObserver MouseStateChange;
 
-		public MouseState MouseStatus
-		{
-			get => mouseStatus;
-			set
-			{
-				mouseStatus = value;
-				MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(mouseStatus));
-			}
-		}
+        private MouseState mouseStatus;
+
+        public MouseState MouseStatus
+        {
+            get => mouseStatus;
+            set
+            {
+                mouseStatus = value;
+                MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(mouseStatus));
+            }
+        }
 
         public event OnTick onTick;
 
@@ -140,7 +140,6 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void Initialize()
         {
-      
             // Fill the Dictionairy
             TerrainDef.TerrainDictionary.Add(TerrainType.Grass, "grass");
             TerrainDef.TerrainDictionary.Add(TerrainType.Water, "Water-MiracleSea");
@@ -148,15 +147,14 @@ namespace kbs2.GamePackage
             // Generate world
             gameModel.World = WorldFactory.GetNewWorld();
 
-			// Pathfinder 
-			gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
+            // Pathfinder 
+            gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
 
-			gameModel.Selection = new Selection_Controller("PurpleLine");
-            CellChunkCheckered();
-
-			gameModel.MouseInput = new MouseInput();
             gameModel.Selection = new Selection_Controller("PurpleLine");
-            gameModel.ActionBox = new ActionBoxController(new FloatCoords() { x = 50, y = 50 });
+
+            gameModel.MouseInput = new MouseInput();
+            gameModel.Selection = new Selection_Controller("PurpleLine");
+            gameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
             camera = new CameraController(GraphicsDevice);
@@ -169,6 +167,8 @@ namespace kbs2.GamePackage
 
             // Makes the mouse visible in the window
             base.IsMouseVisible = true;
+
+            shader();
 
             // Initalize game
             base.Initialize();
@@ -188,10 +188,10 @@ namespace kbs2.GamePackage
 
             Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords {x = 0, y = 0});
             Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords {x = 5, y = 5});
-            
+
             gameModel.World.AddBuilding(def, building);
 
-            BUCController building2 = BUCFactory.CreateNewBUC(def, new Coords { x = 0, y = 0 }, 10 );
+            BUCController building2 = BUCFactory.CreateNewBUC(def, new Coords {x = 0, y = 0}, 10);
             gameModel.World.AddBuildingUnderCunstruction(def, building2);
             building2.World = gameModel.World;
             building2.gameController = this;
@@ -210,9 +210,9 @@ namespace kbs2.GamePackage
             //TESTCODE
 
 
-			//============= More TestCode ===============
+            //============= More TestCode ===============
 
-			      MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
+            MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
             MouseStateChange += gameModel.ActionBox.OnRightClick;
         }
 
@@ -255,6 +255,8 @@ namespace kbs2.GamePackage
             if (chunkExists(chunkCoords)) return;
 
             gameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
+
+            shader();
         }
 
         /// <summary>
@@ -307,7 +309,7 @@ namespace kbs2.GamePackage
                 {
                     Cells.Add(cell.worldCellView);
                 }
-            }   
+            }
 
 
             gameModel.ItemList.AddRange(Cells);
@@ -315,21 +317,28 @@ namespace kbs2.GamePackage
 
             gameModel.GuiTextList.Add(currency.view);
             onTick += currency.DailyReward;
-            
+
             DBController.OpenConnection("DefDex");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
             DBController.CloseConnection();
 
-            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords { x = 5, y = 5 });
+            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords {x = 5, y = 5});
 
             gameModel.ItemList.Add(unit.UnitView);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.R)) shader = RandomPattern2;
-            if (Keyboard.GetState().IsKeyDown(Keys.C)) shader = CellChunkCheckered;
-            if (Keyboard.GetState().IsKeyDown(Keys.D)) shader = DefaultPattern;
+            ShaderDelegate tempShader = null;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R)) tempShader = RandomPattern2;
+            if (Keyboard.GetState().IsKeyDown(Keys.C)) tempShader = CellChunkCheckered;
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) tempShader = DefaultPattern;
 
             mouseChunkLoadUpdate(gameTime);
-            shader.Invoke();
+
+            if (tempShader != null)
+            {
+                shader = tempShader;
+                shader();
+            }
 
             // ======================================================================================
 
@@ -339,17 +348,16 @@ namespace kbs2.GamePackage
 
             // fire Ontick event
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
-            onTick?.Invoke(this,args);
-            
+            onTick?.Invoke(this, args);
+
 
             // Calls the game update
-           
-			//======= Fire MOUSESTATE ================
-			MouseStatus = Mouse.GetState();
+
+            //======= Fire MOUSESTATE ================
+            MouseStatus = Mouse.GetState();
 
             // Calls the game update
             base.Update(gameTime);
-			
         }
 
         /// <summary>
