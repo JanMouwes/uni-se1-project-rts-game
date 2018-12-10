@@ -10,7 +10,7 @@ namespace kbs2.World.Cell
 {
     class WorldCellFactory
     {
-        private static FastNoise myNoise = new FastNoise();
+        private static FastNoise myNoise = new FastNoise(new Random().Next(0, 50));
 
         public static WorldCellController GetNewCell(FloatCoords coords)
         {
