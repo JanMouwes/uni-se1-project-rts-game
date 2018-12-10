@@ -1,4 +1,5 @@
 ﻿using kbs2.GamePackage.EventArgs;
+using kbs2.GamePackage.MouseInput;
 using kbs2.GamePackage.Selection;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Building;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using kbs2.GamePackage.MouseInput;
 
 namespace kbs2.GamePackage
 {
@@ -20,31 +22,15 @@ namespace kbs2.GamePackage
     {
 		public Selection_Model Model { get; set; }
         public Selection_View View { get; set; }
+		public MouseInput Mouse { get; set; }
 
 		public List<Unit_Controller> SelectedUnits { get; set; }
 
 		public Selection_Controller(string lineTexture)
         {
             Model = new Selection_Model();
+			Mouse = new MouseInput();
 			SelectedUnits = new List<Unit_Controller>();
-        }
-
-		public void OnMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
-		{
-            Console.WriteLine(mouseEvent.Value.LeftButton);
-
-			if (mouseEvent.Value.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
-			{
-				Console.WriteLine("=================================> DIPSHIT PRESSED <================================");
-
-			}
-            if (mouseEvent.Value.RightButton == ButtonState.Released && Model.PreviousMouseState.RightButton == ButtonState.Pressed)
-            {
-                Console.WriteLine("=================================> DIPSHIT <================================");
-
-            }
-
-            Model.PreviousMouseState = mouseEvent.Value;
         }
 
 		// Checks if the unit is selected on screen with the left mouse button (drag and click) and adds it to the SelectedUnits list
@@ -137,30 +123,30 @@ namespace kbs2.GamePackage
         // Draws selection box
         public void DrawSelectionBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix matrix, int tileSize, float zoom)
         {
-            if (CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Released)
+            if (CurMouseState.LeftButton == ButtonState.Pressed && Mouse.PreviousMouseState.LeftButton == ButtonState.Released)
             {
                 Model.SelectionBox = new RectangleF(CurMouseState.X, CurMouseState.Y, 0, 0);
                 View.Coords = new FloatCoords() { x = CurMouseState.X, y = CurMouseState.Y};
             }
 
-            if (CurMouseState.LeftButton == ButtonState.Pressed && Model.PreviousMouseState.LeftButton == ButtonState.Pressed)
+            if (CurMouseState.LeftButton == ButtonState.Pressed && Mouse.PreviousMouseState.LeftButton == ButtonState.Pressed)
             {
                 View.Coords = new FloatCoords() { x = CalcSelectionBox(CurMouseState, matrix, tileSize).X, y = CalcSelectionBox(CurMouseState, matrix, tileSize).Y };
                 View.Width = CalcSelectionBox(CurMouseState, matrix, tileSize).Width - Model.SelectionBox.X;
                 View.Height = CalcSelectionBox(CurMouseState, matrix, tileSize).Height - Model.SelectionBox.Y;
             }
 
-            if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Pressed)
+            if (CurMouseState.LeftButton == ButtonState.Released && Mouse.PreviousMouseState.LeftButton == ButtonState.Pressed)
             {
                 CheckClickedBox(List, matrix, tileSize, zoom);
             }
 
-            if (CurMouseState.LeftButton == ButtonState.Released && Model.PreviousMouseState.LeftButton == ButtonState.Released)
+            if (CurMouseState.LeftButton == ButtonState.Released && Mouse.PreviousMouseState.LeftButton == ButtonState.Released)
             {
                 ResetSelectionBox();
             }
 
-            Model.PreviousMouseState = CurMouseState;
+            Mouse.PreviousMouseState = CurMouseState;
         }
 
         public void ResetSelectionBox()
@@ -226,7 +212,7 @@ namespace kbs2.GamePackage
         // If RMB is clicked move units to mouse location
         public void MoveAction(MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
         {
-            if (CurMouseState.RightButton == ButtonState.Pressed && Model.PreviousMouseState.RightButton == ButtonState.Pressed)
+            if (CurMouseState.RightButton == ButtonState.Pressed && Mouse.PreviousMouseState.RightButton == ButtonState.Pressed)
             {
                 if (SelectedUnits.Count > 0)
                 {

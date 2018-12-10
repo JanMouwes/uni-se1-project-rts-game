@@ -154,7 +154,7 @@ namespace kbs2.GamePackage
 
 			//============= More TestCode ===============
 
-			MouseStateChange += gameModel.Selection.OnMouseStateChange;
+			MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
 
         }
 
@@ -223,8 +223,8 @@ namespace kbs2.GamePackage
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this,args);
 
-            //======= Fire MOUSESTATE ================
-            MouseStatus = Mouse.GetState();
+			//======= Fire MOUSESTATE ================
+			MouseStatus = Mouse.GetState();
 
             // Calls the game update
             base.Update(gameTime);
