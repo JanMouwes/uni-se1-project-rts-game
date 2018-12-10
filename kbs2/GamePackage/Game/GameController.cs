@@ -4,6 +4,8 @@ using System.Timers;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.World.World;
+using kbs2.Faction.CurrencyMVC;
+using kbs2.GamePackage.DayCycle;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
 using kbs2.Unit.Unit;
@@ -66,6 +68,9 @@ namespace kbs2.GamePackage
         }
 
         public event GameSpeedObserver GameSpeedChange;
+
+        DayController f = new DayController();
+        Currency_Controller currency = new Currency_Controller();
 
         public event OnTick onTick;
 
@@ -157,12 +162,15 @@ namespace kbs2.GamePackage
             building.gameController = this;
             onTick += building.Update;
 
+            onTick += f.UpdateTime;
+
             UIView ui = new UIView(this);
 
             gameModel.GuiItemList.Add(ui);
 
             ActionInterface = new ActionInterface(this);
             ActionInterface.SetActions(new BuildActions(this));
+
 
             //TESTCODE
         }
@@ -223,6 +231,7 @@ namespace kbs2.GamePackage
             // Updates camera according to the pressed buttons
             camera.MoveCamera();
 
+
             // ============== Temp Code ===================================================================
             // Update Buildings on screen
             List<IViewable> buildings = new List<IViewable>();
@@ -257,6 +266,10 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.AddRange(Cells);
 
+
+            gameModel.GuiTextList.Add(currency.view);
+            onTick += currency.DailyReward;
+            
             DBController.OpenConnection("DefDex");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
             DBController.CloseConnection();
@@ -269,7 +282,6 @@ namespace kbs2.GamePackage
             if (Keyboard.GetState().IsKeyDown(Keys.R)) RandomPattern2();
             if (Keyboard.GetState().IsKeyDown(Keys.C)) CellChunkCheckered();
             if (Keyboard.GetState().IsKeyDown(Keys.D)) DefaultPattern();
-
 
             // ======================================================================================
 
