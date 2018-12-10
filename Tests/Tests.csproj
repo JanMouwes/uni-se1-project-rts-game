@@ -6,6 +6,10 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <PlatformTarget>x86</PlatformTarget>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="MonoGame.Extended" Version="1.1.0" />
         <PackageReference Include="nunit" Version="3.11.0" />
