@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kbs2.GamePackage.SelectionBoxMVC
+namespace kbs2.GamePackage.Selection
 {
-    public class SelectionBoxView : IViewable
+    public class Selection_View : IViewable
     {
         public FloatCoords Coords { get; set; }
         public float Width { get; set; }
@@ -18,7 +18,7 @@ namespace kbs2.GamePackage.SelectionBoxMVC
         public Color Color { get; set; }
         public int ZIndex { get; set; }
 
-        public SelectionBoxView()
+        public Selection_View()
         {
             Coords = new FloatCoords() { x = -1, y = -1};
             Width = 0;

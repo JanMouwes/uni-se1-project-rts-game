@@ -50,6 +50,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Actions\ActionMVC\ActionController.cs" />
+    <Compile Include="Actions\ActionMVC\ActionModel.cs" />
+    <Compile Include="Actions\ActionMVC\ActionView.cs" />
     <Compile Include="DBController.cs" />
     <Compile Include="Faction\Enums\Faction_Relations.cs" />
     <Compile Include="Faction\FactionMVC\Faction_Controller.cs" />
@@ -59,6 +62,7 @@
     <Compile Include="Faction\Interfaces\IHasFactionRelationship.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionUnit.cs" />
     <Compile Include="GamePackage\Enums\GameSpeed.cs" />
+    <Compile Include="GamePackage\EventArgs\OnTickEventArgs.cs" />
     <Compile Include="GamePackage\EventArgs\GameSpeedEventArgs.cs" />
     <Compile Include="GamePackage\EventArgs\GameStateEventArgs.cs" />
     <Compile Include="GamePackage\Game\GameController.cs" />
@@ -66,13 +70,13 @@
     <Compile Include="GamePackage\Game\GameView.cs" />
     <Compile Include="GamePackage\Interfaces\IText.cs" />
     <Compile Include="GamePackage\Interfaces\IViewable.cs" />
-    <Compile Include="GamePackage\SelectionBoxMVC\SelectionBoxController.cs" />
-    <Compile Include="GamePackage\SelectionBoxMVC\SelectionBoxModel.cs" />
-    <Compile Include="GamePackage\SelectionBoxMVC\SelectionBoxView.cs" />
     <Compile Include="GamePackage\Selection\Selection_Controller.cs" />
     <Compile Include="GamePackage\Selection\Selection_Model.cs" />
+    <Compile Include="GamePackage\Selection\Selection_View.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserInterface\ActionInterface.cs" />
+    <Compile Include="UserInterface\BuildActions.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="View\Camera\CameraController.cs" />
     <Compile Include="View\Camera\CameraModel.cs" />
@@ -86,9 +90,11 @@
     <Compile Include="WorldEntity\Building\BuildingMVC\BuildingView.cs" />
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Controller.cs" />
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Model.cs" />
+    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\CunstructionCounter.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
+    <Compile Include="WorldEntity\Interfaces\IHasActions.cs" />
     <Compile Include="WorldEntity\Interfaces\ISelectable.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
@@ -143,6 +149,7 @@
     <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCView.cs" />
     <Compile Include="WorldEntity\Building\BUCFactory.cs" />
     <Compile Include="WorldEntity\Interfaces\IBlockCells.cs" />
+    <Compile Include="UserInterface\UIView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
