@@ -476,20 +476,109 @@ namespace kbs2.GamePackage
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    switch (random.Next(0, 5))
+                    switch (item2.worldCellModel.Terrain)
                     {
-                        case 0:
-                            item2.worldCellView.Colour = Color.DimGray ;
+                        case TerrainType.Grass:
+                            switch (random.Next(0, 5))
+                            {
+                                case 0:
+                                    item2.worldCellView.Colour = Color.Gray;
+                                    break;
+                                case 1:
+                                    item2.worldCellView.Colour = Color.DarkGray;
+                                    break;
+                                case 2:
+                                    item2.worldCellView.Colour = Color.LightGreen;
+                                    break;
+                                default:
+                                    item2.worldCellView.Colour = Color.White;
+                                    break;
+                            }
                             break;
-                        case 1:
-                            item2.worldCellView.Colour = Color.LightGray;
+                        case TerrainType.Sand:
+                            switch (random.Next(0, 2))
+                            {
+                                case 0:
+                                    item2.worldCellView.Colour = Color.WhiteSmoke;
+                                    break;
+                                default:
+                                    item2.worldCellView.Colour = Color.White;
+                                    break;
+                            }
                             break;
-                        case 2:
-                            item2.worldCellView.Colour = Color.DarkGray;
+                        case TerrainType.Water:
+                            switch (random.Next(0, 5))
+                            {
+                                case 0:
+                                    item2.worldCellView.Colour = Color.LightBlue;
+                                    break;
+                                case 1:
+                                    item2.worldCellView.Colour = Color.LightGray;
+                                    break;
+                                case 2:
+                                    item2.worldCellView.Colour = Color.LightCyan;
+                                    break;
+                                default:
+                                    item2.worldCellView.Colour = Color.White;
+                                    break;
+                            }
+                            break;
+                        case TerrainType.Rock:
+                            switch (random.Next(0, 4))
+                            {
+                                case 0:
+                                    item2.worldCellView.Colour = Color.LightGray;
+                                    break;
+                                case 1:
+                                    item2.worldCellView.Colour = Color.DarkGray;
+                                    break;
+                                default:
+                                    item2.worldCellView.Colour = Color.White;
+                                    break;
+                            }
+                            break;
+                        case TerrainType.Soil:
+                            switch (random.Next(0, 7))
+                            {
+                                case 0:
+                                    item2.worldCellView.Colour = Color.SaddleBrown;
+                                    break;
+                                case 1:
+                                    item2.worldCellView.Colour = Color.RosyBrown;
+                                    break;
+                                default:
+                                    item2.worldCellView.Colour = Color.White;
+                                    break;
+                            }
+                            break;
+                        case TerrainType.Trees:
+                            switch (random.Next(0, 3))
+                            {
+                                case 0:
+                                    item2.worldCellView.Colour = Color.DarkGreen;
+                                    break;
+                                case 1:
+                                    item2.worldCellView.Colour = Color.Green;
+                                    break;
+                                default:
+                                    item2.worldCellView.Colour = Color.ForestGreen;
+                                    break;
+                            }
+                            break;
+                        case TerrainType.Snow:
+                            switch (random.Next(0, 3))
+                            {
+                                case 0:
+                                    item2.worldCellView.Colour = Color.White;
+                                    break;
+                                default:
+                                    item2.worldCellView.Colour = Color.WhiteSmoke;
+                                    break;
+                            }
                             break;
                         default:
-                            item2.worldCellView.Colour = Color.White;
                             break;
+
                     }
                 }
             }
