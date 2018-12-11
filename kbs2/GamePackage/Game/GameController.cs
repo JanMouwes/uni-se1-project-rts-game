@@ -192,6 +192,7 @@ namespace kbs2.GamePackage
             APressed = false;
 
             onTick += SetBuilding;
+            onTick += f.UpdateTime;
 
             UIView ui = new UIView(this);
 
