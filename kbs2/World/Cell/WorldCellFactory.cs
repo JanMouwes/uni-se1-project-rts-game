@@ -26,16 +26,16 @@ namespace kbs2.World.Cell
             {
                 textureType = TerrainType.Sand;
             }
-            else if(currentNoise < 0)
+            else if (currentNoise < 0)
             {
                 textureType = TerrainType.Soil;
             }
-            else if(currentNoise < 0.5)
+            else if (currentNoise < 0.5)
             {
                 double treeChance = ((currentNoise - 0.4) * 10) + 0.5;
-                textureType = (currentNoise < 0.55 && currentNoise > 0.25 && treeChance > 0.5)? TerrainType.Trees: TerrainType.Grass;
+                textureType = (currentNoise < 0.55 && currentNoise > 0.25 && treeChance > 0.5) ? TerrainType.Trees : TerrainType.Grass;
             }
-            else if(currentNoise < 0.70)
+            else if (currentNoise < 0.70)
             {
                 textureType = TerrainType.Rock;
             }
@@ -44,10 +44,7 @@ namespace kbs2.World.Cell
                 textureType = TerrainType.Snow;
             }
 
-            
-            
-            string texture = TerrainDef.TerrainDef.TerrainDictionary[textureType];
-            return new WorldCellController(coords, texture);
+            return new WorldCellController(coords, textureType);
         }
     }
 }

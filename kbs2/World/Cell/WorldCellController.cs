@@ -15,10 +15,11 @@ namespace kbs2.World.Cell
 
         public WorldCellView worldCellView { get; set; }
 
-        public WorldCellController(FloatCoords coords, string texture)
+        public WorldCellController(FloatCoords coords, TerrainType terrain)
         {
             worldCellModel.RealCoords = (Coords)coords;
-            worldCellView = new WorldCellView(coords, texture);
+            worldCellModel.Terrain = worldCellModel.BaseTerrain = terrain;
+            worldCellView = new WorldCellView(coords, TerrainDef.TerrainDef.TerrainDictionary[terrain]);
         }
 
         // Changes the TerrainType of the current cell

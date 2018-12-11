@@ -28,13 +28,7 @@ namespace kbs2.World.Chunk
                     });
             }
 
-            foreach (WorldCellController worldCell in controller.WorldChunkModel.grid)
-            {
-                WorldCellModel worldCellModel = worldCell.worldCellModel;
-
-                worldCellModel.BaseTerrain = worldCellModel.Terrain;
-                worldCellModel.ParentChunk = controller.WorldChunkModel;
-            }
+            foreach (WorldCellController worldCell in controller.WorldChunkModel.grid) worldCell.worldCellModel.ParentChunk = controller.WorldChunkModel;
 
             return controller;
         }
