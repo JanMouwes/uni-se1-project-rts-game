@@ -379,7 +379,7 @@ namespace kbs2.GamePackage
                 Coords chunkcoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);  
 
                 if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[ModulusUtils.mod( coords.x,20), ModulusUtils.mod(coords.y, 20)].worldCellModel.BuildingOnTop == null) {
-                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 20 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 5 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
@@ -404,7 +404,7 @@ namespace kbs2.GamePackage
 
                 if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x, 20), ModulusUtils.mod(coords.y, 20)].worldCellModel.BuildingOnTop == null)
                 {
-                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 20 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 7 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
