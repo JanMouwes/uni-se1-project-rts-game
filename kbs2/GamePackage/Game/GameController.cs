@@ -87,9 +87,7 @@ namespace kbs2.GamePackage
        
         Faction_Controller faction_Controller = new Faction_Controller("PlayerFaction");
         
-		    public event MouseStateObserver MouseStateChange;
-
-        public event MouseStateObserver MouseStateChange;
+		public event MouseStateObserver MouseStateChange;
 
         private MouseState mouseStatus;
 
