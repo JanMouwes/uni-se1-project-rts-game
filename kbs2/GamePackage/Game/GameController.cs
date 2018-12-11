@@ -282,7 +282,7 @@ namespace kbs2.GamePackage
 
             // ============== Temp Code ===================================================================
             // Update Buildings on screen
-            List<IViewable> buildings = new List<IViewable>();
+            List<IViewImage> buildings = new List<IViewImage>();
             foreach (Building_Controller building in gameModel.World.WorldModel.buildings)
             {
                 buildings.Add(building.View);
@@ -291,8 +291,8 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(buildings);
 
 
-            List<IViewable> BUCs = new List<IViewable>();
-            List<IText> Counters = new List<IText>();
+            List<IViewImage> BUCs = new List<IViewImage>();
+            List<IViewText> Counters = new List<IViewText>();
             foreach (BUCController BUC in gameModel.World.WorldModel.UnderConstruction)
             {
                 BUCs.Add(BUC.BUCView);
@@ -310,7 +310,7 @@ namespace kbs2.GamePackage
 
             int TileSize = (int)(GraphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
 
-            List<IViewable> Cells = new List<IViewable>();
+            List<IViewImage> Cells = new List<IViewImage>();
             List<WorldChunkController> chunks = (from chunk in gameModel.World.WorldModel.ChunkGrid
                                                  let rightBound = chunk.Key.x + (TileSize * WorldChunkModel.ChunkSize)
                                                  let bottomBound = chunk.Key.y + (TileSize * WorldChunkModel.ChunkSize)
@@ -397,7 +397,7 @@ namespace kbs2.GamePackage
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    item2.worldCellView.Color = Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.x) % 2 ==
+                    item2.worldCellView.Colour = Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.x) % 2 ==
                                                 (Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.y) % 2 == 1
                                                     ? 1
                                                     : 0)
@@ -420,7 +420,7 @@ namespace kbs2.GamePackage
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    item2.worldCellView.Color = Color.White;
+                    item2.worldCellView.Colour = Color.White;
                 }
             }
         }
@@ -436,13 +436,13 @@ namespace kbs2.GamePackage
                     switch (random.Next(0, 3))
                     {
                         case 0:
-                            item2.worldCellView.Color = Color.Gray;
+                            item2.worldCellView.Colour = Color.Gray;
                             break;
                         case 1:
-                            item2.worldCellView.Color = Color.Pink;
+                            item2.worldCellView.Colour = Color.Pink;
                             break;
                         default:
-                            item2.worldCellView.Color = Color.White;
+                            item2.worldCellView.Colour = Color.White;
                             break;
                     }
                 }

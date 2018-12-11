@@ -21,7 +21,7 @@ namespace kbs2.UserInterface
             Actions = new List<ActionController>();
             for(int i = 0; i<9; i++)
             {
-                Actions.Add(new ActionController { View = new ActionView { Texture = "Button", Color = Color.White, ZIndex = 2, gameController = Controller } });
+                Actions.Add(new ActionController { View = new ActionView { Texture = "Button", Colour = Color.White, ZIndex = 2, gameController = Controller } });
             }
         }
     }

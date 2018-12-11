@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace kbs2.View.GUI.ActionBox
 {
-    public class ActionBoxTextView : IText
+    public class ActionBoxTextView : IViewText
     {
         public FloatCoords Coords { get; set; }
         public string SpriteFont { get; set; }
         public string Text { get; set; }
-        public Color Color { get; set; }
+        public Color Colour { get; set; }
         public int ZIndex { get; set; }
 
         public ActionBoxTextView(FloatCoords loc)
@@ -22,7 +22,7 @@ namespace kbs2.View.GUI.ActionBox
             Coords = loc;
             SpriteFont = "BuildingTimer";
             Text = "Raichu";
-            Color = Color.LightGreen;
+            Colour = Color.LightGreen;
             ZIndex = 501;
         }
 

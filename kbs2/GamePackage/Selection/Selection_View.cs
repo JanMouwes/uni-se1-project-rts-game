@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage.Selection
 {
-    public class Selection_View : IViewable
+    public class Selection_View : IViewImage
     {
         public FloatCoords Coords { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
         public string Texture { get; set; }
-        public Color Color { get; set; }
+        public Color Colour { get; set; }
         public int ZIndex { get; set; }
 
         public Selection_View()
@@ -24,7 +24,7 @@ namespace kbs2.GamePackage.Selection
             Width = 0;
             Height = 0;
             Texture = "PurpleLine";
-            Color = Color.White;
+            Colour = Color.White;
             ZIndex = 1000;
         }
     }

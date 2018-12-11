@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace kbs2.View.GUI.ActionBox
 {
-    public class ActionBoxView : IViewable
+    public class ActionBoxView : IViewImage
     {
         public FloatCoords Coords { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
         public string Texture { get; set; }
-        public Color Color { get; set; }
+        public Color Colour { get; set; }
         public int ZIndex { get; set; }
 
         public ActionBoxView(FloatCoords loc)
@@ -24,7 +24,7 @@ namespace kbs2.View.GUI.ActionBox
             Width = 2;
             Height = 1;
             Texture = "unittrainbalkje";
-            Color = Color.White;
+            Colour = Color.White;
             ZIndex = 500;
         }
     }

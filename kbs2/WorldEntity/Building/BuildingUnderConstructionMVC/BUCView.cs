@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 {
-    public class BUCView : IViewable
+    public class BUCView : IViewImage
     {
         public BUCModel model { get; set; }
         public string ImageSrc { get; set; }
@@ -16,7 +16,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public float Width { get => model.BuildingDef.width; set {; } }
         public float Height { get => model.BuildingDef.height; set {; } }
         public string Texture { get { return ImageSrc; } set {; } }
-        public Color Color { get { return Color.White; } set {; } }
+        public Color Colour { get { return Color.White; } set {; } }
         public int ZIndex { get { return 2; } set {; } }
 
 

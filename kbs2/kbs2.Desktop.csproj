@@ -73,8 +73,9 @@
     <Compile Include="GamePackage\Game\GameModel.cs" />
     <Compile Include="GamePackage\Game\GameView.cs" />
     <Compile Include="GamePackage\Game\Location_controller.cs" />
-    <Compile Include="GamePackage\Interfaces\IText.cs" />
-    <Compile Include="GamePackage\Interfaces\IViewable.cs" />
+    <Compile Include="GamePackage\Interfaces\IViewItem.cs" />
+    <Compile Include="GamePackage\Interfaces\IViewText.cs" />
+    <Compile Include="GamePackage\Interfaces\IViewImage.cs" />
     <Compile Include="GamePackage\Selection\MouseInput.cs" />
     <Compile Include="GamePackage\Selection\Selection_Controller.cs" />
     <Compile Include="GamePackage\Selection\Selection_Model.cs" />
@@ -103,7 +104,7 @@
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Controller.cs" />
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Model.cs" />
     <Compile Include="WorldEntity\Building\BuildingUnderConstruction.cs" />
-    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\CunstructionCounter.cs" />
+    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\ConstructionCounter.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />

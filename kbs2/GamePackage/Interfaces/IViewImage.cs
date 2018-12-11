@@ -8,13 +8,10 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage.Interfaces
 {
-    public interface IViewable
+    public interface IViewImage : IViewItem
     {
-        FloatCoords Coords { get; set; }
         float Width { get; set; }
         float Height { get; set; }
         string Texture { get; set; }
-        Color Color { get; set; }
-        int ZIndex { get; set; }
     }
 }

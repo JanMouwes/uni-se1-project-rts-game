@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.Actions.ActionMVC
 {
-    public class ActionView : IViewable
+    public class ActionView : IViewImage
     {
         public GameController gameController { get; set; }
 
@@ -40,7 +40,7 @@ namespace kbs2.Actions.ActionMVC
         public float Width { get {return ButtonSize; } set {; } }
         public float Height { get { return ButtonSize; } set {; } }
         public string Texture { get; set; }
-        public Color Color { get; set; }
+        public Color Colour { get; set; }
         public int ZIndex { get; set; }
     }
 }
