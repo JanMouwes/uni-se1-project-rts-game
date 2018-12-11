@@ -9,12 +9,9 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage.Interfaces
 {
-    public interface IText
+    public interface IViewText : IViewItem
     {
-        FloatCoords Coords { get; set; }
         string SpriteFont { get; set; }
         string Text { get; set; }
-        Color Color { get; set; }
-        int ZIndex { get; set; }
     }
 }

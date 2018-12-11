@@ -8,7 +8,7 @@ namespace kbs2.World.Chunk
     {
         public delegate WorldChunkController ChunkGenerationDelegate(Coords chunkCoords);
 
-        public static WorldChunkController ChunkOfTerrainType(Coords chunkCoords, TerrainType terrainType)
+        public static WorldChunkController ChunkOfDefaultTerrain(Coords chunkCoords)
         {
             WorldChunkController controller = new WorldChunkController(chunkCoords);
             controller.WorldChunkModel.grid =
@@ -25,21 +25,19 @@ namespace kbs2.World.Chunk
                     {
                         x = chunkCoords.x * WorldChunkModel.ChunkSize + relXIndex,
                         y = chunkCoords.y * WorldChunkModel.ChunkSize + relYIndex
-                    }, TerrainDef.TerrainDef.TerrainDictionary[terrainType]);
+                    });
             }
 
             foreach (WorldCellController worldCell in controller.WorldChunkModel.grid)
             {
                 WorldCellModel worldCellModel = worldCell.worldCellModel;
 
-                worldCellModel.BaseTerrain = worldCellModel.Terrain = terrainType;
+                worldCellModel.BaseTerrain = worldCellModel.Terrain;
                 worldCellModel.ParentChunk = controller.WorldChunkModel;
             }
 
             return controller;
         }
 
-        public static WorldChunkController ChunkOfDefaultTerrain(Coords chunkCoords) =>
-            ChunkOfTerrainType(chunkCoords, TerrainType.Default);
     }
 }

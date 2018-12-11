@@ -12,7 +12,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-	public class Unit_View : IViewable
+	public class Unit_View : IViewImage
 	{
         public string ImageSrcShad { get; set; }
 
@@ -22,7 +22,7 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public float Height { get; set; }
 
 		public string Texture { get; set; }
-		public Color Color { get { return Color.White; } set {; } }
+		public Color Colour { get { return Color.White; } set {; } }
 		public int ZIndex { get { return 2; } set {; } }
 
 		public Unit_View(FloatCoords coords)

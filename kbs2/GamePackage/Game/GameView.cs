@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using kbs2.Desktop.View.Camera;
 using kbs2.GamePackage.Interfaces;
 using Microsoft.Xna.Framework;
@@ -18,19 +20,23 @@ namespace kbs2.GamePackage
         private ContentManager content;
 
         // List for drawing items with the camera offset
-        public List<IViewable> DrawList = new List<IViewable>();
+        public List<IViewImage> DrawList = new List<IViewImage>();
+
         // List for drawing items without offset
-        public List<IViewable> DrawGuiList = new List<IViewable>();
+        public List<IViewImage> DrawGuiList = new List<IViewImage>();
+
         // List for drawing text with the camera offset
-        public List<IText> DrawText = new List<IText>();
+        public List<IViewText> DrawText = new List<IViewText>();
+
         // List for drawing text without offset
-        public List<IText> DrawGuiText = new List<IText>();
+        public List<IViewText> DrawGuiText = new List<IViewText>();
 
         // Calculate the size (Width) of a tile
-        public int TileSize => (int)(graphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
+        public int TileSize => (int) (graphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
 
         // Constructor
-        public GameView(GameModel gameModel, GraphicsDeviceManager graphics, SpriteBatch spriteBatch, CameraController camera, GraphicsDevice graphicsDevice, ContentManager content)
+        public GameView(GameModel gameModel, GraphicsDeviceManager graphics, SpriteBatch spriteBatch,
+            CameraController camera, GraphicsDevice graphicsDevice, ContentManager content)
         {
             this.gameModel = gameModel;
             this.graphics = graphics;
@@ -49,7 +55,7 @@ namespace kbs2.GamePackage
             UpdateOnScreen();
 
             DrawNonGui();
-            
+
             DrawGui();
         }
 
@@ -58,18 +64,21 @@ namespace kbs2.GamePackage
         {
             spriteBatch.Begin(transformMatrix: camera.GetViewMatrix());
 
-            foreach (IViewable DrawItem in DrawList)
+            foreach (IViewImage DrawItem in DrawList)
             {
                 if (DrawItem == null) continue;
                 Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
-                spriteBatch.Draw(texture, new Rectangle((int)(DrawItem.Coords.x * TileSize), (int)(DrawItem.Coords.y * TileSize), (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), DrawItem.Color);
+                spriteBatch.Draw(texture,
+                    new Rectangle((int) (DrawItem.Coords.x * TileSize), (int) (DrawItem.Coords.y * TileSize),
+                        (int) (DrawItem.Width * TileSize), (int) (DrawItem.Height * TileSize)), DrawItem.Colour);
             }
 
-            foreach (IText DrawItem in DrawText)
+            foreach (IViewText DrawItem in DrawText)
             {
                 if (DrawItem == null) continue;
                 SpriteFont font = content.Load<SpriteFont>(DrawItem.SpriteFont);
-                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x * TileSize, DrawItem.Coords.y * TileSize), DrawItem.Color);
+                spriteBatch.DrawString(font, DrawItem.Text,
+                    new Vector2(DrawItem.Coords.x * TileSize, DrawItem.Coords.y * TileSize), DrawItem.Colour);
             }
 
             spriteBatch.End();
@@ -80,72 +89,82 @@ namespace kbs2.GamePackage
         {
             spriteBatch.Begin();
 
-            foreach (IViewable DrawItem in DrawGuiList)
+            foreach (IViewImage DrawItem in DrawGuiList)
             {
                 Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
 
-                spriteBatch.Draw(texture, new Rectangle((int)DrawItem.Coords.x, (int)DrawItem.Coords.y, (int)DrawItem.Width, (int)DrawItem.Height), DrawItem.Color);
-
+                spriteBatch.Draw(texture,
+                    new Rectangle((int) DrawItem.Coords.x, (int) DrawItem.Coords.y, (int) DrawItem.Width,
+                        (int) DrawItem.Height), DrawItem.Colour);
             }
 
-            foreach (IText DrawItem in DrawGuiText)
+            foreach (IViewText DrawItem in DrawGuiText)
             {
                 if (DrawItem == null) continue;
                 SpriteFont font = content.Load<SpriteFont>(DrawItem.SpriteFont);
-                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x, DrawItem.Coords.y), DrawItem.Color);
+                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x, DrawItem.Coords.y),
+                    DrawItem.Colour);
             }
 
             spriteBatch.End();
         }
 
+        private List<IViewImage> GetCellsOnScreen(IEnumerable<IViewImage> drawList, Vector2 topLeft,
+            Vector2 bottomRight)
+        {
+            List<IViewImage> returnList;
+
+            returnList = (from item in drawList
+                where (item.Coords.x > (topLeft.X / TileSize) - item.Width &&
+                       item.Coords.y > (topLeft.Y / TileSize) - item.Height &&
+                       item.Coords.x < bottomRight.X / TileSize && item.Coords.y < bottomRight.Y / TileSize)
+                orderby item.ZIndex ascending
+                select item).ToList();
+
+            return returnList;
+        }
+
+        private async Task UpdateCellsOnScreen(IEnumerable<IViewImage> drawList, Vector2 topLeft, Vector2 bottomRight)
+        {
+            await Task.Run(() => DrawList = GetCellsOnScreen(drawList, topLeft, bottomRight));
+        }
+
         // Returns everything that is in the view
         public void UpdateOnScreen()
         {
+            List<TItem> SortByZIndex<TItem>(IEnumerable<TItem> listToSort) where TItem : IViewItem =>
+                (from item in listToSort orderby item.ZIndex ascending select item).ToList();
+
             DrawList.Clear();
             DrawGuiList.Clear();
 
             DrawText.Clear();
             DrawGuiText.Clear();
 
-            Vector2 TopLeft = Vector2.Transform(new Vector2(graphicsDevice.Viewport.X, graphicsDevice.Viewport.Y), camera.GetInverseViewMatrix());
+            Vector2 topLeft = Vector2.Transform(new Vector2(graphicsDevice.Viewport.X, graphicsDevice.Viewport.Y),
+                camera.GetInverseViewMatrix());
 
-            Vector2 BottomRight = Vector2.Transform(new Vector2(graphicsDevice.Viewport.X + graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Y + graphicsDevice.Viewport.Height), camera.GetInverseViewMatrix());
+            Vector2 bottomRight = Vector2.Transform(new Vector2(
+                graphicsDevice.Viewport.X + graphicsDevice.Viewport.Width,
+                graphicsDevice.Viewport.Y + graphicsDevice.Viewport.Height), camera.GetInverseViewMatrix());
 
-            // Add sorted items to the drawlist in the correct z-index order
-            foreach (var item in gameModel.ItemList)
-            {
-                if (item.Coords.x < (TopLeft.X / TileSize) - item.Width || item.Coords.y < (TopLeft.Y / TileSize) - item.Height || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize) continue;
-                DrawList.Add(item);
-            }
-            
-            DrawList = (from Item in DrawList
-                        orderby Item.ZIndex ascending
-                        select Item).ToList();
+            DrawList = GetCellsOnScreen(gameModel.ItemList, topLeft, bottomRight);
 
             // Add all items to the DrawGuiList in the correct Zindex order
-            DrawGuiList.AddRange(gameModel.GuiItemList);
+            DrawGuiList = SortByZIndex(gameModel.GuiItemList);
 
-            DrawGuiList = (from Item in DrawGuiList
-                              orderby Item.ZIndex ascending
-                        select Item).ToList();
-            
-            // Add sorted Text to the drawlist in the correct z-index order
-            foreach (var item in gameModel.TextList)
+            // Add sorted Text to the drawList in the correct z-index order
+            foreach (IViewText item in gameModel.TextList)
             {
-                if (item.Coords.x < (TopLeft.X / TileSize) || item.Coords.y < (TopLeft.Y / TileSize) || item.Coords.x > BottomRight.X / TileSize || item.Coords.y > BottomRight.Y / TileSize) continue;
+                if (item.Coords.x < (topLeft.X / TileSize) || item.Coords.y < (topLeft.Y / TileSize) ||
+                    item.Coords.x > bottomRight.X / TileSize || item.Coords.y > bottomRight.Y / TileSize) continue;
                 DrawText.Add(item);
             }
 
-            DrawText = (from Item in DrawText
-                        orderby Item.ZIndex ascending
-                        select Item).ToList();
+            DrawText = SortByZIndex(DrawText);
 
             // Add all Text to the DrawGuiList in the correct Zindex order
-            DrawGuiText.AddRange(gameModel.GuiTextList);
-
-            DrawGuiText = (from Item in DrawGuiText
-                           orderby Item.ZIndex ascending
-                           select Item).ToList();
+            DrawGuiText = SortByZIndex(gameModel.GuiTextList);
 
             gameModel.ItemList.Clear();
             //gameModel.GuiItemList.Clear();
@@ -153,6 +172,5 @@ namespace kbs2.GamePackage
             gameModel.TextList.Clear();
             gameModel.GuiTextList.Clear();
         }
-        
     }
 }

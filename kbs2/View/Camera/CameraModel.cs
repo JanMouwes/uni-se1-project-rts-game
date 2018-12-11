@@ -8,13 +8,13 @@ namespace kbs2.Desktop.View.Camera
     {
         // Defines the minimum and maximum zoom
         public const float MaximumZoom = 4.0f;
-        public const float MinimumZoom = (float) (1.0 / 4.0);
+        public const float MinimumZoom = (float) (1.0 / 5.0);
 
         // Defines the default amount of tiles on screen
         public const int DefaultTiles = 30;
 
         // Defines the speed the camera moves at
-        private const float MoveSpeedBase = 4f;
+        private const float MoveSpeedBase = 6f;
 
         // Reference to parent camera
         private Camera2D parentCamera;

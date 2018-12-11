@@ -23,12 +23,12 @@ namespace kbs2.GamePackage
 		public Pathfinder pathfinder { get; set; }
 
         // List For everything
-        public List<IViewable> ItemList = new List<IViewable>();
+        public List<IViewImage> ItemList = new List<IViewImage>();
         // List For everything in the gui
-        public List<IViewable> GuiItemList = new List<IViewable>();
+        public List<IViewImage> GuiItemList = new List<IViewImage>();
         // List For everything
-        public List<IText> TextList = new List<IText>();
+        public List<IViewText> TextList = new List<IViewText>();
         // List For everything in the gui
-        public List<IText> GuiTextList = new List<IText>();
+        public List<IViewText> GuiTextList = new List<IViewText>();
     }
 }
