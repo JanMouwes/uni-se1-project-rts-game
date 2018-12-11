@@ -42,7 +42,7 @@ namespace kbs2
             };
 
             string query =
-                "SELECT * FROM BuildingDef";
+                "SELECT * FROM BuildingDef WHERE Id=@i";
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
             {

@@ -48,6 +48,7 @@ namespace kbs2.GamePackage
 
         public ActionInterface ActionInterface { get; set; }// testcode ===============
         public bool QPressed { get; set; }
+        public bool APressed { get; set; }
 
         public event ElapsedEventHandler GameTick
         {
@@ -150,6 +151,7 @@ namespace kbs2.GamePackage
         {
             //TESTCODE
             QPressed = false;
+            APressed = false;
 
             onTick += SetBuilding;
 
@@ -297,10 +299,11 @@ namespace kbs2.GamePackage
                 DBController.CloseConnection();
 
                 MouseState temp = Mouse.GetState();
-                Coords coords = new Coords { x = temp.X / gameView.TileSize, y = temp.Y / gameView.TileSize };
-                Coords chunkcoords = new Coords { x = coords.x / 20, y = coords.y / 20 };
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords( WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
+                Coords chunkcoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);  
 
-                if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[coords.x % 20,coords.y % 20].worldCellModel.BuildingOnTop == null) {
+                if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[ModulusUtils.mod( coords.x,20), ModulusUtils.mod(coords.y, 20)].worldCellModel.BuildingOnTop == null) {
                     BUCController building = BUCFactory.CreateNewBUC(def, coords, 20 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
@@ -311,6 +314,31 @@ namespace kbs2.GamePackage
             if (!Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 QPressed = false;
+            }
+
+            if (!APressed && Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                DBController.OpenConnection("DefDex");
+                BuildingDef def = DBController.GetDefinitionBuilding(2);
+                DBController.CloseConnection();
+
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
+                Coords chunkcoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);
+
+                if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x, 20), ModulusUtils.mod(coords.y, 20)].worldCellModel.BuildingOnTop == null)
+                {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 20 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
+                    gameModel.World.AddBuildingUnderCunstruction(def, building);
+                    building.World = gameModel.World;
+                    building.gameController = this;
+                    onTick += building.Update;
+                }
+            }
+            if (!Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                APressed = false;
             }
         }
         //testcode
@@ -373,17 +401,21 @@ namespace kbs2.GamePackage
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    switch (random.Next(0, 3))
+                    switch (random.Next(0, 5))
                     {
                         case 0:
-                            item2.worldCellView.Color = Color.Gray;
+                            item2.worldCellView.Color = Color.DimGray ;
                             break;
                         case 1:
-                            item2.worldCellView.Color = Color.Pink;
+                            item2.worldCellView.Color = Color.LightGray;
+                            break;
+                        case 2:
+                            item2.worldCellView.Color = Color.DarkGray;
                             break;
                         default:
                             item2.worldCellView.Color = Color.White;
                             break;
+
                     }
                 }
             }
