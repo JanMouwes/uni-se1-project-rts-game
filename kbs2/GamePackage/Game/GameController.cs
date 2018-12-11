@@ -60,7 +60,9 @@ namespace kbs2.GamePackage
 
         private Timer GameTimer; //TODO
 
-        public ActionInterface ActionInterface { get; set; } // testcode ===============
+        public ActionInterface ActionInterface { get; set; }// testcode ===============
+        public bool QPressed { get; set; }
+        public bool APressed { get; set; }
 
         public event ElapsedEventHandler GameTick
         {
@@ -181,6 +183,8 @@ namespace kbs2.GamePackage
 
             // Initalize game
             base.Initialize();
+
+
         }
 
         /// <summary>
@@ -188,25 +192,13 @@ namespace kbs2.GamePackage
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
+
         {
             //TESTCODE
-            DBController.OpenConnection("DefDex");
-            BuildingDef def = DBController.GetDefinitionBuilding(1);
-            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
-            DBController.CloseConnection();
+            QPressed = false;
+            APressed = false;
 
-            Building_Controller building = BuildingFactory.CreateNewBuilding(def, new Coords {x = 0, y = 0});
-            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords {x = 5, y = 5});
-
-            gameModel.World.AddBuilding(def, building);
-
-            BUCController building2 = BUCFactory.CreateNewBUC(def, new Coords {x = 0, y = 0}, 10);
-            gameModel.World.AddBuildingUnderCunstruction(def, building2);
-            building2.World = gameModel.World;
-            building2.gameController = this;
-            onTick += building2.Update;
-
-            onTick += f.UpdateTime;
+            onTick += SetBuilding;
 
             UIView ui = new UIView(this);
 
@@ -379,6 +371,61 @@ namespace kbs2.GamePackage
             base.Update(gameTime);
         }
 
+        //testcode
+        public void SetBuilding(object sender, OnTickEventArgs eventArgs)
+        {
+            if (!QPressed && Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                DBController.OpenConnection("DefDex");
+                BuildingDef def = DBController.GetDefinitionBuilding(1);
+                DBController.CloseConnection();
+
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords( WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
+                Coords chunkcoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);  
+
+                if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[ModulusUtils.mod( coords.x,20), ModulusUtils.mod(coords.y, 20)].worldCellModel.BuildingOnTop == null) {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 20 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
+                    gameModel.World.AddBuildingUnderCunstruction(def, building);
+                    building.World = gameModel.World;
+                    building.gameController = this;
+                    onTick += building.Update;
+                }
+            }
+            if (!Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                QPressed = false;
+            }
+
+            if (!APressed && Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                DBController.OpenConnection("DefDex");
+                BuildingDef def = DBController.GetDefinitionBuilding(2);
+                DBController.CloseConnection();
+
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
+                Coords chunkcoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);
+
+                if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x, 20), ModulusUtils.mod(coords.y, 20)].worldCellModel.BuildingOnTop == null)
+                {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 20 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
+                    gameModel.World.AddBuildingUnderCunstruction(def, building);
+                    building.World = gameModel.World;
+                    building.gameController = this;
+                    onTick += building.Update;
+                }
+            }
+            if (!Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                APressed = false;
+            }
+        }
+        //testcode
+
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -436,16 +483,19 @@ namespace kbs2.GamePackage
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    switch (random.Next(0, 3))
+                    switch (random.Next(0, 5))
                     {
                         case 0:
-                            item2.worldCellView.Colour = Color.Gray;
+                            item2.worldCellView.Color = Color.DimGray ;
                             break;
                         case 1:
-                            item2.worldCellView.Colour = Color.Pink;
+                            item2.worldCellView.Color = Color.LightGray;
+                            break;
+                        case 2:
+                            item2.worldCellView.Color = Color.DarkGray;
                             break;
                         default:
-                            item2.worldCellView.Colour = Color.White;
+                            item2.worldCellView.Color = Color.White;
                             break;
                     }
                 }
