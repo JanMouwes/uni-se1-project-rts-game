@@ -195,6 +195,7 @@ namespace kbs2.GamePackage
 
 
             onTick += SetBuilding;
+            onTick += f.UpdateTime;
 
             UIView ui = new UIView(this);
 
