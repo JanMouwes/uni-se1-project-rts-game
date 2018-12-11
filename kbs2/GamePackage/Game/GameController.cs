@@ -56,6 +56,7 @@ namespace kbs2.GamePackage
         public ActionInterface ActionInterface { get; set; }// testcode ===============
         public bool QPressed { get; set; }
         public bool APressed { get; set; }
+        public Terraintester Terraintester { get; set; }
 
         public event ElapsedEventHandler GameTick
         {
@@ -190,6 +191,8 @@ namespace kbs2.GamePackage
             //TESTCODE
             QPressed = false;
             APressed = false;
+            Terraintester = new Terraintester();
+
 
             onTick += SetBuilding;
 
@@ -269,6 +272,17 @@ namespace kbs2.GamePackage
             camera.MoveCamera();
 
             // ============== Temp Code ===================================================================
+
+            MouseState temp = Mouse.GetState();
+            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
+            if(gameModel.World.GetCellFromCoords(coords)!= null)
+            {
+                Terraintester.Text = coords.x+","+coords.y+"  "+gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString();
+            }
+
+            gameModel.GuiTextList.Add(Terraintester);
+
             // Update Buildings on screen
             List<IViewImage> buildings = new List<IViewImage>();
             foreach (Building_Controller building in gameModel.World.WorldModel.buildings)
@@ -367,7 +381,7 @@ namespace kbs2.GamePackage
         //testcode
         public void SetBuilding(object sender, OnTickEventArgs eventArgs)
         {
-            if (!QPressed && Keyboard.GetState().IsKeyDown(Keys.Q))
+            if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.Q))
             {
                 DBController.OpenConnection("DefDex");
                 BuildingDef def = DBController.GetDefinitionBuilding(1);
@@ -376,45 +390,34 @@ namespace kbs2.GamePackage
                 MouseState temp = Mouse.GetState();
                 Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
                 Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords( WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
-                Coords chunkcoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);  
+                
+                List<Coords> buidlingcoords = new List<Coords>();
+                foreach (Coords stuff in def.BuildingShape )
+                {
+                    buidlingcoords.Add(coords + stuff);
+                }
 
-                if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[ModulusUtils.mod( coords.x,20), ModulusUtils.mod(coords.y, 20)].worldCellModel.BuildingOnTop == null) {
-                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 5 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
+                List<TerrainType> whitelist = new List<TerrainType>();
+                whitelist.Add(TerrainType.Grass);
+                whitelist.Add(TerrainType.Default);
+
+
+
+                if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
+                {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
                     onTick += building.Update;
                 }
+                QPressed = true;
             }
-            if (!Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if ((!Keyboard.GetState().IsKeyDown(Keys.Q)) && QPressed == true)
             {
                 QPressed = false;
             }
-
-            if (!APressed && Keyboard.GetState().IsKeyDown(Keys.A))
-            {
-                DBController.OpenConnection("DefDex");
-                BuildingDef def = DBController.GetDefinitionBuilding(2);
-                DBController.CloseConnection();
-
-                MouseState temp = Mouse.GetState();
-                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
-                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
-                Coords chunkcoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);
-
-                if (gameModel.World.WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x, 20), ModulusUtils.mod(coords.y, 20)].worldCellModel.BuildingOnTop == null)
-                {
-                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 7 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
-                    gameModel.World.AddBuildingUnderCunstruction(def, building);
-                    building.World = gameModel.World;
-                    building.gameController = this;
-                    onTick += building.Update;
-                }
-            }
-            if (!Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                APressed = false;
-            }
+            
         }
         //testcode
 

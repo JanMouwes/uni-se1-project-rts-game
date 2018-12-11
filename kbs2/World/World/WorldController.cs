@@ -5,6 +5,10 @@ using kbs2.World.World;
 using kbs2.World.Chunk;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
+using System.Collections.Generic;
+using kbs2.World.Enums;
+using kbs2.World.Cell;
+using kbs2.World.Structs;
 
 namespace kbs2.Desktop.World.World
 {
@@ -92,5 +96,33 @@ namespace kbs2.Desktop.World.World
             WorldModel.UnderConstruction.Add(building);
         }
 
+        public WorldCellController GetCellFromCoords(Coords coords)
+        {
+            Coords ChunkCoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);
+            if (WorldModel.ChunkGrid.ContainsKey(ChunkCoords))
+            {
+                return WorldModel.ChunkGrid[ChunkCoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x,20), ModulusUtils.mod(coords.x,20)];
+            }
+            return null;
+        }
+
+
+        // check if coordsrange contains building or illigal terain
+        public bool checkTerainCells(List<Coords> coords, List<TerrainType> whiteList)
+        {
+            foreach(Coords coord in coords)
+            {
+                WorldCellModel cell = GetCellFromCoords(coord).worldCellModel;
+                if (cell.BuildingOnTop != null)
+                {
+                    return false;
+                }
+                if (!(whiteList.Contains(cell.Terrain)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
