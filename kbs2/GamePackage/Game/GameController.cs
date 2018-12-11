@@ -17,6 +17,11 @@ using kbs2.World.Enums;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.UserInterface;
+using kbs2.View.GUI.ActionBox;
+using kbs2.World;
+using kbs2.World.Cell;
+using kbs2.World.Chunk;
+using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit;
@@ -26,6 +31,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using System.Linq;
+using kbs2.Faction.FactionMVC;
+
 
 namespace kbs2.GamePackage
 {
@@ -33,12 +41,18 @@ namespace kbs2.GamePackage
 
     public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
 
+    public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> e);
+
     public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
+
+    public delegate void ShaderDelegate();
 
     public class GameController : Game
     {
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
+
+        public MouseInput MouseInput { get; set; }
 
         public const int TicksPerSecond = 30;
 
@@ -72,7 +86,22 @@ namespace kbs2.GamePackage
         public event GameSpeedObserver GameSpeedChange;
 
         DayController f = new DayController();
-        Currency_Controller currency = new Currency_Controller();
+       
+        Faction_Controller faction_Controller = new Faction_Controller("PlayerFaction");
+        
+		public event MouseStateObserver MouseStateChange;
+
+        private MouseState mouseStatus;
+
+        public MouseState MouseStatus
+        {
+            get => mouseStatus;
+            set
+            {
+                mouseStatus = value;
+                MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(mouseStatus));
+            }
+        }
 
         public event OnTick onTick;
 
@@ -95,12 +124,16 @@ namespace kbs2.GamePackage
 
         private CameraController camera;
 
+        private ShaderDelegate shader;
+
         public GameController(GameSpeed gameSpeed, GameState gameState)
         {
             this.GameSpeed = gameSpeed;
             this.GameState = gameState;
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
+
+            shader = DefaultPattern;
 
             Content.RootDirectory = "Content";
         }
@@ -113,17 +146,26 @@ namespace kbs2.GamePackage
         /// </summary>
         protected override void Initialize()
         {
-      
             // Fill the Dictionairy
             TerrainDef.TerrainDictionary.Add(TerrainType.Grass, "grass");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Water, "Water-MiracleSea");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Sand, "Sand");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Soil, "Soil");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Snow, "Snow");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Rock, "Rock");
+            TerrainDef.TerrainDictionary.Add(TerrainType.Trees, "Tree-2");
 
             // Generate world
             gameModel.World = WorldFactory.GetNewWorld();
 
-			// Pathfinder 
-			gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
+            // Pathfinder 
+            gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
 
-			gameModel.Selection = new Selection_Controller("PurpleLine");
+            gameModel.Selection = new Selection_Controller("PurpleLine");
+
+            gameModel.MouseInput = new MouseInput();
+            gameModel.Selection = new Selection_Controller("PurpleLine");
+            gameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
             camera = new CameraController(GraphicsDevice);
@@ -137,6 +179,8 @@ namespace kbs2.GamePackage
             // Makes the mouse visible in the window
             base.IsMouseVisible = true;
 
+            shader();
+
             // Initalize game
             base.Initialize();
 
@@ -148,6 +192,7 @@ namespace kbs2.GamePackage
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
+
         {
             //TESTCODE
             QPressed = false;
@@ -164,6 +209,12 @@ namespace kbs2.GamePackage
 
 
             //TESTCODE
+
+
+            //============= More TestCode ===============
+
+            MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
+            MouseStateChange += gameModel.ActionBox.OnRightClick;
         }
 
         /// <summary>
@@ -205,6 +256,8 @@ namespace kbs2.GamePackage
             if (chunkExists(chunkCoords)) return;
 
             gameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
+
+            shader();
         }
 
         /// <summary>
@@ -221,11 +274,10 @@ namespace kbs2.GamePackage
 
             // Updates camera according to the pressed buttons
             camera.MoveCamera();
-            
 
             // ============== Temp Code ===================================================================
             // Update Buildings on screen
-            List<IViewable> buildings = new List<IViewable>();
+            List<IViewImage> buildings = new List<IViewImage>();
             foreach (Building_Controller building in gameModel.World.WorldModel.buildings)
             {
                 buildings.Add(building.View);
@@ -234,8 +286,8 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(buildings);
 
 
-            List<IViewable> BUCs = new List<IViewable>();
-            List<IText> Counters = new List<IText>();
+            List<IViewImage> BUCs = new List<IViewImage>();
+            List<IViewText> Counters = new List<IViewText>();
             foreach (BUCController BUC in gameModel.World.WorldModel.UnderConstruction)
             {
                 BUCs.Add(BUC.BUCView);
@@ -245,10 +297,26 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(BUCs);
             gameModel.TextList.AddRange(Counters);
 
-            List<IViewable> Cells = new List<IViewable>();
-            foreach (KeyValuePair<Coords, WorldChunkController> chunk in gameModel.World.WorldModel.ChunkGrid)
+            if (gameModel.ActionBox.BoxModel.Show)
             {
-                foreach (WorldCellController cell in chunk.Value.WorldChunkModel.grid)
+                gameModel.ItemList.Add(gameModel.ActionBox.BoxView);
+                gameModel.TextList.Add(gameModel.ActionBox.BoxModel.Text);
+            }
+
+            int TileSize = (int)(GraphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
+
+            List<IViewImage> Cells = new List<IViewImage>();
+            List<WorldChunkController> chunks = (from chunk in gameModel.World.WorldModel.ChunkGrid
+                                                 let rightBound = chunk.Key.x + (TileSize * WorldChunkModel.ChunkSize)
+                                                 let bottomBound = chunk.Key.y + (TileSize * WorldChunkModel.ChunkSize)
+                                                 let leftBound = chunk.Key.x
+                                                 let topBound = chunk.Key.y
+                                                 where !(rightBound < GraphicsDevice.Viewport.X && leftBound > GraphicsDevice.Viewport.Width + GraphicsDevice.Viewport.X && bottomBound < GraphicsDevice.Viewport.Height + GraphicsDevice.Viewport.Y && topBound > GraphicsDevice.Viewport.Height)
+                                                 select chunk.Value).ToList();
+
+            foreach (WorldChunkController chunk in chunks)
+            {
+                foreach (WorldCellController cell in chunk.WorldChunkModel.grid)
                 {
                     Cells.Add(cell.worldCellView);
                 }
@@ -258,21 +326,30 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(Cells);
 
 
-            gameModel.GuiTextList.Add(currency.view);
-            onTick += currency.DailyReward;
+            gameModel.GuiTextList.Add(faction_Controller.currency_Controller.view);
+            onTick += faction_Controller.currency_Controller.DailyReward;
             
             DBController.OpenConnection("DefDex");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
             DBController.CloseConnection();
 
-            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords { x = 5, y = 5 });
+            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords {x = 5, y = 5});
 
             gameModel.ItemList.Add(unit.UnitView);
 
+            ShaderDelegate tempShader = null;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.R)) RandomPattern2();
-            if (Keyboard.GetState().IsKeyDown(Keys.C)) CellChunkCheckered();
-            if (Keyboard.GetState().IsKeyDown(Keys.D)) DefaultPattern();
+            if (Keyboard.GetState().IsKeyDown(Keys.R)) tempShader = RandomPattern2;
+            if (Keyboard.GetState().IsKeyDown(Keys.C)) tempShader = CellChunkCheckered;
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) tempShader = DefaultPattern;
+
+            mouseChunkLoadUpdate(gameTime);
+
+            if (tempShader != null)
+            {
+                shader = tempShader;
+                shader();
+            }
 
             // ======================================================================================
 
@@ -282,8 +359,13 @@ namespace kbs2.GamePackage
 
             // fire Ontick event
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
-            onTick?.Invoke(this,args);
-            
+            onTick?.Invoke(this, args);
+
+
+            // Calls the game update
+
+            //======= Fire MOUSESTATE ================
+            MouseStatus = Mouse.GetState();
 
             // Calls the game update
             base.Update(gameTime);
@@ -365,7 +447,7 @@ namespace kbs2.GamePackage
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    item2.worldCellView.Color = Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.x) % 2 ==
+                    item2.worldCellView.Colour = Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.x) % 2 ==
                                                 (Math.Abs(item2.worldCellModel.ParentChunk.ChunkCoords.y) % 2 == 1
                                                     ? 1
                                                     : 0)
@@ -388,7 +470,7 @@ namespace kbs2.GamePackage
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
-                    item2.worldCellView.Color = Color.White;
+                    item2.worldCellView.Colour = Color.White;
                 }
             }
         }
@@ -415,7 +497,6 @@ namespace kbs2.GamePackage
                         default:
                             item2.worldCellView.Color = Color.White;
                             break;
-
                     }
                 }
             }

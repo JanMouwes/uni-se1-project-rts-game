@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kbs2.GamePackage.Selection
+namespace kbs2.View.GUI.ActionBox
 {
-    public class Selection_View : IViewImage
+    public class ActionBoxView : IViewImage
     {
         public FloatCoords Coords { get; set; }
         public float Width { get; set; }
@@ -18,14 +18,14 @@ namespace kbs2.GamePackage.Selection
         public Color Colour { get; set; }
         public int ZIndex { get; set; }
 
-        public Selection_View()
+        public ActionBoxView(FloatCoords loc)
         {
-            Coords = new FloatCoords() { x = -1, y = -1};
-            Width = 0;
-            Height = 0;
-            Texture = "PurpleLine";
+            Coords = loc;
+            Width = 2;
+            Height = 1;
+            Texture = "unittrainbalkje";
             Colour = Color.White;
-            ZIndex = 1000;
+            ZIndex = 500;
         }
     }
 }

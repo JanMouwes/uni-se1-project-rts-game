@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.UserInterface
 {
-    public class UIView : IViewable
+    public class UIView : IViewImage
     {
         public GameController gameController { get; set; }
         public Coords coords => new Coords
@@ -21,7 +21,7 @@ namespace kbs2.UserInterface
         public float Height { get { return 140; } set {; } }
         public float Width { get { return gameController.GraphicsDevice.Viewport.Width; } set {; } }
         public string Texture { get { return "UITexture"; } set {; } }
-        public Color Color { get { return Color.White; } set {; } }
+        public Color Colour { get { return Color.White; } set {; } }
         public int ZIndex { get { return 1; } set {; } }
 
 

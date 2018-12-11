@@ -15,12 +15,12 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public BUCView BUCView { get; set; }
         public WorldController World { get; set; }
         public GameController gameController { get; set; }
-        public CunstructionCounter counter { get; set; }
+        public ConstructionCounter counter { get; set; }
 
 
         public BUCController()
         {
-            counter = new CunstructionCounter();
+            counter = new ConstructionCounter();
             counter.BUCController = this;
         }
 

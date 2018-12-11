@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace kbs2.World.Cell
 {
-    public class WorldCellView : IViewable
+    public class WorldCellView : IViewImage
     {
         public FloatCoords Coords { get; set; }
         public string Texture { get; set; }
         public float Width { get; set; } = 1;
         public float Height { get; set; } = 1;
-        public Color Color { get; set; } = Color.White;
+        public Color Colour { get; set; } = Color.White;
         public int ZIndex { get; set; } = 1;
 
         public WorldCellView(FloatCoords coords, string texture)
@@ -28,7 +28,7 @@ namespace kbs2.World.Cell
         {
             Width = width;
             Height = height;
-            Color = color;
+            Colour = color;
             ZIndex = zIndex;
         }
     }
