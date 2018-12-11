@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Timers;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.View.Camera;
-using kbs2.Desktop.World.World;
-using kbs2.Faction.CurrencyMVC;
 using kbs2.GamePackage.DayCycle;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
@@ -18,10 +16,6 @@ using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.UserInterface;
 using kbs2.View.GUI.ActionBox;
-using kbs2.World;
-using kbs2.World.Cell;
-using kbs2.World.Chunk;
-using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit;
@@ -30,7 +24,6 @@ using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using System.Linq;
 using kbs2.Faction.FactionMVC;
 
@@ -486,16 +479,16 @@ namespace kbs2.GamePackage
                     switch (random.Next(0, 5))
                     {
                         case 0:
-                            item2.worldCellView.Color = Color.DimGray ;
+                            item2.worldCellView.Colour = Color.DimGray ;
                             break;
                         case 1:
-                            item2.worldCellView.Color = Color.LightGray;
+                            item2.worldCellView.Colour = Color.LightGray;
                             break;
                         case 2:
-                            item2.worldCellView.Color = Color.DarkGray;
+                            item2.worldCellView.Colour = Color.DarkGray;
                             break;
                         default:
-                            item2.worldCellView.Color = Color.White;
+                            item2.worldCellView.Colour = Color.White;
                             break;
                     }
                 }
