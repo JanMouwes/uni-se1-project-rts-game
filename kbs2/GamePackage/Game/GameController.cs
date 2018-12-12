@@ -346,6 +346,7 @@ namespace kbs2.GamePackage
             DBController.CloseConnection();
 
             Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords {x = 5, y = 5});
+            PlayerFaction.AddUnitToFaction(unit);
 
             gameModel.ItemList.Add(unit.UnitView);
 
