@@ -44,8 +44,7 @@ namespace kbs2.GamePackage
     {
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
-
-        public MouseInput MouseInput { get; set; }
+        
 
         public const int TicksPerSecond = 30;
 
@@ -116,7 +115,7 @@ namespace kbs2.GamePackage
 
         private readonly GraphicsDeviceManager graphicsDeviceManager;
 
-        private CameraController camera;
+        public CameraController camera;
 
         private ShaderDelegate shader;
 
@@ -154,11 +153,8 @@ namespace kbs2.GamePackage
 
             // Pathfinder 
             gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
+            
 
-            gameModel.Selection = new Selection_Controller("PurpleLine");
-
-            gameModel.MouseInput = new MouseInput();
-            gameModel.Selection = new Selection_Controller("PurpleLine");
             gameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -166,6 +162,9 @@ namespace kbs2.GamePackage
             gameView = new GameView(gameModel, graphicsDeviceManager, spriteBatch, camera, GraphicsDevice, Content);
 
             GameTimer = new Timer(TickIntervalMilliseconds);
+
+
+            gameModel.MouseInput = new MouseInput(this);
 
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
@@ -196,6 +195,7 @@ namespace kbs2.GamePackage
 
             onTick += SetBuilding;
             onTick += f.UpdateTime;
+            onTick += gameModel.MouseInput.Selection.Update;
 
             UIView ui = new UIView(this);
 
@@ -280,6 +280,10 @@ namespace kbs2.GamePackage
             if(gameModel.World.GetCellFromCoords(coords)!= null)
             {
                 Terraintester.Text = coords.x+","+coords.y+"  "+gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString();
+                if(gameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop!= null)
+                {
+                    Terraintester.Text += " b";
+                }
             }
 
             gameModel.GuiTextList.Add(Terraintester);

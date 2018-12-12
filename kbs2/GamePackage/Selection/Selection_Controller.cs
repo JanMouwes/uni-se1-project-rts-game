@@ -1,5 +1,8 @@
-﻿using kbs2.GamePackage.EventArgs;
+﻿using kbs2.Desktop.GamePackage.EventArgs;
+using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Selection;
+using kbs2.utils;
+using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit.MVC;
@@ -16,22 +19,99 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage
 {
-	public class Selection_Controller
+    public class Selection_Controller
     {
-		public Selection_Model Model { get; set; }
-        public Selection_View View { get; set; }
-		public MouseInput MouseInput { get; set; }
+        public Selection_Model Model { get; set; }
+        public Selection_View LeftView { get; set; }
+        public Selection_View RightView { get; set; }
+        public Selection_View TopView { get; set; }
+        public Selection_View BottomView { get; set; }
+        public GameController gameController { get; set; }
+
 
 		public List<Unit_Controller> SelectedUnits { get; set; }
 
-		public Selection_Controller(string lineTexture)
+        private FloatCoords FirstPoint;
+        private FloatCoords TopLeft;
+        private FloatCoords BottomRight;
+
+
+        public Selection_Controller(GameController game, string lineTexture)
         {
             Model = new Selection_Model();
-			MouseInput = new MouseInput();
 			SelectedUnits = new List<Unit_Controller>();
+            gameController = game;
+
+
+            LeftView = new Selection_View();
+            LeftView.Width = 1/gameController.gameView.TileSize;
+
+            RightView = new Selection_View();
+            RightView.Width = 1/ gameController.gameView.TileSize;
+
+            TopView = new Selection_View();
+            TopView.Height = 1/ gameController.gameView.TileSize;
+
+            BottomView = new Selection_View();
+            BottomView.Height = 1/ gameController.gameView.TileSize;
         }
 
-		public void onMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
+
+        public void ButtonPressed(FloatCoords mouseCoords)
+        {
+            FirstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords)mouseCoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+        }
+
+        public void ButtonRelease()
+        {
+
+        }
+
+        public void Update(object sender, OnTickEventArgs eventArgs)
+        {
+            MouseState temp = Mouse.GetState();
+            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+            FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+            SetCoords(FirstPoint, SecondPoint);
+            DrawBox();
+        }
+
+        public void SetCoords(FloatCoords firstCoords, FloatCoords secondCoords)
+        {
+            TopLeft.x = firstCoords.x < secondCoords.x ? firstCoords.x : secondCoords.x;
+            TopLeft.y = firstCoords.y < secondCoords.y ? firstCoords.y : secondCoords.y;
+
+            BottomRight.x = firstCoords.x > secondCoords.x ? firstCoords.x : secondCoords.x;
+            BottomRight.y = firstCoords.y > secondCoords.y ? firstCoords.y : secondCoords.y;
+        }
+
+        public void DrawBox()
+        {
+            LeftView.Coords = TopLeft;
+            LeftView.Height = Math.Abs(BottomRight.y - TopLeft.y);
+
+            RightView.Coords = new FloatCoords {x = BottomRight.x,y = TopLeft.y };
+            RightView.Height = Math.Abs(BottomRight.y - TopLeft.y);
+
+            TopView.Coords = TopLeft;
+            TopView.Width = Math.Abs(BottomRight.x - TopLeft.x);
+
+            BottomView.Coords = new FloatCoords { x = TopLeft.x, y = BottomRight.y };
+            BottomView.Width = Math.Abs(BottomRight.x - TopLeft.x);
+
+
+            gameController.gameModel.ItemList.Add(LeftView);
+            gameController.gameModel.ItemList.Add(RightView);
+            gameController.gameModel.ItemList.Add(TopView);
+            gameController.gameModel.ItemList.Add(BottomView);
+        }
+
+
+
+
+
+        /*
+        public void onMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
 		{
 
 		}
@@ -239,5 +319,6 @@ namespace kbs2.GamePackage
 
             SelectedUnits.Clear();
         }
+        */
     }
 }
