@@ -14,9 +14,11 @@ namespace kbs2.WorldEntity.Unit.MVC
 {
 	public class Unit_View : IViewImage
 	{
+
+
         public string ImageSrcShad { get; set; }
 
-		public FloatCoords Coords { get; set; }
+		public FloatCoords Coords { get {return  } set {; } }
 
 		public float Width { get; set; }
 		public float Height { get; set; }
@@ -28,7 +30,6 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public Unit_View(FloatCoords coords)
         {
             ImageSrcShad = "shadow";
-            Coords = coords;
         }
 	}
 }

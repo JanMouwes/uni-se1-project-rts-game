@@ -92,12 +92,18 @@ namespace kbs2.GamePackage
         }
 
         public void UpdateSelection()
-        {/*
-            List<Unit_Controller> Selected = (from Item in gameModel.GuiItemList
-                                        where mousecoords.x >= Item.Coords.x && mousecoords.y >= Item.Coords.y
-                                        && mousecoords.x <= Item.Coords.x + Item.Width && mousecoords.y <= Item.Coords.y + Item.Height
-                                        select Item).ToList();*/
-            gameController.PlayerFaction.FactionModel.Units
+        {
+            List<Unit_Controller> Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
+                                              where TopLeft.x >= Item.LocationController.LocationModel.coords.x 
+                                              && TopLeft.y >= Item.LocationController.LocationModel.coords.y
+                                              && BottomRight.x <= Item.LocationController.LocationModel.coords.x 
+                                              && BottomRight.y <= Item.LocationController.LocationModel.coords.y
+                                              select Item).ToList();
+            if (Selected.Count < 0)
+            {
+                SelectedUnits = Selected;
+            }
+            
         }
 
         public void DrawBox()

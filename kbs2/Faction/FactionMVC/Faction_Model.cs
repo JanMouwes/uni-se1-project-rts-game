@@ -22,6 +22,8 @@ namespace kbs2.Faction.FactionMVC
         {
 			Name = name;
 			FactionRelationships = new Dictionary<Faction_Model, Faction_Relations>();
+            Units = new List<Unit_Controller>();
+            Buildings = new List<Building_Controller>();
         }
     }
 }
