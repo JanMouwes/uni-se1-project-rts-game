@@ -37,8 +37,8 @@ namespace kbs2.utils
 
         public static FloatCoords DrawCoordsToCellFloatCoords(Coords drawCoords, int tileSize) => new FloatCoords
         {
-            x = drawCoords.x / tileSize - (drawCoords.x < 0 ? 1 : 0),
-            y = drawCoords.y / tileSize - (drawCoords.y < 0 ? 1 : 0)
+            x = (float)drawCoords.x / tileSize,
+            y = (float)drawCoords.y / tileSize
         };
     }
 }

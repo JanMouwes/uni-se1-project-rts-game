@@ -29,18 +29,18 @@ namespace kbs2.GamePackage
 		public void OnMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
 		{
 			
-			if (mouseEvent.Value.LeftButton == ButtonState.Pressed && PreviousMouseState.LeftButton == ButtonState.Released)
-			{
+			if (mouseEvent.Value.LeftButton != PreviousMouseState.LeftButton)
+            { 
 				MouseInputStatus = mouseEvent.Value.LeftButton;
                 MouseState temp = Mouse.GetState();
-                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y });
+                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y },mouseEvent.Value);
 
             }
-			if (mouseEvent.Value.RightButton == ButtonState.Released && PreviousMouseState.RightButton == ButtonState.Pressed)
+			if (mouseEvent.Value.RightButton != PreviousMouseState.RightButton)
 			{
 				MouseInputStatus = mouseEvent.Value.RightButton;
                 MouseState temp = Mouse.GetState();
-                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y });
+                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y }, mouseEvent.Value);
 
             }
             
@@ -48,7 +48,7 @@ namespace kbs2.GamePackage
 			PreviousMouseState = mouseEvent.Value;
 		}
 
-        public void GuiOrMap(FloatCoords mousecoords)
+        public void GuiOrMap(FloatCoords mousecoords,MouseState mouseState)
         {
             List<IViewImage> Clicked = (from Item in gameModel.GuiItemList
                                         where mousecoords.x>= Item.Coords.x && mousecoords.y >= Item.Coords.y
@@ -62,8 +62,15 @@ namespace kbs2.GamePackage
             }
             else
             {
-
-                Selection.ButtonPressed(mousecoords);
+                if(mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    Selection.ButtonPressed(mousecoords);
+                }
+                if(mouseState.LeftButton == ButtonState.Released)
+                {
+                    Selection.ButtonRelease();
+                }
+                
             }
         }
 	}

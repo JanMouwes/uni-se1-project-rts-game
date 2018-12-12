@@ -34,6 +34,7 @@ namespace kbs2.GamePackage
         private FloatCoords FirstPoint;
         private FloatCoords TopLeft;
         private FloatCoords BottomRight;
+        private bool active;
 
 
         public Selection_Controller(GameController game, string lineTexture)
@@ -44,36 +45,41 @@ namespace kbs2.GamePackage
 
 
             LeftView = new Selection_View();
-            LeftView.Width = 1/gameController.gameView.TileSize;
+            LeftView.Width = 4f/gameController.gameView.TileSize;
 
             RightView = new Selection_View();
-            RightView.Width = 1/ gameController.gameView.TileSize;
+            RightView.Width = 4f / gameController.gameView.TileSize;
 
             TopView = new Selection_View();
-            TopView.Height = 1/ gameController.gameView.TileSize;
+            TopView.Height = 4f / gameController.gameView.TileSize;
 
             BottomView = new Selection_View();
-            BottomView.Height = 1/ gameController.gameView.TileSize;
+            BottomView.Height = 4f / gameController.gameView.TileSize;
         }
 
 
         public void ButtonPressed(FloatCoords mouseCoords)
         {
             FirstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords)mouseCoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+            active = true;
         }
 
         public void ButtonRelease()
         {
-
+            UpdateSelection();
+            active = false;
         }
 
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
-            MouseState temp = Mouse.GetState();
-            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
-            FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
-            SetCoords(FirstPoint, SecondPoint);
-            DrawBox();
+            if (active)
+            {
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+                SetCoords(FirstPoint, SecondPoint);
+                DrawBox();
+            }
         }
 
         public void SetCoords(FloatCoords firstCoords, FloatCoords secondCoords)
@@ -85,18 +91,27 @@ namespace kbs2.GamePackage
             BottomRight.y = firstCoords.y > secondCoords.y ? firstCoords.y : secondCoords.y;
         }
 
+        public void UpdateSelection()
+        {/*
+            List<Unit_Controller> Selected = (from Item in gameModel.GuiItemList
+                                        where mousecoords.x >= Item.Coords.x && mousecoords.y >= Item.Coords.y
+                                        && mousecoords.x <= Item.Coords.x + Item.Width && mousecoords.y <= Item.Coords.y + Item.Height
+                                        select Item).ToList();*/
+            gameController.PlayerFaction.FactionModel.Units
+        }
+
         public void DrawBox()
         {
             LeftView.Coords = TopLeft;
             LeftView.Height = Math.Abs(BottomRight.y - TopLeft.y);
 
-            RightView.Coords = new FloatCoords {x = BottomRight.x,y = TopLeft.y };
+            RightView.Coords = new FloatCoords {x = BottomRight.x - RightView.Width, y = TopLeft.y };
             RightView.Height = Math.Abs(BottomRight.y - TopLeft.y);
 
             TopView.Coords = TopLeft;
             TopView.Width = Math.Abs(BottomRight.x - TopLeft.x);
 
-            BottomView.Coords = new FloatCoords { x = TopLeft.x, y = BottomRight.y };
+            BottomView.Coords = new FloatCoords { x = TopLeft.x, y = BottomRight.y - BottomView.Height };
             BottomView.Width = Math.Abs(BottomRight.x - TopLeft.x);
 
 

@@ -80,7 +80,7 @@ namespace kbs2.GamePackage
 
         DayController f = new DayController();
        
-        Faction_Controller faction_Controller = new Faction_Controller("PlayerFaction");
+        public Faction_Controller PlayerFaction = new Faction_Controller("PlayerFaction");
         
 		public event MouseStateObserver MouseStateChange;
 
@@ -338,8 +338,8 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(Cells);
 
 
-            gameModel.GuiTextList.Add(faction_Controller.currency_Controller.view);
-            onTick += faction_Controller.currency_Controller.DailyReward;
+            gameModel.GuiTextList.Add(PlayerFaction.currency_Controller.view);
+            onTick += PlayerFaction.currency_Controller.DailyReward;
             
             DBController.OpenConnection("DefDex");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
