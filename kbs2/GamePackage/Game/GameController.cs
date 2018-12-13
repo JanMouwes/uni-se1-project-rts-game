@@ -27,6 +27,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using kbs2.Faction.FactionMVC;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.WorldEntitySpawner;
 
 namespace kbs2.GamePackage
 {
@@ -35,7 +36,7 @@ namespace kbs2.GamePackage
     public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
 
     public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> e);
-
+    
     public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
 
     public delegate void ShaderDelegate();
@@ -44,7 +45,8 @@ namespace kbs2.GamePackage
     {
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
-        
+        public EntitySpawner spawner;
+
 
         public const int TicksPerSecond = 30;
 
@@ -154,7 +156,9 @@ namespace kbs2.GamePackage
 
             // Pathfinder 
             gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
-            
+
+            // Spawner
+            spawner = new EntitySpawner(gameModel.World, ref onTick);
 
             gameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
 
@@ -215,11 +219,13 @@ namespace kbs2.GamePackage
             for(int i =0; i < 12; i++)
             {
                 Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords { x = i, y = 5 }, gameModel.World.WorldModel);
-                gameModel.World.WorldModel.Units.Add(unit);
-                PlayerFaction.AddUnitToFaction(unit);
+
                 unit.UnitModel.Speed = 0.05f;
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
+                spawner.SpawnUnit(unit, PlayerFaction);
                 onTick += unit.LocationController.Ontick;
+
+
             }
 
             //============= More TestCode ===============
