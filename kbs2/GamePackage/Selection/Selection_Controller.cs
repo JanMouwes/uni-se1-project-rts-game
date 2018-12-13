@@ -93,15 +93,28 @@ namespace kbs2.GamePackage
 
         public void UpdateSelection(bool CTRL)
         {
-            List<Unit_Controller> Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                                              where TopLeft.x <= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width/2)
-                                              && TopLeft.y <= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
-                                              && BottomRight.x >= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
-                                              && BottomRight.y >= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
-                                              select Item).ToList();
+            List<Unit_Controller> Selected;
+            if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.1)
+            {
+                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
+                            where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < 0.1
+                            || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < Item.UnitView.Height / 2
+                            select Item).ToList();
+            }
+            else
+            {
+
+
+                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
+                            where TopLeft.x <= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
+                            && TopLeft.y <= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
+                            && BottomRight.x >= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
+                            && BottomRight.y >= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
+                            select Item).ToList();
+            }
             if (CTRL)
             {
-                SelectedUnits.AddRange( Selected);
+                SelectedUnits.AddRange(Selected);
             }
             else
             {

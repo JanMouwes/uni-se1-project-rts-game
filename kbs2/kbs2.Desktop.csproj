@@ -86,6 +86,7 @@
     <Compile Include="UserInterface\ActionInterface.cs" />
     <Compile Include="UserInterface\BuildActions.cs" />
     <Compile Include="UserInterface\UIView.cs" />
+    <Compile Include="utils\DistanceCalculator.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="utils\WorldPositionCalculator.cs" />
     <Compile Include="View\Camera\CameraController.cs" />
