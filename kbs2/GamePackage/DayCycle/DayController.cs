@@ -21,7 +21,7 @@ namespace kbs2.GamePackage.DayCycle
             {
                 past = (int)eventArgs.GameTime.TotalGameTime.TotalSeconds;
                 eventArgs.Day = dayModel.currentDay;
-                Console.WriteLine("dag: " + eventArgs.Day);
+                //Console.WriteLine("dag: " + eventArgs.Day);
                 MinutePassed();
             }
         }
@@ -39,7 +39,7 @@ namespace kbs2.GamePackage.DayCycle
             min = currentMin % 6;
             hrs = currentMin / 6;
 
-            Console.WriteLine("Minuut " + hrs.ToString() + "   :   " + min.ToString());
+            //Console.WriteLine("Minuut " + hrs.ToString() + "   :   " + min.ToString());
         }
     }
 }
