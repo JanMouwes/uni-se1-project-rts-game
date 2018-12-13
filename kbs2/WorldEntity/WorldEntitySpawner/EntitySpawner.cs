@@ -21,7 +21,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
         {
             World.WorldModel.Units.Add(unit);
             faction.AddUnitToFaction(unit);
-            OnTick += unit.LocationController.Ontick;
+            //OnTick += unit.LocationController.Ontick; todo fix deze zooi
         }
 
 

@@ -87,16 +87,11 @@ namespace kbs2.GamePackage
         
 		public event MouseStateObserver MouseStateChange;
 
-        private MouseState mouseStatus;
 
-        public MouseState MouseStatus
+        public MouseState PreviousMouseButtonsStatus
         {
-            get => mouseStatus;
-            set
-            {
-                mouseStatus = value;
-                MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(mouseStatus));
-            }
+            get;
+            set;
         }
 
         public event OnTick onTick;
@@ -301,7 +296,7 @@ namespace kbs2.GamePackage
             Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
             if(gameModel.World.GetCellFromCoords(coords)!= null)
             {
-                Terraintester.Text = coords.x+","+coords.y+"  "+gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString();
+                Terraintester.Text = $"{coords.x},{coords.y}  {gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}";
                 if(gameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop!= null)
                 {
                     Terraintester.Text += " b";
@@ -332,11 +327,8 @@ namespace kbs2.GamePackage
             gameModel.TextList.AddRange(Counters);
 
 
-            List<IViewImage> Units = new List<IViewImage>();
-            foreach (Unit_Controller unit in gameModel.World.WorldModel.Units)
-            {
-                Units.Add(unit.UnitView);
-            }
+            List<IViewImage> Units = (from unit in gameModel.World.WorldModel.Units
+                                      select unit.UnitView ).Cast<IViewImage>().ToList();
 
             gameModel.ItemList.AddRange(Units);
 
@@ -402,7 +394,15 @@ namespace kbs2.GamePackage
             // Calls the game update
 
             //======= Fire MOUSESTATE ================
-            MouseStatus = Mouse.GetState();
+            MouseState CurrentMouseButtonsStatus = Mouse.GetState();
+            if(CurrentMouseButtonsStatus.LeftButton != PreviousMouseButtonsStatus.LeftButton ||
+            CurrentMouseButtonsStatus.RightButton != PreviousMouseButtonsStatus.RightButton)
+            {
+                MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(CurrentMouseButtonsStatus));
+                PreviousMouseButtonsStatus = CurrentMouseButtonsStatus;
+            }
+
+
 
             // Calls the game update
             base.Update(gameTime);
@@ -453,15 +453,8 @@ namespace kbs2.GamePackage
 
         public void ChangeSelection(object sender, EventArgsWithPayload<List<IHasActions>> eventArgs)
         {
-            if (eventArgs.Value.Count > 0)
-            {
-                ActionInterface.SetActions(eventArgs.Value[0]);
-            }
-            else
-            {
-                ActionInterface.SetActions(BuildActions);
-            }
-            
+            IHasActions actions = eventArgs.Value.Count > 0 ? eventArgs.Value.First() : BuildActions;
+            ActionInterface.SetActions(actions);
         }
 
 

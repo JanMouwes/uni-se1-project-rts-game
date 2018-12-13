@@ -49,7 +49,7 @@ namespace kbs2.GamePackage
 			PreviousMouseState = mouseEvent.Value;
 		}
 
-        public void GuiOrMap(FloatCoords mousecoords,MouseState mouseState,bool left)
+        public void GuiOrMap(FloatCoords mousecoords,MouseState mouseState,bool leftButton)
         {
             List<IViewImage> Clicked = (from Item in gameModel.GuiItemList
                                         where mousecoords.x>= Item.Coords.x && mousecoords.y >= Item.Coords.y
@@ -63,15 +63,15 @@ namespace kbs2.GamePackage
             }
             else
             {
-                if (mouseState.LeftButton == ButtonState.Pressed && left) 
+                if (mouseState.LeftButton == ButtonState.Pressed && leftButton) 
                 {
                     Selection.ButtonPressed(mousecoords);
                 }
-                if (mouseState.LeftButton == ButtonState.Released && left) 
+                if (mouseState.LeftButton == ButtonState.Released && leftButton) 
                 {
                     Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
                 }
-                if(mouseState.RightButton == ButtonState.Pressed && !left)
+                if(mouseState.RightButton == ButtonState.Pressed && !leftButton)
                 {
                     Selection.move(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
                 }

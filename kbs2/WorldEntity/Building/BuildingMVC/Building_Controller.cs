@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.WorldEntity.Building
 {
-	public class Building_Controller : IBlockCells, IHasActions
+	public class Building_Controller : IImpassable, IHasActions
     {
         public Building_Model Model { get; set; }
         public BuildingView View { get; set; }

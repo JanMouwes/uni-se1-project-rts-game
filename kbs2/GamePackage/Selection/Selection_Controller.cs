@@ -114,7 +114,7 @@ namespace kbs2.GamePackage
         {
             if (CTRL && SelectedItems.OfType<IHasActions>().Any())
             {
-                SelectedItems.AddRange( SelectBuildings(CTRL));
+                SelectedItems.AddRange( SelectBuildings());
                 args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
                 onSelectionChanged?.Invoke(this, args);
             }
@@ -130,7 +130,7 @@ namespace kbs2.GamePackage
                 }
                 else
                 {
-                    SelectedItems = SelectBuildings(CTRL);
+                    SelectedItems = SelectBuildings();
                     args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
                     onSelectionChanged?.Invoke(this, args);
                 }

@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 {
-    public class BUCController : IBlockCells, IHasActions
+    public class BUCController : IImpassable, IHasActions
     {
 
         public BUCModel BUCModel { get; set; }

@@ -26,6 +26,6 @@ namespace kbs2.World.Cell
         // ViewMode defines the current ViewMode Enum state ( full, fog or none )
         public ViewMode ViewMode { get; set; }
 
-        public IBlockCells BuildingOnTop { get; set; }
+        public IImpassable BuildingOnTop { get; set; }
 	}
 }
