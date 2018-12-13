@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using kbs2.Actions;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.World.World;
 using kbs2.GamePackage;
@@ -8,7 +10,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 {
-    public class BUCController : IBlockCells
+    public class BUCController : IBlockCells, IHasActions
     {
 
         public BUCModel BUCModel { get; set; }
@@ -17,6 +19,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public GameController gameController { get; set; }
         public ConstructionCounter counter { get; set; }
 
+        public List<ActionController> Actions => throw new NotImplementedException();
 
         public BUCController()
         {
@@ -46,6 +49,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             // make building
             Building_Controller building = BuildingFactory.CreateNewBuilding(BUCModel.BuildingDef, BUCModel.TopLeft);
             World.AddBuilding(BUCModel.BuildingDef, building);
+            BUCModel.faction_Controller.AddBuildingToFaction(building);
 
             // unsub from ontick event
             gameController.onTick -= Update;

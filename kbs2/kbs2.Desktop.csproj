@@ -111,6 +111,7 @@
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
     <Compile Include="WorldEntity\Interfaces\IHasActions.cs" />
+    <Compile Include="WorldEntity\Interfaces\IMoveable.cs" />
     <Compile Include="WorldEntity\Interfaces\ISelectable.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />

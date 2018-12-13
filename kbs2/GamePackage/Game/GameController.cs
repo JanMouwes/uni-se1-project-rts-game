@@ -26,7 +26,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using kbs2.Faction.FactionMVC;
-
+using kbs2.WorldEntity.Interfaces;
 
 namespace kbs2.GamePackage
 {
@@ -53,6 +53,7 @@ namespace kbs2.GamePackage
         private Timer GameTimer; //TODO
 
         public ActionInterface ActionInterface { get; set; }// testcode ===============
+        public BuildActions BuildActions { get; set; }
         public bool QPressed { get; set; }
         public bool APressed { get; set; }
         public Terraintester Terraintester { get; set; }
@@ -202,7 +203,8 @@ namespace kbs2.GamePackage
             gameModel.GuiItemList.Add(ui);
 
             ActionInterface = new ActionInterface(this);
-            ActionInterface.SetActions(new BuildActions(this));
+            BuildActions = new BuildActions(this);
+            ActionInterface.SetActions(BuildActions);
 
 
             //TESTCODE
@@ -425,7 +427,7 @@ namespace kbs2.GamePackage
 
                 if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
                 {
-                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds,PlayerFaction);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
@@ -440,6 +442,19 @@ namespace kbs2.GamePackage
             
         }
         //testcode
+
+        public void ChangeSelection(object sender, EventArgsWithPayload<List<IHasActions>> eventArgs)
+        {
+            if (eventArgs.Value.Count > 0)
+            {
+                ActionInterface.SetActions(eventArgs.Value[0]);
+            }
+            else
+            {
+                ActionInterface.SetActions(BuildActions);
+            }
+            
+        }
 
 
         /// <summary>
