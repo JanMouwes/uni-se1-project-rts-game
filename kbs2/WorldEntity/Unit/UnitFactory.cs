@@ -23,7 +23,7 @@ namespace kbs2.WorldEntity.Unit
             UnitController.UnitView.Height = def.Height;
             UnitController.UnitModel.Speed = def.Speed;
             Location_Controller location = new Location_Controller(worldModel,TopLeft.x,TopLeft.y);
-            location.LocationModel.parrent = UnitController;
+            location.LocationModel.parent = UnitController;
             UnitController.LocationController = location;
             return UnitController;
         }
