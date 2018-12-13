@@ -42,38 +42,46 @@ namespace kbs2.GamePackage
         private FloatCoords BottomRight;
         private bool active;
 
-
+        // constructor
         public Selection_Controller(GameController game, string lineTexture)
         {
             Model = new Selection_Model();
 			SelectedItems = new List<IHasActions>();
             gameController = game;
 
-            
+            args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
 
             LeftView = new Selection_View();
+            // width of the selection border
             LeftView.Width = 4f/gameController.gameView.TileSize;
 
             RightView = new Selection_View();
+            // width of the selection border
             RightView.Width = 4f / gameController.gameView.TileSize;
 
             TopView = new Selection_View();
+            // width of the selection border
             TopView.Height = 4f / gameController.gameView.TileSize;
 
             BottomView = new Selection_View();
+            // width of the selection border
             BottomView.Height = 4f / gameController.gameView.TileSize;
         }
 
-
+        // name explains this I guess
         public void ButtonPressed(FloatCoords mouseCoords)
         {
+            //Save current mouse location/coords
             FirstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords)mouseCoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+            //enable drawfunction of selectionbox
             active = true;
         }
 
+        // name explains this I guess
         public void ButtonRelease(bool CTRL)
         {
             UpdateSelection(CTRL);
+            //disable drawfunction
             active = false;
         }
 
@@ -83,12 +91,15 @@ namespace kbs2.GamePackage
             {
                 MouseState temp = Mouse.GetState();
                 Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                // saves current mouse location 
                 FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+                //standardices coords to topleft and bottomright 
                 SetCoords(FirstPoint, SecondPoint);
                 DrawBox();
             }
         }
 
+        //standardices coords to topleft and bottomright 
         public void SetCoords(FloatCoords firstCoords, FloatCoords secondCoords)
         {
             TopLeft.x = firstCoords.x < secondCoords.x ? firstCoords.x : secondCoords.x;
@@ -98,6 +109,7 @@ namespace kbs2.GamePackage
             BottomRight.y = firstCoords.y > secondCoords.y ? firstCoords.y : secondCoords.y;
         }
 
+        // get all items in selectionbox
         public void UpdateSelection(bool CTRL)
         {
             if (CTRL && SelectedItems.OfType<IHasActions>().Any())
@@ -109,7 +121,7 @@ namespace kbs2.GamePackage
             else
             {
                 
-                List<IHasActions>selection = SelectUnits(CTRL);
+                List<IHasActions>selection = SelectUnits();
                 if (selection.Count > 0)
                 {
                     SelectedItems = CTRL ? SelectedItems.Union(selection).ToList() : selection;
@@ -125,7 +137,8 @@ namespace kbs2.GamePackage
             }
         }
 
-        public List<IHasActions> SelectBuildings(bool CTRL)
+        // get all buildings from selectionbox
+        public List<IHasActions> SelectBuildings()
         {
             List<IHasActions> Selected;
             if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
@@ -149,7 +162,8 @@ namespace kbs2.GamePackage
             return Selected;
         }
 
-        public List<IHasActions> SelectUnits(bool CTRL)
+        // selects units in selectionbox
+        public List<IHasActions> SelectUnits()
         {
             List<Unit_Controller> Selected;
             if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
@@ -174,6 +188,7 @@ namespace kbs2.GamePackage
             
         }
 
+        // give movecommand to all units in selection
         public void move(bool CTRL)
         {
             MouseState temp = Mouse.GetState();
@@ -188,6 +203,7 @@ namespace kbs2.GamePackage
             }
         }
 
+        //draws the selectionbox
         public void DrawBox()
         {
             LeftView.Coords = TopLeft;
