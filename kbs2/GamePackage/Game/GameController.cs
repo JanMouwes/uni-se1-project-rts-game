@@ -181,8 +181,7 @@ namespace kbs2.GamePackage
         }
 
         /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
+        /// LoadContent is called once per game and is to load all the content.
         /// </summary>
         protected override void LoadContent()
 
@@ -207,7 +206,6 @@ namespace kbs2.GamePackage
             BuildActions = new BuildActions(this);
             ActionInterface.SetActions(BuildActions);
 
-
             //TESTCODE
             DBController.OpenConnection("DefDex");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
@@ -229,6 +227,7 @@ namespace kbs2.GamePackage
 
             MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
             MouseStateChange += gameModel.ActionBox.OnRightClick;
+            //TESTCODE
         }
 
         /// <summary>
@@ -239,7 +238,18 @@ namespace kbs2.GamePackage
         {
         }
 
-        //    Loads chunk at mouse coordinates if not already loaded
+        /// <summary>
+        /// SaveToDB is called by the user or when the game is closed to save the game to the database
+        /// </summary>
+        public void SaveToDB()
+        {
+            gameState = GameState.Paused;
+            // add logic
+        }
+
+        /// <summary>
+        /// Loads chunk at mouse coordinates if not already loaded
+        /// </summary>
         private void mouseChunkLoadUpdate(GameTime gameTime)
         {
             MouseState mouseState = Mouse.GetState();
@@ -262,9 +272,15 @@ namespace kbs2.GamePackage
             loadChunkIfUnloaded(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private bool chunkExists(Coords chunkCoords) => gameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
                                                         gameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void loadChunkIfUnloaded(Coords chunkCoords)
         {
             if (chunkExists(chunkCoords)) return;
@@ -343,12 +359,15 @@ namespace kbs2.GamePackage
 
             List<IViewImage> Cells = new List<IViewImage>();
             List<WorldChunkController> chunks = (from chunk in gameModel.World.WorldModel.ChunkGrid
-                                                 let rightBound = chunk.Key.x + (TileSize * WorldChunkModel.ChunkSize)
-                                                 let bottomBound = chunk.Key.y + (TileSize * WorldChunkModel.ChunkSize)
-                                                 let leftBound = chunk.Key.x
-                                                 let topBound = chunk.Key.y
-                                                 where !(rightBound < GraphicsDevice.Viewport.X && leftBound > GraphicsDevice.Viewport.Width + GraphicsDevice.Viewport.X && bottomBound < GraphicsDevice.Viewport.Height + GraphicsDevice.Viewport.Y && topBound > GraphicsDevice.Viewport.Height)
+                                                 let rightBottomViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(new Coords() { x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width, y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height }, camera.GetViewMatrix()), TileSize)
+                                                 let topLeftViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(new Coords() { x = GraphicsDevice.Viewport.X, y = GraphicsDevice.Viewport.Y }, camera.GetViewMatrix()), TileSize)
+                                                 let rightBottomBound = new Coords() { x = 20 + WorldChunkModel.ChunkSize , y = 20 }
+                                                 let leftTopBound = new Coords() { x = (chunk.Key.x * WorldChunkModel.ChunkSize), y = (chunk.Key.y * WorldChunkModel.ChunkSize) }
+                                                 let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y, (rightBottomBound.x < 0 ? rightBottomBound.x * -1 : rightBottomBound.x), (rightBottomBound.y < 0 ? rightBottomBound.y * -1 : rightBottomBound.y))
+                                                 let viewRectangle = new Rectangle(topLeftViewBound.x, topLeftViewBound.y, Math.Abs(topLeftViewBound.x - rightBottomViewBound.x), Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
+                                                 where (chunkRectangle.Intersects(viewRectangle))
                                                  select chunk.Value).ToList();
+            Console.WriteLine(chunks.Count);
 
             foreach (WorldChunkController chunk in chunks)
             {
@@ -404,11 +423,15 @@ namespace kbs2.GamePackage
 
 
 
+            if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
+
             // Calls the game update
             base.Update(gameTime);
         }
 
-        //testcode
+        /// <summary>
+        /// TestCode
+        /// </summary>
         public void SetBuilding(object sender, OnTickEventArgs eventArgs)
         {
             if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.Q))
@@ -449,7 +472,6 @@ namespace kbs2.GamePackage
             }
             
         }
-        //testcode
 
         public void ChangeSelection(object sender, EventArgsWithPayload<List<IHasActions>> eventArgs)
         {
@@ -472,7 +494,9 @@ namespace kbs2.GamePackage
 
 
         // ===========================================================================================================================
-        // Draws the chunks and cells in a Checkered pattern for easy debugging
+        /// <summary>
+        /// Draws the chunks and cells in a Checkered pattern for easy debugging
+        /// </summary>
         public void CellChunkCheckered()
         {
             foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)

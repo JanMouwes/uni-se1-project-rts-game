@@ -11,14 +11,13 @@ namespace kbs2.World.Cell
 {
     public class WorldCellController
     {
-        public WorldCellModel worldCellModel { get; set; } = new WorldCellModel();
+        public WorldCellModel worldCellModel { get; set; }
 
         public WorldCellView worldCellView { get; set; }
 
         public WorldCellController(FloatCoords coords, TerrainType terrain)
         {
-            worldCellModel.RealCoords = (Coords)coords;
-            worldCellModel.Terrain = worldCellModel.BaseTerrain = terrain;
+            worldCellModel = new WorldCellModel(terrain, (Coords)coords);
             worldCellView = new WorldCellView(coords, TerrainDef.TerrainDef.TerrainDictionary[terrain]);
         }
 

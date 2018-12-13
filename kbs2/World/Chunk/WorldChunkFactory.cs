@@ -20,15 +20,15 @@ namespace kbs2.World.Chunk
                 int relXIndex = (int) i % WorldChunkModel.ChunkSize;
                 int relYIndex = (int) Math.Floor(i / (double) WorldChunkModel.ChunkSize);
 
-                controller.WorldChunkModel.grid[relXIndex, relYIndex] = WorldCellFactory.GetNewCell(
+                WorldCellController cellController = WorldCellFactory.GetNewCell(
                     new Structs.FloatCoords
                     {
                         x = chunkCoords.x * WorldChunkModel.ChunkSize + relXIndex,
                         y = chunkCoords.y * WorldChunkModel.ChunkSize + relYIndex
                     });
+                cellController.worldCellModel.ParentChunk = controller.WorldChunkModel;
+                controller.WorldChunkModel.grid[relXIndex, relYIndex] = cellController;
             }
-
-            foreach (WorldCellController worldCell in controller.WorldChunkModel.grid) worldCell.worldCellModel.ParentChunk = controller.WorldChunkModel;
 
             return controller;
         }

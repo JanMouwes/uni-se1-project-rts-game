@@ -24,8 +24,14 @@ namespace kbs2.World.Cell
 		public WorldChunkModel ParentChunk { get; set; }
 
         // ViewMode defines the current ViewMode Enum state ( full, fog or none )
-        public ViewMode ViewMode { get; set; }
+        public ViewMode ViewMode { get; set; } = ViewMode.None;
 
         public IImpassable BuildingOnTop { get; set; }
 	}
+        public WorldCellModel(TerrainType terrain, Coords realCoords)
+        {
+            this.Terrain = this.BaseTerrain = terrain;
+            RealCoords = realCoords;
+        }
+    }
 }
