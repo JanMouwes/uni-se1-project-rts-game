@@ -32,7 +32,7 @@ namespace kbs2.GamePackage
 {
     public delegate void GameSpeedObserver(object sender, GameSpeedEventArgs eventArgs);
 
-    public delegate void GameStateObserver(object sender, GameStateEventArgs eventArgs);
+    public delegate void GameStateObserver(object sender, EventArgsWithPayload<GameState> eventArgs);
 
     public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> e);
 
@@ -107,8 +107,10 @@ namespace kbs2.GamePackage
             get => gameState;
             set
             {
+                GameStateChange?.Invoke(this, new EventArgsWithPayload<GameState>(gameState)); //Invoke event if has subscribers
+                Console.WriteLine(GameStateChange) ;
                 gameState = value;
-                GameStateChange?.Invoke(this, new GameStateEventArgs(gameState)); //Invoke event if has subscribers
+                
             }
         }
 
@@ -125,11 +127,24 @@ namespace kbs2.GamePackage
             this.GameSpeed = gameSpeed;
             this.GameState = gameState;
 
+            GameStateChange += PauseGame;
+
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
             shader = DefaultPattern;
 
             Content.RootDirectory = "Content";
+        }
+
+        /// <summary>
+        /// Is subscribed to the gamestate so this is called every time the gamestate is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        public void PauseGame(object sender, EventArgsWithPayload<GameState> eventArgs)
+        {
+            if (eventArgs.Value != GameState.Paused) return;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -221,8 +236,9 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SaveToDB()
         {
-            gameState = GameState.Paused;
-            // add logic
+            //GameState = GameState.Paused;
+
+            throw new NotImplementedException();
         }
 
         /// <summary>
