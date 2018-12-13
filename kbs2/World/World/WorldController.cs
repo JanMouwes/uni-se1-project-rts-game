@@ -101,7 +101,7 @@ namespace kbs2.Desktop.World.World
             Coords ChunkCoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);
             if (WorldModel.ChunkGrid.ContainsKey(ChunkCoords))
             {
-                return WorldModel.ChunkGrid[ChunkCoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x,20), ModulusUtils.mod(coords.x,20)];
+                return WorldModel.ChunkGrid[ChunkCoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x,20), ModulusUtils.mod(coords.y,20)];
             }
             return null;
         }

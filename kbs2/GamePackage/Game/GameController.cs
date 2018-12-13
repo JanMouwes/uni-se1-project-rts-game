@@ -26,7 +26,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using kbs2.Faction.FactionMVC;
-
+using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.WorldEntitySpawner;
 
 namespace kbs2.GamePackage
 {
@@ -44,6 +45,7 @@ namespace kbs2.GamePackage
     {
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
+        public EntitySpawner spawner;
 
         public MouseInput MouseInput { get; set; }
 
@@ -54,6 +56,7 @@ namespace kbs2.GamePackage
         private Timer GameTimer; //TODO
 
         public ActionInterface ActionInterface { get; set; }// testcode ===============
+        public BuildActions BuildActions { get; set; }
         public bool QPressed { get; set; }
         public bool APressed { get; set; }
         public Terraintester Terraintester { get; set; }
@@ -82,19 +85,14 @@ namespace kbs2.GamePackage
         DayController f = new DayController();
        
         Faction_Controller faction_Controller = new Faction_Controller("PlayerFaction");
-        
-		public event MouseStateObserver MouseStateChange;
 
-        private MouseState mouseStatus;
+        public event MouseStateObserver MouseStateChange;
 
-        public MouseState MouseStatus
+
+        public MouseState PreviousMouseButtonsStatus
         {
-            get => mouseStatus;
-            set
-            {
-                mouseStatus = value;
-                MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(mouseStatus));
-            }
+            get;
+            set;
         }
 
         public event OnTick onTick;
@@ -107,10 +105,8 @@ namespace kbs2.GamePackage
             get => gameState;
             set
             {
-                GameStateChange?.Invoke(this, new EventArgsWithPayload<GameState>(gameState)); //Invoke event if has subscribers
-                Console.WriteLine(GameStateChange) ;
                 gameState = value;
-                
+                GameStateChange?.Invoke(this, new GameStateEventArgs(gameState)); //Invoke event if has subscribers
             }
         }
 
@@ -170,17 +166,19 @@ namespace kbs2.GamePackage
             // Pathfinder 
             gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
 
-            gameModel.Selection = new Selection_Controller("PurpleLine");
+            // Spawner
+            spawner = new EntitySpawner(gameModel.World, ref onTick);
 
-            gameModel.MouseInput = new MouseInput();
-            gameModel.Selection = new Selection_Controller("PurpleLine");
-            gameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
+            gameModel.ActionBox = new ActionBoxController(new FloatCoords() { x = 50, y = 50 });
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
             camera = new CameraController(GraphicsDevice);
             gameView = new GameView(gameModel, graphicsDeviceManager, spriteBatch, camera, GraphicsDevice, Content);
 
             GameTimer = new Timer(TickIntervalMilliseconds);
+
+
+            gameModel.MouseInput = new MouseInput(this);
 
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
@@ -192,8 +190,6 @@ namespace kbs2.GamePackage
 
             // Initalize game
             base.Initialize();
-
-
         }
 
         /// <summary>
@@ -210,18 +206,42 @@ namespace kbs2.GamePackage
 
             onTick += SetBuilding;
             onTick += f.UpdateTime;
+            onTick += gameModel.MouseInput.Selection.Update;
+            gameModel.MouseInput.Selection.onSelectionChanged += ChangeSelection;
+
 
             UIView ui = new UIView(this);
 
             gameModel.GuiItemList.Add(ui);
 
             ActionInterface = new ActionInterface(this);
-            ActionInterface.SetActions(new BuildActions(this));
+            BuildActions = new BuildActions(this);
+            ActionInterface.SetActions(BuildActions);
+
+            //TESTCODE
+            DBController.OpenConnection("DefDex");
+            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
+            DBController.CloseConnection();
+
+            for (int i = 0; i < 12; i++)
+            {
+                Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords { x = i, y = 5 }, gameModel.World.WorldModel);
+
+                unit.UnitModel.Speed = 0.05f;
+                unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
+                spawner.SpawnUnit(unit, PlayerFaction);
+                onTick += unit.LocationController.Ontick;
+
+
+            }
+
+            //============= More TestCode ===============
 
             MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
             MouseStateChange += gameModel.ActionBox.OnRightClick;
             //TESTCODE
         }
+
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -306,7 +326,11 @@ namespace kbs2.GamePackage
             Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
             if(gameModel.World.GetCellFromCoords(coords)!= null)
             {
-                Terraintester.Text = coords.x+","+coords.y+"  "+gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString();
+                Terraintester.Text = $"{coords.x},{coords.y}  {gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}";
+                if(gameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop!= null)
+                {
+                    Terraintester.Text += " b";
+                }
             }
 
             gameModel.GuiTextList.Add(Terraintester);
@@ -331,6 +355,13 @@ namespace kbs2.GamePackage
 
             gameModel.ItemList.AddRange(BUCs);
             gameModel.TextList.AddRange(Counters);
+
+
+            List<IViewImage> Units = (from unit in gameModel.World.WorldModel.Units
+                                      select unit.UnitView ).Cast<IViewImage>().ToList();
+
+            gameModel.ItemList.AddRange(Units);
+
 
             if (gameModel.ActionBox.BoxModel.Show)
             {
@@ -364,16 +395,9 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(Cells);
 
 
-            gameModel.GuiTextList.Add(faction_Controller.currency_Controller.view);
-            onTick += faction_Controller.currency_Controller.DailyReward;
+            gameModel.GuiTextList.Add(PlayerFaction.currency_Controller.view);
+            onTick += PlayerFaction.currency_Controller.DailyReward;
             
-            DBController.OpenConnection("DefDex");
-            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
-            DBController.CloseConnection();
-
-            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords {x = 5, y = 5});
-
-            gameModel.ItemList.Add(unit.UnitView);
 
             ShaderDelegate tempShader = null;
 
@@ -403,7 +427,15 @@ namespace kbs2.GamePackage
             // Calls the game update
 
             //======= Fire MOUSESTATE ================
-            MouseStatus = Mouse.GetState();
+            MouseState CurrentMouseButtonsStatus = Mouse.GetState();
+            if(CurrentMouseButtonsStatus.LeftButton != PreviousMouseButtonsStatus.LeftButton ||
+            CurrentMouseButtonsStatus.RightButton != PreviousMouseButtonsStatus.RightButton)
+            {
+                MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(CurrentMouseButtonsStatus));
+                PreviousMouseButtonsStatus = CurrentMouseButtonsStatus;
+            }
+
+
 
             if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
 
@@ -440,7 +472,7 @@ namespace kbs2.GamePackage
 
                 if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
                 {
-                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds);
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords, 30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds,PlayerFaction);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
@@ -453,6 +485,12 @@ namespace kbs2.GamePackage
                 QPressed = false;
             }
             
+        }
+
+        public void ChangeSelection(object sender, EventArgsWithPayload<List<IHasActions>> eventArgs)
+        {
+            IHasActions actions = eventArgs.Value.Count > 0 ? eventArgs.Value.First() : BuildActions;
+            ActionInterface.SetActions(actions);
         }
 
 
