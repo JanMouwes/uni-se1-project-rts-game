@@ -94,11 +94,11 @@ namespace kbs2.GamePackage
         public void UpdateSelection(bool CTRL)
         {
             List<Unit_Controller> Selected;
-            if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.1)
+            if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.4)
             {
                 Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                            where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < 0.1
-                            || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < Item.UnitView.Height / 2
+                            where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < 0.4
+                            || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < Item.UnitView.Height
                             select Item).ToList();
             }
             else
