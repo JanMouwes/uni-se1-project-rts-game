@@ -182,8 +182,7 @@ namespace kbs2.GamePackage
         }
 
         /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
+        /// LoadContent is called once per game and is to load all the content.
         /// </summary>
         protected override void LoadContent()
 
@@ -204,14 +203,9 @@ namespace kbs2.GamePackage
             ActionInterface = new ActionInterface(this);
             ActionInterface.SetActions(new BuildActions(this));
 
-
-            //TESTCODE
-
-
-            //============= More TestCode ===============
-
             MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
             MouseStateChange += gameModel.ActionBox.OnRightClick;
+            //TESTCODE
         }
 
         /// <summary>
@@ -222,7 +216,17 @@ namespace kbs2.GamePackage
         {
         }
 
-        //    Loads chunk at mouse coordinates if not already loaded
+        /// <summary>
+        /// SaveToDB is called by the user or when the game is closed to save the game to the database
+        /// </summary>
+        public void SaveToDB()
+        {
+            // add logic
+        }
+
+        /// <summary>
+        /// Loads chunk at mouse coordinates if not already loaded
+        /// </summary>
         private void mouseChunkLoadUpdate(GameTime gameTime)
         {
             MouseState mouseState = Mouse.GetState();
@@ -245,9 +249,15 @@ namespace kbs2.GamePackage
             loadChunkIfUnloaded(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private bool chunkExists(Coords chunkCoords) => gameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
                                                         gameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void loadChunkIfUnloaded(Coords chunkCoords)
         {
             if (chunkExists(chunkCoords)) return;
@@ -382,7 +392,9 @@ namespace kbs2.GamePackage
             base.Update(gameTime);
         }
 
-        //testcode
+        /// <summary>
+        /// TestCode
+        /// </summary>
         public void SetBuilding(object sender, OnTickEventArgs eventArgs)
         {
             if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.Q))
@@ -423,7 +435,6 @@ namespace kbs2.GamePackage
             }
             
         }
-        //testcode
 
 
         /// <summary>
@@ -440,7 +451,9 @@ namespace kbs2.GamePackage
 
 
         // ===========================================================================================================================
-        // Draws the chunks and cells in a Checkered pattern for easy debugging
+        /// <summary>
+        /// Draws the chunks and cells in a Checkered pattern for easy debugging
+        /// </summary>
         public void CellChunkCheckered()
         {
             foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
