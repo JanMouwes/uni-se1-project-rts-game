@@ -1,4 +1,5 @@
-﻿using kbs2.World;
+﻿using kbs2.Actions;
+using kbs2.World;
 using kbs2.World.Cell;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace kbs2.WorldEntity.Building
 
         public Coords TopLeft { get; set; }
 
+        public List<ActionController> actions { get; set; }
+
         // all the cells the building is on
         public List<WorldCellModel> LocationCells { get; set; }
 
@@ -20,6 +23,7 @@ namespace kbs2.WorldEntity.Building
         {
             TopLeft = topLeft;
             LocationCells = new List<WorldCellModel>();
+            actions = new List<ActionController>();
         }
     }
 }

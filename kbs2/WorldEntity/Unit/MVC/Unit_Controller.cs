@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using kbs2.Actions;
 using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Model;
@@ -18,16 +19,18 @@ using MonoGame.Extended;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-	public class Unit_Controller : ISelectable
+	public class Unit_Controller : ISelectable, IMoveable, IHasActions
 	{
 		public Location_Controller LocationController;
 		public Unit_Model UnitModel;
         public Unit_View UnitView;
 
-		public Unit_Controller(Coords topLeft)
+        public List<ActionController> Actions { get {return UnitModel.actions; } }
+
+        public Unit_Controller()
 		{
-            UnitModel = new Unit_Model(topLeft);
-            UnitView = new Unit_View(new FloatCoords() { x = UnitModel.coords.x, y = UnitModel.coords.y });
+            UnitView = new Unit_View(this);
+            UnitModel = new Unit_Model();
         }
         // Create a new unit and add it to a faction
         public void CreateUnit(Faction_Model faction)
@@ -39,5 +42,10 @@ namespace kbs2.WorldEntity.Unit.MVC
         {
             return new RectangleF(LocationController.LocationModel.floatCoords.x - UnitView.Width/2, LocationController.LocationModel.floatCoords.y - UnitView.Height/2, UnitView.Width, UnitView.Height);
         }
-	}
+
+        public void MoveTo(FloatCoords target,bool CTRL)
+        {
+            LocationController.MoveTo(target,CTRL);
+        }
+    }
 }

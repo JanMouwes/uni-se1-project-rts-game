@@ -86,6 +86,7 @@
     <Compile Include="UserInterface\ActionInterface.cs" />
     <Compile Include="UserInterface\BuildActions.cs" />
     <Compile Include="UserInterface\UIView.cs" />
+    <Compile Include="utils\DistanceCalculator.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="utils\WorldPositionCalculator.cs" />
     <Compile Include="View\Camera\CameraController.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
     <Compile Include="WorldEntity\Interfaces\IHasActions.cs" />
+    <Compile Include="WorldEntity\Interfaces\IMoveable.cs" />
     <Compile Include="WorldEntity\Interfaces\ISelectable.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
@@ -165,7 +167,8 @@
     <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCController.cs" />
     <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCView.cs" />
     <Compile Include="WorldEntity\Building\BUCFactory.cs" />
-    <Compile Include="WorldEntity\Interfaces\IBlockCells.cs" />
+    <Compile Include="WorldEntity\Interfaces\IImpassable.cs" />
+    <Compile Include="WorldEntity\WorldEntitySpawner\EntitySpawner.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
@@ -257,6 +260,9 @@
     <Content Include="World\.DS_Store" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WorldEntity\WorldEntitySpawner\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

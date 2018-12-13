@@ -18,6 +18,7 @@ namespace kbs2.GamePackage.Selection
         public Color Colour { get; set; }
         public int ZIndex { get; set; }
 
+        //constructor
         public Selection_View()
         {
             Coords = new FloatCoords() { x = -1, y = -1};

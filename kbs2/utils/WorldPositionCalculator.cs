@@ -34,5 +34,11 @@ namespace kbs2.utils
             x = (int) Math.Floor((double) cellCoords.x / WorldChunkModel.ChunkSize),
             y = (int) Math.Floor((double) cellCoords.y / WorldChunkModel.ChunkSize)
         };
+
+        public static FloatCoords DrawCoordsToCellFloatCoords(Coords drawCoords, int tileSize) => new FloatCoords
+        {
+            x = (float)drawCoords.x / tileSize,
+            y = (float)drawCoords.y / tileSize
+        };
     }
 }
