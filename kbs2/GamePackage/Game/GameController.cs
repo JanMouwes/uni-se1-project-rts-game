@@ -197,8 +197,14 @@ namespace kbs2.GamePackage
             onTick += SetBuilding;
             onTick += f.UpdateTime;
 
+			LeftButtonBar leftButtonBar = new LeftButtonBar(this);
+			RightButtonBar rightButtonBar = new RightButtonBar(this);
+			StatusBar statusBar = new StatusBar(this);
             UIView ui = new UIView(this);
 
+			gameModel.GuiItemList.Add(leftButtonBar);
+			gameModel.GuiItemList.Add(rightButtonBar);
+			gameModel.GuiItemList.Add(statusBar);
             gameModel.GuiItemList.Add(ui);
 
             ActionInterface = new ActionInterface(this);
