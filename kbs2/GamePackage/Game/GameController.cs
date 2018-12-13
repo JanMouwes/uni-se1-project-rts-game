@@ -221,6 +221,7 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SaveToDB()
         {
+            gameState = GameState.Paused;
             // add logic
         }
 
@@ -387,6 +388,8 @@ namespace kbs2.GamePackage
 
             //======= Fire MOUSESTATE ================
             MouseStatus = Mouse.GetState();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
 
             // Calls the game update
             base.Update(gameTime);
