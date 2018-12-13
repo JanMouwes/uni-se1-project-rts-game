@@ -10,6 +10,7 @@ using kbs2.WorldEntity;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World.Enums;
 using Microsoft.Xna.Framework;
+using kbs2.Actions;
 
 namespace kbs2.Unit.Model
 {
@@ -28,9 +29,12 @@ namespace kbs2.Unit.Model
 
         public float Speed { get; set; }
 
+        public List<ActionController> actions { get; set; }
+
 		public Unit_Model()
         {
             Selected = false;
+            actions = new List<ActionController>();
         }
     }
 }

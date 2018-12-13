@@ -16,7 +16,7 @@ namespace kbs2.WorldEntity.Building
         public Building_Model Model { get; set; }
         public BuildingView View { get; set; }
 
-        public List<ActionController> Actions => throw new NotImplementedException();
+        public List<ActionController> Actions { get { return Model.actions; } } 
 
         public RectangleF CalcClickBox()
         {

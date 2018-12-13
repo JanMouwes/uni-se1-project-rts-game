@@ -71,7 +71,11 @@ namespace kbs2.UserInterface
                 }
                 currentActions.Add(actionViews);
             }
-            SetActions(0);
+            if (currentActions.Count > 0)
+            {
+                SetActions(0);
+            }
+            
         }
 
         // Set actiongroup on screen

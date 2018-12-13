@@ -25,7 +25,7 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public Unit_Model UnitModel;
         public Unit_View UnitView;
 
-        public List<ActionController> Actions { get => throw new NotImplementedException(); }
+        public List<ActionController> Actions { get {return UnitModel.actions; } }
 
         public Unit_Controller()
 		{

@@ -19,7 +19,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public GameController gameController { get; set; }
         public ConstructionCounter counter { get; set; }
 
-        public List<ActionController> Actions => throw new NotImplementedException();
+        public List<ActionController> Actions { get { return BUCModel.actions; } }
 
         public BUCController()
         {
