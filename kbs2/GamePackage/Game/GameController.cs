@@ -206,7 +206,19 @@ namespace kbs2.GamePackage
 
 
             //TESTCODE
+            DBController.OpenConnection("DefDex");
+            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
+            DBController.CloseConnection();
 
+            for(int i =0; i < 12; i++)
+            {
+                Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords { x = i, y = 5 }, gameModel.World.WorldModel);
+                gameModel.World.WorldModel.Units.Add(unit);
+                PlayerFaction.AddUnitToFaction(unit);
+                unit.UnitModel.Speed = 0.05f;
+                unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
+                onTick += unit.LocationController.Ontick;
+            }
 
             //============= More TestCode ===============
 
@@ -309,6 +321,16 @@ namespace kbs2.GamePackage
             gameModel.ItemList.AddRange(BUCs);
             gameModel.TextList.AddRange(Counters);
 
+
+            List<IViewImage> Units = new List<IViewImage>();
+            foreach (Unit_Controller unit in gameModel.World.WorldModel.Units)
+            {
+                Units.Add(unit.UnitView);
+            }
+
+            gameModel.ItemList.AddRange(Units);
+
+
             if (gameModel.ActionBox.BoxModel.Show)
             {
                 gameModel.ItemList.Add(gameModel.ActionBox.BoxView);
@@ -341,14 +363,6 @@ namespace kbs2.GamePackage
             gameModel.GuiTextList.Add(PlayerFaction.currency_Controller.view);
             onTick += PlayerFaction.currency_Controller.DailyReward;
             
-            DBController.OpenConnection("DefDex");
-            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
-            DBController.CloseConnection();
-
-            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, new Coords {x = 5, y = 5});
-            PlayerFaction.AddUnitToFaction(unit);
-
-            gameModel.ItemList.Add(unit.UnitView);
 
             ShaderDelegate tempShader = null;
 

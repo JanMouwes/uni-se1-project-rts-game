@@ -4,6 +4,7 @@ using System.Linq;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World.Structs;
+using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.GamePackage
@@ -33,14 +34,14 @@ namespace kbs2.GamePackage
             { 
 				MouseInputStatus = mouseEvent.Value.LeftButton;
                 MouseState temp = Mouse.GetState();
-                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y },mouseEvent.Value);
+                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y },mouseEvent.Value,true);
 
             }
 			if (mouseEvent.Value.RightButton != PreviousMouseState.RightButton)
 			{
 				MouseInputStatus = mouseEvent.Value.RightButton;
                 MouseState temp = Mouse.GetState();
-                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y }, mouseEvent.Value);
+                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y }, mouseEvent.Value,false);
 
             }
             
@@ -48,7 +49,7 @@ namespace kbs2.GamePackage
 			PreviousMouseState = mouseEvent.Value;
 		}
 
-        public void GuiOrMap(FloatCoords mousecoords,MouseState mouseState)
+        public void GuiOrMap(FloatCoords mousecoords,MouseState mouseState,bool left)
         {
             List<IViewImage> Clicked = (from Item in gameModel.GuiItemList
                                         where mousecoords.x>= Item.Coords.x && mousecoords.y >= Item.Coords.y
@@ -62,16 +63,23 @@ namespace kbs2.GamePackage
             }
             else
             {
-                if(mouseState.LeftButton == ButtonState.Pressed)
+                if (mouseState.LeftButton == ButtonState.Pressed && left) 
                 {
                     Selection.ButtonPressed(mousecoords);
                 }
-                if(mouseState.LeftButton == ButtonState.Released)
+                if (mouseState.LeftButton == ButtonState.Released && left) 
                 {
-                    Selection.ButtonRelease();
+                    Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
+                }
+                if(mouseState.RightButton == ButtonState.Pressed && !left)
+                {
+                    Selection.move(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
                 }
                 
             }
         }
+
+
+        
 	}
 }

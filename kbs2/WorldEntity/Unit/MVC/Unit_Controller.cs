@@ -24,10 +24,10 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public Unit_Model UnitModel;
         public Unit_View UnitView;
 
-		public Unit_Controller(Coords topLeft)
+		public Unit_Controller()
 		{
-            UnitModel = new Unit_Model(topLeft);
-            UnitView = new Unit_View(new FloatCoords() { x = UnitModel.coords.x, y = UnitModel.coords.y });
+            UnitView = new Unit_View(this);
+            UnitModel = new Unit_Model();
         }
         // Create a new unit and add it to a faction
         public void CreateUnit(Faction_Model faction)

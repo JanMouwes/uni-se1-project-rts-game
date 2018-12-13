@@ -64,9 +64,9 @@ namespace kbs2.GamePackage
             active = true;
         }
 
-        public void ButtonRelease()
+        public void ButtonRelease(bool CTRL)
         {
-            UpdateSelection();
+            UpdateSelection(CTRL);
             active = false;
         }
 
@@ -91,19 +91,34 @@ namespace kbs2.GamePackage
             BottomRight.y = firstCoords.y > secondCoords.y ? firstCoords.y : secondCoords.y;
         }
 
-        public void UpdateSelection()
+        public void UpdateSelection(bool CTRL)
         {
             List<Unit_Controller> Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                                              where TopLeft.x >= Item.LocationController.LocationModel.coords.x 
-                                              && TopLeft.y >= Item.LocationController.LocationModel.coords.y
-                                              && BottomRight.x <= Item.LocationController.LocationModel.coords.x 
-                                              && BottomRight.y <= Item.LocationController.LocationModel.coords.y
+                                              where TopLeft.x <= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width/2)
+                                              && TopLeft.y <= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
+                                              && BottomRight.x >= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
+                                              && BottomRight.y >= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
                                               select Item).ToList();
-            if (Selected.Count < 0)
+            if (CTRL)
+            {
+                SelectedUnits.AddRange( Selected);
+            }
+            else
             {
                 SelectedUnits = Selected;
             }
             
+        }
+
+        public void move(bool CTRL)
+        {
+            MouseState temp = Mouse.GetState();
+            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+            foreach (Unit_Controller unit in SelectedUnits)
+            {
+                unit.LocationController.MoveTo(target,CTRL);
+            }
         }
 
         public void DrawBox()

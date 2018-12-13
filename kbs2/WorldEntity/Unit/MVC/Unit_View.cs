@@ -14,11 +14,11 @@ namespace kbs2.WorldEntity.Unit.MVC
 {
 	public class Unit_View : IViewImage
 	{
-
+        public Unit_Controller Unit_Controller { get; set; }
 
         public string ImageSrcShad { get; set; }
 
-		public FloatCoords Coords { get {return  } set {; } }
+		public FloatCoords Coords { get { return Unit_Controller.LocationController.LocationModel.floatCoords; } set {; } }
 
 		public float Width { get; set; }
 		public float Height { get; set; }
@@ -27,8 +27,9 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public Color Colour { get { return Color.White; } set {; } }
 		public int ZIndex { get { return 2; } set {; } }
 
-		public Unit_View(FloatCoords coords)
+		public Unit_View(Unit_Controller Unit_Controller)
         {
+            this.Unit_Controller = Unit_Controller;
             ImageSrcShad = "shadow";
         }
 	}

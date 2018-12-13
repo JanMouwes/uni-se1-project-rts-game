@@ -1,4 +1,5 @@
-﻿using kbs2.Desktop.World.World;
+﻿using kbs2.Desktop.GamePackage.EventArgs;
+using kbs2.Desktop.World.World;
 using kbs2.World;
 using kbs2.World.Structs;
 using System;
@@ -26,11 +27,21 @@ namespace kbs2.WorldEntity.Location
             pathfinder = new Pathfinder(worldModel, 500);
             Waypoints = new List<FloatCoords>();
 		}
-		public void MoveTo(FloatCoords target) //[Review] This can be a Lambda expression
+		public void MoveTo(FloatCoords target, bool CTRL) //[Review] This can be a Lambda expression
 		{
-            Waypoints.AddRange(pathfinder.FindPath(target, LocationModel));
+            List<FloatCoords> points = pathfinder.FindPath(target, LocationModel);
+            points.RemoveAt(0);
+            if (CTRL)
+            {
+                Waypoints.AddRange(points);
+            }
+            else
+            {
+                Waypoints = points;
+            }
+            
 		}
-        public void Ontick() //TODO subscribe to ontick event
+        public void Ontick(object sender, OnTickEventArgs eventArgs) 
         {
             if(Waypoints.Count > 0)
             {
