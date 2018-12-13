@@ -82,9 +82,9 @@ namespace kbs2.GamePackage
 
         public event GameSpeedObserver GameSpeedChange;
 
-        DayController f = new DayController();
+        public DayController f = new DayController();
        
-        Faction_Controller faction_Controller = new Faction_Controller("PlayerFaction");
+        public Faction_Controller PlayerFaction = new Faction_Controller("PlayerFaction");
 
         public event MouseStateObserver MouseStateChange;
 
@@ -106,7 +106,7 @@ namespace kbs2.GamePackage
             set
             {
                 gameState = value;
-                GameStateChange?.Invoke(this, new GameStateEventArgs(gameState)); //Invoke event if has subscribers
+                GameStateChange?.Invoke(this, new EventArgsWithPayload<GameState>(gameState)); //Invoke event if has subscribers
             }
         }
 
@@ -114,7 +114,7 @@ namespace kbs2.GamePackage
 
         private readonly GraphicsDeviceManager graphicsDeviceManager;
 
-        private CameraController camera;
+        public CameraController camera;
 
         private ShaderDelegate shader;
 
