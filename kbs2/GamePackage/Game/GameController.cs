@@ -197,6 +197,8 @@ namespace kbs2.GamePackage
             onTick += SetBuilding;
             onTick += f.UpdateTime;
             onTick += gameModel.MouseInput.Selection.Update;
+            gameModel.MouseInput.Selection.onSelectionChanged += ChangeSelection;
+            
 
             UIView ui = new UIView(this);
 

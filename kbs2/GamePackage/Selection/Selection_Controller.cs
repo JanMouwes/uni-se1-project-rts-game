@@ -49,7 +49,7 @@ namespace kbs2.GamePackage
 			SelectedItems = new List<IHasActions>();
             gameController = game;
 
-            args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
+            
 
             LeftView = new Selection_View();
             LeftView.Width = 4f/gameController.gameView.TileSize;
@@ -103,6 +103,7 @@ namespace kbs2.GamePackage
             if (CTRL && SelectedItems.OfType<IHasActions>().Any())
             {
                 SelectedItems.AddRange( SelectBuildings(CTRL));
+                args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
                 onSelectionChanged?.Invoke(this, args);
             }
             else
@@ -112,11 +113,13 @@ namespace kbs2.GamePackage
                 if (selection.Count > 0)
                 {
                     SelectedItems = CTRL ? SelectedItems.Union(selection).ToList() : selection;
+                    args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
                     onSelectionChanged?.Invoke(this, args);
                 }
                 else
                 {
                     SelectedItems = SelectBuildings(CTRL);
+                    args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
                     onSelectionChanged?.Invoke(this, args);
                 }
             }
