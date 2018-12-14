@@ -206,12 +206,23 @@ namespace kbs2.GamePackage
             onTick += gameModel.MouseInput.Selection.Update;
             gameModel.MouseInput.Selection.onSelectionChanged += ChangeSelection;
 
+			StatusBarView statusBarView = new StatusBarView(this);
+			LeftButtonBar leftButtonBar = new LeftButtonBar(this);
+			RightButtonBar rightButtonBar = new RightButtonBar(this);
 
-            UIView ui = new UIView(this);
+			BottomBarView bottomBarView = new BottomBarView(this);
+			MiniMapBar miniMap = new MiniMapBar(this);
+			ActionBarView actionBar = new ActionBarView(this);
 
-            gameModel.GuiItemList.Add(ui);
+            gameModel.GuiItemList.Add(statusBarView);
+			gameModel.GuiItemList.Add(leftButtonBar);
+			gameModel.GuiItemList.Add(rightButtonBar);
+			gameModel.GuiItemList.Add(bottomBarView);
+			gameModel.GuiItemList.Add(miniMap);
+			gameModel.GuiItemList.Add(actionBar);
 
-            ActionInterface = new ActionInterface(this);
+
+			ActionInterface = new ActionInterface(this);
             BuildActions = new BuildActions(this);
             ActionInterface.SetActions(BuildActions);
 
