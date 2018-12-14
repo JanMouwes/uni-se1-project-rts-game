@@ -199,15 +199,20 @@ namespace kbs2.GamePackage
 
 			LeftButtonBar leftButtonBar = new LeftButtonBar(this);
 			RightButtonBar rightButtonBar = new RightButtonBar(this);
-			StatusBar statusBar = new StatusBar(this);
-            UIView ui = new UIView(this);
+			StatusBarView statusBar = new StatusBarView(this);
+            BottomBarView ui = new BottomBarView(this);
+			MiniMapBar miniMap = new MiniMapBar(this);
+			ActionBarView actionBar = new ActionBarView(this);
+
 
 			gameModel.GuiItemList.Add(leftButtonBar);
 			gameModel.GuiItemList.Add(rightButtonBar);
 			gameModel.GuiItemList.Add(statusBar);
             gameModel.GuiItemList.Add(ui);
+			gameModel.GuiItemList.Add(miniMap);
+			gameModel.GuiItemList.Add(actionBar);
 
-            ActionInterface = new ActionInterface(this);
+			ActionInterface = new ActionInterface(this);
             ActionInterface.SetActions(new BuildActions(this));
 
 

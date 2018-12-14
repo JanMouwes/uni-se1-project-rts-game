@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.UserInterface
 {
-	public class StatusBar : IViewImage
+	public class StatusBarView : IViewImage
 	{
 		public GameController GameController { get; set; }
 		public Coords coords => new Coords
@@ -28,7 +28,7 @@ namespace kbs2.UserInterface
 		public Color Colour { get { return Color.White; } set {; } }
 		public int ZIndex { get { return 1; } set {; } }
 
-		public StatusBar(GameController controller)
+		public StatusBarView(GameController controller)
 		{
 			this.GameController = controller;
 		}

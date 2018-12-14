@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kbs2.UserInterface
+namespace kbs2.UserInterface.ActionBar
 {
-	class ActionBar
+	class ActionBarModel
 	{
 	}
 }
