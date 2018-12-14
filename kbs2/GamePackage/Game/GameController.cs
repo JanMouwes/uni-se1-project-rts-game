@@ -334,7 +334,7 @@ namespace kbs2.GamePackage
                                                  let viewRectangle = new Rectangle(topLeftViewBound.x, topLeftViewBound.y, Math.Abs(topLeftViewBound.x - rightBottomViewBound.x), Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
                                                  where (chunkRectangle.Intersects(viewRectangle))
                                                  select chunk.Value).ToList();
-            Console.WriteLine(chunks.Count);
+            //Console.WriteLine(chunks.Count);
 
             foreach (WorldChunkController chunk in chunks)
             {
