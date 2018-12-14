@@ -10,14 +10,14 @@ using kbs2.WorldEntity;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World.Enums;
 using Microsoft.Xna.Framework;
+using kbs2.Actions;
 
 namespace kbs2.Unit.Model
 {
     public class Unit_Model : IHasPersonalSpace, IPurchasable, IElemental, IHasFaction
     {
         public Faction_Model Faction { get; set; }
-
-		public Coords coords { get; set; } 
+        
 
 		public bool Selected { get; set; }
 
@@ -29,10 +29,12 @@ namespace kbs2.Unit.Model
 
         public float Speed { get; set; }
 
-		public Unit_Model(Coords locCoords)
+        public List<ActionController> actions { get; set; }
+
+		public Unit_Model()
         {
-			coords = locCoords;
             Selected = false;
+            actions = new List<ActionController>();
         }
     }
 }

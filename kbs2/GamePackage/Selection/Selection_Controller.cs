@@ -1,7 +1,12 @@
-﻿using kbs2.GamePackage.EventArgs;
+﻿using kbs2.Desktop.GamePackage.EventArgs;
+using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Selection;
+using kbs2.utils;
+using kbs2.World;
+using kbs2.World.Cell;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,228 +21,211 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage
 {
-	public class Selection_Controller
+    public class Selection_Controller
     {
-		public Selection_Model Model { get; set; }
-        public Selection_View View { get; set; }
-		public MouseInput MouseInput { get; set; }
+        public Selection_Model Model { get; set; }
+        public Selection_View LeftView { get; set; }
+        public Selection_View RightView { get; set; }
+        public Selection_View TopView { get; set; }
+        public Selection_View BottomView { get; set; }
+        public GameController gameController { get; set; }
 
-		public List<Unit_Controller> SelectedUnits { get; set; }
+        public delegate void OnSelectionChanged(object sender, EventArgsWithPayload<List<IHasActions>> eventArgs);
+        public event OnSelectionChanged onSelectionChanged;
 
-		public Selection_Controller(string lineTexture)
+
+        public List<IHasActions> SelectedItems { get; set; }
+        private EventArgsWithPayload<List<IHasActions>> args { get; set; }
+
+        private FloatCoords FirstPoint;
+        private FloatCoords TopLeft;
+        private FloatCoords BottomRight;
+        private bool active;
+
+        // constructor
+        public Selection_Controller(GameController game, string lineTexture)
         {
             Model = new Selection_Model();
-			MouseInput = new MouseInput();
-			SelectedUnits = new List<Unit_Controller>();
+			SelectedItems = new List<IHasActions>();
+            gameController = game;
+
+            args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
+
+            LeftView = new Selection_View();
+            // width of the selection border
+            LeftView.Width = 4f/gameController.gameView.TileSize;
+
+            RightView = new Selection_View();
+            // width of the selection border
+            RightView.Width = 4f / gameController.gameView.TileSize;
+
+            TopView = new Selection_View();
+            // width of the selection border
+            TopView.Height = 4f / gameController.gameView.TileSize;
+
+            BottomView = new Selection_View();
+            // width of the selection border
+            BottomView.Height = 4f / gameController.gameView.TileSize;
         }
 
-		public void onMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
-		{
-
-		}
-		// Checks if the unit is selected on screen with the left mouse button (drag and click) and adds it to the SelectedUnits list
-		public void CheckClickedBox(List<Unit_Controller> List, Matrix viewMatrix, int tileSize, float zoom)
+        // name explains this I guess
+        public void ButtonPressed(FloatCoords mouseCoords)
         {
-            // Gets the current stats of the keyboard
-            KeyboardState state = Keyboard.GetState();
-            
-            RectangleF boxDragPosition = new RectangleF(0, 0, 0, 0);
+            //Save current mouse location/coords
+            FirstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords)mouseCoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+            //enable drawfunction of selectionbox
+            active = true;
+        }
 
-            // Transforms the mouse cursor's position on the screen to the map matrix's position
-            Vector2 boxPosition = new Vector2(Model.SelectionBox.X, Model.SelectionBox.Y);
-            Vector2 worldPosition = Vector2.Transform(boxPosition, Matrix.Invert(viewMatrix));
-            Vector2 boxWH = new Vector2(View.Width, View.Height);
+        // name explains this I guess
+        public void ButtonRelease(bool CTRL)
+        {
+            UpdateSelection(CTRL);
+            //disable drawfunction
+            active = false;
+        }
 
-            // Bottom left to Top right
-            if(boxWH.Y < 0 && boxWH.X > 0)
+        public void Update(object sender, OnTickEventArgs eventArgs)
+        {
+            if (active)
             {
-                boxDragPosition = new RectangleF(
-                    (worldPosition.X / tileSize), 
-                    ((worldPosition.Y + (boxWH.Y / zoom)) / tileSize), 
-                    (boxWH.X / tileSize) / zoom, 
-                    ((boxWH.Y / tileSize) * -1) / zoom
-                );
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                // saves current mouse location 
+                FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+                //standardices coords to topleft and bottomright 
+                SetCoords(FirstPoint, SecondPoint);
+                DrawBox();
             }
-            // Top right to Bottom left
-            else if(boxWH.Y > 0 && boxWH.X < 0)
-            {
-                boxDragPosition = new RectangleF(
-                    ((worldPosition.X + (boxWH.X / zoom)) / tileSize), 
-                    (worldPosition.Y / tileSize), 
-                    ((boxWH.X / tileSize) * -1) / zoom, 
-                    (boxWH.Y / tileSize) / zoom
-                );
-            }
-            // Bottom right to Top left
-            else if(boxWH.Y < 0 && boxWH.X < 0)
-            {
-                boxDragPosition = new RectangleF(
-                    ((worldPosition.X + (boxWH.X / zoom)) / tileSize), 
-                    ((worldPosition.Y + (boxWH.Y / zoom)) / tileSize), 
-                    ((boxWH.X / tileSize) * -1) / zoom, 
-                    ((boxWH.Y / tileSize) * -1) / zoom
-                );
-            }
-            // Top left to Bottom right
-            else 
-            {
-                boxDragPosition = new RectangleF(
-                    (worldPosition.X / tileSize), 
-                    (worldPosition.Y / tileSize), 
-                    (boxWH.X / tileSize) / zoom, 
-                    (boxWH.Y / tileSize) / zoom
-                );
-            }
+        }
 
-            Console.WriteLine($"boxDragPosition: {boxDragPosition}");
-            // Checks if the control key is not pressed and clears the selectedlist
-            if (!state.IsKeyDown(Keys.LeftControl))
-                ClearSelectedList();
+        //standardices coords to topleft and bottomright 
+        public void SetCoords(FloatCoords firstCoords, FloatCoords secondCoords)
+        {
+            TopLeft.x = firstCoords.x < secondCoords.x ? firstCoords.x : secondCoords.x;
+            TopLeft.y = firstCoords.y < secondCoords.y ? firstCoords.y : secondCoords.y;
 
-            // Goes by every unit in the map and checks if the selection box intersects with any of the unit's hitboxes
-            foreach (Unit_Controller unit in List)
+            BottomRight.x = firstCoords.x > secondCoords.x ? firstCoords.x : secondCoords.x;
+            BottomRight.y = firstCoords.y > secondCoords.y ? firstCoords.y : secondCoords.y;
+        }
+
+        // get all items in selectionbox
+        public void UpdateSelection(bool CTRL)
+        {
+            if (CTRL && SelectedItems.OfType<IHasActions>().Any())
             {
-                // Check for the intersection between selection box and unit box (rectangles)
-                if (!boxDragPosition.Intersects(unit.CalcClickBox())) continue;
-                // Checks if you have pressed Left Ctrl
-                if (state.IsKeyDown(Keys.LeftControl))
+                SelectedItems.AddRange( SelectBuildings());
+                args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
+                onSelectionChanged?.Invoke(this, args);
+            }
+            else
+            {
+                
+                List<IHasActions>selection = SelectUnits();
+                if (selection.Count > 0)
                 {
-                    // Checks if a unit is already selected and if so deletes it from the list otherwise it adds the unit to the list
-                    if (unit.UnitModel.Selected)
-                    {
-                        SelectedUnits.Remove(unit);
-                    } else
-                    {
-                        SelectedUnits.Add(unit);
-                    }
-                    unit.UnitView.ImageSrcShad = unit.UnitModel.Selected ? "shadow" : "shadowselected";
-                    unit.UnitModel.Selected = !unit.UnitModel.Selected;
+                    SelectedItems = CTRL ? SelectedItems.Union(selection).ToList() : selection;
+                    args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
+                    onSelectionChanged?.Invoke(this, args);
                 }
                 else
                 {
-                    // Clears the list and adds the selected unit
-                    unit.UnitModel.Selected = true;
-                    unit.UnitView.ImageSrcShad = "shadowselected";
-                    SelectedUnits.Add(unit);
+                    SelectedItems = SelectBuildings();
+                    args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
+                    onSelectionChanged?.Invoke(this, args);
                 }
             }
         }
-        // Draws selection box
-        public void DrawSelectionBox(List<Unit_Controller> List, MouseState CurMouseState, Matrix matrix, int tileSize, float zoom)
+
+        // get all buildings from selectionbox
+        public List<IHasActions> SelectBuildings()
         {
-            if (CurMouseState.LeftButton == ButtonState.Pressed && MouseInput.PreviousMouseState.LeftButton == ButtonState.Released)
+            List<IHasActions> Selected;
+            if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
             {
-                Model.SelectionBox = new RectangleF(CurMouseState.X, CurMouseState.Y, 0, 0);
-                View.Coords = new FloatCoords() { x = CurMouseState.X, y = CurMouseState.Y};
+                Selected = new List<IHasActions>();
+                WorldCellModel cell = gameController.gameModel.World.GetCellFromCoords((Coords)TopLeft).worldCellModel;
+                if (cell.BuildingOnTop != null)
+                {
+                    Selected.Add((IHasActions)cell.BuildingOnTop);
+                }
             }
-
-            if (CurMouseState.LeftButton == ButtonState.Pressed && MouseInput.PreviousMouseState.LeftButton == ButtonState.Pressed)
-            {
-                View.Coords = new FloatCoords() { x = CalcSelectionBox(CurMouseState, matrix, tileSize).X, y = CalcSelectionBox(CurMouseState, matrix, tileSize).Y };
-                View.Width = CalcSelectionBox(CurMouseState, matrix, tileSize).Width - Model.SelectionBox.X;
-                View.Height = CalcSelectionBox(CurMouseState, matrix, tileSize).Height - Model.SelectionBox.Y;
-            }
-
-            if (CurMouseState.LeftButton == ButtonState.Released && MouseInput.PreviousMouseState.LeftButton == ButtonState.Pressed)
-            {
-                CheckClickedBox(List, matrix, tileSize, zoom);
-            }
-
-            if (CurMouseState.LeftButton == ButtonState.Released && MouseInput.PreviousMouseState.LeftButton == ButtonState.Released)
-            {
-                ResetSelectionBox();
-            }
-
-            MouseInput.PreviousMouseState = CurMouseState;
-        }
-
-        public void ResetSelectionBox()
-        {
-            View.Coords = new FloatCoords() { x = -1, y = -1 };
-            View.Width = 0;
-            View.Height = 0;
-        }
-
-        public RectangleF CalcSelectionBox(MouseState mouse, Matrix matrix, int tileSize)
-        {
-            // Bottom Left to Top Right 
-            if(mouse.Y < 0 && mouse.X > 0)
-            {
-                Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
-
-                return new RectangleF(
-                    View.Coords.x / tileSize,
-                    View.Coords.y + (temp.Y / tileSize),
-                    temp.X / tileSize,
-                    (temp.Y / tileSize) * -1
-                );
-            }
-            // Top Right to Bottom Left
-            else if(mouse.Y > 0 && mouse.X < 0)
-            {
-                Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
-
-                return new RectangleF(
-                    View.Coords.x + (temp.X / tileSize),
-                    View.Coords.y  / tileSize,
-                    (temp.X / tileSize) * -1,
-                    temp.Y / tileSize
-                );
-            }
-            // Bottom Right to Top Left
-            else if(mouse.X < 0 && mouse.Y < 0)
-            {
-                Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
-
-                return new RectangleF(
-                    View.Coords.x + (temp.X / tileSize),
-                    View.Coords.y + (temp.Y / tileSize),
-                    (temp.X / tileSize) * -1,
-                    (temp.Y / tileSize) * -1
-                );
-            }
-            // Top Left to Bottom Right
             else
             {
-                Vector2 temp = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(matrix));
-
-                return new RectangleF(
-                    View.Coords.x / tileSize,
-                    View.Coords.y / tileSize,
-                    temp.X / tileSize,
-                    temp.Y / tileSize
-                );
+                Selected = (from Item in gameController.PlayerFaction.FactionModel.Buildings
+                            where TopLeft.x <= Item.Model.TopLeft.x + (Item.View.Width / 2)
+                            && TopLeft.y <= Item.Model.TopLeft.y + (Item.View.Height / 2)
+                            && BottomRight.x >= Item.Model.TopLeft.x + (Item.View.Width / 2)
+                            && BottomRight.y >= Item.Model.TopLeft.y + (Item.View.Height / 2)
+                            select Item).Cast<IHasActions>().ToList();
             }
+            return Selected;
+        }
+
+        // selects units in selectionbox
+        public List<IHasActions> SelectUnits()
+        {
+            List<Unit_Controller> Selected;
+            if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
+            {
+                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
+                            where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < 0.5
+                            || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < Item.UnitView.Height
+                            select Item).ToList();
+            }
+            else
+            {
+
+
+                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
+                            where TopLeft.x <= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
+                            && TopLeft.y <= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
+                            && BottomRight.x >= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
+                            && BottomRight.y >= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
+                            select Item).ToList();
+            }
+            return Selected.Cast<IHasActions>().ToList();
             
         }
 
-        // If RMB is clicked move units to mouse location
-        public void MoveAction(MouseState CurMouseState, Matrix viewMatrix, int tileSize, float zoom)
+        // give movecommand to all units in selection
+        public void move(bool CTRL)
         {
-            if (CurMouseState.RightButton == ButtonState.Pressed && MouseInput.PreviousMouseState.RightButton == ButtonState.Pressed)
+            MouseState temp = Mouse.GetState();
+            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+            foreach (IHasActions unit in SelectedItems)
             {
-                if (SelectedUnits.Count > 0)
+                if(unit.GetType() == typeof(Unit_Controller))
                 {
-                    Vector2 pointerPosition = new Vector2(CurMouseState.X, CurMouseState.Y);
-                    Vector2 realPointerPosition = Vector2.Transform(pointerPosition, Matrix.Invert(viewMatrix));
-
-                    foreach (Unit_Controller unit in SelectedUnits)
-                    {
-                        unit.LocationController.MoveTo(new FloatCoords() { x = (realPointerPosition.X / tileSize) / zoom, y = (realPointerPosition.Y / tileSize) / zoom});
-                    }
+                    ((IMoveable)unit).MoveTo(target, CTRL);
                 }
             }
         }
-        // Clears the SelectedUnit list and puts every selected unit on false
-        public void ClearSelectedList()
-        {
-            foreach(Unit_Controller unit in SelectedUnits)
-            {
-                unit.UnitModel.Selected = false;
-                unit.UnitView.ImageSrcShad = "shadow";
-            }
 
-            SelectedUnits.Clear();
+        //draws the selectionbox
+        public void DrawBox()
+        {
+            LeftView.Coords = TopLeft;
+            LeftView.Height = Math.Abs(BottomRight.y - TopLeft.y);
+
+            RightView.Coords = new FloatCoords {x = BottomRight.x - RightView.Width, y = TopLeft.y };
+            RightView.Height = Math.Abs(BottomRight.y - TopLeft.y);
+
+            TopView.Coords = TopLeft;
+            TopView.Width = Math.Abs(BottomRight.x - TopLeft.x);
+
+            BottomView.Coords = new FloatCoords { x = TopLeft.x, y = BottomRight.y - BottomView.Height };
+            BottomView.Width = Math.Abs(BottomRight.x - TopLeft.x);
+
+
+            gameController.gameModel.ItemList.Add(LeftView);
+            gameController.gameModel.ItemList.Add(RightView);
+            gameController.gameModel.ItemList.Add(TopView);
+            gameController.gameModel.ItemList.Add(BottomView);
         }
+
+
+        
     }
 }

@@ -14,6 +14,7 @@ namespace kbs2.GamePackage.Selection
     {
         public RectangleF SelectionBox { get; set; }
 
+        //constructor
         public Selection_Model()
         {
             SelectionBox = new RectangleF();

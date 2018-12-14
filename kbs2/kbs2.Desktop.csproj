@@ -96,6 +96,7 @@
     <Compile Include="UserInterface\StatusBar\StatusBarView.cs" />
     <Compile Include="UserInterface\StatusBar\StatusBarModel.cs" />
     <Compile Include="UserInterface\UIView.cs" />
+    <Compile Include="utils\DistanceCalculator.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="utils\WorldPositionCalculator.cs" />
     <Compile Include="View\Camera\CameraController.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
     <Compile Include="WorldEntity\Interfaces\IHasActions.cs" />
+    <Compile Include="WorldEntity\Interfaces\IMoveable.cs" />
     <Compile Include="WorldEntity\Interfaces\ISelectable.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
@@ -175,7 +177,8 @@
     <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCController.cs" />
     <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCView.cs" />
     <Compile Include="WorldEntity\Building\BUCFactory.cs" />
-    <Compile Include="WorldEntity\Interfaces\IBlockCells.cs" />
+    <Compile Include="WorldEntity\Interfaces\IImpassable.cs" />
+    <Compile Include="WorldEntity\WorldEntitySpawner\EntitySpawner.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
@@ -265,6 +268,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="World\.DS_Store" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GamePackage\AI\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
