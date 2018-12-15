@@ -121,6 +121,7 @@ namespace kbs2.GamePackage
             this.GameState = gameState;
 
             GameStateChange += PauseGame;
+            GameStateChange += UnPauseGame;
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
@@ -137,7 +138,20 @@ namespace kbs2.GamePackage
         public void PauseGame(object sender, EventArgsWithPayload<GameState> eventArgs)
         {
             if (eventArgs.Value != GameState.Paused) return;
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            Console.WriteLine("pause");
+        }
+
+        /// <summary>
+        /// Is subscribed to the gamestate so this is called every time the gamestate is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        public void UnPauseGame(object sender, EventArgsWithPayload<GameState> eventArgs)
+        {
+            if (eventArgs.Value != GameState.Running) return;
+            //throw new NotImplementedException();
+            Console.WriteLine("unpause");
         }
 
         /// <summary>
@@ -263,9 +277,9 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SaveToDB()
         {
-            //GameState = GameState.Paused;
+            GameState = GameState.Paused;
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -322,6 +336,10 @@ namespace kbs2.GamePackage
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Z)) GameState = GameState.Running;
+            
+            if (gameState == GameState.Paused) return;
 
             // Updates camera according to the pressed buttons
             camera.MoveCamera();
