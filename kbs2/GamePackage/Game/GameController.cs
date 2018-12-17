@@ -28,6 +28,8 @@ using System.Linq;
 using kbs2.Faction.FactionMVC;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.WorldEntitySpawner;
+using kbs2.Actions;
+using kbs2.Actions.ActionMVC;
 
 namespace kbs2.GamePackage
 {
@@ -240,6 +242,13 @@ namespace kbs2.GamePackage
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 spawner.SpawnUnit(unit, PlayerFaction);
                 onTick += unit.LocationController.Ontick;
+				
+				for(int act = 0; act < 9; act++)
+				{
+					unit.UnitModel.actions.Add(new ActionController { View = new ActionView { Texture = "pichu_idle", Colour = Color.White, ZIndex = 2, gameController = this } });
+				}
+				
+
             }
 
             //============= More TestCode ===============
@@ -404,7 +413,6 @@ namespace kbs2.GamePackage
                     Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
                 where (chunkRectangle.Intersects(viewRectangle))
                 select chunk.Value).ToList();
-            Console.WriteLine(chunks.Count);
 
             foreach (WorldChunkController chunk in chunks)
             {

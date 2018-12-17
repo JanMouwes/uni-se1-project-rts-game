@@ -21,19 +21,20 @@ namespace kbs2.Actions.ActionMVC
         // set locations of all bottons
         public const int ButtonSize = 40;
         public const int ButtonSpace = 5;
-        public Coords[] ButtonCoords = new Coords[9] {
-            new Coords{x = (ButtonSize + ButtonSpace)*3, y = (ButtonSize + ButtonSpace)*3},
-            new Coords{x = (ButtonSize + ButtonSpace)*2, y = (ButtonSize + ButtonSpace)*3},
-            new Coords{x = (ButtonSize + ButtonSpace)*1, y = (ButtonSize + ButtonSpace)*3},
-            new Coords{x = (ButtonSize + ButtonSpace)*3, y = (ButtonSize + ButtonSpace)*2},
-            new Coords{x = (ButtonSize + ButtonSpace)*2, y = (ButtonSize + ButtonSpace)*2},
-            new Coords{x = (ButtonSize + ButtonSpace)*1, y = (ButtonSize + ButtonSpace)*2},
-            new Coords{x = (ButtonSize + ButtonSpace)*3, y = (ButtonSize + ButtonSpace)*1},
-            new Coords{x = (ButtonSize + ButtonSpace)*2, y = (ButtonSize + ButtonSpace)*1},
-            new Coords{x = (ButtonSize + ButtonSpace)*1, y = (ButtonSize + ButtonSpace)*1}
-        };
-        // the index of the location
-        public int index { get; set; }
+		public Coords[] ButtonCoords = new Coords[9] { // hoogte van de ActionHud Blokje gedeelt door 140 en dan keer 40 en 5 voorbeeld: ActionHUD.heigth / 140 * 40
+			   	new Coords{},
+				new Coords{x = (ButtonSize + ButtonSpace)*2, y = (ButtonSize + ButtonSpace)*3},
+				new Coords{x = (ButtonSize + ButtonSpace)*1, y = (ButtonSize + ButtonSpace)*3},
+				new Coords{x = (ButtonSize + ButtonSpace)*3, y = (ButtonSize + ButtonSpace)*2},
+				new Coords{x = (ButtonSize + ButtonSpace)*2, y = (ButtonSize + ButtonSpace)*2},
+				new Coords{x = (ButtonSize + ButtonSpace)*1, y = (ButtonSize + ButtonSpace)*2},
+				new Coords{x = (ButtonSize + ButtonSpace)*3, y = (ButtonSize + ButtonSpace)*1},
+				new Coords{x = (ButtonSize + ButtonSpace)*2, y = (ButtonSize + ButtonSpace)*1},
+				new Coords{x = (ButtonSize + ButtonSpace)*1, y = (ButtonSize + ButtonSpace)*1}
+			 };
+
+		// the index of the location
+		public int index { get; set; }
 
         //stuff from IViewable
         public FloatCoords Coords { get { return (FloatCoords)(Corner - ButtonCoords[index]); } set {; } }
@@ -42,5 +43,7 @@ namespace kbs2.Actions.ActionMVC
         public string Texture { get; set; }
         public Color Colour { get; set; }
         public int ZIndex { get; set; }
+
+
     }
 }

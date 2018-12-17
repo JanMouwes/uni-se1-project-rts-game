@@ -11,5 +11,7 @@ namespace kbs2.Actions
     {
         public ActionModel Model;
         public ActionView View;
+
+
     }
 }
