@@ -17,6 +17,7 @@ namespace kbs2.UserInterface
     {
         // List for actions in groups of nine
         private List<ActionView[]> currentActions;
+        private List<CooldownView[]> currentCooldowns;
         public GameController gameController { get; set; }
         
         // index for the groups of nine
@@ -26,6 +27,7 @@ namespace kbs2.UserInterface
         {
             this.gameController = gameController;
             currentActions = new List<ActionView[]>();
+            currentCooldowns = new List<CooldownView[]>();
         }
 
         // switch to next group of nine
@@ -60,16 +62,20 @@ namespace kbs2.UserInterface
             for (int i = 0; i < amount; i++)
             {
                 ActionView[] actionViews = new ActionView[9];
+                CooldownView[] cooldownViews = new CooldownView[9];
                 for(int j =0; j < 9; j++)
                 {
                     if(hasActions.Actions.Count > i * 9 + j)
                     {
                         hasActions.Actions[(i * 9 + j)].View.index = j;
+                        hasActions.Actions[(i * 9 + j)].CooldownView.index = j;
                         
                         actionViews[j] = hasActions.Actions[(i * 9 + j)].View;
+                        cooldownViews[j] = hasActions.Actions[(i * 9 + j)].CooldownView;
                     }
                 }
                 currentActions.Add(actionViews);
+                currentCooldowns.Add(cooldownViews);
             }
             if (currentActions.Count > 0)
             {
@@ -84,6 +90,10 @@ namespace kbs2.UserInterface
             foreach (ActionView actionView in currentActions[index])
             {
                 gameController.gameModel.GuiItemList.Add(actionView);
+            }
+            foreach (CooldownView cooldownView in currentCooldowns[index])
+            {
+                gameController.gameModel.GuiTextList.Add(cooldownView);
             }
         }
 
@@ -101,7 +111,19 @@ namespace kbs2.UserInterface
                     }
                 }
             }
+            foreach (CooldownView[] cooldownViews in currentCooldowns)
+            {
+                foreach (CooldownView cooldownView in cooldownViews)
+                {
+
+                    if (gameController.gameModel.GuiTextList.Contains(cooldownView))
+                    {
+                        gameController.gameModel.GuiTextList.Remove(cooldownView);
+                    }
+                }
+            }
             currentActions.Clear();
+            currentCooldowns.Clear();
         }
 
         // remove group of nine from screen
@@ -112,6 +134,14 @@ namespace kbs2.UserInterface
                 if (gameController.gameModel.GuiItemList.Contains(actionView))
                 {
                     gameController.gameModel.GuiItemList.Remove(actionView);
+                }
+            }
+            foreach (CooldownView cooldownView in currentCooldowns[index])
+            {
+
+                if (gameController.gameModel.GuiTextList.Contains(cooldownView))
+                {
+                    gameController.gameModel.GuiTextList.Remove(cooldownView);
                 }
             }
         }

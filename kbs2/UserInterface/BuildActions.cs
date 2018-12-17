@@ -1,4 +1,5 @@
 ﻿using kbs2.Actions;
+using kbs2.Actions.ActionModels;
 using kbs2.Actions.ActionMVC;
 using kbs2.GamePackage;
 using kbs2.WorldEntity.Interfaces;
@@ -21,7 +22,11 @@ namespace kbs2.UserInterface
             Actions = new List<ActionController>();
             for(int i = 0; i<9; i++)
             {
-                Actions.Add(new ActionController { View = new ActionView { Texture = "Button", Colour = Color.White, ZIndex = 2, gameController = Controller } });
+                ActionController Action = new ActionController { View = new ActionView { Texture = "Button", Colour = Color.White, ZIndex = 2, gameController = Controller } };
+                Action.Model = new Spawn_Model { CurrentCoolDown = 100, CoolDown = 20 };
+                Action.CooldownView = new CooldownView { actionModel = Action.Model, gameController = Controller };
+                Controller.onTick += Action.Update;
+                Actions.Add(Action);
             }
         }
     }

@@ -170,7 +170,7 @@ namespace kbs2.GamePackage
             //gameModel.GuiItemList.Clear();
 
             gameModel.TextList.Clear();
-            gameModel.GuiTextList.Clear();
+            //gameModel.GuiTextList.Clear();
         }
     }
 }

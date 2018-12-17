@@ -31,7 +31,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             World.AddBuildingUnderCunstruction(buildingDef, BUC);
             BUC.World = BUC.World;
             BUC.gameController = Game;
-            BUC.BUCModel.Time = ConstructionTime + Game.gametime
+            //BUC.BUCModel.Time = ConstructionTime + Game.gametime
             Game.onTick += BUC.Update;
         }
 
