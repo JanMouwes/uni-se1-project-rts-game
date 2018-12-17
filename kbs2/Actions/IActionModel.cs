@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kbs2.Actions.ActionMVC
+namespace kbs2.Actions
 {
-    public class ActionModel
+    public interface IActionModel
     {
+        int CoolDown { get; set; }
+        int CurrentCoolDown { get; set; }
     }
 }

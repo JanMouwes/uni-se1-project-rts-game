@@ -46,6 +46,7 @@ namespace kbs2.GamePackage
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
         public EntitySpawner spawner;
+        
 
         public MouseInput MouseInput { get; set; }
 
@@ -164,7 +165,7 @@ namespace kbs2.GamePackage
             gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
 
             // Spawner
-            spawner = new EntitySpawner(gameModel.World, ref onTick);
+            spawner = new EntitySpawner(gameModel.World, this);
 
             gameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
 
@@ -223,12 +224,11 @@ namespace kbs2.GamePackage
             for (int i = 0; i < 12; i++)
             {
                 Unit_Controller unit =
-                    UnitFactory.CreateNewUnit(unitdef, new Coords {x = i, y = 5}, gameModel.World.WorldModel);
+                    UnitFactory.CreateNewUnit(unitdef, new FloatCoords {x = i, y = 5}, gameModel.World.WorldModel);
 
                 unit.UnitModel.Speed = 0.05f;
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 spawner.SpawnUnit(unit, PlayerFaction);
-                onTick += unit.LocationController.Ontick;
             }
 
             //============= More TestCode ===============
@@ -471,26 +471,9 @@ namespace kbs2.GamePackage
                     WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
                     gameView.TileSize);
 
-                List<Coords> buidlingcoords = new List<Coords>();
-                foreach (Coords stuff in def.BuildingShape)
-                {
-                    buidlingcoords.Add(coords + stuff);
-                }
+            
 
-                List<TerrainType> whitelist = new List<TerrainType>();
-                whitelist.Add(TerrainType.Grass);
-                whitelist.Add(TerrainType.Default);
-
-
-                if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
-                {
-                    BUCController building = BUCFactory.CreateNewBUC(def, coords,
-                        30 + (int) eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
-                    gameModel.World.AddBuildingUnderCunstruction(def, building);
-                    building.World = gameModel.World;
-                    building.gameController = this;
-                    onTick += building.Update;
-                }
+                
 
                 QPressed = true;
             }

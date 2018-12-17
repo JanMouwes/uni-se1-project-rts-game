@@ -50,9 +50,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Actions\ActionModels\Spawn_Model.cs" />
     <Compile Include="Actions\ActionMVC\ActionController.cs" />
-    <Compile Include="Actions\ActionMVC\ActionModel.cs" />
     <Compile Include="Actions\ActionMVC\ActionView.cs" />
+    <Compile Include="Actions\ActionDelegates.cs" />
+    <Compile Include="Actions\IActionModel.cs" />
     <Compile Include="DBController.cs" />
     <Compile Include="Faction\CurrencyMVC\CurrencyView.cs" />
     <Compile Include="Faction\Enums\Faction_Relations.cs" />
