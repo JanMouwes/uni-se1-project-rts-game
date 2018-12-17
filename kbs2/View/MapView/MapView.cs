@@ -80,7 +80,7 @@ namespace kbs2.Desktop.View.MapView
             def.width = 2f;
             def.imageSrc = "TrainingCenter";
             */
-            DBController.OpenConnection("DefDex");
+            DBController.OpenConnection("DefDex.db");
 
             BuildingDef def = DBController.GetDefinitionBuilding(1);
 

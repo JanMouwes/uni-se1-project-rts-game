@@ -43,6 +43,8 @@ namespace kbs2.GamePackage
 
     public class GameController : Game
     {
+        public int Id { get; } = -1;
+
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
         public EntitySpawner spawner;
@@ -216,7 +218,7 @@ namespace kbs2.GamePackage
             ActionInterface.SetActions(BuildActions);
 
             //TESTCODE
-            DBController.OpenConnection("DefDex");
+            DBController.OpenConnection("DefDex.db");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
             DBController.CloseConnection();
 
@@ -461,7 +463,7 @@ namespace kbs2.GamePackage
         {
             if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.Q))
             {
-                DBController.OpenConnection("DefDex");
+                DBController.OpenConnection("DefDex.db");
                 BuildingDef def = DBController.GetDefinitionBuilding(1);
                 DBController.CloseConnection();
 
