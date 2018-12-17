@@ -23,7 +23,7 @@ namespace kbs2.UserInterface.BottomBar
         {
             Coords = coords;
             Text = $"{healthModel.CurrentHP}/{healthModel.MaxHP}";
-            SpriteFont = "BuildingTimer";
+            SpriteFont = "unitstatinfo";
             ZIndex = 1002;
             Colour = Color.Red;
         }

@@ -327,6 +327,13 @@
 /processorParam:TextureFormat=Color
 /build:UITexture.png
 
+#begin unitstatinfo.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:unitstatinfo.spritefont
+
 #begin unittrainbalkje.png
 /importer:TextureImporter
 /processor:TextureProcessor

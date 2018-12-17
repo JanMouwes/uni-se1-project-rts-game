@@ -16,8 +16,8 @@ namespace kbs2.UserInterface.BottomBar
         public BottomBarStatView(BottomBarModel model, IViewImage entity, HP_Model healthModel)
         {
             Model = model;
-            StatImage = new StatImageView(new FloatCoords() { x = (Model.MainView.coords.x + 5) + (20 * Model.StatViews.Count), y = Model.MainView.coords.y + 5 }, entity);
-            StatText = new StatTextView(new FloatCoords() { x = (Model.MainView.coords.x + 5) + (20 * Model.StatViews.Count), y = Model.MainView.coords.y + 35 }, healthModel);
+            StatImage = new StatImageView(new FloatCoords() { x = (Model.MainView.coords.x + 5) + (40 * Model.StatViews.Count), y = Model.MainView.coords.y + 5 }, entity);
+            StatText = new StatTextView(new FloatCoords() { x = (Model.MainView.coords.x + 5) + (40 * Model.StatViews.Count), y = Model.MainView.coords.y + 35 }, healthModel);
         }
     }
 }   

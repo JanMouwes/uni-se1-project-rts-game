@@ -17,7 +17,6 @@ namespace kbs2.Unit.Model
     public class Unit_Model : IHasPersonalSpace, IPurchasable, IElemental, IHasFaction
     {
         public Faction_Model Faction { get; set; }
-        
 
 		public bool Selected { get; set; }
 
