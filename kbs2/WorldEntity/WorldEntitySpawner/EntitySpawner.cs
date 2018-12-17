@@ -1,4 +1,5 @@
 ﻿using System;
+using kbs2.Actions;
 using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
@@ -10,6 +11,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
 {
     public class EntitySpawner
     {
+        public IActionModel Model;
         public WorldController World { get; set; }
         public GameController Game { get; set; } 
 
@@ -31,7 +33,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             World.AddBuildingUnderCunstruction(buildingDef, BUC);
             BUC.World = BUC.World;
             BUC.gameController = Game;
-            BUC.BUCModel.Time = ConstructionTime + Game.gametime
+            BUC.BUCModel.Time = ConstructionTime + (int)BUC.currentTimer;
             Game.onTick += BUC.Update;
         }
 

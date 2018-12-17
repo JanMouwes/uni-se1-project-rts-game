@@ -12,7 +12,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 {
     public class BUCController : IImpassable, IHasActions
     {
-
+        public float currentTimer;
         public BUCModel BUCModel { get; set; }
         public BUCView BUCView { get; set; }
         public WorldController World { get; set; }
@@ -35,6 +35,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
                 SetBuilding();
             }
             counter.Text = ((int)(BUCModel.Time - eventArgs.GameTime.TotalGameTime.TotalSeconds)).ToString();
+            currentTimer = (float)eventArgs.GameTime.ElapsedGameTime.TotalSeconds;
         }
 
         // replace buc with building
