@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace kbs2.Actions
 {
-    public interface IActionModel
-    {
-        float CoolDown { get; set; }
-        float CurrentCoolDown { get; set; }
+    public class ActionFactory
+    {/*
+        public ActionController NewAction()
+        {
+
+        }*/
     }
 }

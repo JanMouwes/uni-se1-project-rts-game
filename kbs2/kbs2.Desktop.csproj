@@ -50,10 +50,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Actions\ActionFactory.cs" />
     <Compile Include="Actions\ActionModels\Spawn_Model.cs" />
     <Compile Include="Actions\ActionMVC\ActionController.cs" />
     <Compile Include="Actions\ActionMVC\ActionView.cs" />
     <Compile Include="Actions\ActionDelegates.cs" />
+    <Compile Include="Actions\ActionMVC\CooldownView.cs" />
     <Compile Include="Actions\IActionModel.cs" />
     <Compile Include="DBController.cs" />
     <Compile Include="Faction\CurrencyMVC\CurrencyView.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="UserInterface\ActionInterface.cs" />
     <Compile Include="UserInterface\BuildActions.cs" />
     <Compile Include="UserInterface\UIView.cs" />
+    <Compile Include="utils\ActionButtonPosition.cs" />
     <Compile Include="utils\DistanceCalculator.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="utils\WorldPositionCalculator.cs" />

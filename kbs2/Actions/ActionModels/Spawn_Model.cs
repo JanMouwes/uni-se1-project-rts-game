@@ -17,7 +17,7 @@ namespace kbs2.Actions.ActionModels
         public WorldController World { get; set; }
         public Faction_Controller faction { get; set; }
         public int ConstructionTime { get; set; }
-        public int CoolDown { get; set ; }
-        public int CurrentCoolDown { get; set; }
+        public float CoolDown { get; set ; }
+        public float CurrentCoolDown { get; set; }
     }
 }
