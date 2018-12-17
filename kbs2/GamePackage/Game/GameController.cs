@@ -335,7 +335,10 @@ namespace kbs2.GamePackage
             // Exit game if escape is pressed
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                SaveToDB();
                 Exit();
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Z)) GameState = GameState.Running;
             
