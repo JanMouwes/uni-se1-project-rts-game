@@ -24,6 +24,7 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public Location_Controller LocationController;
 		public Unit_Model UnitModel;
         public Unit_View UnitView;
+        public HP_Controller HPController;
 
         public List<ActionController> Actions { get {return UnitModel.actions; } }
 

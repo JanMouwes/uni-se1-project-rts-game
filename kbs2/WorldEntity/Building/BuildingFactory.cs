@@ -1,5 +1,6 @@
 ﻿using kbs2.World;
 using kbs2.WorldEntity.Building.BuildingMVC;
+using kbs2.WorldEntity.Health;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace kbs2.WorldEntity.Building
                 BuildingModel = model
             };
             building_Controller.View = view;
-            
+            building_Controller.HPController = new HP_Controller(500, 500);
 
             return building_Controller;
         }

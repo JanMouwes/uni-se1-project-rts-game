@@ -28,6 +28,7 @@ using System.Linq;
 using kbs2.Faction.FactionMVC;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.WorldEntitySpawner;
+using kbs2.UserInterface.BottomBar;
 using kbs2.Actions;
 using kbs2.Actions.ActionMVC;
 
@@ -62,6 +63,8 @@ namespace kbs2.GamePackage
         public bool QPressed { get; set; }
         public bool APressed { get; set; }
         public Terraintester Terraintester { get; set; }
+
+        private BottomBarView bottomBarView;
 
         public event ElapsedEventHandler GameTick
         {
@@ -207,12 +210,13 @@ namespace kbs2.GamePackage
             onTick += f.UpdateTime;
             onTick += gameModel.MouseInput.Selection.Update;
             gameModel.MouseInput.Selection.onSelectionChanged += ChangeSelection;
+            gameModel.MouseInput.Selection.onSelectionChanged += UpdateHUDOnSelect;
 
 			StatusBarView statusBarView = new StatusBarView(this);
 			LeftButtonBar leftButtonBar = new LeftButtonBar(this);
 			RightButtonBar rightButtonBar = new RightButtonBar(this);
 
-			BottomBarView bottomBarView = new BottomBarView(this);
+			bottomBarView = new BottomBarView(this);
 			MiniMapBar miniMap = new MiniMapBar(this);
 			ActionBarView actionBar = new ActionBarView(this);
 
@@ -526,6 +530,41 @@ namespace kbs2.GamePackage
             ActionInterface.SetActions(actions);
         }
 
+
+        /// <summary>
+        /// Changes the HUD according to the selected entities
+        /// </summary>
+        /// <param name="eventArgs">List of selected entities</param>
+        public void UpdateHUDOnSelect(object sender, EventArgsWithPayload<List<IHasActions>> eventArgs)
+        {
+            // Clean the GUI of selected entities
+            foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
+            {
+                gameModel.GuiItemList.Remove(view.StatImage);
+                gameModel.GuiTextList.Remove(view.StatText);
+            }
+
+            bottomBarView.Model.StatViews.Clear();
+
+            // Convert all IHasActions to Unit_Controllers
+            List<IHasActions> units = gameModel.MouseInput.Selection.SelectUnits();
+            units.ConvertAll(o => (Unit_Controller) o);
+            // Add new views to the model
+            foreach(Unit_Controller unit in units)
+                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, unit.UnitView, unit.HPController.HPModel));
+            // Convert all IHasActions to Unit_Controllers
+            List<IHasActions> buildings = gameModel.MouseInput.Selection.SelectBuildings();
+            buildings.ConvertAll(o => (Building_Controller)o);
+            // Add new views to the model
+            foreach (Building_Controller building in buildings)
+                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, building.View, building.HPController.HPModel));
+            // Adds the views to the gameModel
+            foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
+            {
+                gameModel.GuiItemList.Add(view.StatImage);
+                gameModel.GuiTextList.Add(view.StatText);
+            }
+        }
 
         /// <summary>
         /// This is called when the game should draw itself.

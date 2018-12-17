@@ -8,20 +8,20 @@ namespace kbs2.WorldEntity.Health
 {
 	public class HP_Controller
 	{
-		private HP_Model HPModel;
+        public HP_Model HPModel;
 
-		public HP_Controller()
+		public HP_Controller(int curHP, int maxHP)
 		{
-
+            HPModel = new HP_Model(curHP, maxHP);
 		}
 
-		public int AddHP()
+		public void AddHP()
 		{
-			return 1;
+			
 		}
-		public int RemoveHP()
+		public void RemoveHP()
 		{
-			return 1;
+			
 		}
 		private void AffectHP()
 		{

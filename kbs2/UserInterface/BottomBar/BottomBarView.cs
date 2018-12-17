@@ -5,15 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using kbs2.GamePackage;
 using kbs2.GamePackage.Interfaces;
+using kbs2.UserInterface.BottomBar;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.UserInterface
 {
-	class BottomBarView : IViewImage
+	public class BottomBarView : IViewImage
 	{
 		public GameController gameController { get; set; }
+        public BottomBarModel Model { get; set; }
+
 		public Coords coords => new Coords
 		{
 			x = (int) (gameController.GraphicsDevice.Viewport.Width * .15),
@@ -31,6 +34,7 @@ namespace kbs2.UserInterface
 		public BottomBarView(GameController gameController)
 		{
 			this.gameController = gameController;
+            Model = new BottomBarModel(this);
 		}
 	}
 }
