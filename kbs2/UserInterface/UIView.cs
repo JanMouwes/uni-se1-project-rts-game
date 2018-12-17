@@ -14,7 +14,7 @@ namespace kbs2.UserInterface
         public Coords coords => new Coords
         {
             x = 0,
-            y = gameController.GraphicsDevice.Viewport.Height-140
+            y = gameController.GraphicsDevice.Viewport.Height -140
         };
         
         public FloatCoords Coords { get { return (FloatCoords)coords; } set {; } }

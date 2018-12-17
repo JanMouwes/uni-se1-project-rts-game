@@ -123,6 +123,7 @@ namespace kbs2.GamePackage
             this.GameState = gameState;
 
             GameStateChange += PauseGame;
+            GameStateChange += UnPauseGame;
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
@@ -139,7 +140,20 @@ namespace kbs2.GamePackage
         public void PauseGame(object sender, EventArgsWithPayload<GameState> eventArgs)
         {
             if (eventArgs.Value != GameState.Paused) return;
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            Console.WriteLine("pause");
+        }
+
+        /// <summary>
+        /// Is subscribed to the gamestate so this is called every time the gamestate is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        public void UnPauseGame(object sender, EventArgsWithPayload<GameState> eventArgs)
+        {
+            if (eventArgs.Value != GameState.Running) return;
+            //throw new NotImplementedException();
+            Console.WriteLine("unpause");
         }
 
         /// <summary>
@@ -208,12 +222,23 @@ namespace kbs2.GamePackage
             onTick += gameModel.MouseInput.Selection.Update;
             gameModel.MouseInput.Selection.onSelectionChanged += ChangeSelection;
 
+			StatusBarView statusBarView = new StatusBarView(this);
+			LeftButtonBar leftButtonBar = new LeftButtonBar(this);
+			RightButtonBar rightButtonBar = new RightButtonBar(this);
 
-            UIView ui = new UIView(this);
+			BottomBarView bottomBarView = new BottomBarView(this);
+			MiniMapBar miniMap = new MiniMapBar(this);
+			ActionBarView actionBar = new ActionBarView(this);
 
-            gameModel.GuiItemList.Add(ui);
+            gameModel.GuiItemList.Add(statusBarView);
+			gameModel.GuiItemList.Add(leftButtonBar);
+			gameModel.GuiItemList.Add(rightButtonBar);
+			gameModel.GuiItemList.Add(bottomBarView);
+			gameModel.GuiItemList.Add(miniMap);
+			gameModel.GuiItemList.Add(actionBar);
 
-            ActionInterface = new ActionInterface(this);
+
+			ActionInterface = new ActionInterface(this);
             BuildActions = new BuildActions(this);
             ActionInterface.SetActions(BuildActions);
 
@@ -254,9 +279,9 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SaveToDB()
         {
-            //GameState = GameState.Paused;
+            GameState = GameState.Paused;
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -312,7 +337,14 @@ namespace kbs2.GamePackage
             // Exit game if escape is pressed
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                SaveToDB();
                 Exit();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Z)) GameState = GameState.Running;
+            
+            if (gameState == GameState.Paused) return;
 
             // Updates camera according to the pressed buttons
             camera.MoveCamera();
