@@ -86,8 +86,11 @@
     <Compile Include="UserInterface\ActionBar\ActionBarView.cs" />
     <Compile Include="UserInterface\ActionBar\ActionBarModel.cs" />
     <Compile Include="UserInterface\ActionInterface.cs" />
+    <Compile Include="UserInterface\BottomBar\BottomBarStatView.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarView.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarModel.cs" />
+    <Compile Include="UserInterface\BottomBar\StatImageView.cs" />
+    <Compile Include="UserInterface\BottomBar\StatTextView.cs" />
     <Compile Include="UserInterface\BuildActions.cs" />
     <Compile Include="UserInterface\LeftButtonBar.cs" />
     <Compile Include="UserInterface\MiniMap\MiniMapBar.cs" />
