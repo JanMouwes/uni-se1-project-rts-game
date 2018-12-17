@@ -346,7 +346,7 @@ namespace kbs2.GamePackage
                 }
             }
 
-            gameModel.GuiTextList.Add(Terraintester);
+            //gameModel.GuiTextList.Add(Terraintester);
 
             // Update Buildings on screen
             List<IViewImage> buildings = new List<IViewImage>();
@@ -533,6 +533,7 @@ namespace kbs2.GamePackage
             foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
             {
                 gameModel.GuiItemList.Remove(view.StatImage);
+                gameModel.GuiTextList.Remove(view.StatText);
             }
 
             bottomBarView.Model.StatViews.Clear();
@@ -542,14 +543,18 @@ namespace kbs2.GamePackage
             units.ConvertAll(o => (Unit_Controller) o);
             // Add new views to the model
             foreach(Unit_Controller unit in units)
-            {
-                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, unit.UnitView));
-            }
+                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, unit.UnitView, unit.HPController.HPModel));
+            // Convert all IHasActions to Unit_Controllers
+            List<IHasActions> buildings = gameModel.MouseInput.Selection.SelectBuildings();
+            buildings.ConvertAll(o => (Building_Controller)o);
+            // Add new views to the model
+            foreach (Building_Controller building in buildings)
+                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, building.View, building.HPController.HPModel));
             // Adds the views to the gameModel
-            foreach(BottomBarStatView view in bottomBarView.Model.StatViews)
+            foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
             {
                 gameModel.GuiItemList.Add(view.StatImage);
-                //gameModel.GuiTextList.Add(view.StatText);
+                gameModel.GuiTextList.Add(view.StatText);
             }
         }
 

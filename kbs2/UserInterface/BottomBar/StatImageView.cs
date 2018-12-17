@@ -25,7 +25,7 @@ namespace kbs2.UserInterface.BottomBar
             Width = 30;
             Height = 30;
             Texture = entity.Texture;
-            ZIndex = 50000;
+            ZIndex = 1001;
             Colour = Color.White;
         }
     }

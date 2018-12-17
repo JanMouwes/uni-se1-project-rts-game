@@ -1,6 +1,7 @@
 ﻿using kbs2.Actions;
 using kbs2.World;
 using kbs2.WorldEntity.Building.BuildingMVC;
+using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
 using MonoGame.Extended;
 using System;
@@ -15,6 +16,7 @@ namespace kbs2.WorldEntity.Building
     {
         public Building_Model Model { get; set; }
         public BuildingView View { get; set; }
+        public HP_Controller HPController;
 
         public List<ActionController> Actions { get { return Model.actions; } } 
 
