@@ -16,7 +16,9 @@ namespace kbs2
         // Open a connection with the given database file
         public static SqliteConnection OpenConnection(string databaseFileName)
         {
-            if (DBConn != null) return DBConn;
+            if (DBConn != null && DBConn.State == System.Data.ConnectionState.Open)
+                return DBConn;
+            
 
             //TODO: Tempfix so we can continue copied DefDex.db to bin/DesktopGL/AnyCPU/debug/
 
