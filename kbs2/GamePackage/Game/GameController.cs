@@ -494,7 +494,7 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SetBuilding(object sender, OnTickEventArgs eventArgs)
         {
-            if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.Q))
+            if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D1))
             {
                 DBController.OpenConnection("DefDex.db");
                 BuildingDef def = DBController.GetDefinitionBuilding(1);
@@ -521,6 +521,181 @@ namespace kbs2.GamePackage
                 {
                     BUCController building = BUCFactory.CreateNewBUC(def, coords,
                         30 + (int) eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                    gameModel.World.AddBuildingUnderCunstruction(def, building);
+                    building.World = gameModel.World;
+                    building.gameController = this;
+                    onTick += building.Update;
+                }
+
+                QPressed = true;
+            }
+            if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D2))
+            {
+                DBController.OpenConnection("DefDex.db");
+                BuildingDef def = DBController.GetDefinitionBuilding(2);
+                DBController.CloseConnection();
+
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
+                    WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
+                    gameView.TileSize);
+
+                List<Coords> buidlingcoords = new List<Coords>();
+                foreach (Coords stuff in def.BuildingShape)
+                {
+                    buidlingcoords.Add(coords + stuff);
+                }
+
+                List<TerrainType> whitelist = new List<TerrainType>();
+                whitelist.Add(TerrainType.Grass);
+                whitelist.Add(TerrainType.Default);
+
+
+                if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
+                {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords,
+                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                    gameModel.World.AddBuildingUnderCunstruction(def, building);
+                    building.World = gameModel.World;
+                    building.gameController = this;
+                    onTick += building.Update;
+                }
+
+                QPressed = true;
+            }
+            if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D3))
+            {
+                DBController.OpenConnection("DefDex.db");
+                BuildingDef def = DBController.GetDefinitionBuilding(3);
+                DBController.CloseConnection();
+
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
+                    WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
+                    gameView.TileSize);
+
+                List<Coords> buidlingcoords = new List<Coords>();
+                foreach (Coords stuff in def.BuildingShape)
+                {
+                    buidlingcoords.Add(coords + stuff);
+                }
+
+                List<TerrainType> whitelist = new List<TerrainType>();
+                whitelist.Add(TerrainType.Grass);
+                whitelist.Add(TerrainType.Default);
+
+
+                if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
+                {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords,
+                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                    gameModel.World.AddBuildingUnderCunstruction(def, building);
+                    building.World = gameModel.World;
+                    building.gameController = this;
+                    onTick += building.Update;
+                }
+
+                QPressed = true;
+            }
+            if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D4))
+            {
+                DBController.OpenConnection("DefDex.db");
+                BuildingDef def = DBController.GetDefinitionBuilding(4);
+                DBController.CloseConnection();
+
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
+                    WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
+                    gameView.TileSize);
+
+                List<Coords> buidlingcoords = new List<Coords>();
+                foreach (Coords stuff in def.BuildingShape)
+                {
+                    buidlingcoords.Add(coords + stuff);
+                }
+
+                List<TerrainType> whitelist = new List<TerrainType>();
+                whitelist.Add(TerrainType.Grass);
+                whitelist.Add(TerrainType.Default);
+
+
+                if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
+                {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords,
+                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                    gameModel.World.AddBuildingUnderCunstruction(def, building);
+                    building.World = gameModel.World;
+                    building.gameController = this;
+                    onTick += building.Update;
+                }
+
+                QPressed = true;
+            }
+            if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D5))
+            {
+                DBController.OpenConnection("DefDex.db");
+                BuildingDef def = DBController.GetDefinitionBuilding(5);
+                DBController.CloseConnection();
+
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
+                    WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
+                    gameView.TileSize);
+
+                List<Coords> buidlingcoords = new List<Coords>();
+                foreach (Coords stuff in def.BuildingShape)
+                {
+                    buidlingcoords.Add(coords + stuff);
+                }
+
+                List<TerrainType> whitelist = new List<TerrainType>();
+                whitelist.Add(TerrainType.Grass);
+                whitelist.Add(TerrainType.Default);
+
+
+                if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
+                {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords,
+                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                    gameModel.World.AddBuildingUnderCunstruction(def, building);
+                    building.World = gameModel.World;
+                    building.gameController = this;
+                    onTick += building.Update;
+                }
+
+                QPressed = true;
+            }
+            if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D6))
+            {
+                DBController.OpenConnection("DefDex.db");
+                BuildingDef def = DBController.GetDefinitionBuilding(6);
+                DBController.CloseConnection();
+
+                MouseState temp = Mouse.GetState();
+                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
+                    WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
+                    gameView.TileSize);
+
+                List<Coords> buidlingcoords = new List<Coords>();
+                foreach (Coords stuff in def.BuildingShape)
+                {
+                    buidlingcoords.Add(coords + stuff);
+                }
+
+                List<TerrainType> whitelist = new List<TerrainType>();
+                whitelist.Add(TerrainType.Grass);
+                whitelist.Add(TerrainType.Default);
+
+
+                if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
+                {
+                    BUCController building = BUCFactory.CreateNewBUC(def, coords,
+                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
