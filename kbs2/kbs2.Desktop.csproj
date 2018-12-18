@@ -118,6 +118,8 @@
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Model.cs" />
     <Compile Include="WorldEntity\Building\BuildingUnderConstruction.cs" />
     <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\ConstructionCounter.cs" />
+    <Compile Include="WorldEntity\Building\FactoryMVC\FactoryController.cs" />
+    <Compile Include="WorldEntity\Building\FactoryMVC\FactoryModel.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
