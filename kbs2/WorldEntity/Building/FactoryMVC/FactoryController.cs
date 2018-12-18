@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.WorldEntity.Building.FactoryMVC
 {
-    class FactoryController
+    class FactoryController : Building_Controller
     {
     }
 }
