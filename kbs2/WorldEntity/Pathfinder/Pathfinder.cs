@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using kbs2.Desktop.World.World;
 using kbs2.Unit.Model;
 using kbs2.World;
 using kbs2.World.Cell;
@@ -9,6 +8,7 @@ using kbs2.World.Structs;
 using kbs2.WorldEntity.Location;
 using kbs2.World.Chunk;
 using kbs2.utils;
+using kbs2.World.World;
 
 public class Pathfinder
 {

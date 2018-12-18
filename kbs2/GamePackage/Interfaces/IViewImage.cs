@@ -10,8 +10,8 @@ namespace kbs2.GamePackage.Interfaces
 {
     public interface IViewImage : IViewItem
     {
-        float Width { get; set; }
-        float Height { get; set; }
-        string Texture { get; set; }
+        float Width { get; }
+        float Height { get; }
+        string Texture { get; }
     }
 }

@@ -5,8 +5,8 @@ namespace kbs2.GamePackage.Interfaces
 {
     public interface IViewItem
     {
-        FloatCoords Coords { get; set; }
-        int ZIndex { get; set; }
-        Color Colour { get; set; }
+        FloatCoords Coords { get; }
+        int ZIndex { get; }
+        Color Colour { get; }
     }
 }

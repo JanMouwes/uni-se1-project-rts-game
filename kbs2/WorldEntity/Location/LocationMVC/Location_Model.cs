@@ -12,7 +12,7 @@ namespace kbs2.WorldEntity.Location
 {
 	public class Location_Model
 	{
-        public Unit_Controller parent;
+        public UnitController parent;
 		public Coords coords => (Coords)floatCoords;
 		public FloatCoords floatCoords;
         public List<TerrainType> UnwalkableTerrain;

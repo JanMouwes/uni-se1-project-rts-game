@@ -1,5 +1,4 @@
-﻿using kbs2.Desktop.World.World;
-using kbs2.World.Chunk;
+﻿using kbs2.World.Chunk;
 using System;
 using System.Collections.Generic;
 using System.Linq;

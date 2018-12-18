@@ -1,5 +1,4 @@
 ﻿using kbs2.Actions.ActionModels;
-using kbs2.Unit.Unit;
 using kbs2.World;
 using kbs2.World.Enums;
 using kbs2.World.Structs;
@@ -17,34 +16,33 @@ namespace kbs2.Actions
 {
     public class ActionDelegates
     {
-
         public delegate void GameAction(IActionModel actionModel, FloatCoords target);
-        
+
         public void SpawnUnit(IActionModel actionModel, FloatCoords target)
         {
-            Spawn_Model model = (Spawn_Model)actionModel;
-            
+            SpawnActionModel spawnActionModel = (SpawnActionModel) actionModel;
+
             DBController.OpenConnection("DefDex");
-            UnitDef unitdef = DBController.GetDefinitionFromUnit(model.Index);
+            UnitDef unitdef = DBController.GetDefinitionFromUnit(spawnActionModel.Id);
             DBController.CloseConnection();
-            Unit_Controller unit = UnitFactory.CreateNewUnit(unitdef, target, model.World.WorldModel);
-            model.spawner.SpawnUnit(unit, model.faction);
+            UnitController unit = UnitFactory.CreateNewUnit(unitdef, target, spawnActionModel.World.WorldModel);
+            spawnActionModel.Spawner.SpawnUnit(unit, spawnActionModel.Faction);
         }
 
         public void SpawnBuilding(IActionModel actionModel, FloatCoords target)
         {
-            Spawn_Model model = (Spawn_Model)actionModel;
+            SpawnActionModel spawnActionModel = (SpawnActionModel) actionModel;
 
             DBController.OpenConnection("DefDex");
-            BuildingDef buildingDef = DBController.GetDefinitionBuilding(model.Index);
+            BuildingDef buildingDef = DBController.GetDefinitionBuilding(spawnActionModel.Id);
             DBController.CloseConnection();
-           
+
             //model.spawner.SpawnUnit(, model.faction);
 
             List<Coords> buidlingcoords = new List<Coords>();
             foreach (Coords stuff in buildingDef.BuildingShape)
             {
-                buidlingcoords.Add((Coords)target + stuff);
+                buidlingcoords.Add((Coords) target + stuff);
             }
 
 
@@ -54,12 +52,10 @@ namespace kbs2.Actions
             whitelist.Add(TerrainType.Default);
 
 
-            if (model.World.checkTerainCells(buidlingcoords, whitelist))
-            {
-                BUCController BUC = BUCFactory.CreateNewBUC(buildingDef, (Coords)target, model.faction);
-                model.spawner.SpawnBUC(BUC, buildingDef, model.ConstructionTime, model.faction);
-            }
+            if (!spawnActionModel.World.AreTerrainCellsLegal(buidlingcoords, whitelist)) return;
+            
+            ConstructingBuildingController constructingBuilding = ConstructingBuildingFactory.CreateNewBUCAt(buildingDef, (Coords) target, spawnActionModel.Faction);
+            spawnActionModel.Spawner.SpawnConstructingBuilding(constructingBuilding, spawnActionModel.ConstructionTime);
         }
-
     }
 }

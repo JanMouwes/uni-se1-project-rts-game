@@ -20,7 +20,7 @@ namespace kbs2.GamePackage
 
 		public MouseInput(GameController game)
 		{
-            gameModel = game.gameModel;
+            gameModel = game.GameModel;
 			PreviousMouseState = new MouseState();
             Selection = new Selection_Controller(game, "PurpleLine");
 		}

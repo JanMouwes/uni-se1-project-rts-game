@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using kbs2.Unit.Model;
-using kbs2.Unit.Unit;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Health;
+using kbs2.WorldEntity.Unit;
 using Mono.Data.Sqlite;
 
 namespace kbs2
@@ -55,10 +55,10 @@ namespace kbs2
                         BuildingDef.HPDef.CurrentHP = int.Parse(reader["CurrentHp"].ToString());
                         BuildingDef.HPDef.MaxHP = int.Parse(reader["MaxHp"].ToString());
 
-                        BuildingDef.width = float.Parse(reader["width"].ToString());
-                        BuildingDef.height = float.Parse(reader["height"].ToString());
+                        BuildingDef.Width = float.Parse(reader["width"].ToString());
+                        BuildingDef.Height = float.Parse(reader["height"].ToString());
 
-                        BuildingDef.imageSrc = reader["image"].ToString();
+                        BuildingDef.Image = reader["image"].ToString();
                         BuildingDef.AddShapeFromString(reader["shape"].ToString());
                     }
                 }

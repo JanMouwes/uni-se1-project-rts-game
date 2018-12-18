@@ -5,18 +5,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structs;
 
 namespace kbs2.WorldEntity.Building
 {
-	public class BuildingDef
-	{
+    public class BuildingDef : IStructureDef
+    {
         // list of cells that contain the building
         public List<Coords> BuildingShape { get; set; }
 
         // sprite info
-        public string imageSrc { get; set; }
-        public float height { get; set; }
-        public float width { get; set; }
+        public string Image { get; set; }
+        public float Height { get; set; }
+        public float Width { get; set; }
 
         public HPDef HPDef { get; set; }
 
@@ -31,23 +33,26 @@ namespace kbs2.WorldEntity.Building
             };
             foreach (char c in array)
             {
-                if(c == 'x')
+                switch (c)
                 {
-                    BuildingShape.Add(coords);
-                    coords.x++;
-                }
-                if(c == 'o')
-                {
-                    coords.x++;
-                }
-                if(c == ';')
-                {
-                    coords.x = 0;
-                    coords.y++;
+                    case 'x':
+                        BuildingShape.Add(coords);
+                        coords.x++;
+                        break;
+                    case 'o':
+                        coords.x++;
+                        break;
+                    case ';':
+                        coords.x = 0;
+                        coords.y++;
+                        break;
+                    default:
+                        throw new ArgumentException($"Invalid char '{c}'"); //NOTE temp solution
+                        break;
                 }
             }
         }
 
-
+        public ViewValues ViewValues => new ViewValues(Image, Width, Height);
     }
 }

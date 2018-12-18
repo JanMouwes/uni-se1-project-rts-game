@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using kbs2.Desktop.View.Camera;
 using kbs2.Desktop.View.EventArgs;
-using kbs2.Desktop.World.World;
 using kbs2.GamePackage;
 using kbs2.World;
 using kbs2.World.Cell;
@@ -12,14 +11,10 @@ using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
-using kbs2.WorldEntity.Building.BuildingMVC;
-using kbs2.WorldEntity.Unit.MVC;
+using kbs2.WorldEntity.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
-using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
 
 namespace kbs2.Desktop.View.MapView
 {
@@ -33,10 +28,10 @@ namespace kbs2.Desktop.View.MapView
         private CameraController Camera;
         private WorldController World;
         private Selection_Controller Selection;
-        
+
 
         // Calculate the size (Width) of a tile
-        public int TileSize => (int)(GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
+        public int TileSize => (int) (GraphicsDevice.Viewport.Width / Camera.CameraModel.TileCount);
 
         // Constructor
         public MapView()
@@ -85,7 +80,11 @@ namespace kbs2.Desktop.View.MapView
             BuildingDef def = DBController.GetDefinitionBuilding(1);
 
             DBController.CloseConnection();
-            World.AddBuilding(def,BuildingFactory.CreateNewBuilding(def, new Coords { x = 0, y = 0 }));
+            World.AddBuilding(
+                BuildingFactory.CreateNewBuilding(
+                    def
+                )
+            );
 
 
             // Allows the user to resize the window
@@ -98,7 +97,6 @@ namespace kbs2.Desktop.View.MapView
             base.Initialize();
         }
 
-        
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -261,9 +259,9 @@ namespace kbs2.Desktop.View.MapView
 
             float minChunkX = minX / WorldChunkModel.ChunkSize;
             float minChunkY = minY / WorldChunkModel.ChunkSize;
-            
-            int minChunkXInt = (int)Math.Floor(minChunkX * -1);
-            int minChunkYInt = (int)Math.Floor(minChunkY * -1);
+
+            int minChunkXInt = (int) Math.Floor(minChunkX * -1);
+            int minChunkYInt = (int) Math.Floor(minChunkY * -1);
 
             Coords coords = new Coords();
             coords.x = minChunkXInt;
@@ -293,12 +291,11 @@ namespace kbs2.Desktop.View.MapView
             // Begin drawing without an offset
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(font, "TODO get link to currency", new Vector2(0,0), Color.White); //TODO
+            spriteBatch.DrawString(font, "TODO get link to currency", new Vector2(0, 0), Color.White); //TODO
 
             // End drawing of the selection box
             spriteBatch.End();
         }
-
 
 
         // Todo: Add comments from here on down

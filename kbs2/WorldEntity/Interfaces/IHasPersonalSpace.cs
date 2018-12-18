@@ -1,5 +1,4 @@
 ﻿using System;
-using kbs2.Unit.Unit;
 
 namespace kbs2.Unit.Interfaces
 {

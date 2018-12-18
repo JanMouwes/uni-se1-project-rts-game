@@ -28,17 +28,33 @@ namespace kbs2.utils
             y = drawCoords.y / tileSize - (drawCoords.y < 0 ? 1 : 0)
         };
 
-        //    Calculates chunk-coords from cell-coords  
+        /// <summary>
+        /// Calculates chunk-coords from cell-coords
+        /// </summary>
+        /// <param name="cellCoords">Cell-coords relative to center of the World</param>
+        /// <returns>Chunk-coords relative to center of the World</returns>
         public static Coords ChunkCoordsOfCellCoords(FloatCoords cellCoords) => new Coords
         {
             x = (int) Math.Floor((double) cellCoords.x / WorldChunkModel.ChunkSize),
             y = (int) Math.Floor((double) cellCoords.y / WorldChunkModel.ChunkSize)
         };
 
+        /// <summary>
+        /// Translates coords relative to center of the map
+        /// to coords relative only to the left-top of any chunk
+        /// </summary>
+        /// <param name="realCoords">Coords relative to center of the World</param>
+        /// <returns>Coords relative to left-top of a WorldChunk</returns>
+        public static Coords RelativeChunkCoords(Coords realCoords) => new Coords
+        {
+            x = ModulusUtils.mod(realCoords.x, WorldChunkModel.ChunkSize),
+            y = ModulusUtils.mod(realCoords.y, WorldChunkModel.ChunkSize)
+        };
+
         public static FloatCoords DrawCoordsToCellFloatCoords(Coords drawCoords, int tileSize) => new FloatCoords
         {
-            x = (float)drawCoords.x / tileSize,
-            y = (float)drawCoords.y / tileSize
+            x = (float) drawCoords.x / tileSize,
+            y = (float) drawCoords.y / tileSize
         };
     }
 }
