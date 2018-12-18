@@ -108,7 +108,6 @@
     <Compile Include="View\GUI\ActionBox\ActionBoxModel.cs" />
     <Compile Include="View\GUI\ActionBox\ActionBoxTextView.cs" />
     <Compile Include="View\GUI\ActionBox\ActionBoxView.cs" />
-    <Compile Include="View\MapView\MapView.cs" />
     <Compile Include="WorldEntity\Battle\BattleDef.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Controller.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Model.cs" />
