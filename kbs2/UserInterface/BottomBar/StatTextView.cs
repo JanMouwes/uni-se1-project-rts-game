@@ -26,9 +26,10 @@ namespace kbs2.UserInterface.BottomBar
         public StatTextView(FloatCoords coords, string displayText)
         {
             Coords = coords;
+            Coords = new FloatCoords() { x = Coords.x + 20, y = Coords.y + 20};
             Text = displayText;
             SpriteFont = "unitstatinfo";
-            ZIndex = 1002;
+            ZIndex = 1005;
             Colour = Color.Black;
         }
     }

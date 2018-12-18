@@ -60,6 +60,7 @@ namespace kbs2
 
                         BuildingDef.imageSrc = reader["image"].ToString();
                         BuildingDef.AddShapeFromString(reader["shape"].ToString());
+                        BuildingDef.Name = reader["Name"].ToString();
                     }
                 }
             }
@@ -88,6 +89,7 @@ namespace kbs2
                         returnedUnitDef.Image = reader["Image"].ToString();
                         returnedUnitDef.Width = float.Parse(reader["Width"].ToString());
                         returnedUnitDef.Height = float.Parse(reader["Height"].ToString());
+                        returnedUnitDef.Name = reader["Name"].ToString();
 
                         // This is for the different defs not implemented yet
                         //returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());

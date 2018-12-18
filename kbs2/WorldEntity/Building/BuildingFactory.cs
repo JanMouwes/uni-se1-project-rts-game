@@ -17,6 +17,7 @@ namespace kbs2.WorldEntity.Building
 
             Building_Model model = new Building_Model(TopLeft);
             building_Controller.Model = model;
+            building_Controller.Model.Name = def.Name;
             BuildingView view = new BuildingView(def.imageSrc, def.height, def.width)
             {
                 BuildingModel = model

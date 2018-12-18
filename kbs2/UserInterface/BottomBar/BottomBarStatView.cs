@@ -11,31 +11,28 @@ namespace kbs2.UserInterface.BottomBar
         public BottomBarModel Model { get; set; }
 
         public StatImageView StatImage { get; set; }
-        public StatTextView StatText { get; set; }
         public StatImageView MaxHP { get; set; }
         public StatImageView CurHP { get; set; }
-        public StatTextView NameText { get; set; }
+        public StatTextView StatName { get; set; }
 
         public BottomBarStatView(BottomBarModel model, IViewImage entity, HP_Model healthModel)
         {
             Model = model;
-            StatImage = new StatImageView(Offset(), entity);
-            MaxHP = new StatImageView(Offset(), "hpbar");
-            CurHP = new StatImageView(Offset(), healthModel, "curhpbar");
+            StatImage = new StatImageView(ListView(), entity);
+            MaxHP = new StatImageView(ListView(), "hpbar");
+            CurHP = new StatImageView(ListView(), healthModel, "curhpbar");
         }
 
         public void AddNameText(string name)
         {
-            NameText = new StatTextView(Offset(), name);
+            StatName = new StatTextView(ListView(), name);
         }
 
-
-
         /// <summary>
-        /// ListView of Selected entities
+        /// Puts all the views in a list form
         /// </summary>
         /// <returns></returns>
-        private FloatCoords Offset() {
+        private FloatCoords ListView() {
             const int padding = 5;
             const int margin = 30;
 

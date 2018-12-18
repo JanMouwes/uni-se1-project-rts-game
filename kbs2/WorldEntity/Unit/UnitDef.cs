@@ -12,6 +12,7 @@ namespace kbs2.Unit.Unit
         public string Image;
         public float Width;
         public float Height;
+        public string Name;
         public BattleDef BattleDef { get; set; }
         public HPDef HPDef { get; set; }
         public LevelXPDef LevelXPDef { get; set; }

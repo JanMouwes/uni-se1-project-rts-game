@@ -16,6 +16,8 @@ namespace kbs2.WorldEntity.Building
 
         public List<ActionController> actions { get; set; }
 
+        public string Name { get; set; }
+
         // all the cells the building is on
         public List<WorldCellModel> LocationCells { get; set; }
 

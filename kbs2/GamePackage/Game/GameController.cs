@@ -549,7 +549,7 @@ namespace kbs2.GamePackage
                 gameModel.GuiItemList.Remove(view.StatImage);
                 gameModel.GuiItemList.Remove(view.CurHP);
                 gameModel.GuiItemList.Remove(view.MaxHP);
-                //gameModel.GuiTextList.Remove(view.StatText);
+                gameModel.GuiTextList.Remove(view.StatName);
             }
 
             bottomBarView.Model.StatViews.Clear();
@@ -566,13 +566,27 @@ namespace kbs2.GamePackage
             // Add new views to the model
             foreach (Building_Controller building in buildings)
                 bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, building.View, building.HPController.HPModel));
+
+            if (bottomBarView.Model.StatViews.Count == 1)
+            {
+                if (units.Count > 0)
+                {
+                    bottomBarView.Model.StatViews[0].AddNameText(((Unit_Controller)units[0]).UnitModel.Name);
+                } else if(buildings.Count > 0)
+                {
+                    bottomBarView.Model.StatViews[0].AddNameText(((Building_Controller)buildings[0]).Model.Name);
+                }
+            }
+                
+                
             // Adds the views to the gameModel
             foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
             {
                 gameModel.GuiItemList.Add(view.StatImage);
                 gameModel.GuiItemList.Add(view.MaxHP);
                 gameModel.GuiItemList.Add(view.CurHP);
-                //gameModel.GuiTextList.Add(view.StatText);
+                    if (view.StatName != null)
+                        gameModel.GuiTextList.Add(view.StatName);
             }
         }
 

@@ -27,6 +27,8 @@ namespace kbs2.Unit.Model
         public CostValue CostValue { get; set; }
 
         public float Speed { get; set; }
+        
+        public string Name { get; set; }
 
         public List<ActionController> actions { get; set; }
 

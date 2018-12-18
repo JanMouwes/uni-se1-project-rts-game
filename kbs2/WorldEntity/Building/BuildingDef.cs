@@ -17,6 +17,7 @@ namespace kbs2.WorldEntity.Building
         public string imageSrc { get; set; }
         public float height { get; set; }
         public float width { get; set; }
+        public string Name { get; set; }
 
         public HPDef HPDef { get; set; }
 

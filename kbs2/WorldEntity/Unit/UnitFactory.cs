@@ -23,6 +23,7 @@ namespace kbs2.WorldEntity.Unit
             UnitController.UnitView.Width = def.Width;
             UnitController.UnitView.Height = def.Height;
             UnitController.UnitModel.Speed = def.Speed;
+            UnitController.UnitModel.Name = def.Name;
             Location_Controller location = new Location_Controller(worldModel,TopLeft.x,TopLeft.y);
             UnitController.HPController = new HP_Controller(def.HPDef.CurrentHP, def.HPDef.MaxHP);
             location.LocationModel.parent = UnitController;
