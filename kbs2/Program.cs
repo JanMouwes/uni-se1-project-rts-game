@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using kbs2.Desktop.View.MapView;
 using kbs2.GamePackage;
 using kbs2.GamePackage.GameSaveManager;
 using kbs2.World.TerrainDef;
