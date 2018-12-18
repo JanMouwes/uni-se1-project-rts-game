@@ -19,13 +19,17 @@ namespace kbs2.UserInterface.BottomBar
         public int ZIndex { get; set; }
         public Color Colour { get; set; }
 
-        public StatTextView(FloatCoords coords, HP_Model healthModel)
+        // Health
+        public StatTextView(FloatCoords coords, HP_Model healthModel) : this(coords, $"{healthModel.CurrentHP} / {healthModel.MaxHP}") { Colour = Color.Red; }
+
+        // Name
+        public StatTextView(FloatCoords coords, string displayText)
         {
             Coords = coords;
-            Text = $"{healthModel.CurrentHP}/{healthModel.MaxHP}";
+            Text = displayText;
             SpriteFont = "unitstatinfo";
             ZIndex = 1002;
-            Colour = Color.Red;
+            Colour = Color.Black;
         }
     }
 }

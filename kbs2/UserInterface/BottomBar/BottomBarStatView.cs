@@ -12,12 +12,55 @@ namespace kbs2.UserInterface.BottomBar
 
         public StatImageView StatImage { get; set; }
         public StatTextView StatText { get; set; }
+        public StatImageView MaxHP { get; set; }
+        public StatImageView CurHP { get; set; }
+        public StatTextView NameText { get; set; }
 
         public BottomBarStatView(BottomBarModel model, IViewImage entity, HP_Model healthModel)
         {
             Model = model;
-            StatImage = new StatImageView(new FloatCoords() { x = (Model.MainView.coords.x + 5) + (40 * Model.StatViews.Count), y = Model.MainView.coords.y + 5 }, entity);
-            StatText = new StatTextView(new FloatCoords() { x = (Model.MainView.coords.x + 5) + (40 * Model.StatViews.Count), y = Model.MainView.coords.y + 35 }, healthModel);
+            StatImage = new StatImageView(Offset(), entity);
+            MaxHP = new StatImageView(Offset(), "hpbar");
+            CurHP = new StatImageView(Offset(), healthModel, "curhpbar");
+        }
+
+        public void AddNameText(string name)
+        {
+            NameText = new StatTextView(Offset(), name);
+        }
+
+
+
+        /// <summary>
+        /// ListView of Selected entities
+        /// </summary>
+        /// <returns></returns>
+        private FloatCoords Offset() {
+            const int padding = 5;
+            const int margin = 30;
+
+            int row = 0;
+            int unitsPerRow = (int) (Model.MainView.Width / margin) - 1;
+            int rowSizeY = 40;
+            int curUnitPos = 0;
+            
+
+            for (int i = 0; i < Model.StatViews.Count; i++)
+            {
+                if (i % unitsPerRow == 0 && i != 0)
+                {
+                    row++;
+                    curUnitPos = -1;
+                }
+
+                curUnitPos++;
+            }
+
+            return new FloatCoords()
+            {
+                x = (Model.MainView.coords.x + padding) + (margin * curUnitPos),
+                y = Model.MainView.coords.y + (row * rowSizeY)
+            }; 
         }
     }
 }   

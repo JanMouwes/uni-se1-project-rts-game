@@ -237,12 +237,19 @@ namespace kbs2.GamePackage
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
             DBController.CloseConnection();
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 42; i++)
             {
                 Unit_Controller unit =
                     UnitFactory.CreateNewUnit(unitdef, new Coords {x = i, y = 5}, gameModel.World.WorldModel);
 
                 unit.UnitModel.Speed = 0.05f;
+                
+                if (i == 13 || i == 17 || i == 25)
+                {
+                    unit.UnitView.Texture = "pikachu_idle";
+                    unit.HPController.HPModel.CurrentHP = unit.HPController.HPModel.CurrentHP / 2;
+                }
+                    
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 spawner.SpawnUnit(unit, PlayerFaction);
                 onTick += unit.LocationController.Ontick;
@@ -355,7 +362,7 @@ namespace kbs2.GamePackage
                 }
             }
 
-            gameModel.GuiTextList.Add(Terraintester);
+            //gameModel.GuiTextList.Add(Terraintester);
 
             // Update Buildings on screen
             List<IViewImage> buildings = new List<IViewImage>();
@@ -383,7 +390,6 @@ namespace kbs2.GamePackage
                 select unit.UnitView).Cast<IViewImage>().ToList();
 
             gameModel.ItemList.AddRange(Units);
-
 
             if (gameModel.ActionBox.BoxModel.Show)
             {
@@ -541,7 +547,9 @@ namespace kbs2.GamePackage
             foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
             {
                 gameModel.GuiItemList.Remove(view.StatImage);
-                gameModel.GuiTextList.Remove(view.StatText);
+                gameModel.GuiItemList.Remove(view.CurHP);
+                gameModel.GuiItemList.Remove(view.MaxHP);
+                //gameModel.GuiTextList.Remove(view.StatText);
             }
 
             bottomBarView.Model.StatViews.Clear();
@@ -562,7 +570,9 @@ namespace kbs2.GamePackage
             foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
             {
                 gameModel.GuiItemList.Add(view.StatImage);
-                gameModel.GuiTextList.Add(view.StatText);
+                gameModel.GuiItemList.Add(view.MaxHP);
+                gameModel.GuiItemList.Add(view.CurHP);
+                //gameModel.GuiTextList.Add(view.StatText);
             }
         }
 
