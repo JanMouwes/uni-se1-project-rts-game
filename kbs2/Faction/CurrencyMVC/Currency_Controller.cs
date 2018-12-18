@@ -14,7 +14,7 @@ namespace kbs2.Faction.CurrencyMVC
 
         private int temp;
         private float reward;
-
+        
         public Currency_Controller() => view = new CurrencyView(model);
 
         // Adds amount to currency
@@ -34,12 +34,23 @@ namespace kbs2.Faction.CurrencyMVC
         {
             if (eventArgs.Day > temp)
             {
-                reward = (float)(12 + (temp * 0.33)); //TODO Find a propper way/formula
+                reward = (float)(12 + (temp * 0.33) - model.UpkeepCost); //TODO Find a propper way/formula
                 AddCurrency(reward);
+                //Console.WriteLine("Upkeep: " + model.UpkeepCost + " Dayreward = " + reward );
                 temp++;
             }
         }
 
+        //adds amount to upkeepCost
+        public void AddUpkeepCost(float upkeep)
+        {
+            if (upkeep > 0) model.UpkeepCost += upkeep;
+        }
 
+        //removes amount to upkeepCost
+        public void RemoveUpkeepCost(float upkeep)
+        {
+            if (upkeep > 0) model.UpkeepCost -= upkeep;
+        }
     }
 }

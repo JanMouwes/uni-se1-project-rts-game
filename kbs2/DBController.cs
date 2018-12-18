@@ -92,6 +92,8 @@ namespace kbs2
                         returnedUnitDef.Image = reader["Image"].ToString();
                         returnedUnitDef.Width = float.Parse(reader["Width"].ToString());
                         returnedUnitDef.Height = float.Parse(reader["Height"].ToString());
+                        returnedUnitDef.Upkeep = float.Parse(reader["Upkeep"].ToString());
+
 
                         // This is for the different defs not implemented yet
                         /*returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());

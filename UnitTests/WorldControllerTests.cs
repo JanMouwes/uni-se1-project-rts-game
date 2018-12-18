@@ -1,4 +1,4 @@
-using kbs2.World;
+﻿using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
 using kbs2.World.Enums;
@@ -17,12 +17,12 @@ namespace Tests
         {
             //    Arrange
             WorldChunkController chunk;
-            Coords chunkCoords = new Coords() {x = chunkX, y = chunkY};
-            Coords relativeCellCoords = new Coords() {x = relativeCellX, y = relativeCellY};
-            Coords expectedCellCoords = new Coords() {x = expectedCellX, y = expectedCellY};
+            Coords chunkCoords = new Coords() { x = chunkX, y = chunkY };
+            Coords relativeCellCoords = new Coords() { x = relativeCellX, y = relativeCellY };
+            Coords expectedCellCoords = new Coords() { x = expectedCellX, y = expectedCellY };
 
             //    Act
-            chunk = WorldChunkFactory.ChunkOfTerrainType(chunkCoords, TerrainType.Soil);
+            chunk = WorldChunkFactory.ChunkOfDefaultTerrain(chunkCoords);
 
 
             //    Assert

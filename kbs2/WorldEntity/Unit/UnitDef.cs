@@ -15,5 +15,6 @@ namespace kbs2.Unit.Unit
         public BattleDef BattleDef { get; set; }
         public HPDef HPDef { get; set; }
         public LevelXPDef LevelXPDef { get; set; }
+        public float Upkeep { get; set; }
     }
 }

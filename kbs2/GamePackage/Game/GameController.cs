@@ -255,6 +255,7 @@ namespace kbs2.GamePackage
                 unit.UnitModel.Speed = 0.05f;
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 spawner.SpawnUnit(unit, PlayerFaction);
+                PlayerFaction.currency_Controller.AddUpkeepCost(unitdef.Upkeep);
                 onTick += unit.LocationController.Ontick;
             }
 
@@ -427,7 +428,7 @@ namespace kbs2.GamePackage
                     Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
                 where (chunkRectangle.Intersects(viewRectangle))
                 select chunk.Value).ToList();
-            Console.WriteLine(chunks.Count);
+            //Console.WriteLine(chunks.Count);
 
             foreach (WorldChunkController chunk in chunks)
             {
