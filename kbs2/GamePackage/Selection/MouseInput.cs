@@ -59,6 +59,8 @@ namespace kbs2.GamePackage
             if(Clicked.Count > 0)
             {
                 //TODO geef door aan gui
+                // Betere naam suggesties worden gewaardeerd 
+                CheckWhichGuiIsClicked(Clicked);
                 Console.WriteLine("gui Click");
             }
             else
@@ -75,11 +77,13 @@ namespace kbs2.GamePackage
                 {
                     Selection.move(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
                 }
-                
             }
         }
 
-
+        private void CheckWhichGuiIsClicked(List<IViewImage> buttons)
+        {
+            
+        }
         
 	}
 }

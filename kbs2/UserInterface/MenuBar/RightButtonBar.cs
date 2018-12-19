@@ -5,15 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using kbs2.GamePackage;
 using kbs2.GamePackage.Interfaces;
+using kbs2.UserInterface.MenuBar;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.UserInterface
 {
-	class RightButtonBar : IViewImage
+	public class RightButtonBar : IViewImage
 	{
 		public GameController GameController { get; set; }
+        public MenuBarModel Menu { get; set; }
 		public Coords coords => new Coords
 		{
 			x = (int)(GameController.GraphicsDevice.Viewport.Width - Width),
@@ -31,6 +33,7 @@ namespace kbs2.UserInterface
 		public RightButtonBar(GameController controller)
 		{
 			this.GameController = controller;
+            Menu = new MenuBarModel(this);
 		}
 	}
 }

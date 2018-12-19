@@ -259,8 +259,6 @@ namespace kbs2.GamePackage
 				{
 					unit.UnitModel.actions.Add(new ActionController { View = new ActionView { Texture = "pichu_idle", Colour = Color.White, ZIndex = 2, gameController = this } });
 				}
-				
-
             }
 
             //============= More TestCode ===============
@@ -478,7 +476,7 @@ namespace kbs2.GamePackage
             }
 
 
-            if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
+            //if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
 
             // Calls the game update
             base.Update(gameTime);

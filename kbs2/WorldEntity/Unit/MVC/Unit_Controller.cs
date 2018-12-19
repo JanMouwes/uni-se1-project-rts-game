@@ -19,7 +19,7 @@ using MonoGame.Extended;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-	public class Unit_Controller : ISelectable, IMoveable, IHasActions
+	public class Unit_Controller : IMoveable, IHasActions
 	{
 		public Location_Controller LocationController;
 		public Unit_Model UnitModel;
@@ -32,11 +32,6 @@ namespace kbs2.WorldEntity.Unit.MVC
         public void CreateUnit(Faction_Model faction)
         {
             faction.Units.Add(this);
-        }
-
-        public RectangleF CalcClickBox()
-        {
-            return new RectangleF(LocationController.LocationModel.floatCoords.x - UnitView.Width/2, LocationController.LocationModel.floatCoords.y - UnitView.Height/2, UnitView.Width, UnitView.Height);
         }
 
         public void MoveTo(FloatCoords target,bool CTRL)
