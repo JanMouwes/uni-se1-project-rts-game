@@ -12,6 +12,11 @@ namespace kbs2.World.Cell
     {
         private static FastNoise myNoise = new FastNoise(new Random().Next(0, 50));
 
+        /// <summary>
+        /// Generates a new chunk with new cells
+        /// </summary>
+        /// <param name="coords">The required chunk coordinates for setting the new chunks coordinates</param>
+        /// <returns>returns a wordchunk filled with worldcells</returns>
         public static WorldCellController GetNewCell(FloatCoords coords)
         {
             myNoise.SetNoiseType(FastNoise.NoiseType.Simplex); // Set the desired noise type
