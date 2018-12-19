@@ -10,6 +10,11 @@ namespace kbs2.Faction
 {
     public class FactionFactory
     {
+        /// <summary>
+        /// Returns a new Faction that the player can interact with
+        /// </summary>
+        /// <param name="name">De meegegeven naam onderscheid de factions</param>
+        /// <returns>Geeft een faction controller</returns>
         public static Faction_Controller CreatePlayerFaction(string name)
         {
             Faction_Controller playerFaction = new Faction_Controller()
@@ -29,7 +34,12 @@ namespace kbs2.Faction
 
             return playerFaction;
         }
-        // Reden voor verschillende methodes tussen Player en Faction is start scenarios etc.
+
+        /// <summary>
+        /// Returns a new hostile Faction that you cant interact with
+        /// </summary>
+        /// <param name="name">De meegegeven naam onderscheid de factions</param>
+        /// <returns>Geeft een faction controller</returns>
         public static Faction_Controller CreateCPUFaction(string name)
         {
             Faction_Controller cpuFaction = new Faction_Controller()
