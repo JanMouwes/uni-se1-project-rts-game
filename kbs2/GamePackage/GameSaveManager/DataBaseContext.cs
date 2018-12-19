@@ -1,7 +1,7 @@
 using System.Data.Entity;
-using kbs2.Desktop.World.World;
 using kbs2.World.Cell;
 using kbs2.World.Chunk;
+using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 
 namespace kbs2.GamePackage.GameSaveManager

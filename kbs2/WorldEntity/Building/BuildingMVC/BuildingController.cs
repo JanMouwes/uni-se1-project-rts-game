@@ -19,7 +19,7 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
             Def = def;
         }
 
-        public Building_Model Model { get; } = new Building_Model();
+        public BuildingModel Model { get; } = new BuildingModel();
         public BuildingView View { get; set; }
 
         public FloatCoords FloatCoords => (FloatCoords) Model.TopLeft;

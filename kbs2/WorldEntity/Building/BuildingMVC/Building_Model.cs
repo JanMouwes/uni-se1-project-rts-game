@@ -7,19 +7,19 @@ using kbs2.World.Cell;
 
 namespace kbs2.WorldEntity.Building.BuildingMVC
 {
-    public class Building_Model
+    public class BuildingModel
     {
         public Coords TopLeft { get; set; }
 
-        public List<GameAction<GameActionDef>> actions { get; }
+        public List<GameAction<GameActionDef>> Actions { get; }
 
         // all the cells the building is on
         public List<WorldCellModel> LocationCells { get; }
 
-        public Building_Model()
+        public BuildingModel()
         {
             LocationCells = new List<WorldCellModel>();
-            actions = new List<GameAction<GameActionDef>>();
+            Actions = new List<GameAction<GameActionDef>>();
         }
     }
 }

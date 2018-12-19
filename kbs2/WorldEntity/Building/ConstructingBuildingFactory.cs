@@ -8,7 +8,7 @@ using kbs2.WorldEntity.Structs;
 
 namespace kbs2.WorldEntity.Building
 {
-    public class ConstructingBuildingFactory
+    public class ConstructingBuildingFactory : IDisposable
     {
         private Faction_Controller faction;
 
@@ -20,6 +20,10 @@ namespace kbs2.WorldEntity.Building
         public ConstructingBuildingController CreateBUCOf(IStructure structure)
         {
             return CreateNewBUC(structure.Def, faction);
+        }
+        public ConstructingBuildingController CreateBUC(IStructureDef structureDef)
+        {
+            return CreateNewBUC(structureDef, faction);
         }
 
         public static ConstructingBuildingController CreateNewBUC(IStructureDef def,
@@ -55,6 +59,10 @@ namespace kbs2.WorldEntity.Building
             constructingBuildingController.ConstructingBuildingModel = new ConstructingBuildingModel() {StartCoords = TopLeft};
 
             return constructingBuildingController;
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using kbs2.Actions.GameActionGrid;
 using kbs2.GamePackage;
+using kbs2.GamePackage.Interfaces;
 
 namespace kbs2.UserInterface.GameActionGui
 {
     public class GameActionGuiController
     {
-        private GameActionGuiView view;
+        private readonly GameActionGuiView view;
         private readonly GameActionGuiModel model;
+        
 
 
         public GameActionGuiController(GameController gameController)
