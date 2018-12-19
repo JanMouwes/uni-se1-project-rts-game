@@ -41,8 +41,8 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
         {
         }
 
-        /// <summary>DoWork is a method in the TestClass class.
-        /// <para>Here's how you could make a second paragraph in a description. <see cref="System.Console.WriteLine(System.String)"/> for information about output statements.</para>
+        /// <summary>Checks if user has enough currency to purchase.
+        /// <para>If user has enough the cost price will be removed from balance and upkeep cost will be added to the total upkeepcost of there faction</para>
         /// </summary>
         public void EnoughCurrencyCheck(IStructureDef def)
         {
