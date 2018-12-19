@@ -20,7 +20,7 @@ namespace kbs2.WorldEntity.Building
         public float Height { get; set; }
         public float Width { get; set; }
 
-        public HPDef HPDef { get; set; }
+        public HPDef HPDef { get; set; } = new HPDef();
 
         public void AddShapeFromString(string shape)
         {

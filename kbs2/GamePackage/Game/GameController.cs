@@ -506,7 +506,6 @@ namespace kbs2.GamePackage
             Func<bool, bool, int, MouseState, List<TerrainType>, bool> checkKeysAndPlaceBuilding =
                 (isKeyPressed, wasKeyPressed, buildingId, mouseState, legalTerrainTypes) =>
                 {
-                    
                     //FIXME temp
                     if (isKeyPressed == wasKeyPressed) return wasKeyPressed;
 
@@ -518,29 +517,22 @@ namespace kbs2.GamePackage
 
                     Coords tempCoords = new Coords {x = mouseState.X, y = mouseState.Y};
 
-                    Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
-                        WorldPositionCalculator.TransformWindowCoords(tempCoords, Camera.GetViewMatrix()),
-                        GameView.TileSize);
+                    Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempCoords, Camera.GetViewMatrix()), GameView.TileSize);
 
                     List<Coords> buildingCoords = new List<Coords>();
-                    foreach (Coords stuff in def.BuildingShape)
-                    {
-                        buildingCoords.Add(coords + stuff);
-                    }
+                    foreach (Coords buildingShape in def.BuildingShape) buildingCoords.Add(coords + buildingShape);
 
                     if (!GameModel.World.AreTerrainCellsLegal(buildingCoords, legalTerrainTypes)) return true;
 
-                    using (ConstructingBuildingFactory factory = new ConstructingBuildingFactory(PlayerFaction))
+                    using (ConstructingBuildingFactory constructionFactory = new ConstructingBuildingFactory(PlayerFaction))
                     {
-                        ConstructingBuildingController building = factory.CreateBUC(def);
+                        ConstructingBuildingController building = constructionFactory.CreateBUC(def);
 
 
                         GameModel.World.AddBuildingUnderConstruction(building.Def, building);
                         onTick += building.Update;
 
-                        building.ConstructionComplete += (o, args) => Spawner.SpawnStructure(
-                            building.StartCoords,
-                            BuildingFactory.CreateNewBuilding((BuildingDef) building.Def.CompletedBuildingDef));
+                        building.ConstructionComplete += (o, args) => Spawner.SpawnStructure( building.StartCoords, BuildingFactory.CreateNewBuilding((BuildingDef) building.Def.CompletedBuildingDef));
                     }
 
                     return true;
@@ -550,40 +542,17 @@ namespace kbs2.GamePackage
 
             KeyboardState keyboardState = Keyboard.GetState();
 
-            PreviousQPressed = checkKeysAndPlaceBuilding(isQPressed, PreviousQPressed, 2, Mouse.GetState(),
-                new List<TerrainType>()
+            List<TerrainType> terrainList = new List<TerrainType>()
                 {
                     TerrainType.Grass,
                     TerrainType.Default
-                });
-            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), PreviousQPressed, 3,
-                Mouse.GetState(),
-                new List<TerrainType>()
-                {
-                    TerrainType.Grass,
-                    TerrainType.Default
-                });
-            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), PreviousQPressed, 4,
-                Mouse.GetState(),
-                new List<TerrainType>()
-                {
-                    TerrainType.Grass,
-                    TerrainType.Default
-                });
-            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), PreviousQPressed, 5,
-                Mouse.GetState(),
-                new List<TerrainType>()
-                {
-                    TerrainType.Grass,
-                    TerrainType.Default
-                });
-            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), PreviousQPressed, 6,
-                Mouse.GetState(),
-                new List<TerrainType>()
-                {
-                    TerrainType.Grass,
-                    TerrainType.Default
-                });
+                };
+
+            PreviousQPressed = checkKeysAndPlaceBuilding(isQPressed, PreviousQPressed, 2, Mouse.GetState(), terrainList);
+            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), PreviousQPressed, 3, Mouse.GetState(), terrainList);
+            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), PreviousQPressed, 4, Mouse.GetState(), terrainList);
+            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), PreviousQPressed, 5, Mouse.GetState(), terrainList);
+            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), PreviousQPressed, 6, Mouse.GetState(), terrainList);
         }
 
         public void ChangeSelection(object sender, EventArgsWithPayload<List<IHasGameActions>> eventArgs)

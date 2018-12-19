@@ -42,13 +42,9 @@ namespace kbs2
         // get the Def from a given building
         public static BuildingDef GetDefinitionBuilding(int building)
         {
-            BuildingDef BuildingDef = new BuildingDef
-            {
-                HPDef = new HPDef()
-            };
+            BuildingDef BuildingDef = new BuildingDef();
 
-            string query =
-                "SELECT * FROM BuildingDef WHERE Id=@i";
+            string query = "SELECT * FROM BuildingDef WHERE Id=@i";
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
             {
