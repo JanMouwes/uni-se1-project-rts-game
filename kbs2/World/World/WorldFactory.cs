@@ -9,6 +9,10 @@ namespace kbs2.World.World
 {
     public static class WorldFactory
     {
+        /// <summary>
+        /// The default function to generate a new world.
+        /// </summary>
+        /// <returns>Return a world made with terrain generation</returns>
         public static WorldController GetNewWorld()
         {
             // Initialize World 
@@ -40,6 +44,10 @@ namespace kbs2.World.World
             return world;
         }
 
+        /// <summary>
+        /// Debugging function for getting a world of empty chunks
+        /// </summary>
+        /// <returns>Returns a world of 5x5 chuncks that are default terrain </returns>
         public static WorldController GetNewEmptyWorld()
         {
             // Initialize World 
