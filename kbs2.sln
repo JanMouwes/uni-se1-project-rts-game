@@ -1,7 +1,12 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kbs2.Desktop", "kbs2\kbs2.Desktop.csproj", "{905B6B3B-33B1-49FB-B691-AE30F88CB4F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathfindingConsoleApp", "PathfindingConsoleApp\PathfindingConsoleApp.csproj", "{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{6720B4A0-889A-411D-8CED-D466BA10A84B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,5 +18,19 @@ Global
 		{905B6B3B-33B1-49FB-B691-AE30F88CB4F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{905B6B3B-33B1-49FB-B691-AE30F88CB4F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{905B6B3B-33B1-49FB-B691-AE30F88CB4F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2018605-3BB0-4C35-AE24-85FEB3C50EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6720B4A0-889A-411D-8CED-D466BA10A84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6720B4A0-889A-411D-8CED-D466BA10A84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6720B4A0-889A-411D-8CED-D466BA10A84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6720B4A0-889A-411D-8CED-D466BA10A84B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B25BE1A3-A821-4F0B-865D-72D3185CE09C}
 	EndGlobalSection
 EndGlobal
