@@ -31,6 +31,7 @@ using kbs2.WorldEntity.WorldEntitySpawner;
 using kbs2.UserInterface.BottomBar;
 using kbs2.Actions;
 using kbs2.Actions.ActionMVC;
+using kbs2.Faction;
 
 namespace kbs2.GamePackage
 {
@@ -89,8 +90,6 @@ namespace kbs2.GamePackage
 
         DayController f = new DayController();
 
-        public Faction_Controller PlayerFaction = new Faction_Controller("PlayerFaction");
-
         public event MouseStateObserver MouseStateChange;
 
 
@@ -115,6 +114,8 @@ namespace kbs2.GamePackage
         public event GameStateObserver GameStateChange;
 
         private readonly GraphicsDeviceManager graphicsDeviceManager;
+
+        public Faction_Controller PlayerFaction { get; set; }
 
         public CameraController camera;
 
@@ -165,6 +166,24 @@ namespace kbs2.GamePackage
             // Generate world
             gameModel.World = WorldFactory.GetNewWorld();
 
+            // Generate Player Faction
+            PlayerFaction = FactionFactory.CreatePlayerFaction("Byzantine Empire");
+            gameModel.Factions.Add(PlayerFaction);
+
+            // Generate CPU Faction (1)
+            gameModel.Factions.Add(FactionFactory.CreateCPUFaction("StandardAIFaction"));
+            gameModel.Factions[1].AddRelationship(PlayerFaction, Faction.Enums.Faction_Relations.hostile);
+
+            // Give Factions starting units
+            DBController.OpenConnection("DefDex");
+
+            foreach (Faction_Controller faction in gameModel.Factions)
+            {
+                faction.AddUnitToFaction(UnitFactory.CreateNewUnit(DBController.GetDefinitionFromUnit(1), gameModel.World.WorldModel));
+            }
+
+            DBController.CloseConnection();
+
             // Pathfinder 
             gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
 
@@ -205,8 +224,6 @@ namespace kbs2.GamePackage
             APressed = false;
             Terraintester = new Terraintester();
 
-            Faction_Controller playerFaction = new Faction_Controller("Byzantine Empire");
-
             onTick += SetBuilding;
             onTick += f.UpdateTime;
             onTick += gameModel.MouseInput.Selection.Update;
@@ -234,14 +251,15 @@ namespace kbs2.GamePackage
             ActionInterface.SetActions(BuildActions);
 
             //TESTCODE
+            /*
             DBController.OpenConnection("DefDex");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
-            DBController.CloseConnection();
+            DBController.CloseConnection();*/
 
-            for (int i = 0; i < 42; i++)
+            /*for (int i = 0; i < 42; i++)
             {
                 Unit_Controller unit =
-                    UnitFactory.CreateNewUnit(unitdef, playerFaction, gameModel.World.WorldModel);
+                    UnitFactory.CreateNewUnit(unitdef, gameModel.World.WorldModel);
 
                 unit.UnitModel.Speed = 0.05f;
                 
@@ -259,7 +277,7 @@ namespace kbs2.GamePackage
 				{
 					unit.UnitModel.actions.Add(new ActionController { View = new ActionView { Texture = "pichu_idle", Colour = Color.White, ZIndex = 2, gameController = this } });
 				}
-            }
+            }*/
 
             //============= More TestCode ===============
 

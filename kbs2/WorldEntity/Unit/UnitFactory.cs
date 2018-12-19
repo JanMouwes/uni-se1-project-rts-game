@@ -19,15 +19,13 @@ namespace kbs2.WorldEntity.Unit
 	public class UnitFactory
 	{
         public WorldModel World { get; set; }
-        public Faction_Controller Faction { get; set; }
 
-        public UnitFactory(WorldModel worldModel, Faction_Controller faction)
+        public UnitFactory(WorldModel worldModel)
         {
             World = worldModel;
-            Faction = faction;
         }
 
-		public static Unit_Controller CreateNewUnit(UnitDef def, Faction_Controller faction, WorldModel world)
+		public static Unit_Controller CreateNewUnit(UnitDef def, WorldModel world)
         {
             Unit_Controller UnitController = new Unit_Controller
             {
@@ -61,8 +59,6 @@ namespace kbs2.WorldEntity.Unit
             Location_Controller location = new Location_Controller(world, 0, 0);
             location.LocationModel.parent = UnitController;
             UnitController.LocationController = location;
-
-            faction.AddUnitToFaction(UnitController);
 
             return UnitController;
         }
