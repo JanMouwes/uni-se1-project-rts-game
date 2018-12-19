@@ -12,6 +12,11 @@ namespace kbs2.WorldEntity.Building
     {
         private Faction_Controller faction;
 
+        public ConstructingBuildingFactory(Faction_Controller faction)
+        {
+            this.faction = faction;
+        }
+
         public ConstructingBuildingController CreateBUCOf(IStructure structure)
         {
             return CreateNewBUC(structure.Def, faction);
