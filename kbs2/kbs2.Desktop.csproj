@@ -292,13 +292,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\DesktopGL\AnyCPU\Debug\DefDex.db" />
     <Content Include="DefDex.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="World\.DS_Store" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\DesktopGL\AnyCPU\Debug" />
     <Folder Include="GamePackage\AI\" />
   </ItemGroup>
   <ItemGroup />
