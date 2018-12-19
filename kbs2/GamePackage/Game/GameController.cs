@@ -31,8 +31,6 @@ using kbs2.UserInterface.GameActionGui;
 using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.WorldEntitySpawner;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace kbs2.GamePackage
 {
