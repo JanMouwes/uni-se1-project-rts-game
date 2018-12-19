@@ -40,5 +40,17 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
         }
+
+        /// <summary>DoWork is a method in the TestClass class.
+        /// <para>Here's how you could make a second paragraph in a description. <see cref="System.Console.WriteLine(System.String)"/> for information about output statements.</para>
+        /// </summary>
+        public void EnoughCurrencyCheck(IStructureDef def)
+        {
+            if(Faction.currency_Controller.model.currency >= def.Cost){
+                Faction.currency_Controller.RemoveCurrency((float)def.Cost);
+                Faction.currency_Controller.AddUpkeepCost((float)def.UpkeepCost);
+            }
+        }
+
     }
 }
