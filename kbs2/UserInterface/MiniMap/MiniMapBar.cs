@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using kbs2.GamePackage;
 using kbs2.GamePackage.Interfaces;
+using kbs2.UserInterface.MiniMap;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
@@ -14,6 +15,9 @@ namespace kbs2.UserInterface
 	public class MiniMapBar : IViewImage
 	{
 		public GameController gameController { get; set; }
+
+        public MiniMapModel Model { get; set; }
+
 		public Coords coords => new Coords
 		{
 			x = 0,
@@ -31,6 +35,7 @@ namespace kbs2.UserInterface
 		public MiniMapBar(GameController gameController)
 		{
 			this.gameController = gameController;
+            Model = new MiniMapModel(gameController.camera, gameController);
 		}
 	}
 }

@@ -26,11 +26,5 @@ namespace kbs2.WorldEntity.Unit.MVC
 		public string Texture { get; set; }
 		public Color Colour { get { return Color.White; } set {; } }
 		public int ZIndex { get { return 2; } set {; } }
-
-		public Unit_View(Unit_Controller Unit_Controller)
-        {
-            this.Unit_Controller = Unit_Controller;
-            ImageSrcShad = "shadow";
-        }
 	}
 }

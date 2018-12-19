@@ -23,7 +23,14 @@ namespace kbs2.WorldEntity.Building
                 BuildingModel = model
             };
             building_Controller.View = view;
-            building_Controller.HPController = new HP_Controller(500, 500);
+            building_Controller.HPController = new HP_Controller
+            {
+                HPModel = new HP_Model
+                {
+                    CurrentHP = 500,
+                    MaxHP = 500
+                }
+            };
 
             return building_Controller;
         }

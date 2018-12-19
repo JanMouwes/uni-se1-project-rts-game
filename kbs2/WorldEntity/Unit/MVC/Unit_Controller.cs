@@ -28,11 +28,6 @@ namespace kbs2.WorldEntity.Unit.MVC
 
         public List<ActionController> Actions { get {return UnitModel.actions; } }
 
-        public Unit_Controller()
-		{
-            UnitView = new Unit_View(this);
-            UnitModel = new Unit_Model();
-        }
         // Create a new unit and add it to a faction
         public void CreateUnit(Faction_Model faction)
         {

@@ -49,7 +49,7 @@ namespace kbs2.GamePackage
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
         public EntitySpawner spawner;
-
+        public SpriteBatch spriteBatch;
         public MouseInput MouseInput { get; set; }
 
         public const int TicksPerSecond = 30;
@@ -173,7 +173,7 @@ namespace kbs2.GamePackage
 
             gameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
 
-            SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
             camera = new CameraController(GraphicsDevice);
             gameView = new GameView(gameModel, graphicsDeviceManager, spriteBatch, camera, GraphicsDevice, Content);
 
@@ -205,6 +205,7 @@ namespace kbs2.GamePackage
             APressed = false;
             Terraintester = new Terraintester();
 
+            Faction_Controller playerFaction = new Faction_Controller("Byzantine Empire");
 
             onTick += SetBuilding;
             onTick += f.UpdateTime;
@@ -240,7 +241,7 @@ namespace kbs2.GamePackage
             for (int i = 0; i < 42; i++)
             {
                 Unit_Controller unit =
-                    UnitFactory.CreateNewUnit(unitdef, new Coords {x = i, y = 5}, gameModel.World.WorldModel);
+                    UnitFactory.CreateNewUnit(unitdef, playerFaction, gameModel.World.WorldModel);
 
                 unit.UnitModel.Speed = 0.05f;
                 
@@ -577,7 +578,6 @@ namespace kbs2.GamePackage
                     bottomBarView.Model.StatViews[0].AddNameText(((Building_Controller)buildings[0]).Model.Name);
                 }
             }
-                
                 
             // Adds the views to the gameModel
             foreach (BottomBarStatView view in bottomBarView.Model.StatViews)

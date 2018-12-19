@@ -10,11 +10,5 @@ namespace kbs2.WorldEntity.Health
 	{
 		public int CurrentHP { get; set; }
 		public int MaxHP { get; set; }
-
-        public HP_Model(int currentHP, int maxHP)
-        {
-            CurrentHP = currentHP;
-            MaxHP = maxHP;
-        }
 	}
 }
