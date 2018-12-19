@@ -62,6 +62,10 @@ namespace kbs2
 
                         BuildingDef.Image = reader["image"].ToString();
                         BuildingDef.AddShapeFromString(reader["shape"].ToString());
+
+                        BuildingDef.Cost = float.Parse(reader["Cost"].ToString());
+                        BuildingDef.UpkeepCost = float.Parse(reader["Upkeep"].ToString());
+
                     }
                 }
             }

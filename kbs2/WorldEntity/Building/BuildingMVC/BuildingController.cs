@@ -40,5 +40,17 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
         }
+
+        /// <summary>Checks if user has enough currency to purchase.
+        /// <para>If user has enough the cost price will be removed from balance and upkeep cost will be added to the total upkeepcost of there faction</para>
+        /// </summary>
+        public void EnoughCurrencyCheck(IStructureDef def)
+        {
+            if(Faction.currency_Controller.model.currency >= def.Cost){
+                Faction.currency_Controller.RemoveCurrency((float)def.Cost);
+                Faction.currency_Controller.AddUpkeepCost((float)def.UpkeepCost);
+            }
+        }
+
     }
 }

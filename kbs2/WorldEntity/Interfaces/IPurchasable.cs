@@ -3,6 +3,7 @@ namespace kbs2.Unit.Interfaces
 {
     public interface IPurchasable
     {
-        CostValue CostValue{ get; set;}
+        double Cost { get; set; }
+        double UpkeepCost { get; set; }
     }
 }
