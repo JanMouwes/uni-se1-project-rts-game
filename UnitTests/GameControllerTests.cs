@@ -9,7 +9,7 @@ namespace Tests
     [TestFixture]
     class GameControllerTests
     {
-        [TestCase(GameSpeed.Regular , GameState.Running, GameSpeed.Regular, GameState.Running)]
+        [TestCase(GameSpeed.Regular, GameState.Running, GameSpeed.Regular, GameState.Running)]
         public void Test_GameController_Registers_Values(GameSpeed gameSpeed, GameState gameState, GameSpeed expectedGameSpeed, GameState expectedGameState)
         {
             // Arrange
@@ -22,7 +22,7 @@ namespace Tests
             Assert.AreEqual(controller.GameSpeed, expectedGameSpeed);
             Assert.AreEqual(controller.GameState, expectedGameState);
         }
- 
+
         [TestCase(GameSpeed.Regular, GameState.Running, GameSpeed.Regular, GameState.Running)]
         public void Test_Events_Are_Raised(GameSpeed gameSpeed, GameState gameState, GameSpeed expectedGameSpeed, GameState expectedGameState)
         {
@@ -37,10 +37,10 @@ namespace Tests
                 receivedSpeedEvents.Add(e.GameSpeed);
             };
 
-            controller.GameStateChange += delegate (object sender, GameStateEventArgs e)
-            {
-                receivedStateEvents.Add(e.GameState);
-            };
+            //controller.GameStateChange += delegate (object sender, GameStateEventArgs e)
+            //{
+            //    receivedStateEvents.Add(e.GameState);
+            //};
 
             controller.GameSpeed = gameSpeed;
             controller.GameState = gameState;

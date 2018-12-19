@@ -1,4 +1,4 @@
-using kbs2.utils;
+﻿using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Structs;
 using NUnit.Framework;
@@ -13,13 +13,13 @@ namespace Tests
             int expectedX, int expectedY)
         {
             //    Arrange
-            Coords drawCoords = new Coords {x = drawCoordsX, y = drawCoordsY};
+            Coords drawCoords = new Coords { x = drawCoordsX, y = drawCoordsY };
 
             //    Act
             Coords actual = WorldPositionCalculator.DrawCoordsToCellCoords(drawCoords, tileSize);
 
             //    Assert
-            Coords expectedCoords = new Coords {x = expectedX, y = expectedY};
+            Coords expectedCoords = new Coords { x = expectedX, y = expectedY };
             Assert.AreEqual(expectedCoords, actual);
         }
 
@@ -29,13 +29,13 @@ namespace Tests
             int expectedChunkY)
         {
             //    Arrange
-            FloatCoords cellCoords = new FloatCoords {x = tileX, y = tileY};
+            FloatCoords cellCoords = new FloatCoords { x = tileX, y = tileY };
 
             //    Act
             Coords actual = WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords);
 
             //    Assert
-            Coords expectedCoords = new Coords {x = expectedChunkX, y = expectedChunkY};
+            Coords expectedCoords = new Coords { x = expectedChunkX, y = expectedChunkY };
             Assert.AreEqual(expectedCoords, actual);
         }
     }

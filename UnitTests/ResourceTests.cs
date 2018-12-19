@@ -15,11 +15,11 @@ namespace Tests
 
         ResourceController controller;
 
-       
+
 
 
         [Test]
-        [TestCase(1,2,3,10+500)]
+        [TestCase(1, 2, 3, 10 + 500)]
         public void ResourcesToCurrencyTest(float type1, float type2, float type3, float result)
         {
             controller = new ResourceController();

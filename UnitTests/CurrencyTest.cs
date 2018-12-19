@@ -10,13 +10,13 @@ namespace Tests
     [TestFixture]
     public class CurrencyTests
     {
-        
+
         public CurrencyTests()
         {
         }
         Currency_Controller controller;
 
-      
+
 
         [Test]
         [TestCase(20)]
@@ -40,6 +40,19 @@ namespace Tests
             controller.RemoveCurrency(amount);
 
             Assert.IsTrue(controller.model.currency == expected);
+        }
+
+
+        [Test]
+        [TestCase(20)]
+        [TestCase(30)]
+        public void AddUpkeepCost(float amount)
+        {
+            controller = new Currency_Controller();
+            float expected = amount;
+            controller.AddUpkeepCost(amount);
+
+            Assert.IsTrue(controller.model.UpkeepCost == expected);
         }
 
 

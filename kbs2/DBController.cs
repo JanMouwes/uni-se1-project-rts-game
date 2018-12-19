@@ -14,17 +14,23 @@ namespace kbs2
         public static SqliteConnection DBConn { get; set; }
 
         // Open a connection with the given database file
-        public static void OpenConnection(string dbName)
+        public static SqliteConnection OpenConnection(string databaseFileName)
         {
+            if (DBConn != null && DBConn.State == System.Data.ConnectionState.Open)
+                return DBConn;
+            
+
             //TODO: Tempfix so we can continue copied DefDex.db to bin/DesktopGL/AnyCPU/debug/
 
-            string directoryName = Path.GetFullPath("DefDex.db");
+            string directoryName = Path.GetFullPath(databaseFileName);
             // gives /Users/Username/Github/Project/bin/DesktopGL/AnyCPU/debug/Defdex.db
             // Should give /Users/Username/Github/Project/DefDex.db
 
             DBConn = new SqliteConnection(
                 "Data Source= " + directoryName + "; Version=3;");
             DBConn.Open();
+
+            return DBConn;
         }
 
         // Close the current connection with the database
@@ -74,7 +80,7 @@ namespace kbs2
             UnitDef returnedUnitDef = new UnitDef();
 
             string query = $"SELECT * FROM UnitDef WHERE Id=@i";
-                
+
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
             {
@@ -88,6 +94,8 @@ namespace kbs2
                         returnedUnitDef.Image = reader["Image"].ToString();
                         returnedUnitDef.Width = float.Parse(reader["Width"].ToString());
                         returnedUnitDef.Height = float.Parse(reader["Height"].ToString());
+                        returnedUnitDef.Upkeep = float.Parse(reader["Upkeep"].ToString());
+
 
                         // This is for the different defs not implemented yet
                         /*returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());
