@@ -14,7 +14,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 {
     public class ConstructingBuildingModel
     {
-        public IStructureDef BuildingDef { get; set; }
+        public ConstructingBuildingDef BuildingDef { get; set; }
         public Faction_Controller FactionController { get; set; }
 
         public int FinishTime { get; set; }

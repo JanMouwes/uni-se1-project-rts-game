@@ -30,7 +30,9 @@ using kbs2.Faction.FactionMVC;
 using kbs2.UserInterface.GameActionGui;
 using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structs;
 using kbs2.WorldEntity.WorldEntitySpawner;
+using MonoGame.Extended.Timers;
 
 namespace kbs2.GamePackage
 {
@@ -52,6 +54,8 @@ namespace kbs2.GamePackage
         public GameView GameView { get; set; }
         public EntitySpawner Spawner;
 
+        public GameTime LastUpdateGameTime { get; private set; }
+
         public MouseInput MouseInput { get; set; }
 
         public const int TicksPerSecond = 30;
@@ -60,7 +64,7 @@ namespace kbs2.GamePackage
 
         private Timer gameTimer; //TODO
 
-        public GameActionGuiController GameActionGuiView { get; set; } // testcode ===============
+        public GameActionGuiController GameActionGui { get; set; }
         public bool PreviousQPressed { get; set; }
         public bool APressed { get; set; }
         public Terraintester Terraintester { get; set; }
@@ -128,6 +132,8 @@ namespace kbs2.GamePackage
             GameStateChange += UnPauseGame;
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
+            
+            GameActionGui = new GameActionGuiController(this);
 
             shader = RandomPattern2;
 
@@ -336,8 +342,7 @@ namespace kbs2.GamePackage
         protected override void Update(GameTime gameTime)
         {
             // Exit game if escape is pressed
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 SaveToDB();
                 Exit();
@@ -347,6 +352,8 @@ namespace kbs2.GamePackage
 
             if (gameState == GameState.Paused) return;
 
+            LastUpdateGameTime = gameTime;
+
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
 
@@ -354,48 +361,38 @@ namespace kbs2.GamePackage
 
             MouseState temp = Mouse.GetState();
             Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
-            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
-                WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
+            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
             if (GameModel.World.GetCellFromCoords(coords) != null)
             {
-                Terraintester.Text =
-                    $"{coords.x},{coords.y}  {GameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}";
-                if (GameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop != null)
-                {
-                    Terraintester.Text += " b";
-                }
+                Terraintester.Text = $"{coords.x},{coords.y}  {GameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}";
+                Terraintester.Colour = GameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop != null ? Color.Red : Color.Blue;
             }
 
             GameModel.GuiTextList.Add(Terraintester);
 
             // Update Buildings on screen
-            List<IViewImage> buildings = new List<IViewImage>();
-            foreach (IStructure structure in GameModel.World.WorldModel.Structures)
-            {
-                BuildingController building = (BuildingController) structure;
-                buildings.Add(building.View);
-            }
+            List<IViewImage> buildings = (from structure in GameModel.World.WorldModel.Structures
+                let building = structure as BuildingController
+                select building.View as IViewImage).ToList();
 
             GameModel.ItemList.AddRange(buildings);
 
 
             List<IViewImage> constructingBuildingViews = new List<IViewImage>();
             List<IViewText> counters = new List<IViewText>();
-            foreach (ConstructingBuildingController BUC in GameModel.World.WorldModel.UnderConstruction)
+            foreach (ConstructingBuildingController building in GameModel.World.WorldModel.UnderConstruction)
             {
-                constructingBuildingViews.Add(BUC.ConstructingBuildingView);
-                counters.Add(BUC.Counter);
+                constructingBuildingViews.Add(building.ConstructingBuildingView);
+                counters.Add(building.Counter);
             }
 
             GameModel.ItemList.AddRange(constructingBuildingViews);
             GameModel.TextList.AddRange(counters);
 
 
-            List<IViewImage> units = (from unit in GameModel.World.WorldModel.Units
-                select unit.UnitView).Cast<IViewImage>().ToList();
+            List<IViewImage> units = (from unit in GameModel.World.WorldModel.Units select unit.UnitView).Cast<IViewImage>().ToList();
 
             GameModel.ItemList.AddRange(units);
-
 
             if (GameModel.ActionBox.BoxModel.Show)
             {
@@ -503,62 +500,98 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SetBuilding(object sender, OnTickEventArgs eventArgs)
         {
-            Func<bool, bool, int, MouseState, List<TerrainType>, bool> checkKeysAndPlaceBuilding =
-                (isKeyPressed, wasKeyPressed, buildingId, mouseState, legalTerrainTypes) =>
+            bool CheckKeysAndPlaceBuilding(bool isKeyPressed, bool wasKeyPressed, int buildingId, MouseState mouseState, List<TerrainType> legalTerrainTypes)
+            {
+                //FIXME temp
+                //if (isKeyPressed == wasKeyPressed) return wasKeyPressed;
+
+                if (!isKeyPressed) return true;
+
+                DBController.OpenConnection("DefDex.db");
+                IStructureDef def = DBController.GetDefinitionBuilding(buildingId);
+                DBController.CloseConnection();
+
+                Coords tempCoords = new Coords {x = mouseState.X, y = mouseState.Y};
+
+                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempCoords, Camera.GetViewMatrix()), GameView.TileSize);
+
+                List<Coords> buildingCoords = new List<Coords>();
+                foreach (Coords buildingShape in def.BuildingShape) buildingCoords.Add(coords + buildingShape);
+
+                if (!GameModel.World.AreTerrainCellsLegal(buildingCoords, legalTerrainTypes)) return true;
+
+                using (ConstructingBuildingFactory constructionFactory = new ConstructingBuildingFactory(PlayerFaction))
                 {
-                    //FIXME temp
-                    if (isKeyPressed == wasKeyPressed) return wasKeyPressed;
+                    ViewValues viewValues = new ViewValues(ConstructingBuildingFactory.ConstructionImageSource, def.ViewValues.Width, def.ViewValues.Height);
 
-                    if (!isKeyPressed) return true;
+                    ConstructingBuildingDef buildingDef = new ConstructingBuildingDef(def, 20) {BuildingShape = def.BuildingShape, ViewValues = viewValues};
 
-                    DBController.OpenConnection("DefDex.db");
-                    BuildingDef def = DBController.GetDefinitionBuilding(buildingId);
-                    DBController.CloseConnection();
+                    ConstructingBuildingController building = constructionFactory.CreateBUC(buildingDef);
 
-                    Coords tempCoords = new Coords {x = mouseState.X, y = mouseState.Y};
+                    Spawner.SpawnStructure(coords, building);
 
-                    Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempCoords, Camera.GetViewMatrix()), GameView.TileSize);
+                    onTick += building.Update;
 
-                    List<Coords> buildingCoords = new List<Coords>();
-                    foreach (Coords buildingShape in def.BuildingShape) buildingCoords.Add(coords + buildingShape);
-
-                    if (!GameModel.World.AreTerrainCellsLegal(buildingCoords, legalTerrainTypes)) return true;
-
-                    using (ConstructingBuildingFactory constructionFactory = new ConstructingBuildingFactory(PlayerFaction))
+                    building.ConstructionComplete += (o, args) =>
                     {
-                        ConstructingBuildingController building = constructionFactory.CreateBUC(def);
+                        if (!(o is ConstructingBuildingController structure)) return;
 
+                        onTick -= structure.Update;
+                        GameModel.World.RemoveStructure(structure);
 
-                        GameModel.World.AddBuildingUnderConstruction(building.Def, building);
-                        onTick += building.Update;
+                        Spawner.SpawnStructure(structure.StartCoords, BuildingFactory.CreateNewBuilding((BuildingDef) structure.Def.CompletedBuildingDef));
+                    };
+                }
 
-                        building.ConstructionComplete += (o, args) => Spawner.SpawnStructure( building.StartCoords, BuildingFactory.CreateNewBuilding((BuildingDef) building.Def.CompletedBuildingDef));
-                    }
-
-                    return true;
-                };
+                return true;
+            }
 
             bool isQPressed = Keyboard.GetState().IsKeyDown(Keys.D1);
 
             KeyboardState keyboardState = Keyboard.GetState();
 
             List<TerrainType> terrainList = new List<TerrainType>()
-                {
-                    TerrainType.Grass,
-                    TerrainType.Default
-                };
+            {
+                TerrainType.Grass,
+                TerrainType.Default
+            };
 
-            PreviousQPressed = checkKeysAndPlaceBuilding(isQPressed, PreviousQPressed, 2, Mouse.GetState(), terrainList);
-            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), PreviousQPressed, 3, Mouse.GetState(), terrainList);
-            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), PreviousQPressed, 4, Mouse.GetState(), terrainList);
-            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), PreviousQPressed, 5, Mouse.GetState(), terrainList);
-            PreviousQPressed = checkKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), PreviousQPressed, 6, Mouse.GetState(), terrainList);
+            if (isQPressed)
+            {
+                PreviousQPressed = CheckKeysAndPlaceBuilding(isQPressed, PreviousQPressed, 2, Mouse.GetState(), terrainList);
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D3))
+            {
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), PreviousQPressed, 3, Mouse.GetState(), terrainList);
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D4))
+            {
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), PreviousQPressed, 4, Mouse.GetState(), terrainList);
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D5))
+            {
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), PreviousQPressed, 5, Mouse.GetState(), terrainList);
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D6))
+            {
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), PreviousQPressed, 6, Mouse.GetState(), terrainList);
+                return;
+            }
         }
 
         public void ChangeSelection(object sender, EventArgsWithPayload<List<IHasGameActions>> eventArgs)
         {
             List<IGameAction> actions = eventArgs.Value.First().GameActions;
-            GameActionGuiView.SetActions(new List<GameActionTabModel> {new GameActionTabModel(actions.ToArray())});
+            IGameAction[] actionArray = actions.ToArray();
+            GameActionGui.SetActions(new List<GameActionTabModel> {new GameActionTabModel(actionArray)});
         }
 
 

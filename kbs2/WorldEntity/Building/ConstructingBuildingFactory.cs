@@ -10,6 +10,8 @@ namespace kbs2.WorldEntity.Building
 {
     public class ConstructingBuildingFactory : IDisposable
     {
+        public const string ConstructionImageSource = "Construction";
+
         private Faction_Controller faction;
 
         public ConstructingBuildingFactory(Faction_Controller faction)
@@ -17,25 +19,18 @@ namespace kbs2.WorldEntity.Building
             this.faction = faction;
         }
 
-        public ConstructingBuildingController CreateBUCOf(IStructure structure)
-        {
-            return CreateNewBUC(structure.Def, faction);
-        }
-        public ConstructingBuildingController CreateBUC(IStructureDef structureDef)
+        public ConstructingBuildingController CreateBUC(ConstructingBuildingDef structureDef)
         {
             return CreateNewBUC(structureDef, faction);
         }
 
-        public static ConstructingBuildingController CreateNewBUC(IStructureDef def,
+        public static ConstructingBuildingController CreateNewBUC(ConstructingBuildingDef def,
             Faction_Controller factionController)
         {
-            ViewValues viewValues = def.ViewValues;
-
-            ConstructingBuildingController building = new ConstructingBuildingController
+            ConstructingBuildingController building = new ConstructingBuildingController(def)
             {
                 ConstructingBuildingModel =
                 {
-                    BuildingDef = def,
                     FactionController = factionController
                 }
             };
@@ -53,7 +48,7 @@ namespace kbs2.WorldEntity.Building
 
         public static ConstructingBuildingController CreateNewBUCAt(IStructureDef def, Coords TopLeft, Faction_Controller faction_Controller)
         {
-            ConstructingBuildingController constructingBuildingController = CreateNewBUC(def, faction_Controller);
+            ConstructingBuildingController constructingBuildingController = CreateNewBUC((ConstructingBuildingDef) def, faction_Controller);
 
             constructingBuildingController.ConstructingBuildingModel = new ConstructingBuildingModel() {StartCoords = TopLeft};
 
