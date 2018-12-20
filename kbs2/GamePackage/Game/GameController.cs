@@ -171,7 +171,7 @@ namespace kbs2.GamePackage
             gameModel.Factions.Add(PlayerFaction);
 
             // Generate CPU Faction (1)
-            gameModel.Factions.Add(FactionFactory.CreateCPUFaction("StandardAIFaction"));
+            gameModel.Factions.Add(FactionFactory.CreateCPUFaction("OverworldFaction"));
             gameModel.Factions[1].AddRelationship(PlayerFaction, Faction.Enums.Faction_Relations.hostile);
 
             // Give Factions starting units

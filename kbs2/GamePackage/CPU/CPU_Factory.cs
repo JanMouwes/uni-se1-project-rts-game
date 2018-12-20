@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kbs2.GamePackage.AI
+namespace kbs2.GamePackage.CPU
 {
-    class SimpleAI
+    public class CPU_Factory
     {
     }
 }

@@ -314,7 +314,6 @@ public class Pathfinder
             return;
         }
 
-
         CellWeight cellWeight;
 
         // set weightvalues
