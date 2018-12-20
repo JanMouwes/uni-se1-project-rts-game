@@ -179,7 +179,7 @@ namespace kbs2.GamePackage
 
             foreach (Faction_Controller faction in gameModel.Factions)
             {
-                faction.AddUnitToFaction(UnitFactory.CreateNewUnit(DBController.GetDefinitionFromUnit(1), gameModel.World.WorldModel));
+                faction.AddUnitToFaction(UnitFactory.CreateNewUnit(DBController.GetDefinitionFromUnit(1), this));
             }
 
             DBController.CloseConnection();
@@ -197,7 +197,6 @@ namespace kbs2.GamePackage
             gameView = new GameView(gameModel, graphicsDeviceManager, spriteBatch, camera, GraphicsDevice, Content);
 
             GameTimer = new Timer(TickIntervalMilliseconds);
-
 
             gameModel.MouseInput = new MouseInput(this);
 
@@ -251,33 +250,18 @@ namespace kbs2.GamePackage
             ActionInterface.SetActions(BuildActions);
 
             //TESTCODE
-            /*
             DBController.OpenConnection("DefDex");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
-            DBController.CloseConnection();*/
+            DBController.CloseConnection();
 
-            /*for (int i = 0; i < 42; i++)
+            foreach(Faction_Controller faction in gameModel.Factions)
             {
-                Unit_Controller unit =
-                    UnitFactory.CreateNewUnit(unitdef, gameModel.World.WorldModel);
-
-                unit.UnitModel.Speed = 0.05f;
-                
-                if (i == 13 || i == 17 || i == 25)
+                foreach (Unit_Controller unit in faction.FactionModel.Units.ToList())
                 {
-                    unit.UnitView.Texture = "pikachu_idle";
-                    unit.HPController.HPModel.CurrentHP = unit.HPController.HPModel.CurrentHP / 2;
+                    spawner.SpawnUnit(unit, faction);
+                    onTick += unit.LocationController.Ontick;
                 }
-                    
-                unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
-                spawner.SpawnUnit(unit, PlayerFaction);
-                onTick += unit.LocationController.Ontick;
-				
-				for(int act = 0; act < 9; act++)
-				{
-					unit.UnitModel.actions.Add(new ActionController { View = new ActionView { Texture = "pichu_idle", Colour = Color.White, ZIndex = 2, gameController = this } });
-				}
-            }*/
+            }
 
             //============= More TestCode ===============
 
