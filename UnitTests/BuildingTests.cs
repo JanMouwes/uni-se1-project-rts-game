@@ -1,4 +1,6 @@
-﻿using kbs2.WorldEntity.Building;
+﻿using kbs2.Faction.FactionMVC;
+using kbs2.World;
+using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Interfaces;
 using NUnit.Framework;
@@ -20,7 +22,11 @@ namespace Tests
                 Cost = 50,
                 UpkeepCost = 1.4,
             };
-            controller = new BuildingController(def);
+            controller = new BuildingController(def)
+            {
+                Faction = new Faction_Controller("test-faction"),
+                StartCoords = new Coords()
+            };
         }
 
         [Test]
@@ -29,7 +35,7 @@ namespace Tests
             float expected = controller.Faction.currency_Controller.model.currency - (float)def.Cost;
             controller.EnoughCurrencyCheck(def);
 
-            Assert.IsTrue(controller.Faction.currency_Controller.model.currency == expected);
+            Assert.AreEqual(expected, controller.Faction.currency_Controller.model.currency);
         }
 
         [Test]
@@ -38,7 +44,7 @@ namespace Tests
             float expected = controller.Faction.currency_Controller.model.UpkeepCost - (float)def.UpkeepCost;
             controller.EnoughCurrencyCheck(def);
 
-            Assert.IsTrue(controller.Faction.currency_Controller.model.UpkeepCost == expected);
+            Assert.AreEqual(expected, controller.Faction.currency_Controller.model.UpkeepCost);
         }
 
     }
