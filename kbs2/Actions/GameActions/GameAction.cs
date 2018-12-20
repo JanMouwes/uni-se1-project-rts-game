@@ -19,6 +19,11 @@ namespace kbs2.Actions.GameActions
             CurrentCooldown = actionDef.Cooldown;
         }
 
+        /// <summary>
+        /// updates the cooldown of the actions
+        /// </summary>
+        /// <param name="sender">Event sender</param>
+        /// <param name="eventArgs">EventArgs in gametime</param>
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
             CurrentCooldown -= (uint) eventArgs.GameTime.ElapsedGameTime.TotalSeconds;
