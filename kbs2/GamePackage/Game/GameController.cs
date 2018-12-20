@@ -129,7 +129,7 @@ namespace kbs2.GamePackage
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
-            shader = DefaultPattern;
+            shader = RandomPattern2;
 
             Content.RootDirectory = "Content";
         }
