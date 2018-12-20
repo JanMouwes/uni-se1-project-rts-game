@@ -54,7 +54,7 @@
     <Compile Include="Actions\GameActionDefs\SpawnActionDef.cs" />
     <Compile Include="Actions\GameActionFactory.cs" />
     <Compile Include="Actions\ActionModels\SpawnActionModel.cs" />
-    <Compile Include="Actions\GameActionGrid\GameActionHolder.cs" />
+    <Compile Include="Actions\GameActionGrid\GameActionTabItem.cs" />
     <Compile Include="Actions\GameActionGrid\GameActionTabModel.cs" />
     <Compile Include="Actions\GameActions\GameAction.cs" />
     <Compile Include="Actions\GameActions\ActionView.cs" />

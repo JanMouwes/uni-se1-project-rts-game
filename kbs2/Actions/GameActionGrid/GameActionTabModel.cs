@@ -8,14 +8,14 @@ namespace kbs2.Actions.GameActionGrid
     {
         public const int GameActionsPerTab = 9;
 
-        public GameActionHolder[] GameActionHolders { get; private set; }
+        public GameActionTabItem[] GameActionTabItems { get; private set; }
 
         public GameActionTabModel(IGameAction[] gameActions)
         {
-            GameActionHolders = new GameActionHolder[GameActionsPerTab];
+            GameActionTabItems = new GameActionTabItem[GameActionsPerTab];
             for (int i = 0; i < gameActions.Length; i++)
             {
-                GameActionHolders[i] = new GameActionHolder(gameActions[i]);
+                GameActionTabItems[i] = new GameActionTabItem(gameActions[i]);
             }
         }
     }
