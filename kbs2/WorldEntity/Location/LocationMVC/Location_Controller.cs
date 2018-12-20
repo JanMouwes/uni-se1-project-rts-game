@@ -13,7 +13,7 @@ namespace kbs2.WorldEntity.Location
     public class Location_Controller
     {
         public Pathfinder pathfinder;
-        public Location_Model LocationModel;
+        public LocationModel LocationModel;
         public List<FloatCoords> Waypoints;
 
 
@@ -25,7 +25,7 @@ namespace kbs2.WorldEntity.Location
 
         public Location_Controller(WorldModel worldModel, float lx, float ly)
         {
-            LocationModel = new Location_Model(lx, ly);
+            LocationModel = new LocationModel(lx, ly);
             pathfinder = new Pathfinder(worldModel, 500);
             Waypoints = new List<FloatCoords>();
         }
@@ -48,17 +48,17 @@ namespace kbs2.WorldEntity.Location
         {
             if (Waypoints.Count > 0)
             {
-                float speed = LocationModel.parent.UnitModel.Speed;
+                float speed = LocationModel.Parent.UnitModel.Speed;
 
-                if (getDistance2d(Waypoints[0], LocationModel.floatCoords) < speed)
+                if (getDistance2d(Waypoints[0], LocationModel.FloatCoords) < speed)
                 {
-                    LocationModel.floatCoords = Waypoints[0];
+                    LocationModel.FloatCoords = Waypoints[0];
                     Waypoints.RemoveAt(0);
                 }
                 else
                 {
-                    float xdifference = (float) getDistance(LocationModel.floatCoords.x, Waypoints[0].x);
-                    float ydifference = (float) getDistance(LocationModel.floatCoords.y, Waypoints[0].y);
+                    float xdifference = (float) getDistance(LocationModel.FloatCoords.x, Waypoints[0].x);
+                    float ydifference = (float) getDistance(LocationModel.FloatCoords.y, Waypoints[0].y);
                     // calculate new coords
                     float diagonaldifference = (float) pythagoras(xdifference, ydifference);
                     float v = diagonaldifference / speed;
@@ -67,22 +67,22 @@ namespace kbs2.WorldEntity.Location
                     difference.x = xdifference / v;
                     difference.y = ydifference / v;
 
-                    if (Waypoints[0].x < LocationModel.floatCoords.x)
+                    if (Waypoints[0].x < LocationModel.FloatCoords.x)
                     {
-                        LocationModel.floatCoords.x -= difference.x;
+                        LocationModel.FloatCoords.x -= difference.x;
                     }
                     else
                     {
-                        LocationModel.floatCoords.x += difference.x;
+                        LocationModel.FloatCoords.x += difference.x;
                     }
 
-                    if (Waypoints[0].y < LocationModel.floatCoords.y)
+                    if (Waypoints[0].y < LocationModel.FloatCoords.y)
                     {
-                        LocationModel.floatCoords.y -= difference.y;
+                        LocationModel.FloatCoords.y -= difference.y;
                     }
                     else
                     {
-                        LocationModel.floatCoords.y += difference.y;
+                        LocationModel.FloatCoords.y += difference.y;
                     }
                 }
             }

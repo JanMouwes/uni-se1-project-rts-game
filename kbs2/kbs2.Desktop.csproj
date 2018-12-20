@@ -58,7 +58,6 @@
     <Compile Include="Actions\GameActionGrid\GameActionTabModel.cs" />
     <Compile Include="Actions\GameActions\GameAction.cs" />
     <Compile Include="Actions\GameActions\ActionView.cs" />
-    <Compile Include="Actions\ActionDelegates.cs" />
     <Compile Include="Actions\GameActions\CooldownView.cs" />
     <Compile Include="Actions\GameActions\SpawnAction.cs" />
     <Compile Include="Actions\IActionModel.cs" />

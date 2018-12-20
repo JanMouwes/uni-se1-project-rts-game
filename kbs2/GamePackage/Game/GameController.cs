@@ -24,7 +24,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
+using kbs2.Actions.GameActionDefs;
 using kbs2.Actions.GameActionGrid;
+using kbs2.Actions.GameActions;
 using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
 using kbs2.UserInterface.GameActionGui;
@@ -53,6 +55,8 @@ namespace kbs2.GamePackage
         public GameModel GameModel { get; set; } = new GameModel();
         public GameView GameView { get; set; }
         public EntitySpawner Spawner;
+
+        public IGameAction selectedGameAction = null;
 
         public GameTime LastUpdateGameTime { get; private set; }
 
@@ -239,8 +243,6 @@ namespace kbs2.GamePackage
             MiniMapBar miniMap = new MiniMapBar(this);
             ActionBarView actionBar = new ActionBarView(this);
 
-            GameActionGuiController gameActionUI = new GameActionGuiController(this);
-
             GameModel.GuiItemList.Add(statusBarView);
             GameModel.GuiItemList.Add(leftButtonBar);
             GameModel.GuiItemList.Add(rightButtonBar);
@@ -256,12 +258,12 @@ namespace kbs2.GamePackage
 
             for (int i = 0; i < 12; i++)
             {
-                UnitController unit =
-                    UnitFactory.CreateNewUnit(unitdef, new FloatCoords {x = i, y = 5}, GameModel.World.WorldModel);
+                FloatCoords coords = new FloatCoords {x = i, y = 5};
+                UnitController unit = UnitFactory.CreateNewUnit(unitdef, coords, GameModel.World.WorldModel, PlayerFaction);
 
                 unit.UnitModel.Speed = 0.05f;
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
-                Spawner.SpawnUnit(unit, PlayerFaction);
+                Spawner.SpawnUnit(unit, (Coords) coords);
                 PlayerFaction.currency_Controller.AddUpkeepCost(unitdef.Upkeep);
             }
 
@@ -558,7 +560,16 @@ namespace kbs2.GamePackage
 
             if (isQPressed)
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(isQPressed, PreviousQPressed, 2, Mouse.GetState(), terrainList);
+                SpawnActionDef def = SpawnActionDef.Pikachu;
+                selectedGameAction = new SpawnAction(def, this, PlayerFaction);
+                //PreviousQPressed = CheckKeysAndPlaceBuilding(isQPressed, PreviousQPressed, 2, Mouse.GetState(), terrainList);
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D2))
+            {
+                SpawnActionDef def = SpawnActionDef.Raichu;
+                selectedGameAction = new SpawnAction(def, this, PlayerFaction);
                 return;
             }
 

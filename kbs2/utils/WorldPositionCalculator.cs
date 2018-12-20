@@ -51,10 +51,8 @@ namespace kbs2.utils
             y = ModulusUtils.mod(realCoords.y, WorldChunkModel.ChunkSize)
         };
 
-        public static FloatCoords DrawCoordsToCellFloatCoords(Coords drawCoords, int tileSize) => new FloatCoords
-        {
-            x = (float) drawCoords.x / tileSize,
-            y = (float) drawCoords.y / tileSize
-        };
+        public static FloatCoords DrawCoordsToCellFloatCoords(Coords drawCoords, int tileSize) =>
+            (FloatCoords) DrawCoordsToCellCoords(drawCoords, tileSize);
+        
     }
 }

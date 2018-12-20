@@ -169,8 +169,8 @@ namespace kbs2.GamePackage
             if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
             {
                 Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                            where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < 0.5
-                            || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < Item.UnitView.Height
+                            where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.FloatCoords) < 0.5
+                            || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.FloatCoords) < Item.UnitView.Height
                             select Item).ToList();
             }
             else
@@ -178,10 +178,10 @@ namespace kbs2.GamePackage
 
 
                 Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                            where TopLeft.x <= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
-                            && TopLeft.y <= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
-                            && BottomRight.x >= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
-                            && BottomRight.y >= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
+                            where TopLeft.x <= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
+                            && TopLeft.y <= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
+                            && BottomRight.x >= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
+                            && BottomRight.y >= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
                             select Item).ToList();
             }
             return Selected.Cast<IHasGameActions>().ToList();

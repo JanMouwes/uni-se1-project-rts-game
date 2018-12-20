@@ -19,6 +19,12 @@ namespace kbs2.WorldEntity.Building
             this.faction = faction;
         }
 
+        public ConstructingBuildingController CreateConstructingBuildingControllerOf(BuildingDef structureDef)
+        {
+            ConstructingBuildingDef def = new ConstructingBuildingDef(structureDef, 20);
+            return CreateNewBUC(def, faction);
+        }
+
         public ConstructingBuildingController CreateBUC(ConstructingBuildingDef structureDef)
         {
             return CreateNewBUC(structureDef, faction);
