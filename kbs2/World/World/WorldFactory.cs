@@ -9,12 +9,17 @@ namespace kbs2.World.World
 {
     public static class WorldFactory
     {
+        public static FastNoise.NoiseType Noise;
+
         /// <summary>
         /// The default function to generate a new world.
         /// </summary>
         /// <returns>Return a world made with terrain generation</returns>
-        public static WorldController GetNewWorld()
+        public static WorldController GetNewWorld(FastNoise.NoiseType noise)
         {
+            // Set the generation noise type
+            Noise = noise;
+
             // Initialize World 
             WorldController world = new WorldController();
 

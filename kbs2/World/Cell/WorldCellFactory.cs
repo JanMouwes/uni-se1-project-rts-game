@@ -1,5 +1,6 @@
 ﻿using kbs2.World.Enums;
 using kbs2.World.Structs;
+using kbs2.World.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,18 +18,17 @@ namespace kbs2.World.Cell
         /// </summary>
         /// <param name="coords">The required chunk coordinates for setting the new chunks coordinates</param>
         /// <returns>returns a wordchunk filled with worldcells</returns>
-        public static WorldCellController GetNewCell(FloatCoords coords) => new WorldCellController(coords, GetTypeFromCoords(coords.x, coords.y, FastNoise.NoiseType.Simplex));
+        public static WorldCellController GetNewCell(FloatCoords coords) => new WorldCellController(coords, GetTypeFromCoords(coords.x, coords.y));
 
         /// <summary>
         /// This function generates the terrain type from its coords with noise
         /// </summary>
         /// <param name="x">Cell x position in float</param>
         /// <param name="y">Cell y position in float</param>
-        /// <param name="noise">Desired noise type</param>
         /// <returns>returns the specific cell's terrain type</returns>
-        public static TerrainType GetTypeFromCoords(float x, float y, FastNoise.NoiseType noise)
+        public static TerrainType GetTypeFromCoords(float x, float y)
         {
-            myNoise.SetNoiseType(noise); // Set the desired noise type
+            myNoise.SetNoiseType(WorldFactory.Noise); // Set the desired noise type
             float currentNoise = myNoise.GetNoise(x, y);
 
             TerrainType textureType;
