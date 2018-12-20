@@ -30,22 +30,32 @@ namespace kbs2.Actions.GameActions
         }
 
         /// <summary>
+        /// spawns a unit at a target location
+        /// </summary>
+        /// <param name="unit">unit to be spawned</param>
+        /// <param name="targetable">The target</param>
+        private void SpawnUnit(UnitController unit, ITargetable targetable)
+        {
+            gameController.Spawner.SpawnUnit(unit, (Coords)targetable.FloatCoords);
+        }
+
+        /// <summary>
+        /// Spawns a building at a target location
+        /// </summary>
+        /// <param name="building">building to be spawned</param>
+        /// <param name="spawntarget">The target</param>
+        private void SpawnBuilding(IStructure building, ITargetable spawntarget)
+        {
+            ConstructingBuildingController constructingBuilding = ConstructingBuildingFactory.CreateNewBUCAt(building.Def, (Coords)spawntarget.FloatCoords, factionController);
+            gameController.Spawner.SpawnStructure((Coords)spawntarget.FloatCoords, constructingBuilding);
+        }
+
+        /// <summary>
         /// Execute action on the selected target
         /// </summary>
         /// <param name="target">Selected target</param>
         public override void Execute(ITargetable target)
         {
-            void SpawnUnit(UnitController unit, ITargetable targetable)
-            {
-                gameController.Spawner.SpawnUnit(unit, (Coords) targetable.FloatCoords);
-            }
-
-            void SpawnBuilding(IStructure building, ITargetable spawntarget)
-            {
-                ConstructingBuildingController constructingBuilding = ConstructingBuildingFactory.CreateNewBUCAt(building.Def, (Coords) spawntarget.FloatCoords, factionController);
-                gameController.Spawner.SpawnStructure((Coords) spawntarget.FloatCoords, constructingBuilding);
-            }
-
             switch (SpawnableDef)
             {
                 case BuildingDef buildingDef:

@@ -43,6 +43,7 @@
     <Compile Include="GameControllerTests.cs" />
     <Compile Include="PathfinderTests.cs" />
     <Compile Include="ResourceTests.cs" />
+    <Compile Include="ActionTests.cs" />
     <Compile Include="WorldControllerTests.cs" />
     <Compile Include="WorldPositionControllerCheck.cs" />
     <Compile Include="BuildingTests.cs" />
