@@ -13,7 +13,7 @@ namespace kbs2.WorldEntity.Unit
 {
 	public static class UnitFactory
 	{
-		public static UnitController CreateNewUnit(UnitDef def, FloatCoords TopLeft, WorldModel worldModel)
+		public static UnitController CreateNewUnit(UnitDef def, FloatCoords TopLeft, WorldController worldController)
         {
             UnitController UnitController = new UnitController();
             
@@ -21,7 +21,7 @@ namespace kbs2.WorldEntity.Unit
             UnitController.UnitView.Width = def.Width;
             UnitController.UnitView.Height = def.Height;
             UnitController.UnitModel.Speed = def.Speed;
-            Location_Controller location = new Location_Controller(worldModel,TopLeft.x,TopLeft.y);
+            Location_Controller location = new Location_Controller(worldController, TopLeft.x,TopLeft.y);
             location.LocationModel.parent = UnitController;
             UnitController.LocationController = location;
             return UnitController;

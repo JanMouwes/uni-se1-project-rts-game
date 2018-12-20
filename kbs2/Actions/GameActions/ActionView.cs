@@ -26,5 +26,7 @@ namespace kbs2.Actions.ActionMVC
         public string Texture { get; set; }
         public Color Colour { get; set; }
         public int ZIndex { get; set; }
+
+        public ViewMode ViewMode => ViewMode.Full;
     }
 }

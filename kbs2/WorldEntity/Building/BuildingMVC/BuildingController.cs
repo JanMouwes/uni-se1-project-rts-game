@@ -3,6 +3,7 @@ using kbs2.Actions.ActionMVC;
 using kbs2.Actions.Interfaces;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
+using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
@@ -24,6 +25,8 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
 
         public FloatCoords FloatCoords => (FloatCoords) Model.TopLeft;
 
+        public FloatCoords center => new FloatCoords { x = (Model.TopLeft.x + View.Width), y = (Model.TopLeft.y + View.Height) };
+
         public List<IGameAction> GameActions => actions;
         public List<WorldCellModel> OccupiedCells => Model.LocationCells;
 
@@ -33,6 +36,8 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
             set => Model.TopLeft = value;
         }
 
+        public int viewrange = 8;
+
         public IStructureDef Def { get; }
 
         public Faction_Controller Faction { get; set; }
@@ -40,6 +45,8 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
         }
+
+        
 
         /// <summary>Checks if user has enough currency to purchase.
         /// <para>If user has enough the cost price will be removed from balance and upkeep cost will be added to the total upkeepcost of there faction</para>

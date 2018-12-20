@@ -73,6 +73,7 @@
     <Compile Include="Faction\Interfaces\IHasFactionBuilding.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionRelationship.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionUnit.cs" />
+    <Compile Include="GamePackage\FogController.cs" />
     <Compile Include="GamePackage\GameSaveManager\DataBaseContext.cs" />
     <Compile Include="GamePackage\GameSaveManager\GameSaveManager.cs" />
     <Compile Include="GamePackage\Terraintester.cs" />

@@ -33,6 +33,20 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
         public event ConstructionCompleteObserver ConstructionComplete;
 
+        public FloatCoords center
+        {
+            get
+            {
+                return new FloatCoords
+                {
+                    x = StartCoords.x + ConstructingBuildingView.Width / 2,
+                    y = StartCoords.y + ConstructingBuildingView.Height / 2
+                };
+            }
+        }
+
+        public int viewrange = 8;
+
         public ConstructingBuildingController(ConstructingBuildingDef def)
         {
             ConstructingBuildingModel.BuildingDef = def;

@@ -1,6 +1,7 @@
 ﻿using kbs2.GamePackage;
 using kbs2.GamePackage.Interfaces;
 using kbs2.utils;
+using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 using System;
@@ -26,5 +27,7 @@ namespace kbs2.Actions.ActionMVC
         public FloatCoords Coords { get => ActionButtonPosition.GetPosition(gameController, index); set {; } }
         public int ZIndex { get {return 2; }  set {; } }
         public Color Colour { get {return Color.White; } set {; } }
+
+        public ViewMode ViewMode => ViewMode.Full;
     }
 }

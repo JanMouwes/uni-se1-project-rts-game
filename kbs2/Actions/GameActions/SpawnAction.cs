@@ -33,7 +33,7 @@ namespace kbs2.Actions.GameActions
             Action<ISpawnable, ITargetable> spawnUnit = (spawnable, targetable) =>
             {
                 UnitController unit = UnitFactory.CreateNewUnit((UnitDef) ActionDef.SpawnableDef,
-                    target.FloatCoords, gameController.GameModel.World.WorldModel);
+                    target.FloatCoords, gameController.GameModel.World);
                 gameController.Spawner.SpawnUnit(unit, factionController);
             };
             Action<ISpawnable, ITargetable> spawnBuilding = (spawnable, spawntarget) =>

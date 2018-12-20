@@ -25,7 +25,7 @@ namespace kbs2.Actions
             DBController.OpenConnection("DefDex");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(spawnActionModel.Id);
             DBController.CloseConnection();
-            UnitController unit = UnitFactory.CreateNewUnit(unitdef, target, spawnActionModel.World.WorldModel);
+            UnitController unit = UnitFactory.CreateNewUnit(unitdef, target, spawnActionModel.World);
             spawnActionModel.Spawner.SpawnUnit(unit, spawnActionModel.Faction);
         }
 

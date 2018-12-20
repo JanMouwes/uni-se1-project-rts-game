@@ -6,6 +6,9 @@ using kbs2.Actions.Interfaces;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Model;
+using kbs2.utils;
+using kbs2.World;
+using kbs2.World.Cell;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Location;
@@ -23,6 +26,17 @@ namespace kbs2.WorldEntity.Unit.MVC
         public FloatCoords FloatCoords => LocationController.LocationModel.floatCoords;
         public Faction_Controller Faction => UnitModel.Faction;
 
+        public FloatCoords center { get {
+                return new FloatCoords
+                {
+                    x = LocationController.LocationModel.floatCoords.x + UnitView.Width / 2,
+                    y = LocationController.LocationModel.floatCoords.y + UnitView.Height / 2
+                };
+            }
+        }
+
+        public int viewrange = 8;
+
         public UnitController()
         {
             UnitView = new Unit_View(this);
@@ -35,6 +49,10 @@ namespace kbs2.WorldEntity.Unit.MVC
         }
 
 
-        public void Update(object sender, OnTickEventArgs eventArgs) => LocationController.Ontick(sender, eventArgs);
+        public void Update(object sender, OnTickEventArgs eventArgs)=>LocationController.Ontick(sender, eventArgs);
+        
+
+        
+
     }
 }

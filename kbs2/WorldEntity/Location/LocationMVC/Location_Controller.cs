@@ -15,6 +15,9 @@ namespace kbs2.WorldEntity.Location
         public Pathfinder pathfinder;
         public Location_Model LocationModel;
         public List<FloatCoords> Waypoints;
+        public WorldController worldController;
+
+        
 
 
         static Func<double, double, double> pythagoras = (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
@@ -23,11 +26,12 @@ namespace kbs2.WorldEntity.Location
         Func<FloatCoords, FloatCoords, double> getDistance2d = (a, b) =>
             pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
 
-        public Location_Controller(WorldModel worldModel, float lx, float ly)
+        public Location_Controller(WorldController worldController, float lx, float ly)
         {
             LocationModel = new Location_Model(lx, ly);
-            pathfinder = new Pathfinder(worldModel, 500);
+            pathfinder = new Pathfinder(worldController.WorldModel, 500);
             Waypoints = new List<FloatCoords>();
+            this.worldController = worldController;
         }
 
         public void MoveTo(FloatCoords target, bool isQueueKeyPressed) //[Review] This can be a Lambda expression
@@ -43,6 +47,8 @@ namespace kbs2.WorldEntity.Location
                 Waypoints = points;
             }
         }
+
+        
 
         public void Ontick(object sender, OnTickEventArgs eventArgs)
         {

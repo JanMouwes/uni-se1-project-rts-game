@@ -1,5 +1,6 @@
 ﻿using System;
 using kbs2.GamePackage.Interfaces;
+using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 
@@ -12,7 +13,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
 
         // Implementation IViewable
-        public FloatCoords Coords => (FloatCoords) Model.StartCoords;
+        public FloatCoords Coords => (FloatCoords)Model.StartCoords;
 
         public float Width => Model.BuildingDef.ViewValues.Width;
 
@@ -23,6 +24,8 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public Color Colour => Color.White;
 
         public int ZIndex => 2;
+
+        public ViewMode ViewMode {get;set;}
 
 
         // constructor
