@@ -29,6 +29,10 @@ namespace kbs2.Actions.GameActions
             this.factionController = factionController;
         }
 
+        /// <summary>
+        /// Execute action on the selected target
+        /// </summary>
+        /// <param name="target">Selected target</param>
         public override void Execute(ITargetable target)
         {
             void SpawnUnit(UnitController unit, ITargetable targetable)
