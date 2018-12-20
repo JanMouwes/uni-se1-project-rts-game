@@ -7,7 +7,7 @@ using kbs2.Actions.Interfaces;
 
 namespace kbs2.Unit.Model
 {
-    public class Unit_Model : IHasPersonalSpace, IPurchasable, IElemental, IFactionMember
+    public class Unit_Model : IHasPersonalSpace, IElemental, IFactionMember
     {
         public Faction_Controller Faction { get; set; }
 
@@ -17,12 +17,10 @@ namespace kbs2.Unit.Model
 
         public List<ElementType> ElementTypes { get; set; }
 
-        public CostValue CostValue { get; set; }
-
         public float Speed { get; set; }
 
         public List<IGameAction> Actions { get; } = new List<IGameAction>();
-
+      
         public Unit_Model()
         {
             Selected = false;

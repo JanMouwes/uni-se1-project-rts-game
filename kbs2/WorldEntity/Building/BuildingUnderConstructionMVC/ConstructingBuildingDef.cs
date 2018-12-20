@@ -17,5 +17,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public List<Coords> BuildingShape { get; set; }
         public int ConstructionTime { get; }
         public IStructureDef CompletedBuildingDef { get; }
+        public double Cost { get { return 0; } set => throw new System.NotImplementedException(); }
+        public double UpkeepCost { get { return 0; } set => throw new System.NotImplementedException(); }
     }
 }

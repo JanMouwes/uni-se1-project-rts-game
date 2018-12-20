@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;
+using kbs2.Unit;
 
 namespace kbs2.WorldEntity.Building
 {
@@ -19,6 +20,10 @@ namespace kbs2.WorldEntity.Building
         public string Image { get; set; }
         public float Height { get; set; }
         public float Width { get; set; }
+
+        //Cost info
+        public double Cost { get; set; }
+        public double UpkeepCost { get; set; }
 
         public HPDef HPDef { get; set; } = new HPDef();
 
@@ -54,5 +59,6 @@ namespace kbs2.WorldEntity.Building
         }
 
         public ViewValues ViewValues => new ViewValues(Image, Width, Height);
+
     }
 }

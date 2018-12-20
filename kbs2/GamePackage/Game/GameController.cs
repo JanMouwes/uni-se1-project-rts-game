@@ -182,7 +182,7 @@ namespace kbs2.GamePackage
             TerrainDef.TerrainDictionary.Add(TerrainType.Trees, "Tree-2");
 
             // Generate world
-            GameModel.World = WorldFactory.GetNewWorld();
+            GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.Simplex);
 
             // Pathfinder 
             GameModel.pathfinder = new Pathfinder(GameModel.World.WorldModel, 500);

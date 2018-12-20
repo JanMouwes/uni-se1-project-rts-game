@@ -46,8 +46,7 @@ namespace kbs2.WorldEntity.Building
         }
 
 
-        public static ConstructingBuildingController CreateNewBUCAt(IStructureDef def, Coords TopLeft,
-            Faction_Controller faction_Controller)
+        public static ConstructingBuildingController CreateNewBUCAt(IStructureDef def, Coords TopLeft, Faction_Controller faction_Controller)
         {
             ConstructingBuildingController constructingBuildingController = CreateNewBUC((ConstructingBuildingDef) def, faction_Controller);
 
