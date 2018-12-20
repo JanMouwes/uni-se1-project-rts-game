@@ -548,8 +548,6 @@ namespace kbs2.GamePackage
                 return true;
             }
 
-            bool isQPressed = Keyboard.GetState().IsKeyDown(Keys.D1);
-
             KeyboardState keyboardState = Keyboard.GetState();
 
             List<TerrainType> terrainList = new List<TerrainType>()
@@ -558,18 +556,29 @@ namespace kbs2.GamePackage
                 TerrainType.Default
             };
 
-            if (isQPressed)
+            if (keyboardState.IsKeyDown(Keys.D8))
             {
                 SpawnActionDef def = SpawnActionDef.Pikachu;
                 selectedGameAction = new SpawnAction(def, this, PlayerFaction);
-                //PreviousQPressed = CheckKeysAndPlaceBuilding(isQPressed, PreviousQPressed, 2, Mouse.GetState(), terrainList);
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D7))
+            {
+                SpawnActionDef def = SpawnActionDef.Raichu;
+                selectedGameAction = new SpawnAction(def, this, PlayerFaction);
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D1))
+            {
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D1), PreviousQPressed, 1, Mouse.GetState(), terrainList);
                 return;
             }
 
             if (keyboardState.IsKeyDown(Keys.D2))
             {
-                SpawnActionDef def = SpawnActionDef.Raichu;
-                selectedGameAction = new SpawnAction(def, this, PlayerFaction);
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D2), PreviousQPressed, 2, Mouse.GetState(), terrainList);
                 return;
             }
 
