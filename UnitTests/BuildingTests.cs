@@ -1,12 +1,7 @@
-﻿using kbs2;
-using kbs2.Desktop.View.Camera;
-using kbs2.World;
-using kbs2.WorldEntity.Building;
+﻿using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Interfaces;
-using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Tests
 {
