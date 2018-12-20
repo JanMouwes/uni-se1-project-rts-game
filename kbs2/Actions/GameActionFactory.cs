@@ -19,6 +19,10 @@ namespace kbs2.Actions
             this.gameController = gameController;
         }
 
+        /// <summary>
+        /// Temp function
+        /// </summary>
+        /// <returns>returns a list of game actions</returns>
         public List<IGameAction> DefaultGameActions()
         {
             List<IGameAction> returnList = new List<IGameAction>
@@ -30,7 +34,11 @@ namespace kbs2.Actions
             return returnList;
         }
 
-
+        /// <summary>
+        /// Creates a spawnaction from the specified dev
+        /// </summary>
+        /// <param name="def">The spawnaction dev</param>
+        /// <returns>Returns the specified spawnaction of the selected def</returns>
         public SpawnAction CreateSpawnAction(SpawnActionDef def)
         {
             return new SpawnAction(def, gameController, faction);
