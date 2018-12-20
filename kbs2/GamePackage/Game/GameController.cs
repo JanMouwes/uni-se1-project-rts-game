@@ -313,7 +313,7 @@ namespace kbs2.GamePackage
             );
 
 
-            loadChunkIfUnloaded(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
+            generateNewChunkIfNotExisting(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
         }
 
         /// <summary>
@@ -325,7 +325,7 @@ namespace kbs2.GamePackage
         /// <summary>
         /// 
         /// </summary>
-        private void loadChunkIfUnloaded(Coords chunkCoords)
+        private void generateNewChunkIfNotExisting(Coords chunkCoords)
         {
             if (chunkExists(chunkCoords)) return;
 

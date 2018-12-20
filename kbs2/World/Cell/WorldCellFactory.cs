@@ -33,7 +33,7 @@ namespace kbs2.World.Cell
             float currentNoise = myNoise.GetNoise(x, y);
 
             TerrainType textureType;
-            if (currentNoise < -0.3)
+            if (currentNoise < -0.15)
             {
                 textureType = TerrainType.Water;
             }
