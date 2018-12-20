@@ -49,7 +49,6 @@ namespace kbs2.GamePackage
     {
         public GameModel gameModel { get; set; } = new GameModel();
         public GameView gameView { get; set; }
-        public EntitySpawner spawner;
         public SpriteBatch spriteBatch;
         public MouseInput MouseInput { get; set; }
 
@@ -58,14 +57,6 @@ namespace kbs2.GamePackage
         public static int TickIntervalMilliseconds => 1000 / TicksPerSecond;
 
         private Timer GameTimer; //TODO
-
-        public ActionInterface ActionInterface { get; set; } // testcode ===============
-        public BuildActions BuildActions { get; set; }
-        public bool QPressed { get; set; }
-        public bool APressed { get; set; }
-        public Terraintester Terraintester { get; set; }
-
-        private BottomBarView bottomBarView;
 
         public event ElapsedEventHandler GameTick
         {
@@ -88,13 +79,6 @@ namespace kbs2.GamePackage
 
         public event GameSpeedObserver GameSpeedChange;
 
-        DayController f = new DayController();
-
-        public event MouseStateObserver MouseStateChange;
-
-
-        public MouseState PreviousMouseButtonsStatus { get; set; }
-
         public event OnTick onTick;
 
         //    GameState and its event
@@ -115,11 +99,27 @@ namespace kbs2.GamePackage
 
         private readonly GraphicsDeviceManager graphicsDeviceManager;
 
-        public Faction_Controller PlayerFaction { get; set; }
-
         public CameraController camera;
 
         private ShaderDelegate shader;
+
+        // Temp code position ===============
+        public Faction_Controller PlayerFaction { get; set; }
+
+        public event MouseStateObserver MouseStateChange;
+        public MouseState PreviousMouseButtonsStatus { get; set; }
+
+        DayController f = new DayController();
+
+        public EntitySpawner spawner;
+        public ActionInterface ActionInterface { get; set; }
+        public BuildActions BuildActions { get; set; }
+        public bool QPressed { get; set; }
+        public bool APressed { get; set; }
+        public Terraintester Terraintester { get; set; }
+
+        private BottomBarView bottomBarView;
+        // End temp code ===============
 
         public GameController(GameSpeed gameSpeed, GameState gameState)
         {
@@ -130,7 +130,7 @@ namespace kbs2.GamePackage
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
-            shader = DefaultPattern;
+            shader = RandomPattern2;
 
             Content.RootDirectory = "Content";
         }
