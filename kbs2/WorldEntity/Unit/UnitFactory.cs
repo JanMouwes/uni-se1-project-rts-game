@@ -35,7 +35,7 @@ namespace kbs2.WorldEntity.Unit
                     Width = def.Width,
                     Height = def.Height,
                     Colour = Color.White,
-                    ZIndex = 4
+                    ZIndex = 12
                 },
                 UnitModel = new Unit_Model
                 {
