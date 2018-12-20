@@ -18,14 +18,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 {
-    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>, IHasGameActions
+    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>, IHasGameActions, IStructure
     {
         public delegate void ConstructionCompleteObserver(object sender, EventArgsWithPayload<IStructureDef> eventArgs);
 
         public float CurrentTimer;
         public ConstructingBuildingModel ConstructingBuildingModel { get; set; } = new ConstructingBuildingModel();
         public ConstructingBuildingView ConstructingBuildingView { get; set; }
-        public GameController GameController { get; set; }
         public ConstructionCounter Counter { get; }
 
         public FloatCoords FloatCoords => (FloatCoords) ConstructingBuildingModel.StartCoords;
@@ -34,8 +33,9 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
         public event ConstructionCompleteObserver ConstructionComplete;
 
-        public ConstructingBuildingController()
+        public ConstructingBuildingController(ConstructingBuildingDef def)
         {
+            ConstructingBuildingModel.BuildingDef = def;
             Counter = new ConstructionCounter
             {
                 ConstructingBuildingController = this
@@ -46,7 +46,10 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
             if (eventArgs.GameTime.TotalGameTime.TotalSeconds > ConstructingBuildingModel.FinishTime)
+            {
                 ConstructionComplete?.Invoke(this, new EventArgsWithPayload<IStructureDef>(ConstructingBuildingModel.BuildingDef));
+                ConstructionComplete = null;
+            }
 
             Counter.Text = ((int) (ConstructingBuildingModel.FinishTime - eventArgs.GameTime.TotalGameTime.TotalSeconds)).ToString();
             CurrentTimer = (float) eventArgs.GameTime.ElapsedGameTime.TotalSeconds;
@@ -60,7 +63,9 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             set => ConstructingBuildingModel.StartCoords = value;
         }
 
-        public ConstructingBuildingDef Def { get; }
+        IStructureDef IStructure<IStructureDef>.Def => Def;
+
+        public ConstructingBuildingDef Def => ConstructingBuildingModel.BuildingDef;
         public Faction_Controller Faction => ConstructingBuildingModel.FactionController;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using kbs2.utils;
 using kbs2.World.Cell;
@@ -70,6 +71,8 @@ namespace kbs2.World.World
                 case ConstructingBuildingController buildingController:
                     RemoveBUC(buildingController);
                     break;
+                default:
+                    throw new NotImplementedException();
             }
         }
 

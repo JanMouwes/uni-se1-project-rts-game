@@ -8,7 +8,7 @@ namespace kbs2.WorldEntity.Interfaces
     {
     }
 
-    public interface IStructure<TStructureDef> : IWorldEntity, IImpassable where TStructureDef : IStructureDef
+    public interface IStructure<out TStructureDef> : IWorldEntity, IImpassable where TStructureDef : IStructureDef
     {
         /// <summary>
         /// Cells which the structure occupies

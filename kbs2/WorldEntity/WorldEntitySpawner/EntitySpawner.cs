@@ -81,15 +81,14 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
         public void SpawnConstructingBuilding(ConstructingBuildingController constructingBuilding, int constructionTime)
         {
             World.AddBuildingUnderConstruction(constructingBuilding.Def, constructingBuilding);
-            constructingBuilding.GameController = Game;
-            constructingBuilding.ConstructingBuildingModel.FinishTime =
-                constructionTime + (int) constructingBuilding.CurrentTimer;
+            constructingBuilding.ConstructingBuildingModel.FinishTime = (int) (constructionTime + Game.LastUpdateGameTime.TotalGameTime.TotalSeconds);
 
             Game.onTick += constructingBuilding.Update;
         }
 
         public void SpawnWorldEntity(IWorldEntity entity)
         {
+            throw new NotImplementedException();
             //    FIXME Unfinished
             World.WorldModel.Units.Add(entity as UnitController);
         }
