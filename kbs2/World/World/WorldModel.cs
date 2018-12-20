@@ -17,12 +17,13 @@ namespace kbs2.World.World
         public List<ConstructingBuildingController> UnderConstruction { get; set; } = new List<ConstructingBuildingController>();
         public List<UnitController> Units { get; set; }
 
-        public readonly int seed = new Random().Next(0, 10000);
+        public int seed { get; }
 
-        public WorldModel()
+        public WorldModel(int seed)
         {
             Structures = new List<IStructure>();
             Units = new List<UnitController>();
+            this.seed = seed;
         }
     }
 

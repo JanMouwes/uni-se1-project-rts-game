@@ -30,9 +30,19 @@ public class Pathfinder
         Limit = limit;
     }
 
+
+    public List<FloatCoords> DontCareJustWalk(FloatCoords TargetFloatCoords)
+    {
+        List<FloatCoords> floatCoords = new List<FloatCoords>();
+        floatCoords.Add(TargetFloatCoords);
+        return floatCoords;
+    }
+
     // returns a path to the target that does not contain obstacles
     public List<FloatCoords> FindPath(FloatCoords TargetFloatCoords, Location_Model unit)
     {
+        return DontCareJustWalk(TargetFloatCoords);
+
         WeightDictionarys weightDictionaries = new WeightDictionarys(true);
 
         Coords targetIntCoords = (Coords) TargetFloatCoords;

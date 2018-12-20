@@ -15,9 +15,10 @@ namespace kbs2.World.World
             WorldController world = new WorldController();
 
             // Initialize WorldModel and ChunkGrid in World so you can add chunks to this grid
-            world.WorldModel = new WorldModel
+            world.WorldModel = new WorldModel( new Random().Next(0, 10000))
             {
                 ChunkGrid = new Dictionary<Coords, WorldChunkController>()
+
             };
 
             // For loop to add chunks from -2 to +2 in both x and y directions. this makes for a 5x5 chunkmap.
@@ -46,7 +47,7 @@ namespace kbs2.World.World
             WorldController world = new WorldController();
 
             // Initialize WorldModel and ChunkGrid in World so you can add chunks to this grid
-            world.WorldModel = new WorldModel
+            world.WorldModel = new WorldModel(new Random().Next(0, 10000))
             {
                 ChunkGrid = new Dictionary<Coords, WorldChunkController>()
             };
