@@ -132,7 +132,7 @@ namespace kbs2.GamePackage
             GameStateChange += UnPauseGame;
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
-            
+
             GameActionGui = new GameActionGuiController(this);
 
             shader = RandomPattern2;
@@ -589,9 +589,16 @@ namespace kbs2.GamePackage
 
         public void ChangeSelection(object sender, EventArgsWithPayload<List<IHasGameActions>> eventArgs)
         {
-            List<IGameAction> actions = eventArgs.Value.First().GameActions;
-            IGameAction[] actionArray = actions.ToArray();
-            GameActionGui.SetActions(new List<GameActionTabModel> {new GameActionTabModel(actionArray)});
+            List<IHasGameActions> gameActionHolders = eventArgs.Value;
+            List<GameActionTabModel> gameActionTabModels = new List<GameActionTabModel>();
+            foreach (IHasGameActions gameActionHolder in gameActionHolders)
+            {
+                IGameAction[] gameActions = gameActionHolder.GameActions.ToArray();
+                GameActionTabModel gameActionTabModel = new GameActionTabModel(gameActions);
+                gameActionTabModels.Add(gameActionTabModel);
+            }
+
+            GameActionGui.SetActions(gameActionTabModels);
         }
 
 
