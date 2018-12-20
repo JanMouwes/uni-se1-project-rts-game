@@ -34,6 +34,7 @@
     <Reference Include="MonoGame.Framework">
       <HintPath>..\..\..\..\..\..\Library\Frameworks\Mono.framework\External\xbuild\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Data.Sqlite" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CurrencyTest.cs" />
@@ -44,6 +45,7 @@
     <Compile Include="ResourceTests.cs" />
     <Compile Include="WorldControllerTests.cs" />
     <Compile Include="WorldPositionControllerCheck.cs" />
+    <Compile Include="BuildingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\kbs2\kbs2.Desktop.csproj">
