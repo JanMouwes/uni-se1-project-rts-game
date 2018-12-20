@@ -315,7 +315,7 @@ namespace kbs2.GamePackage
             );
 
 
-            loadChunkIfUnloaded(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
+            generateNewChunkIfNotExisting(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace kbs2.GamePackage
         /// <summary>
         /// 
         /// </summary>
-        private void loadChunkIfUnloaded(Coords chunkCoords)
+        private void generateNewChunkIfNotExisting(Coords chunkCoords)
         {
             if (chunkExists(chunkCoords)) return;
 
@@ -460,7 +460,7 @@ namespace kbs2.GamePackage
             if (Keyboard.GetState().IsKeyDown(Keys.C)) tempShader = CellChunkCheckered;
             if (Keyboard.GetState().IsKeyDown(Keys.D)) tempShader = DefaultPattern;
 
-            mouseChunkLoadUpdate(gameTime);
+            //mouseChunkLoadUpdate(gameTime);
 
             if (tempShader != null)
             {
