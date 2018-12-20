@@ -458,7 +458,7 @@ namespace kbs2.GamePackage
             if (Keyboard.GetState().IsKeyDown(Keys.C)) tempShader = CellChunkCheckered;
             if (Keyboard.GetState().IsKeyDown(Keys.D)) tempShader = DefaultPattern;
 
-            mouseChunkLoadUpdate(gameTime);
+            //mouseChunkLoadUpdate(gameTime);
 
             if (tempShader != null)
             {
