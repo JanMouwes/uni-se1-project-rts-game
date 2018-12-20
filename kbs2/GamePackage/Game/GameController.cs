@@ -648,7 +648,7 @@ namespace kbs2.GamePackage
 
         public void RandomPattern2()
         {
-            Random random = new Random(GameModel.World.WorldModel.seed);
+            Random random = new Random(WorldModel.seed);
 
             foreach (var Chunk in GameModel.World.WorldModel.ChunkGrid)
             {

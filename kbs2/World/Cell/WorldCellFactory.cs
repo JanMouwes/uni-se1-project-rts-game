@@ -1,4 +1,5 @@
-﻿using kbs2.World.Enums;
+﻿using kbs2.GamePackage;
+using kbs2.World.Enums;
 using kbs2.World.Structs;
 using kbs2.World.World;
 using System;
@@ -11,7 +12,7 @@ namespace kbs2.World.Cell
 {
     class WorldCellFactory
     {
-        private static FastNoise myNoise = new FastNoise(new Random().Next(0, 50));
+        private static FastNoise myNoise = new FastNoise(WorldModel.seed);
 
         /// <summary>
         /// Generates a new chunk with new cells

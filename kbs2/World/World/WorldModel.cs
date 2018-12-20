@@ -17,7 +17,7 @@ namespace kbs2.World.World
         public List<ConstructingBuildingController> UnderConstruction { get; set; } = new List<ConstructingBuildingController>();
         public List<UnitController> Units { get; set; }
 
-        public readonly int seed = new Random().Next(0, 10000);
+        public static readonly int seed = new Random().Next(0, 9999);
 
         public WorldModel()
         {
