@@ -183,7 +183,7 @@ namespace kbs2.GamePackage
         {
             MouseState temp = Mouse.GetState();
             Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
-            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
+            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords)WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
             foreach (IHasGameActions unit in SelectedItems)
             {
                 if(unit.GetType() == typeof(UnitController))
