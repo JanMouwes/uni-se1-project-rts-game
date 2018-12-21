@@ -30,7 +30,7 @@ namespace kbs2.Actions.GameActionDefs
         }
         //TEMP
 
-        public ISpawnableDef SpawnableDef { get; }
+        public virtual ISpawnableDef SpawnableDef { get; }
 
         public SpawnActionDef(uint cooldown, string imageSource, ISpawnableDef spawnableDef) : base(cooldown,
             imageSource)
