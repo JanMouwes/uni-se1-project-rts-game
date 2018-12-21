@@ -4,6 +4,7 @@ using kbs2.GamePackage;
 using kbs2.GamePackage.EventArgs;
 using kbs2.World;
 using kbs2.World.Cell;
+using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingMVC;
@@ -23,10 +24,11 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             Game = game;
         }
 
-        public void SpawnUnit(UnitController unit, Faction_Controller faction)
+        public void SpawnUnit(UnitController unit, Coords coords)
         {
+            unit.LocationController.LocationModel.FloatCoords = (FloatCoords) coords;
             World.WorldModel.Units.Add(unit);
-            faction.AddUnitToFaction(unit);
+            unit.Faction.AddUnitToFaction(unit);
             Game.onTick += unit.Update;
         }
 

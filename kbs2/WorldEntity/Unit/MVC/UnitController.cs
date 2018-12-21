@@ -23,7 +23,7 @@ namespace kbs2.WorldEntity.Unit.MVC
 
         public List<IGameAction> GameActions => UnitModel.Actions;
 
-        public FloatCoords FloatCoords => LocationController.LocationModel.floatCoords;
+        public FloatCoords FloatCoords => LocationController.LocationModel.FloatCoords;
         public Faction_Controller Faction => UnitModel.Faction;
 
         public FloatCoords center { get {

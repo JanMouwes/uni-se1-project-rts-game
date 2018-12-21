@@ -31,6 +31,7 @@ namespace kbs2.GamePackage
         public GameController gameController { get; set; }
 
         public delegate void OnSelectionChanged(object sender, EventArgsWithPayload<List<IHasGameActions>> eventArgs);
+
         public event OnSelectionChanged onSelectionChanged;
 
 
@@ -46,14 +47,14 @@ namespace kbs2.GamePackage
         public Selection_Controller(GameController game, string lineTexture)
         {
             Model = new Selection_Model();
-			SelectedItems = new List<IHasGameActions>();
+            SelectedItems = new List<IHasGameActions>();
             gameController = game;
 
             args = new EventArgsWithPayload<List<IHasGameActions>>(SelectedItems);
 
             LeftView = new Selection_View();
             // width of the selection border
-            LeftView.Width = 4f/gameController.GameView.TileSize;
+            LeftView.Width = 4f / gameController.GameView.TileSize;
 
             RightView = new Selection_View();
             // width of the selection border
@@ -72,7 +73,7 @@ namespace kbs2.GamePackage
         public void ButtonPressed(FloatCoords mouseCoords)
         {
             //Save current mouse location/coords
-            FirstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords)mouseCoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
+            FirstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
             //enable drawfunction of selectionbox
             active = true;
         }
@@ -90,7 +91,7 @@ namespace kbs2.GamePackage
             if (active)
             {
                 MouseState temp = Mouse.GetState();
-                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
                 // saves current mouse location 
                 FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
                 //standardices coords to topleft and bottomright 
@@ -110,31 +111,20 @@ namespace kbs2.GamePackage
         }
 
         // get all items in selectionbox
-        public void UpdateSelection(bool CTRL)
+        public void UpdateSelection(bool isQueueButtonPressed)
         {
-            if (CTRL && SelectedItems.OfType<IHasGameActions>().Any())
+            if (isQueueButtonPressed && SelectedItems.Where((actions => actions != null)).Any())
             {
-                SelectedItems.AddRange( SelectBuildings());
-                args = new EventArgsWithPayload<List<IHasGameActions>>(SelectedItems);
-                onSelectionChanged?.Invoke(this, args);
+                SelectedItems.AddRange(SelectBuildings());
             }
             else
             {
-                
-                List<IHasGameActions>selection = SelectUnits();
-                if (selection.Count > 0)
-                {
-                    SelectedItems = CTRL ? SelectedItems.Union(selection).ToList() : selection;
-                    args = new EventArgsWithPayload<List<IHasGameActions>>(SelectedItems);
-                    onSelectionChanged?.Invoke(this, args);
-                }
-                else
-                {
-                    SelectedItems = SelectBuildings();
-                    args = new EventArgsWithPayload<List<IHasGameActions>>(SelectedItems);
-                    onSelectionChanged?.Invoke(this, args);
-                }
+                List<IHasGameActions> selection = SelectUnits();
+                SelectedItems = (selection.Count > 0) ? isQueueButtonPressed ? SelectedItems.Union(selection).ToList() : selection : SelectBuildings();
             }
+
+            args = new EventArgsWithPayload<List<IHasGameActions>>(SelectedItems);
+            onSelectionChanged?.Invoke(this, args);
         }
 
         // get all buildings from selectionbox

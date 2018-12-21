@@ -4,6 +4,7 @@ using kbs2.Actions.GameActionDefs;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
 using kbs2.World;
+using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
@@ -16,7 +17,7 @@ namespace kbs2.Actions.GameActions
     //    TODO Generic ISpawnableDef (type of spawn-action, building vs unit vs ...?)
     public class SpawnAction : GameAction<SpawnActionDef>
     {
-        public ISpawnableDef Type { get; set; }
+        private ISpawnableDef SpawnableDef => ActionDef.SpawnableDef;
 
         private GameController gameController;
         private Faction_Controller factionController;
@@ -28,32 +29,55 @@ namespace kbs2.Actions.GameActions
             this.factionController = factionController;
         }
 
+        /// <summary>
+        /// spawns a unit at a target location
+        /// </summary>
+        /// <param name="unit">unit to be spawned</param>
+        /// <param name="targetable">The target</param>
+        private void SpawnUnit(UnitController unit, ITargetable targetable)
+        {
+            gameController.Spawner.SpawnUnit(unit, (Coords)targetable.FloatCoords);
+        }
+
+        /// <summary>
+        /// Spawns a building at a target location
+        /// </summary>
+        /// <param name="building">building to be spawned</param>
+        /// <param name="spawntarget">The target</param>
+        private void SpawnBuilding(IStructure building, ITargetable spawntarget)
+        {
+            ConstructingBuildingController constructingBuilding = ConstructingBuildingFactory.CreateNewBUCAt(building.Def, (Coords)spawntarget.FloatCoords, factionController);
+            gameController.Spawner.SpawnStructure((Coords)spawntarget.FloatCoords, constructingBuilding);
+        }
+
+        /// <summary>
+        /// Execute action on the selected target
+        /// </summary>
+        /// <param name="target">Selected target</param>
         public override void Execute(ITargetable target)
         {
-            Action<ISpawnable, ITargetable> spawnUnit = (spawnable, targetable) =>
+            switch (SpawnableDef)
             {
-                UnitController unit = UnitFactory.CreateNewUnit((UnitDef) ActionDef.SpawnableDef,
-                    target.FloatCoords, gameController.GameModel.World);
-                gameController.Spawner.SpawnUnit(unit, factionController);
-            };
-            Action<ISpawnable, ITargetable> spawnBuilding = (spawnable, spawntarget) =>
-            {
-                IStructure building = (IStructure) (spawnable);
-                
-                ConstructingBuildingController constructingBuilding = ConstructingBuildingFactory.CreateNewBUCAt(
-                    building.Def,
-                    (Coords) spawntarget.FloatCoords,
-                    factionController
-                );
-                gameController.Spawner.SpawnConstructingBuilding(constructingBuilding, 20); //FIXME
-            };
+                case BuildingDef buildingDef:
+                    using (ConstructingBuildingFactory factory = new ConstructingBuildingFactory(factionController))
+                    {
+                        ConstructingBuildingController building = factory.CreateConstructingBuildingControllerOf(buildingDef);
+                        SpawnBuilding(building, target);
+                    }
 
-            Dictionary<Type, Action<ISpawnable, ITargetable>> dictionary =
-                new Dictionary<Type, Action<ISpawnable, ITargetable>>()
-                {
-                    {typeof(UnitDef), spawnUnit},
-                    {typeof(BuildingDef), spawnBuilding}
-                };
+                    break;
+                case UnitDef unitDef:
+                    using (UnitFactory factory = new UnitFactory(factionController))
+                    {
+                        UnitController unit = factory.CreateNewUnit(unitDef, new WorldModel());
+                        SpawnUnit(unit, target);
+                    }
+
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }

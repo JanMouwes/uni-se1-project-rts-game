@@ -33,7 +33,7 @@ namespace kbs2.World.Cell
             float currentNoise = myNoise.GetNoise(x, y);
 
             TerrainType textureType;
-            if (currentNoise < -0.3)
+            if (currentNoise < -0.10)
             {
                 textureType = TerrainType.Water;
             }
@@ -41,23 +41,23 @@ namespace kbs2.World.Cell
             {
                 textureType = TerrainType.Sand;
             }
-            else if (currentNoise < 0.2)
+            else if (currentNoise < 0.15)
             {
                 textureType = TerrainType.Soil;
             }
-            else if (currentNoise < 0.35)
+            else if (currentNoise < 0.30)
             {
                 textureType = TerrainType.Grass;
             }
-            else if (currentNoise < 0.45)
+            else if (currentNoise < 0.40)
             {
                 textureType = TerrainType.Trees;
             }
-            else if (currentNoise < 0.55)
+            else if (currentNoise < 0.50)
             {
                 textureType = TerrainType.Grass;
             }
-            else if (currentNoise < 0.65)
+            else if (currentNoise < 0.60)
             {
                 textureType = TerrainType.Rock;
             }
