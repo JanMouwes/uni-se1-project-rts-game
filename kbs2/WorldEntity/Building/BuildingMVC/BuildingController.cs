@@ -25,7 +25,7 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
 
         public FloatCoords FloatCoords => (FloatCoords) Model.TopLeft;
 
-        public FloatCoords center => new FloatCoords { x = (Model.TopLeft.x + View.Width), y = (Model.TopLeft.y + View.Height) };
+        public FloatCoords center => new FloatCoords { x = (Model.TopLeft.x + View.Width/2), y = (Model.TopLeft.y + View.Height/2) };
 
         public List<IGameAction> GameActions => actions;
         public List<WorldCellModel> OccupiedCells => Model.LocationCells;
@@ -36,11 +36,15 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
             set => Model.TopLeft = value;
         }
 
-        public int viewrange = 8;
+        public int viewrange => 8;
 
         public IStructureDef Def { get; }
 
         public Faction_Controller Faction { get; set; }
+
+        public float With => View.Width;
+
+        public float Heigth => View.Height;
 
         public void Update(object sender, OnTickEventArgs eventArgs)
         {

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using kbs2.WorldEntity.Building.BuildingMVC;
+using kbs2.WorldEntity.Interfaces;
 
 namespace kbs2.Faction.FactionMVC
 {
@@ -18,8 +19,7 @@ namespace kbs2.Faction.FactionMVC
         public string Name { get; set; }
         public Dictionary<Faction_Model, Faction_Relations> FactionRelationships { get; set; }
         public List<UnitController> Units { get; set; }
-        public List<BuildingController> Buildings { get; set; }
-        public List<ConstructingBuildingController> BUCs { get; set; }
+        public List<IStructure> Buildings { get; set; }
 
         public Faction_Model(string name)
         {
@@ -27,8 +27,7 @@ namespace kbs2.Faction.FactionMVC
 			FactionRelationships = new Dictionary<Faction_Model, Faction_Relations>();
             Units = new List<UnitController>();
             //TODO use central 'List<IStructure>' with LINQ-queries for filtering
-            Buildings = new List<BuildingController>(); 
-            BUCs = new List<ConstructingBuildingController>();
+            Buildings = new List<IStructure>(); 
         }
     }
 }

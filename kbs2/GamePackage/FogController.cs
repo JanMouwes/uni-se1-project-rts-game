@@ -6,6 +6,7 @@ using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
+using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Unit.MVC;
 using System;
 using System.Collections.Generic;
@@ -26,17 +27,12 @@ namespace kbs2.GamePackage
             {
                 UpdateViewMode(mode, unit.viewrange, unit.center);
             }
-            foreach(BuildingController building in faction.FactionModel.Buildings)
+            foreach(IStructure building in faction.FactionModel.Buildings)
             {
                 UpdateViewMode(mode, building.viewrange, building.center);
             }
-            foreach(ConstructingBuildingController building in faction.FactionModel.BUCs)
-            {
-                UpdateViewMode(mode, building.viewrange, building.center);
-            }
+            UpdateUnits();
         }
-
-
 
         public void UpdateViewMode(ViewMode mode , int viewrange, FloatCoords coords)
         {
@@ -58,6 +54,20 @@ namespace kbs2.GamePackage
                     {
                         ((ConstructingBuildingController)cellController.worldCellModel.BuildingOnTop).ConstructingBuildingView.ViewMode = mode;
                     }
+                }
+            }
+        }
+
+        public void UpdateUnits()
+        {
+            foreach(UnitController unit in worldController.WorldModel.Units)
+            {
+                if(worldController.GetCellFromCoords(unit.LocationController.LocationModel.coords).worldCellView.ViewMode == ViewMode.Full)
+                {
+                    unit.UnitView.ViewMode = ViewMode.Full;
+                } else
+                {
+                    unit.UnitView.ViewMode = ViewMode.None;
                 }
             }
         }

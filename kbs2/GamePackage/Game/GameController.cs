@@ -536,9 +536,8 @@ namespace kbs2.GamePackage
                     ConstructingBuildingDef buildingDef = new ConstructingBuildingDef(def, 20) {BuildingShape = def.BuildingShape, ViewValues = viewValues};
 
                     ConstructingBuildingController building = constructionFactory.CreateBUC(buildingDef);
-
                     Spawner.SpawnStructure(coords, building);
-
+                    PlayerFaction.AddBuildingToFaction(building);
                     onTick += building.Update;
 
                     building.ConstructionComplete += (o, args) =>
@@ -547,8 +546,9 @@ namespace kbs2.GamePackage
 
                         onTick -= structure.Update;
                         GameModel.World.RemoveStructure(structure);
-
-                        Spawner.SpawnStructure(structure.StartCoords, BuildingFactory.CreateNewBuilding((BuildingDef) structure.Def.CompletedBuildingDef));
+                        BuildingController building2 = BuildingFactory.CreateNewBuilding((BuildingDef)structure.Def.CompletedBuildingDef);
+                        Spawner.SpawnStructure(structure.StartCoords, building2);
+                        PlayerFaction.AddBuildingToFaction(building2);
                     };
                 }
 

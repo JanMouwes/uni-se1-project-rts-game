@@ -45,7 +45,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             }
         }
 
-        public int viewrange = 8;
+        public int viewrange => 8;
 
         public ConstructingBuildingController(ConstructingBuildingDef def)
         {
@@ -81,5 +81,9 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
         public ConstructingBuildingDef Def => ConstructingBuildingModel.BuildingDef;
         public Faction_Controller Faction => ConstructingBuildingModel.FactionController;
+
+        public float With => ConstructingBuildingView.Width;
+
+        public float Heigth => ConstructingBuildingView.Height;
     }
 }
