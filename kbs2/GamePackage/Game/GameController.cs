@@ -364,6 +364,12 @@ namespace kbs2.GamePackage
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
 
+            // Clears the itemList
+            GameModel.ItemList.Clear();
+            GameModel.TextList.Clear();
+            GameModel.GuiItemList.Clear();
+            GameModel.GuiTextList.Clear();
+
             // ============== Temp Code ===================================================================
 
             MouseState temp = Mouse.GetState();
@@ -378,7 +384,8 @@ namespace kbs2.GamePackage
             GameModel.GuiTextList.Add(Terraintester);
 
             // Update Buildings on screen
-            List<IViewImage> buildings = (from structure in GameModel.World.WorldModel.Structures
+            List<IViewImage> buildings = (
+                from structure in GameModel.World.WorldModel.Structures
                 let building = structure as BuildingController
                 select building.View as IViewImage).ToList();
 
@@ -444,41 +451,19 @@ namespace kbs2.GamePackage
                     Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
                 where (chunkRectangle.Intersects(viewRectangle))
                 select chunk.Value).ToList();
-            //Console.WriteLine(chunks.Count);
 
             foreach (WorldChunkController chunk in chunks)
             {
-                cells.AddRange(from WorldCellController cell in chunk.WorldChunkModel.grid
-                    select cell.worldCellView);
+                cells.AddRange(from WorldCellController cell in chunk.WorldChunkModel.grid where cell.worldCellView.ViewMode != ViewMode.None select cell.worldCellView);
             }
 
             GameModel.ItemList.AddRange(cells);
 
-
             GameModel.GuiTextList.Add(PlayerFaction.currency_Controller.view);
             onTick += PlayerFaction.currency_Controller.DailyReward;
 
-
-            ShaderDelegate tempShader = null;
-
-            if (Keyboard.GetState().IsKeyDown(Keys.R)) tempShader = RandomPattern2;
-            if (Keyboard.GetState().IsKeyDown(Keys.C)) tempShader = CellChunkCheckered;
-            if (Keyboard.GetState().IsKeyDown(Keys.D)) tempShader = DefaultPattern;
-
-            //mouseChunkLoadUpdate(gameTime);
-
-            if (tempShader != null)
-            {
-                shader = tempShader;
-                shader();
-            }
-
-            // ======================================================================================
-
-            //  gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
-
-            // gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
-
+            // Chunks generate when hovered over
+            mouseChunkLoadUpdate(gameTime);
 
             FogController.UpdateViewModes(ViewMode.Fog);
 
@@ -498,11 +483,30 @@ namespace kbs2.GamePackage
                 PreviousMouseButtonsStatus = currentMouseButtonsStatus;
             }
 
+            AddShader();
 
             if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
 
             // Calls the game update
             base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// This checks if a new shader needs to be applied and applies shader to new chunks
+        /// </summary>
+        private void AddShader()
+        {
+            ShaderDelegate tempShader = null;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R)) tempShader = RandomPattern2;
+            if (Keyboard.GetState().IsKeyDown(Keys.C)) tempShader = CellChunkCheckered;
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) tempShader = DefaultPattern;
+
+            if (tempShader != null)
+            {
+                shader = tempShader;
+                shader();
+            }
         }
 
         /// <summary>
@@ -512,9 +516,6 @@ namespace kbs2.GamePackage
         {
             bool CheckKeysAndPlaceBuilding(bool isKeyPressed, bool wasKeyPressed, int buildingId, MouseState mouseState, List<TerrainType> legalTerrainTypes)
             {
-                //FIXME temp
-                //if (isKeyPressed == wasKeyPressed) return wasKeyPressed;
-
                 if (!isKeyPressed) return true;
 
                 DBController.OpenConnection("DefDex.db");
