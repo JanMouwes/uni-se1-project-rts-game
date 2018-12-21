@@ -73,7 +73,7 @@ namespace kbs2.GamePackage
         public void ButtonPressed(FloatCoords mouseCoords)
         {
             //Save current mouse location/coords
-            FirstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
+            FirstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
             //enable drawfunction of selectionbox
             active = true;
         }
@@ -93,7 +93,7 @@ namespace kbs2.GamePackage
                 MouseState temp = Mouse.GetState();
                 Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
                 // saves current mouse location 
-                FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
+                FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
                 //standardices coords to topleft and bottomright 
                 SetCoords(FirstPoint, SecondPoint);
                 DrawBox();
@@ -182,7 +182,7 @@ namespace kbs2.GamePackage
         {
             MouseState temp = Mouse.GetState();
             Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
-            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
+            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
             foreach (IHasGameActions unit in SelectedItems)
             {
                 if (unit.GetType() == typeof(UnitController))

@@ -22,11 +22,8 @@ namespace kbs2.utils
         }
 
         //    Calculates cell-coords from draw-coords.
-        public static Coords DrawCoordsToCellCoords(Coords drawCoords, int tileSize) => new Coords
-        {
-            x = drawCoords.x / tileSize - (drawCoords.x < 0 ? 1 : 0),
-            y = drawCoords.y / tileSize - (drawCoords.y < 0 ? 1 : 0)
-        };
+        public static Coords DrawCoordsToCellCoords(Coords drawCoords, int tileSize) =>
+            (Coords) DrawCoordsToCellFloatCoords((FloatCoords) drawCoords, tileSize);
 
         /// <summary>
         /// Calculates chunk-coords from cell-coords
@@ -51,8 +48,10 @@ namespace kbs2.utils
             y = ModulusUtils.mod(realCoords.y, WorldChunkModel.ChunkSize)
         };
 
-        public static FloatCoords DrawCoordsToCellFloatCoords(Coords drawCoords, int tileSize) =>
-            (FloatCoords) DrawCoordsToCellCoords(drawCoords, tileSize);
-        
+        public static FloatCoords DrawCoordsToCellFloatCoords(FloatCoords drawCoords, int tileSize) => new FloatCoords
+        {
+            x = drawCoords.x / tileSize - (drawCoords.x < 0 ? 1 : 0),
+            y = drawCoords.y / tileSize - (drawCoords.y < 0 ? 1 : 0)
+        };
     }
 }

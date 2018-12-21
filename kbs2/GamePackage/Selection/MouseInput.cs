@@ -64,7 +64,7 @@ namespace kbs2.GamePackage
                 switch (mouseState.LeftButton)
                 {
                     case ButtonState.Pressed when leftButton:
-                        FloatCoords cellCoords = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, game.Camera.GetViewMatrix()), game.GameView.TileSize);
+                        FloatCoords cellCoords = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, game.Camera.GetViewMatrix()), game.GameView.TileSize);
 
                         game.selectedGameAction?.Execute(game.GameModel.World.GetCellFromCoords((Coords) cellCoords));
 
