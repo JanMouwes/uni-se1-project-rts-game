@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using kbs2.WorldEntity.Building.BuildingMVC;
+using kbs2.WorldEntity.Interfaces;
 
 namespace kbs2.Faction.FactionMVC
 {
@@ -26,7 +27,7 @@ namespace kbs2.Faction.FactionMVC
         // Adds a unit to the faction units list
         public void AddUnitToFaction(UnitController unit) => FactionModel.Units.Add(unit);
 
-        public void AddBuildingToFaction(BuildingController building) => FactionModel.Buildings.Add(building);
+        public void AddBuildingToFaction(IStructure building) => FactionModel.Buildings.Add(building);
         // Checks if the given faction is hostile to this faction
         public bool IsHostileTo(Faction_Model faction) => FactionModel.FactionRelationships[faction] == Faction_Relations.hostile;
         // Checks if there is a relation with the given faction and changes it to the given relation if not the same

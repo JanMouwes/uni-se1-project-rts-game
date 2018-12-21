@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using kbs2.Desktop.View.Camera;
 using kbs2.GamePackage.Interfaces;
+using kbs2.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -67,18 +68,22 @@ namespace kbs2.GamePackage
             foreach (IViewImage DrawItem in DrawList)
             {
                 if (DrawItem == null) continue;
+                if (DrawItem.ViewMode == ViewMode.None) continue;
                 Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
+                Color color = DrawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : DrawItem.Colour;
                 spriteBatch.Draw(texture,
                     new Rectangle((int) (DrawItem.Coords.x * TileSize), (int) (DrawItem.Coords.y * TileSize),
-                        (int) (DrawItem.Width * TileSize), (int) (DrawItem.Height * TileSize)), DrawItem.Colour);
+                        (int) (DrawItem.Width * TileSize), (int) (DrawItem.Height * TileSize)), color);
             }
 
             foreach (IViewText DrawItem in DrawText)
             {
                 if (DrawItem == null) continue;
+                if (DrawItem.ViewMode == ViewMode.None) continue;
                 SpriteFont font = content.Load<SpriteFont>(DrawItem.SpriteFont);
+                Color color = DrawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : DrawItem.Colour;
                 spriteBatch.DrawString(font, DrawItem.Text,
-                    new Vector2(DrawItem.Coords.x * TileSize, DrawItem.Coords.y * TileSize), DrawItem.Colour);
+                    new Vector2(DrawItem.Coords.x * TileSize, DrawItem.Coords.y * TileSize), color);
             }
 
             spriteBatch.End();

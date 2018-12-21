@@ -134,22 +134,21 @@ namespace kbs2.GamePackage
             if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
             {
                 Selected = new List<IHasGameActions>();
-                WorldCellModel cell = gameController.GameModel.World.GetCellFromCoords((Coords) TopLeft).worldCellModel;
+                WorldCellModel cell = gameController.GameModel.World.GetCellFromCoords((Coords)TopLeft).worldCellModel;
                 if (cell.BuildingOnTop != null)
                 {
-                    Selected.Add((IHasGameActions) cell.BuildingOnTop);
+                    Selected.Add((IHasGameActions)cell.BuildingOnTop);
                 }
             }
             else
             {
                 Selected = (from Item in gameController.PlayerFaction.FactionModel.Buildings
-                    where TopLeft.x <= Item.Model.TopLeft.x + (Item.View.Width / 2)
-                          && TopLeft.y <= Item.Model.TopLeft.y + (Item.View.Height / 2)
-                          && BottomRight.x >= Item.Model.TopLeft.x + (Item.View.Width / 2)
-                          && BottomRight.y >= Item.Model.TopLeft.y + (Item.View.Height / 2)
-                    select Item).Cast<IHasGameActions>().ToList();
+                            where TopLeft.x <= Item.StartCoords.x + (Item.With / 2)
+                            && TopLeft.y <= Item.StartCoords.y + (Item.Heigth / 2)
+                            && BottomRight.x >= Item.StartCoords.x + (Item.With / 2)
+                            && BottomRight.y >= Item.StartCoords.y + (Item.Heigth / 2)
+                            select Item).Cast<IHasGameActions>().ToList();
             }
-
             return Selected;
         }
 
@@ -160,34 +159,36 @@ namespace kbs2.GamePackage
             if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
             {
                 Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                    where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.FloatCoords) < 0.5
-                          || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.FloatCoords) < Item.UnitView.Height
-                    select Item).ToList();
+                            where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.FloatCoords) < 0.5
+                            || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.FloatCoords) < Item.UnitView.Height
+                            select Item).ToList();
             }
             else
             {
-                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                    where TopLeft.x <= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
-                          && TopLeft.y <= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
-                          && BottomRight.x >= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
-                          && BottomRight.y >= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
-                    select Item).ToList();
-            }
 
+
+                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
+                            where TopLeft.x <= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
+                            && TopLeft.y <= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
+                            && BottomRight.x >= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
+                            && BottomRight.y >= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
+                            select Item).ToList();
+            }
             return Selected.Cast<IHasGameActions>().ToList();
+            
         }
 
         // give movecommand to all units in selection
         public void move(bool CTRL)
         {
             MouseState temp = Mouse.GetState();
-            Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
-            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
+            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.Camera.GetViewMatrix()), gameController.GameView.TileSize);
             foreach (IHasGameActions unit in SelectedItems)
             {
-                if (unit.GetType() == typeof(UnitController))
+                if(unit.GetType() == typeof(UnitController))
                 {
-                    ((IMoveable) unit).MoveTo(target, CTRL);
+                    ((IMoveable)unit).MoveTo(target, CTRL);
                 }
             }
         }
@@ -198,13 +199,13 @@ namespace kbs2.GamePackage
             LeftView.Coords = TopLeft;
             LeftView.Height = Math.Abs(BottomRight.y - TopLeft.y);
 
-            RightView.Coords = new FloatCoords {x = BottomRight.x - RightView.Width, y = TopLeft.y};
+            RightView.Coords = new FloatCoords {x = BottomRight.x - RightView.Width, y = TopLeft.y };
             RightView.Height = Math.Abs(BottomRight.y - TopLeft.y);
 
             TopView.Coords = TopLeft;
             TopView.Width = Math.Abs(BottomRight.x - TopLeft.x);
 
-            BottomView.Coords = new FloatCoords {x = TopLeft.x, y = BottomRight.y - BottomView.Height};
+            BottomView.Coords = new FloatCoords { x = TopLeft.x, y = BottomRight.y - BottomView.Height };
             BottomView.Width = Math.Abs(BottomRight.x - TopLeft.x);
 
 
@@ -213,5 +214,8 @@ namespace kbs2.GamePackage
             gameController.GameModel.ItemList.Add(TopView);
             gameController.GameModel.ItemList.Add(BottomView);
         }
+
+
+        
     }
 }

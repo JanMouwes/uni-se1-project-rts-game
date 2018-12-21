@@ -1,4 +1,5 @@
 ﻿using kbs2.GamePackage.Interfaces;
+using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 using System;
@@ -36,5 +37,7 @@ namespace kbs2.GamePackage
             get => 2;
             set => throw new NotImplementedException();
         }
+
+        public ViewMode ViewMode => ViewMode.Full;
     }
 }

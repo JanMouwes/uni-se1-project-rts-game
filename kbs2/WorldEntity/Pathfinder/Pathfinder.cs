@@ -33,6 +33,13 @@ public class Pathfinder
     // returns a path to the target that does not contain obstacles
     public List<FloatCoords> FindPath(FloatCoords TargetFloatCoords, LocationModel unit)
     {
+        //temp fix
+        List<FloatCoords> newlist = new List<FloatCoords>();
+        newlist.Add(unit.FloatCoords);
+        newlist.Add(TargetFloatCoords);
+        return newlist;
+
+
         WeightDictionarys weightDictionaries = new WeightDictionarys(true);
 
         Coords targetIntCoords = (Coords) TargetFloatCoords;

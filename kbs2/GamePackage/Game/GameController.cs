@@ -72,6 +72,7 @@ namespace kbs2.GamePackage
         public bool PreviousQPressed { get; set; }
         public bool APressed { get; set; }
         public Terraintester Terraintester { get; set; }
+        public FogController FogController { get; set; }
 
         public event ElapsedEventHandler GameTick
         {
@@ -272,6 +273,10 @@ namespace kbs2.GamePackage
             MouseStateChange += GameModel.MouseInput.OnMouseStateChange;
             MouseStateChange += GameModel.ActionBox.OnRightClick;
             //TESTCODE
+
+            FogController = new FogController();
+            FogController.faction = PlayerFaction;
+            FogController.worldController = GameModel.World;
         }
 
 
@@ -474,10 +479,13 @@ namespace kbs2.GamePackage
 
             // gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
 
+
+            FogController.UpdateViewModes(ViewMode.Fog);
+
             // fire Ontick event
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this, args);
-
+            FogController.UpdateViewModes(ViewMode.Full);
 
             // Calls the game update
 
@@ -529,9 +537,8 @@ namespace kbs2.GamePackage
                     ConstructingBuildingDef buildingDef = new ConstructingBuildingDef(def, 20) {BuildingShape = def.BuildingShape, ViewValues = viewValues};
 
                     ConstructingBuildingController building = constructionFactory.CreateBUC(buildingDef);
-
                     Spawner.SpawnStructure(coords, building);
-
+                    PlayerFaction.AddBuildingToFaction(building);
                     onTick += building.Update;
 
                     building.ConstructionComplete += (o, args) =>
@@ -540,8 +547,9 @@ namespace kbs2.GamePackage
 
                         onTick -= structure.Update;
                         GameModel.World.RemoveStructure(structure);
-
-                        Spawner.SpawnStructure(structure.StartCoords, BuildingFactory.CreateNewBuilding((BuildingDef) structure.Def.CompletedBuildingDef));
+                        BuildingController building2 = BuildingFactory.CreateNewBuilding((BuildingDef)structure.Def.CompletedBuildingDef);
+                        Spawner.SpawnStructure(structure.StartCoords, building2);
+                        PlayerFaction.AddBuildingToFaction(building2);
                     };
                 }
 
