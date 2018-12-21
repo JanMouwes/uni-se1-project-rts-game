@@ -267,6 +267,12 @@ namespace kbs2.GamePackage
                 unit.UnitView.ViewMode = ViewMode.Full;
             }
 
+            UnitController enemy =
+                    UnitFactory.CreateNewUnit(unitdef, new FloatCoords { x = 10, y = 10 }, GameModel.World);
+            Faction_Controller enemyFaction = new Faction_Controller("enemy");
+            enemy.UnitModel.Speed = 0.05f;
+            Spawner.SpawnUnit(enemy, enemyFaction);
+
             //============= More TestCode ===============
 
             MouseStateChange += GameModel.MouseInput.OnMouseStateChange;
