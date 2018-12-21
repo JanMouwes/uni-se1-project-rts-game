@@ -558,12 +558,6 @@ namespace kbs2.GamePackage
 
             KeyboardState keyboardState = Keyboard.GetState();
 
-            List<TerrainType> terrainList = new List<TerrainType>()
-            {
-                TerrainType.Grass,
-                TerrainType.Default
-            };
-
             if (keyboardState.IsKeyDown(Keys.D8))
             {
                 SpawnActionDef def = SpawnActionDef.Pikachu;
@@ -580,37 +574,78 @@ namespace kbs2.GamePackage
 
             if (keyboardState.IsKeyDown(Keys.D1))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D1), PreviousQPressed, 1, Mouse.GetState(), terrainList);
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D1), PreviousQPressed, 1, Mouse.GetState(),
+                    new List<TerrainType>()
+                        {
+                            TerrainType.Grass,
+                            TerrainType.Rock,
+                            TerrainType.Soil,
+                            TerrainType.Default
+                        }
+                    );
                 return;
             }
 
             if (keyboardState.IsKeyDown(Keys.D2))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D2), PreviousQPressed, 2, Mouse.GetState(), terrainList);
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D2), PreviousQPressed, 2, Mouse.GetState(),
+                    new List<TerrainType>()
+                        {
+                            TerrainType.Grass,
+                            TerrainType.Rock,
+                            TerrainType.Soil,
+                            TerrainType.Default
+                        }
+                    );
                 return;
             }
 
             if (keyboardState.IsKeyDown(Keys.D3))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), PreviousQPressed, 3, Mouse.GetState(), terrainList);
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), PreviousQPressed, 3, Mouse.GetState(),
+                    new List<TerrainType>()
+                        {
+                            TerrainType.Rock
+                        }
+                    );
                 return;
             }
 
             if (keyboardState.IsKeyDown(Keys.D4))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), PreviousQPressed, 4, Mouse.GetState(), terrainList);
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), PreviousQPressed, 4, Mouse.GetState(),
+                    new List<TerrainType>()
+                        {
+                            TerrainType.Grass,
+                            TerrainType.Rock,
+                            TerrainType.Default
+                        }
+                    );
                 return;
             }
 
             if (keyboardState.IsKeyDown(Keys.D5))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), PreviousQPressed, 5, Mouse.GetState(), terrainList);
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), PreviousQPressed, 5, Mouse.GetState(),
+                    new List<TerrainType>()
+                        {
+                            TerrainType.Trees
+                        }
+                    );
                 return;
             }
 
             if (keyboardState.IsKeyDown(Keys.D6))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), PreviousQPressed, 6, Mouse.GetState(), terrainList);
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), PreviousQPressed, 6, Mouse.GetState(),
+                    new List<TerrainType>()
+                        {
+                            TerrainType.Grass,
+                            TerrainType.Soil,
+                            TerrainType.Sand,
+                            TerrainType.Default
+                        }
+                    );
                 return;
             }
         }
