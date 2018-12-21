@@ -15,7 +15,6 @@ namespace kbs2.WorldEntity.Location
         public Pathfinder pathfinder;
         public LocationModel LocationModel;
         public List<FloatCoords> Waypoints;
-        public WorldController worldController;
 
         
 
@@ -26,12 +25,11 @@ namespace kbs2.WorldEntity.Location
         Func<FloatCoords, FloatCoords, double> getDistance2d = (a, b) =>
             pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
 
-        public Location_Controller(WorldController worldController, float lx, float ly)
+        public Location_Controller(WorldModel WorldModel, float lx, float ly)
         {
-            LocationModel = new Location_Model(lx, ly);
-            pathfinder = new Pathfinder(worldController.WorldModel, 500);
+            LocationModel = new LocationModel(lx, ly);
+            pathfinder = new Pathfinder(WorldModel, 500);
             Waypoints = new List<FloatCoords>();
-            this.worldController = worldController;
         }
 
         public void MoveTo(FloatCoords target, bool isQueueKeyPressed) //[Review] This can be a Lambda expression

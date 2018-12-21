@@ -62,7 +62,7 @@ namespace kbs2.GamePackage
         {
             foreach(UnitController unit in worldController.WorldModel.Units)
             {
-                if(worldController.GetCellFromCoords(unit.LocationController.LocationModel.coords).worldCellView.ViewMode == ViewMode.Full)
+                if(worldController.GetCellFromCoords(unit.LocationController.LocationModel.Coords).worldCellView.ViewMode == ViewMode.Full)
                 {
                     unit.UnitView.ViewMode = ViewMode.Full;
                 } else

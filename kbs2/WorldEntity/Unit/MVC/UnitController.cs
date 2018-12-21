@@ -29,8 +29,8 @@ namespace kbs2.WorldEntity.Unit.MVC
         public FloatCoords center { get {
                 return new FloatCoords
                 {
-                    x = LocationController.LocationModel.floatCoords.x + UnitView.Width / 2,
-                    y = LocationController.LocationModel.floatCoords.y + UnitView.Height / 2
+                    x = LocationController.LocationModel.FloatCoords.x + UnitView.Width / 2,
+                    y = LocationController.LocationModel.FloatCoords.y + UnitView.Height / 2
                 };
             }
         }

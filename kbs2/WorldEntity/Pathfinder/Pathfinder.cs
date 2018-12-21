@@ -35,7 +35,7 @@ public class Pathfinder
     {
         //temp fix
         List<FloatCoords> newlist = new List<FloatCoords>();
-        newlist.Add(unit.floatCoords);
+        newlist.Add(unit.FloatCoords);
         newlist.Add(TargetFloatCoords);
         return newlist;
 
