@@ -36,6 +36,7 @@ namespace kbs2.World.Cell
         // Switches the viewmode between enum ViewMode ( full, fog and none )
         public void ChangeViewMode(ViewMode mode)
         {
+            worldCellView.ViewMode = mode;
         }
 
         // This function is called when the building on top of the cell is destroyed
