@@ -24,7 +24,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             Game = game;
         }
 
-        public void SpawnUnit(UnitController unit, Coords coords)
+        public virtual void SpawnUnit(UnitController unit, Coords coords)
         {
             unit.LocationController.LocationModel.FloatCoords = (FloatCoords) coords;
             World.WorldModel.Units.Add(unit);
@@ -42,8 +42,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             buildingConstruction.OccupiedCells.ForEach(cellModel => cellModel.BuildingOnTop = null);
 
             // make building
-            BuildingController building =
-                BuildingFactory.CreateNewBuilding((BuildingDef) buildingConstruction.Def.CompletedBuildingDef);
+            BuildingController building = BuildingFactory.CreateNewBuilding((BuildingDef) buildingConstruction.Def.CompletedBuildingDef);
             SpawnStructure(buildingConstruction.StartCoords, building);
             buildingConstruction.Faction.AddBuildingToFaction(building);
 
@@ -57,7 +56,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
         /// <param name="spawnCoords">Where to spawn, 'StartCoords'</param>
         /// <param name="structure">What to spawn</param>
         /// <exception cref="NotImplementedException">When structure isn't implemented yet</exception>
-        public void SpawnStructure(Coords spawnCoords, IStructure structure)
+        public virtual void SpawnStructure(Coords spawnCoords, IStructure structure)
         {
             structure.StartCoords = spawnCoords;
             switch (structure)

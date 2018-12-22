@@ -36,8 +36,7 @@ namespace kbs2.GamePackage
         public int TileSize => (int) (graphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
 
         // Constructor
-        public GameView(GameModel gameModel, GraphicsDeviceManager graphics, SpriteBatch spriteBatch,
-            CameraController camera, GraphicsDevice graphicsDevice, ContentManager content)
+        public GameView(GameModel gameModel, GraphicsDeviceManager graphics, SpriteBatch spriteBatch, CameraController camera, GraphicsDevice graphicsDevice, ContentManager content)
         {
             this.gameModel = gameModel;
             this.graphics = graphics;
@@ -67,23 +66,16 @@ namespace kbs2.GamePackage
 
             foreach (IViewImage DrawItem in DrawList)
             {
-                if (DrawItem == null) continue;
-                if (DrawItem.ViewMode == ViewMode.None) continue;
                 Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
                 Color color = DrawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : DrawItem.Colour;
-                spriteBatch.Draw(texture,
-                    new Rectangle((int) (DrawItem.Coords.x * TileSize), (int) (DrawItem.Coords.y * TileSize),
-                        (int) (DrawItem.Width * TileSize), (int) (DrawItem.Height * TileSize)), color);
+                spriteBatch.Draw(texture, new Rectangle((int)(DrawItem.Coords.x * TileSize), (int)(DrawItem.Coords.y * TileSize), (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), color);
             }
 
             foreach (IViewText DrawItem in DrawText)
             {
-                if (DrawItem == null) continue;
-                if (DrawItem.ViewMode == ViewMode.None) continue;
                 SpriteFont font = content.Load<SpriteFont>(DrawItem.SpriteFont);
                 Color color = DrawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : DrawItem.Colour;
-                spriteBatch.DrawString(font, DrawItem.Text,
-                    new Vector2(DrawItem.Coords.x * TileSize, DrawItem.Coords.y * TileSize), color);
+                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x * TileSize, DrawItem.Coords.y * TileSize), color);
             }
 
             spriteBatch.End();
@@ -97,27 +89,21 @@ namespace kbs2.GamePackage
             foreach (IViewImage DrawItem in DrawGuiList)
             {
                 Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
-
-                spriteBatch.Draw(texture,
-                    new Rectangle((int) DrawItem.Coords.x, (int) DrawItem.Coords.y, (int) DrawItem.Width,
-                        (int) DrawItem.Height), DrawItem.Colour);
+                spriteBatch.Draw(texture, new Rectangle((int) DrawItem.Coords.x, (int) DrawItem.Coords.y, (int) DrawItem.Width, (int) DrawItem.Height), DrawItem.Colour);
             }
 
             foreach (IViewText DrawItem in DrawGuiText)
             {
-                if (DrawItem == null) continue;
                 SpriteFont font = content.Load<SpriteFont>(DrawItem.SpriteFont);
-                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x, DrawItem.Coords.y),
-                    DrawItem.Colour);
+                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x, DrawItem.Coords.y), DrawItem.Colour);
             }
 
             spriteBatch.End();
         }
 
-        private List<IViewImage> GetCellsOnScreen(IEnumerable<IViewImage> drawList, Vector2 topLeft,
-            Vector2 bottomRight)
+        private List<IViewImage> GetCellsOnScreen(IEnumerable<IViewImage> drawList, Vector2 topLeft, Vector2 bottomRight)
         {
-            List<IViewImage> returnList;
+            List<IViewImage> returnList = new List<IViewImage>();
 
             returnList = (from item in drawList
                 where (item.Coords.x > (topLeft.X / TileSize) - item.Width &&
@@ -136,24 +122,22 @@ namespace kbs2.GamePackage
 
         // Returns everything that is in the view
         public void UpdateOnScreen()
-        {
-            List<TItem> SortByZIndex<TItem>(IEnumerable<TItem> listToSort) where TItem : IViewItem =>
-                (from item in listToSort orderby item.ZIndex ascending select item).ToList();
-
+        {            
+            // Clears the Draw Lists 
             DrawList.Clear();
             DrawGuiList.Clear();
-
             DrawText.Clear();
             DrawGuiText.Clear();
 
-            Vector2 topLeft = Vector2.Transform(new Vector2(graphicsDevice.Viewport.X, graphicsDevice.Viewport.Y),
-                camera.GetInverseViewMatrix());
+            List<TItem> SortByZIndex<TItem>(IEnumerable<TItem> listToSort) where TItem : IViewItem =>
+                (from item in listToSort orderby item.ZIndex ascending select item).ToList();
 
-            Vector2 bottomRight = Vector2.Transform(new Vector2(
-                graphicsDevice.Viewport.X + graphicsDevice.Viewport.Width,
-                graphicsDevice.Viewport.Y + graphicsDevice.Viewport.Height), camera.GetInverseViewMatrix());
+            Vector2 topLeft = Vector2.Transform(new Vector2(graphicsDevice.Viewport.X, graphicsDevice.Viewport.Y), camera.GetInverseViewMatrix());
 
-            DrawList = GetCellsOnScreen(gameModel.ItemList, topLeft, bottomRight);
+            Vector2 bottomRight = Vector2.Transform(new Vector2( graphicsDevice.Viewport.X + graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Y + graphicsDevice.Viewport.Height), camera.GetInverseViewMatrix());
+
+            // Gets the cells in the current view and adds them to the Drawlist
+            DrawList.AddRange(GetCellsOnScreen(gameModel.ItemList, topLeft, bottomRight));
 
             // Add all items to the DrawGuiList in the correct Zindex order
             DrawGuiList = SortByZIndex(gameModel.GuiItemList);
@@ -170,12 +154,6 @@ namespace kbs2.GamePackage
 
             // Add all Text to the DrawGuiList in the correct Zindex order
             DrawGuiText = SortByZIndex(gameModel.GuiTextList);
-
-            gameModel.ItemList.Clear();
-            //gameModel.GuiItemList.Clear();
-
-            gameModel.TextList.Clear();
-            //gameModel.GuiTextList.Clear();
         }
     }
 }
