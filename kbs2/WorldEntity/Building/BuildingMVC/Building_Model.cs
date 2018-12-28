@@ -1,25 +1,29 @@
-﻿using System.Collections.Generic;
-using kbs2.Actions.ActionMVC;
-using kbs2.Actions.GameActionDefs;
-using kbs2.Actions.GameActions;
+﻿using kbs2.Actions;
 using kbs2.World;
 using kbs2.World.Cell;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace kbs2.WorldEntity.Building.BuildingMVC
+namespace kbs2.WorldEntity.Building
 {
-    public class BuildingModel
+    public class Building_Model
     {
+
         public Coords TopLeft { get; set; }
 
-        public List<GameAction<GameActionDef>> Actions { get; }
+        public List<ActionController> actions { get; set; }
 
         // all the cells the building is on
-        public List<WorldCellModel> LocationCells { get; }
+        public List<WorldCellModel> LocationCells { get; set; }
 
-        public BuildingModel()
+        public Building_Model(Coords topLeft)
         {
+            TopLeft = topLeft;
             LocationCells = new List<WorldCellModel>();
-            Actions = new List<GameAction<GameActionDef>>();
+            actions = new List<ActionController>();
         }
     }
 }

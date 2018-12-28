@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage.Interfaces;
 using kbs2.View.GUI.ActionBox;
-using kbs2.World.World;
 
 namespace kbs2.GamePackage
 {

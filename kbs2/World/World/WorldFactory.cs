@@ -1,4 +1,5 @@
-﻿using kbs2.World.Chunk;
+﻿using kbs2.Desktop.World.World;
+using kbs2.World.Chunk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,17 +10,8 @@ namespace kbs2.World.World
 {
     public static class WorldFactory
     {
-        public static FastNoise.NoiseType Noise;
-
-        /// <summary>
-        /// The default function to generate a new world.
-        /// </summary>
-        /// <returns>Return a world made with terrain generation</returns>
-        public static WorldController GetNewWorld(FastNoise.NoiseType noise)
+        public static WorldController GetNewWorld()
         {
-            // Set the generation noise type
-            Noise = noise;
-
             // Initialize World 
             WorldController world = new WorldController();
 
@@ -49,10 +41,6 @@ namespace kbs2.World.World
             return world;
         }
 
-        /// <summary>
-        /// Debugging function for getting a world of empty chunks
-        /// </summary>
-        /// <returns>Returns a world of 5x5 chuncks that are default terrain </returns>
         public static WorldController GetNewEmptyWorld()
         {
             // Initialize World 

@@ -1,4 +1,5 @@
 ﻿using kbs2.Desktop.GamePackage.EventArgs;
+using kbs2.Desktop.World.World;
 using kbs2.World;
 using kbs2.World.Structs;
 using System;
@@ -6,37 +7,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using kbs2.World.World;
 
 namespace kbs2.WorldEntity.Location
 {
-    public class Location_Controller
-    {
+	public class Location_Controller
+	{
         public Pathfinder pathfinder;
-        public LocationModel LocationModel;
+		public Location_Model LocationModel;
         public List<FloatCoords> Waypoints;
-
-        
 
 
         static Func<double, double, double> pythagoras = (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
         static Func<double, double, double> getDistance = (x, y) => x > y ? x - y : y - x;
+        Func<FloatCoords, FloatCoords, double> getDistance2d = (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
 
-        Func<FloatCoords, FloatCoords, double> getDistance2d = (a, b) =>
-            pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
-
-        public Location_Controller(WorldModel WorldModel, float lx, float ly)
-        {
-            LocationModel = new LocationModel(lx, ly);
-            pathfinder = new Pathfinder(WorldModel, 500);
+        public Location_Controller(WorldModel worldModel, float lx, float ly)
+		{
+            LocationModel = new Location_Model(lx, ly);
+            pathfinder = new Pathfinder(worldModel, 500);
             Waypoints = new List<FloatCoords>();
-        }
-
-        public void MoveTo(FloatCoords target, bool isQueueKeyPressed) //[Review] This can be a Lambda expression
-        {
+		}
+		public void MoveTo(FloatCoords target, bool CTRL) //[Review] This can be a Lambda expression
+		{
             List<FloatCoords> points = pathfinder.FindPath(target, LocationModel);
             points.RemoveAt(0);
-            if (isQueueKeyPressed)
+            if (CTRL)
             {
                 Waypoints.AddRange(points);
             }
@@ -44,52 +39,52 @@ namespace kbs2.WorldEntity.Location
             {
                 Waypoints = points;
             }
-        }
-
-        
-
-        public void Ontick(object sender, OnTickEventArgs eventArgs)
+            
+		}
+        public void Ontick(object sender, OnTickEventArgs eventArgs) 
         {
-            if (Waypoints.Count > 0)
+            if(Waypoints.Count > 0)
             {
-                float speed = LocationModel.Parent.UnitModel.Speed;
+                float speed = LocationModel.parent.UnitModel.Speed;
 
-                if (getDistance2d(Waypoints[0], LocationModel.FloatCoords) < speed)
+                if (getDistance2d(Waypoints[0], LocationModel.floatCoords) < speed)
                 {
-                    LocationModel.FloatCoords = Waypoints[0];
+                    LocationModel.floatCoords = Waypoints[0];
                     Waypoints.RemoveAt(0);
                 }
                 else
                 {
-                    float xdifference = (float) getDistance(LocationModel.FloatCoords.x, Waypoints[0].x);
-                    float ydifference = (float) getDistance(LocationModel.FloatCoords.y, Waypoints[0].y);
-                    // calculate new coords
-                    float diagonaldifference = (float) pythagoras(xdifference, ydifference);
-                    float v = diagonaldifference / speed;
 
+                    float xdifference = (float)getDistance(LocationModel.floatCoords.x, Waypoints[0].x);
+                    float ydifference = (float)getDistance(LocationModel.floatCoords.y, Waypoints[0].y);
+                    // calculate new coords
+                    float diagonaldifference = (float)pythagoras(xdifference, ydifference);
+                    float v = diagonaldifference / speed;
+       
                     FloatCoords difference = new FloatCoords();
                     difference.x = xdifference / v;
                     difference.y = ydifference / v;
 
-                    if (Waypoints[0].x < LocationModel.FloatCoords.x)
+                    if(Waypoints[0].x< LocationModel.floatCoords.x)
                     {
-                        LocationModel.FloatCoords.x -= difference.x;
-                    }
-                    else
+                        LocationModel.floatCoords.x -= difference.x;
+                    } else
                     {
-                        LocationModel.FloatCoords.x += difference.x;
+                        LocationModel.floatCoords.x += difference.x;
                     }
 
-                    if (Waypoints[0].y < LocationModel.FloatCoords.y)
+                    if (Waypoints[0].y < LocationModel.floatCoords.y)
                     {
-                        LocationModel.FloatCoords.y -= difference.y;
+                        LocationModel.floatCoords.y -= difference.y;
                     }
                     else
                     {
-                        LocationModel.FloatCoords.y += difference.y;
+                        LocationModel.floatCoords.y += difference.y;
                     }
+                    
                 }
+                
             }
         }
-    }
+	}
 }

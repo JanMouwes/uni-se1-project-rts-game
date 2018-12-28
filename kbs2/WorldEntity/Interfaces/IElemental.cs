@@ -5,7 +5,7 @@ namespace kbs2.Unit.Interfaces
 {
     public interface IElemental
     {
-        List<ElementType> ElementTypes
+        List<ElementType> Elementtypes
         {
             get;
             set;

@@ -1,7 +1,5 @@
-﻿using kbs2.GamePackage;
-using kbs2.World.Enums;
+﻿using kbs2.World.Enums;
 using kbs2.World.Structs;
-using kbs2.World.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,52 +10,32 @@ namespace kbs2.World.Cell
 {
     class WorldCellFactory
     {
-        private static FastNoise myNoise = new FastNoise(WorldModel.seed);
+        private static FastNoise myNoise = new FastNoise(new Random().Next(0, 50));
 
-        /// <summary>
-        /// Generates a new chunk with new cells
-        /// </summary>
-        /// <param name="coords">The required chunk coordinates for setting the new chunks coordinates</param>
-        /// <returns>returns a wordchunk filled with worldcells</returns>
-        public static WorldCellController GetNewCell(FloatCoords coords) => new WorldCellController(coords, GetTypeFromCoords(coords.x, coords.y));
-
-        /// <summary>
-        /// This function generates the terrain type from its coords with noise
-        /// </summary>
-        /// <param name="x">Cell x position in float</param>
-        /// <param name="y">Cell y position in float</param>
-        /// <returns>returns the specific cell's terrain type</returns>
-        public static TerrainType GetTypeFromCoords(float x, float y)
+        public static WorldCellController GetNewCell(FloatCoords coords)
         {
-            myNoise.SetNoiseType(WorldFactory.Noise); // Set the desired noise type
-            float currentNoise = myNoise.GetNoise(x, y);
+            myNoise.SetNoiseType(FastNoise.NoiseType.Simplex); // Set the desired noise type
+            float currentNoise = myNoise.GetNoise(coords.x, coords.y);
 
             TerrainType textureType;
-            if (currentNoise < -0.10)
+            if (currentNoise < -0.45)
             {
                 textureType = TerrainType.Water;
             }
-            else if (currentNoise < 0)
+            else if (currentNoise < -0.2)
             {
                 textureType = TerrainType.Sand;
             }
-            else if (currentNoise < 0.15)
+            else if (currentNoise < 0)
             {
                 textureType = TerrainType.Soil;
             }
-            else if (currentNoise < 0.30)
+            else if (currentNoise < 0.5)
             {
-                textureType = TerrainType.Grass;
+                double treeChance = ((currentNoise - 0.4) * 10) + 0.5;
+                textureType = (currentNoise < 0.55 && currentNoise > 0.25 && treeChance > 0.5) ? TerrainType.Trees : TerrainType.Grass;
             }
-            else if (currentNoise < 0.40)
-            {
-                textureType = TerrainType.Trees;
-            }
-            else if (currentNoise < 0.50)
-            {
-                textureType = TerrainType.Grass;
-            }
-            else if (currentNoise < 0.60)
+            else if (currentNoise < 0.70)
             {
                 textureType = TerrainType.Rock;
             }
@@ -66,7 +44,7 @@ namespace kbs2.World.Cell
                 textureType = TerrainType.Snow;
             }
 
-            return textureType;
+            return new WorldCellController(coords, textureType);
         }
     }
 }

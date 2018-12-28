@@ -2,8 +2,8 @@
 using System;
 namespace kbs2.Faction.Interfaces
 {
-    public interface IFactionMember
+    public interface IHasFaction
     {
-        Faction_Controller Faction { get; }
+        Faction_Model Faction { get; set; }
     }
 }

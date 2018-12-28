@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using kbs2.Unit.Model;
+using kbs2.Unit.Unit;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Health;
-using kbs2.WorldEntity.Unit;
 using Mono.Data.Sqlite;
 
 namespace kbs2
@@ -42,9 +42,13 @@ namespace kbs2
         // get the Def from a given building
         public static BuildingDef GetDefinitionBuilding(int building)
         {
-            BuildingDef BuildingDef = new BuildingDef();
+            BuildingDef BuildingDef = new BuildingDef
+            {
+                HPDef = new HPDef()
+            };
 
-            string query = "SELECT * FROM BuildingDef WHERE Id=@i";
+            string query =
+                "SELECT * FROM BuildingDef WHERE Id=@i";
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
             {
@@ -57,15 +61,11 @@ namespace kbs2
                         BuildingDef.HPDef.CurrentHP = int.Parse(reader["CurrentHp"].ToString());
                         BuildingDef.HPDef.MaxHP = int.Parse(reader["MaxHp"].ToString());
 
-                        BuildingDef.Width = float.Parse(reader["width"].ToString());
-                        BuildingDef.Height = float.Parse(reader["height"].ToString());
+                        BuildingDef.width = float.Parse(reader["width"].ToString());
+                        BuildingDef.height = float.Parse(reader["height"].ToString());
 
-                        BuildingDef.Image = reader["image"].ToString();
+                        BuildingDef.imageSrc = reader["image"].ToString();
                         BuildingDef.AddShapeFromString(reader["shape"].ToString());
-
-                        BuildingDef.Cost = float.Parse(reader["Cost"].ToString());
-                        BuildingDef.UpkeepCost = float.Parse(reader["Upkeep"].ToString());
-
                     }
                 }
             }

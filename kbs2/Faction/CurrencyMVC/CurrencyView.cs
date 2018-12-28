@@ -16,8 +16,6 @@ namespace kbs2.Faction.CurrencyMVC
         public Color Colour { get => Color.White; set {; } }
         public int ZIndex { get => 1; set {; } }
 
-        public ViewMode ViewMode => ViewMode.Full;
-
         public CurrencyView(Currency_Model model) => this.model = model;
 
     }

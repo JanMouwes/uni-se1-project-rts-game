@@ -71,11 +71,11 @@ namespace PathfindingConsoleApp
             Pathfinder pathfinder = new Pathfinder(world.WorldModel, 150);
 
 
-            LocationModel locationModel = new LocationModel(0, 0);
+            Location_Model locationModel = new Location_Model(0, 0);
             locationModel.UnwalkableTerrain = new List<TerrainType>();
             locationModel.UnwalkableTerrain.Add(TerrainType.Water);
-            locationModel.FloatCoords.x = 0;
-            locationModel.FloatCoords.y = 0;
+            locationModel.floatCoords.x = 0;
+            locationModel.floatCoords.y = 0;
 
             FloatCoords floatCoords = new FloatCoords();
             floatCoords.x = 9;

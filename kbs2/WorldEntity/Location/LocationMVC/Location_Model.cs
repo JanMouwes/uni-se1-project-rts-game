@@ -10,17 +10,17 @@ using kbs2.WorldEntity.Unit.MVC;
 
 namespace kbs2.WorldEntity.Location
 {
-	public class LocationModel
+	public class Location_Model
 	{
-        public UnitController Parent;
-		public Coords Coords => (Coords)FloatCoords;
-		public FloatCoords FloatCoords;
+        public Unit_Controller parent;
+		public Coords coords => (Coords)floatCoords;
+		public FloatCoords floatCoords;
         public List<TerrainType> UnwalkableTerrain;
 
-        public LocationModel(float locationX, float locationY)
+        public Location_Model(float locationX, float locationY)
         {
-            FloatCoords.x = locationX;
-            FloatCoords.y = locationY;
+            floatCoords.x = locationX;
+            floatCoords.y = locationY;
 
             UnwalkableTerrain = new List<TerrainType>();
         }

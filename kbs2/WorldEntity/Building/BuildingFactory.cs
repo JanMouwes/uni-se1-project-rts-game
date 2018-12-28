@@ -1,4 +1,5 @@
-﻿using kbs2.WorldEntity.Building.BuildingMVC;
+﻿using kbs2.World;
+using kbs2.WorldEntity.Building.BuildingMVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,17 +10,20 @@ namespace kbs2.WorldEntity.Building
 {
     public static class BuildingFactory
     {
-        public static BuildingController CreateNewBuilding(BuildingDef def)
+        public static Building_Controller CreateNewBuilding(BuildingDef def, Coords TopLeft)
         {
-            BuildingController buildingController = new BuildingController(def);
+            Building_Controller building_Controller = new Building_Controller();
 
-            BuildingView view = new BuildingView(def.Image, def.Height, def.Width)
+            Building_Model model = new Building_Model(TopLeft);
+            building_Controller.Model = model;
+            BuildingView view = new BuildingView(def.imageSrc, def.height, def.width)
             {
-                BuildingModel = buildingController.Model
+                BuildingModel = model
             };
-            buildingController.View = view;
+            building_Controller.View = view;
+            
 
-            return buildingController;
+            return building_Controller;
         }
     }
 }

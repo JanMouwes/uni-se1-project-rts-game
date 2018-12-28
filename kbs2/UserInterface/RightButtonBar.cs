@@ -28,9 +28,7 @@ namespace kbs2.UserInterface
 		public Color Colour { get { return Color.White; } set {; } }
 		public int ZIndex { get { return 1; } set {; } }
 
-        public ViewMode ViewMode => ViewMode.Full;
-
-        public RightButtonBar(GameController controller)
+		public RightButtonBar(GameController controller)
 		{
 			this.GameController = controller;
 		}

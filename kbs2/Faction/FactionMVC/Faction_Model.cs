@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using kbs2.WorldEntity.Building.BuildingMVC;
-using kbs2.WorldEntity.Interfaces;
 
 namespace kbs2.Faction.FactionMVC
 {
@@ -18,16 +16,17 @@ namespace kbs2.Faction.FactionMVC
     {
         public string Name { get; set; }
         public Dictionary<Faction_Model, Faction_Relations> FactionRelationships { get; set; }
-        public List<UnitController> Units { get; set; }
-        public List<IStructure> Buildings { get; set; }
+        public List<Unit_Controller> Units { get; set; }
+        public List<Building_Controller> Buildings { get; set; }
+        public List<BUCController> BUCs { get; set; }
 
         public Faction_Model(string name)
         {
 			Name = name;
 			FactionRelationships = new Dictionary<Faction_Model, Faction_Relations>();
-            Units = new List<UnitController>();
-            //TODO use central 'List<IStructure>' with LINQ-queries for filtering
-            Buildings = new List<IStructure>(); 
+            Units = new List<Unit_Controller>();
+            Buildings = new List<Building_Controller>();
+            BUCs = new List<BUCController>();
         }
     }
 }

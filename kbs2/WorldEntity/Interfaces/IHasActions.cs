@@ -1,4 +1,4 @@
-﻿using kbs2.World.Structs;
+﻿using kbs2.Actions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace kbs2.WorldEntity.Interfaces
 {
-    public interface IMoveable
+    public interface IHasActions
     {
-        void MoveTo(FloatCoords target,bool CTRL);
+        List<ActionController> Actions { get;}
     }
 }
