@@ -1,4 +1,5 @@
 ﻿using kbs2.GamePackage.Interfaces;
+using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 using System;
@@ -11,15 +12,15 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 {
     public class ConstructionCounter : IViewText
     {
-        public BUCController BUCController { get; set; }
+        public ConstructingBuildingController ConstructingBuildingController { get; set; }
 
         public FloatCoords Coords
         {
             get => new FloatCoords()
             {
-                x = (BUCController.BUCModel.TopLeft.x + (BUCController.BUCView.Width / 2f) -
+                x = (ConstructingBuildingController.ConstructingBuildingModel.StartCoords.x + (ConstructingBuildingController.ConstructingBuildingView.Width / 2f) -
                      ((Text.Length / 2f) * 0.35f)),
-                y = (BUCController.BUCModel.TopLeft.y + (BUCController.BUCView.Height / 2f) - 0.4f)
+                y = (ConstructingBuildingController.ConstructingBuildingModel.StartCoords.y + (ConstructingBuildingController.ConstructingBuildingView.Height / 2f) - 0.4f)
             };
             set => throw new NotImplementedException();
         }
@@ -43,5 +44,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             get => 1;
             set => throw new NotImplementedException();
         }
+
+        public ViewMode ViewMode => ConstructingBuildingController.ConstructingBuildingView.ViewMode;
     }
 }

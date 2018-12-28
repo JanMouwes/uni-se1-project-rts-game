@@ -10,6 +10,6 @@ namespace kbs2.Faction.Interfaces
 {
     public interface IHasFactionUnit
     {
-        List<Unit_Controller> Units { get; }
+        List<UnitController> Units { get; }
     }
 }
