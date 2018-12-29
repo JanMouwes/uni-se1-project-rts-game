@@ -1,90 +1,101 @@
-﻿using kbs2.Desktop.GamePackage.EventArgs;
-using kbs2.Desktop.World.World;
-using kbs2.World;
-using kbs2.World.Structs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using kbs2.Desktop.GamePackage.EventArgs;
+using kbs2.Desktop.World.World;
+using kbs2.GamePackage.EventArgs;
+using kbs2.utils;
+using kbs2.World.Structs;
+using kbs2.WorldEntity.Pathfinder;
+using kbs2.WorldEntity.Pathfinder.Exceptions;
 
-namespace kbs2.WorldEntity.Location
+namespace kbs2.WorldEntity.Location.LocationMVC
 {
-	public class Location_Controller
-	{
-        public Pathfinder pathfinder;
-		public Location_Model LocationModel;
-        public List<FloatCoords> Waypoints;
+    public class Location_Controller
+    {
+        private Thread pathfinderThread;
+        public Pathfinder.Pathfinder Pathfinder;
+        public Location_Model LocationModel;
+        public Queue<FloatCoords> Waypoints = new Queue<FloatCoords>();
 
+        public delegate void MoveCompleteDelegate(object sender, EventArgsWithPayload<FloatCoords> eventArgs);
 
-        static Func<double, double, double> pythagoras = (x, y) => Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
-        static Func<double, double, double> getDistance = (x, y) => x > y ? x - y : y - x;
-        Func<FloatCoords, FloatCoords, double> getDistance2d = (a, b) => pythagoras(getDistance(a.x, b.x), getDistance(a.y, b.y));
+        public event MoveCompleteDelegate MoveComplete;
 
-        public Location_Controller(WorldModel worldModel, float lx, float ly)
-		{
-            LocationModel = new Location_Model(lx, ly);
-            pathfinder = new Pathfinder(worldModel, 500);
-            Waypoints = new List<FloatCoords>();
-		}
-		public void MoveTo(FloatCoords target, bool CTRL) //[Review] This can be a Lambda expression
-		{
-            List<FloatCoords> points = pathfinder.FindPath(target, LocationModel);
-            points.RemoveAt(0);
-            if (CTRL)
-            {
-                Waypoints.AddRange(points);
-            }
-            else
-            {
-                Waypoints = points;
-            }
-            
-		}
-        public void Ontick(object sender, OnTickEventArgs eventArgs) 
+        public Location_Controller(WorldController worldModel, float lx, float ly)
         {
-            if(Waypoints.Count > 0)
-            {
-                float speed = LocationModel.parent.UnitModel.Speed;
+            LocationModel = new Location_Model(lx, ly);
+            Pathfinder = new Pathfinder.Pathfinder(worldModel);
+        }
 
-                if (getDistance2d(Waypoints[0], LocationModel.floatCoords) < speed)
+        //TODO find better name for this method.
+        public void MoveTo(FloatCoords target, bool isQueueKeyPressed) //[Review] This can be a Lambda expression
+        {
+            pathfinderThread?.Abort();
+
+            ThreadStart threadStart = () =>
+            {
+                List<FloatCoords> points;
+                try
                 {
-                    LocationModel.floatCoords = Waypoints[0];
-                    Waypoints.RemoveAt(0);
+                    points = Pathfinder.FindPath(target, LocationModel);
+                }
+                catch (NoPathFoundException exception)
+                {
+                    return;
+                }
+
+                if (isQueueKeyPressed)
+                {
+                    points.ForEach(coords => Waypoints.Enqueue(coords));
                 }
                 else
                 {
-
-                    float xdifference = (float)getDistance(LocationModel.floatCoords.x, Waypoints[0].x);
-                    float ydifference = (float)getDistance(LocationModel.floatCoords.y, Waypoints[0].y);
-                    // calculate new coords
-                    float diagonaldifference = (float)pythagoras(xdifference, ydifference);
-                    float v = diagonaldifference / speed;
-       
-                    FloatCoords difference = new FloatCoords();
-                    difference.x = xdifference / v;
-                    difference.y = ydifference / v;
-
-                    if(Waypoints[0].x< LocationModel.floatCoords.x)
-                    {
-                        LocationModel.floatCoords.x -= difference.x;
-                    } else
-                    {
-                        LocationModel.floatCoords.x += difference.x;
-                    }
-
-                    if (Waypoints[0].y < LocationModel.floatCoords.y)
-                    {
-                        LocationModel.floatCoords.y -= difference.y;
-                    }
-                    else
-                    {
-                        LocationModel.floatCoords.y += difference.y;
-                    }
-                    
+                    Waypoints = new Queue<FloatCoords>(points);
                 }
-                
-            }
+            };
+
+            pathfinderThread = new Thread(threadStart);
+            pathfinderThread.Start();
         }
-	}
+
+
+        public void Update(object sender, OnTickEventArgs eventArgs)
+        {
+            if (!Waypoints.Any()) return;
+
+            float speed = LocationModel.parent.UnitModel.Speed;
+
+            if (DistanceCalculator.DiagonalDistance(Waypoints.Peek(), LocationModel.floatCoords) < speed)
+            {
+                // Arrived near destination
+                LocationModel.floatCoords = Waypoints.Dequeue();
+
+                if (!Waypoints.Any()) MoveComplete?.Invoke(this, new EventArgsWithPayload<FloatCoords>(LocationModel.floatCoords));
+
+                return;
+            }
+
+            float xDifference = (float) DistanceCalculator.CalcDistance(LocationModel.floatCoords.x, Waypoints.Peek().x);
+            float yDifference = (float) DistanceCalculator.CalcDistance(LocationModel.floatCoords.y, Waypoints.Peek().y);
+
+            // calculate new coords
+            float diagonalDifference = (float) DistanceCalculator.Pythagoras(xDifference, yDifference);
+            float v = diagonalDifference / speed;
+
+            FloatCoords difference = new FloatCoords
+            {
+                x = xDifference / v,
+                y = yDifference / v
+            };
+
+            difference.x = Waypoints.Peek().x < LocationModel.floatCoords.x ? -difference.x : difference.x;
+            LocationModel.floatCoords.x = LocationModel.floatCoords.x + difference.x;
+
+            difference.y = Waypoints.Peek().y < LocationModel.floatCoords.y ? -difference.y : difference.y;
+            LocationModel.floatCoords.y = LocationModel.floatCoords.y + difference.y;
+        }
+    }
 }

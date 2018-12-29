@@ -27,6 +27,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using kbs2.Faction.FactionMVC;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Pathfinder;
 using kbs2.WorldEntity.WorldEntitySpawner;
 
 namespace kbs2.GamePackage
@@ -61,7 +62,7 @@ namespace kbs2.GamePackage
         public BuildActions BuildActions { get; set; }
         public bool QPressed { get; set; }
         public bool APressed { get; set; }
-        public Terraintester Terraintester { get; set; }
+        public TerrainTester TerrainTester { get; set; }
 
         public event ElapsedEventHandler GameTick
         {
@@ -177,7 +178,7 @@ namespace kbs2.GamePackage
             gameModel.World = WorldFactory.GetNewWorld();
 
             // Pathfinder 
-            gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
+            gameModel.pathfinder = new Pathfinder(gameModel.World, 500);
 
             // Spawner
             spawner = new EntitySpawner(gameModel.World, ref onTick);
@@ -214,7 +215,7 @@ namespace kbs2.GamePackage
             //TESTCODE
             QPressed = false;
             APressed = false;
-            Terraintester = new Terraintester();
+            TerrainTester = new TerrainTester();
 
 
             onTick += SetBuilding;
@@ -222,23 +223,23 @@ namespace kbs2.GamePackage
             onTick += gameModel.MouseInput.Selection.Update;
             gameModel.MouseInput.Selection.onSelectionChanged += ChangeSelection;
 
-			StatusBarView statusBarView = new StatusBarView(this);
-			LeftButtonBar leftButtonBar = new LeftButtonBar(this);
-			RightButtonBar rightButtonBar = new RightButtonBar(this);
+            StatusBarView statusBarView = new StatusBarView(this);
+            LeftButtonBar leftButtonBar = new LeftButtonBar(this);
+            RightButtonBar rightButtonBar = new RightButtonBar(this);
 
-			BottomBarView bottomBarView = new BottomBarView(this);
-			MiniMapBar miniMap = new MiniMapBar(this);
-			ActionBarView actionBar = new ActionBarView(this);
+            BottomBarView bottomBarView = new BottomBarView(this);
+            MiniMapBar miniMap = new MiniMapBar(this);
+            ActionBarView actionBar = new ActionBarView(this);
 
             gameModel.GuiItemList.Add(statusBarView);
-			gameModel.GuiItemList.Add(leftButtonBar);
-			gameModel.GuiItemList.Add(rightButtonBar);
-			gameModel.GuiItemList.Add(bottomBarView);
-			gameModel.GuiItemList.Add(miniMap);
-			gameModel.GuiItemList.Add(actionBar);
+            gameModel.GuiItemList.Add(leftButtonBar);
+            gameModel.GuiItemList.Add(rightButtonBar);
+            gameModel.GuiItemList.Add(bottomBarView);
+            gameModel.GuiItemList.Add(miniMap);
+            gameModel.GuiItemList.Add(actionBar);
 
 
-			ActionInterface = new ActionInterface(this);
+            ActionInterface = new ActionInterface(this);
             BuildActions = new BuildActions(this);
             ActionInterface.SetActions(BuildActions);
 
@@ -250,13 +251,13 @@ namespace kbs2.GamePackage
             for (int i = 0; i < 12; i++)
             {
                 Unit_Controller unit =
-                    UnitFactory.CreateNewUnit(unitdef, new Coords {x = i, y = 5}, gameModel.World.WorldModel);
+                    UnitFactory.CreateNewUnit(unitdef, new Coords {x = i, y = 5}, gameModel.World);
 
                 unit.UnitModel.Speed = 0.05f;
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 spawner.SpawnUnit(unit, PlayerFaction);
                 PlayerFaction.currency_Controller.AddUpkeepCost(unitdef.Upkeep);
-                onTick += unit.LocationController.Ontick;
+                onTick += unit.LocationController.Update;
             }
 
             //============= More TestCode ===============
@@ -344,7 +345,7 @@ namespace kbs2.GamePackage
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Z)) GameState = GameState.Running;
-            
+
             if (gameState == GameState.Paused) return;
 
             // Updates camera according to the pressed buttons
@@ -358,15 +359,20 @@ namespace kbs2.GamePackage
                 WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
             if (gameModel.World.GetCellFromCoords(coords) != null)
             {
-                Terraintester.Text =
+                TerrainTester.Text =
                     $"{coords.x},{coords.y}  {gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}";
                 if (gameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop != null)
                 {
-                    Terraintester.Text += " b";
+                    TerrainTester.Text += " b";
                 }
-            }
 
-            gameModel.GuiTextList.Add(Terraintester);
+                gameModel.GuiTextList.Add(TerrainTester);
+                TerrainTester tester = new TerrainTester(new FloatCoords {x = 0, y = 120})
+                {
+                    Text = $"Chunk: {WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).x},{WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).y} "
+                };
+                gameModel.GuiTextList.Add(tester);
+            }
 
             // Update Buildings on screen
             List<IViewImage> buildings = new List<IViewImage>();
@@ -529,6 +535,7 @@ namespace kbs2.GamePackage
 
                 QPressed = true;
             }
+
             if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D2))
             {
                 DBController.OpenConnection("DefDex.db");
@@ -536,7 +543,7 @@ namespace kbs2.GamePackage
                 DBController.CloseConnection();
 
                 MouseState temp = Mouse.GetState();
-                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
                 Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
                     WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
                     gameView.TileSize);
@@ -555,7 +562,7 @@ namespace kbs2.GamePackage
                 if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
                 {
                     BUCController building = BUCFactory.CreateNewBUC(def, coords,
-                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                        30 + (int) eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
@@ -564,6 +571,7 @@ namespace kbs2.GamePackage
 
                 QPressed = true;
             }
+
             if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D3))
             {
                 DBController.OpenConnection("DefDex.db");
@@ -571,7 +579,7 @@ namespace kbs2.GamePackage
                 DBController.CloseConnection();
 
                 MouseState temp = Mouse.GetState();
-                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
                 Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
                     WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
                     gameView.TileSize);
@@ -590,7 +598,7 @@ namespace kbs2.GamePackage
                 if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
                 {
                     BUCController building = BUCFactory.CreateNewBUC(def, coords,
-                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                        30 + (int) eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
@@ -599,6 +607,7 @@ namespace kbs2.GamePackage
 
                 QPressed = true;
             }
+
             if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D4))
             {
                 DBController.OpenConnection("DefDex.db");
@@ -606,7 +615,7 @@ namespace kbs2.GamePackage
                 DBController.CloseConnection();
 
                 MouseState temp = Mouse.GetState();
-                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
                 Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
                     WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
                     gameView.TileSize);
@@ -625,7 +634,7 @@ namespace kbs2.GamePackage
                 if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
                 {
                     BUCController building = BUCFactory.CreateNewBUC(def, coords,
-                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                        30 + (int) eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
@@ -634,6 +643,7 @@ namespace kbs2.GamePackage
 
                 QPressed = true;
             }
+
             if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D5))
             {
                 DBController.OpenConnection("DefDex.db");
@@ -641,7 +651,7 @@ namespace kbs2.GamePackage
                 DBController.CloseConnection();
 
                 MouseState temp = Mouse.GetState();
-                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
                 Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
                     WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
                     gameView.TileSize);
@@ -660,7 +670,7 @@ namespace kbs2.GamePackage
                 if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
                 {
                     BUCController building = BUCFactory.CreateNewBUC(def, coords,
-                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                        30 + (int) eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;
@@ -669,6 +679,7 @@ namespace kbs2.GamePackage
 
                 QPressed = true;
             }
+
             if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.D6))
             {
                 DBController.OpenConnection("DefDex.db");
@@ -676,7 +687,7 @@ namespace kbs2.GamePackage
                 DBController.CloseConnection();
 
                 MouseState temp = Mouse.GetState();
-                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+                Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
                 Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
                     WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
                     gameView.TileSize);
@@ -695,7 +706,7 @@ namespace kbs2.GamePackage
                 if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
                 {
                     BUCController building = BUCFactory.CreateNewBUC(def, coords,
-                        30 + (int)eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
+                        30 + (int) eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
                     gameModel.World.AddBuildingUnderCunstruction(def, building);
                     building.World = gameModel.World;
                     building.gameController = this;

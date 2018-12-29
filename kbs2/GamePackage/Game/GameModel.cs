@@ -7,6 +7,7 @@ using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage.Interfaces;
 using kbs2.View.GUI.ActionBox;
+using kbs2.WorldEntity.Pathfinder;
 
 namespace kbs2.GamePackage
 {

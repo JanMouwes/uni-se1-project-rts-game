@@ -98,12 +98,8 @@ namespace kbs2.Desktop.World.World
 
         public WorldCellController GetCellFromCoords(Coords coords)
         {
-            Coords ChunkCoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);
-            if (WorldModel.ChunkGrid.ContainsKey(ChunkCoords))
-            {
-                return WorldModel.ChunkGrid[ChunkCoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x,20), ModulusUtils.mod(coords.y,20)];
-            }
-            return null;
+            Coords chunkCoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);
+            return WorldModel.ChunkGrid.ContainsKey(chunkCoords) ? WorldModel.ChunkGrid[chunkCoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x,20), ModulusUtils.mod(coords.y,20)] : null;
         }
 
 
