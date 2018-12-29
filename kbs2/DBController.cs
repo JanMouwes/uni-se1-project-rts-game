@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using kbs2.Unit.Model;
+using kbs2.World;
+using kbs2.World.Cell;
+using kbs2.World.Chunk;
+using kbs2.World.Enums;
+using kbs2.World.Structs;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Unit;
@@ -113,6 +118,151 @@ namespace kbs2
             return returnedUnitDef;
         }
 
+        public static void SaveChunk(WorldChunkController worldChunk, int worldId)
+        {
+            int ChunkId = -1;
+            string query = $"INSERT INTO Save_World_Chunk( World_Id, xCoord, yCoord) VALUES(@World_Id, @xCoord, @yCoord)";
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@World_Id", worldId));
+                cmd.Parameters.Add(new SqliteParameter("@xCoord", worldChunk.WorldChunkModel.ChunkCoords.x));
+                cmd.Parameters.Add(new SqliteParameter("@yCoord", worldChunk.WorldChunkModel.ChunkCoords.y));
+
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ChunkId = int.Parse(reader["id"].ToString());
+                    }
+                }
+            }
+            if(ChunkId == -1)
+            {
+                throw new System.ArgumentException();
+            }
+            foreach(WorldCellController worldCell in worldChunk.WorldChunkModel.grid)
+            {
+                SaveCell(worldCell, ChunkId);
+
+            }
+        }
+
+        public static List<WorldChunkController> LoadChunks(int WorldId)
+        {
+            List<WorldChunkController> ChunkList = new List<WorldChunkController>();
+            string query = $"SELECT * FROM Save_World_Chunk WHERE World_Id=@WorldId";
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@WorldId", WorldId));
+
+
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int ChunkId = int.Parse(reader["id"].ToString());
+                        int x = int.Parse(reader["xCoord"].ToString());
+                        int y = int.Parse(reader["yCoord"].ToString());
+                        Coords coords = new Coords { x = x, y = y };
+                        ChunkList.Add(LoadChunk(ChunkId, coords));
+                    }
+                }
+            }
+
+            return ChunkList;
+        }
+
+        public static WorldChunkController LoadChunk(int ChunkId,Coords coords)
+        {
+            WorldChunkController worldChunk = new WorldChunkController(coords);
+            for(int x =0; x<WorldChunkModel.ChunkSize; x++)
+            {
+                for (int y = 0; y < WorldChunkModel.ChunkSize; y++)
+                {
+                    worldChunk.WorldChunkModel.grid[x, y] = LoadCell(ChunkId, new Coords { x = x, y = y });
+                }
+            }
+            return worldChunk;
+        }
+
+        public static void SaveCell(WorldCellController worldCell, int ChunkId)
+        {
+            string query = $"INSERT INTO Save_World_Cell(Chunk_Id, Terrain_Id, Base_Terrain_Id, xCoord, yCoord) VALUES(@ChunkId, @TerrainId, @BaseTerrainId, @xCoord, @yCoord)";
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@ChunkId", ChunkId));
+                cmd.Parameters.Add(new SqliteParameter("@TerrainId", GetTerrianTypeId(worldCell.worldCellModel.Terrain)));
+                cmd.Parameters.Add(new SqliteParameter("@BaseTerrainId", GetTerrianTypeId(worldCell.worldCellModel.BaseTerrain)));
+                cmd.Parameters.Add(new SqliteParameter("@xCoord", worldCell.worldCellModel.RealCoords.x));
+                cmd.Parameters.Add(new SqliteParameter("@yCoord", worldCell.worldCellModel.RealCoords.y));
+
+                using (SqliteDataReader reader = cmd.ExecuteReader()) ;
+            }
+        }
+
+        public static WorldCellController LoadCell(int ChunkId, Coords coords)
+        {
+            WorldCellController worldCellController;
+            TerrainType terrain = TerrainType.Default;
+            TerrainType baseTerrain = TerrainType.Default;
+            string query = $"SELECT * FROM Save_World_Cell WHERE Chunk_Id=@ChunkId AND xCoord=@xCoord AND yCoord=@yCoord";
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@ChunkId", ChunkId));
+                cmd.Parameters.Add(new SqliteParameter("@xCoord", coords.x));
+                cmd.Parameters.Add(new SqliteParameter("@yCoord", coords.y));
+                
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        terrain = GetTerrainType(int.Parse(reader["Terrain_Id"].ToString()));
+                        baseTerrain = GetTerrainType(int.Parse(reader["Base_Terrain_Id"].ToString()));
+                    }
+                }
+            }
+            worldCellController = new WorldCellController((FloatCoords)coords, baseTerrain);
+            worldCellController.ChangeTerrain(terrain);
+            return worldCellController;
+        }
+
+        public static TerrainType GetTerrainType(int id)
+        {
+            string query = $"SELECT Name FROM TerrainDef WHERE Id=@i";
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@i", id));
+
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string Name = reader["Name"].ToString();
+                        return (TerrainType)Enum.Parse(typeof(TerrainType),Name, true);
+                    }
+                }
+            }
+            return TerrainType.Default;
+        }
+
+        public static int GetTerrianTypeId(TerrainType terrainType)
+        {
+            string query = $"SELECT Id FROM TerrainDef WHERE Name=@i";
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@i", terrainType.ToString()));
+
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        return int.Parse(reader["Id"].ToString());
+                    }
+                }
+            }
+            return -1;
+        }
+
         //// Retrieves all units assigned to the given faction    CHANGE int factionName to string factionName if easier
         //public static List<Unit_Model> GetUnitsFromFaction(int factionName)
         //{
@@ -163,5 +313,7 @@ namespace kbs2
         //    // Return the Unit_Model list
         //    return units;
         //}
+
+
     }
 }
