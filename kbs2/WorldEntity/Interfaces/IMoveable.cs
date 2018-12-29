@@ -9,6 +9,6 @@ namespace kbs2.WorldEntity.Interfaces
 {
     public interface IMoveable
     {
-        void MoveTo(FloatCoords target,bool CTRL);
+        void MoveTo(FloatCoords target,bool isQueueKeyPressed);
     }
 }

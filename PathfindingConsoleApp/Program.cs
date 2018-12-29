@@ -6,6 +6,7 @@ using kbs2.World.Enums;
 using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Location;
+using kbs2.WorldEntity.Pathfinder;
 using kbs2.WorldEntity.Unit;
 
 namespace PathfindingConsoleApp
@@ -68,7 +69,7 @@ namespace PathfindingConsoleApp
             Console.WriteLine();
 
 
-            Pathfinder pathfinder = new Pathfinder(world.WorldModel, 150);
+            Pathfinder pathfinder = new Pathfinder(world, 150);
 
 
             Location_Model locationModel = new Location_Model(0, 0);

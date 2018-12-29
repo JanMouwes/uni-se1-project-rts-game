@@ -36,10 +36,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoordsCalculatorTests.cs" />
     <Compile Include="CurrencyTest.cs" />
     <Compile Include="CameraTests.cs" />
     <Compile Include="FactionTests.cs" />
     <Compile Include="GameControllerTests.cs" />
+    <Compile Include="ModulusUtilsTests.cs" />
     <Compile Include="PathfinderTests.cs" />
     <Compile Include="ResourceTests.cs" />
     <Compile Include="WorldControllerTests.cs" />
