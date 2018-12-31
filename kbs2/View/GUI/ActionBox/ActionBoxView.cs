@@ -1,4 +1,5 @@
 ﻿using kbs2.GamePackage.Interfaces;
+using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 using System;
@@ -17,6 +18,8 @@ namespace kbs2.View.GUI.ActionBox
         public string Texture { get; set; }
         public Color Colour { get; set; }
         public int ZIndex { get; set; }
+
+        public ViewMode ViewMode => ViewMode.Full;
 
         public ActionBoxView(FloatCoords loc)
         {

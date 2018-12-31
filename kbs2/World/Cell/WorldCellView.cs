@@ -18,10 +18,13 @@ namespace kbs2.World.Cell
         public Color Colour { get; set; } = Color.White;
         public int ZIndex { get; set; } = 1;
 
+        public ViewMode ViewMode { get; set; }
+
         public WorldCellView(FloatCoords coords, string texture)
         {
             Coords = coords;
             Texture = texture;
+            ViewMode = ViewMode.None;
         }
 
         public WorldCellView(FloatCoords coords, string texture, float width, float height, Color color, int zIndex) : this(coords, texture)

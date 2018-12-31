@@ -50,9 +50,19 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Actions\ActionMVC\ActionController.cs" />
-    <Compile Include="Actions\ActionMVC\ActionModel.cs" />
-    <Compile Include="Actions\ActionMVC\ActionView.cs" />
+    <Compile Include="Actions\GameActionDefs\GameActionDef.cs" />
+    <Compile Include="Actions\GameActionDefs\SpawnActionDef.cs" />
+    <Compile Include="Actions\GameActionFactory.cs" />
+    <Compile Include="Actions\ActionModels\SpawnActionModel.cs" />
+    <Compile Include="Actions\GameActionGrid\GameActionTabItem.cs" />
+    <Compile Include="Actions\GameActionGrid\GameActionTabModel.cs" />
+    <Compile Include="Actions\GameActions\GameAction.cs" />
+    <Compile Include="Actions\GameActions\ActionView.cs" />
+    <Compile Include="Actions\GameActions\CooldownView.cs" />
+    <Compile Include="Actions\GameActions\SpawnAction.cs" />
+    <Compile Include="Actions\IActionModel.cs" />
+    <Compile Include="Actions\Interfaces\IGameAction.cs" />
+    <Compile Include="Actions\Interfaces\IGameActionDef.cs" />
     <Compile Include="DBController.cs" />
     <Compile Include="Faction\CurrencyMVC\CurrencyView.cs" />
     <Compile Include="Faction\Enums\Faction_Relations.cs" />
@@ -62,6 +72,7 @@
     <Compile Include="Faction\Interfaces\IHasFactionBuilding.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionRelationship.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionUnit.cs" />
+    <Compile Include="GamePackage\FogController.cs" />
     <Compile Include="GamePackage\GameSaveManager\DataBaseContext.cs" />
     <Compile Include="GamePackage\GameSaveManager\GameSaveManager.cs" />
     <Compile Include="GamePackage\TerrainTester.cs" />
@@ -87,10 +98,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInterface\ActionBar\ActionBarView.cs" />
     <Compile Include="UserInterface\ActionBar\ActionBarModel.cs" />
-    <Compile Include="UserInterface\ActionInterface.cs" />
+    <Compile Include="UserInterface\BuildGameActions.cs" />
+    <Compile Include="UserInterface\GameActionGui\GameActionGuiController.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarView.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarModel.cs" />
-    <Compile Include="UserInterface\BuildActions.cs" />
+    <Compile Include="UserInterface\GameActionGui\GameActionGuiModel.cs" />
+    <Compile Include="UserInterface\GameActionGui\GameActionGuiView.cs" />
     <Compile Include="UserInterface\LeftButtonBar.cs" />
     <Compile Include="UserInterface\MiniMap\MiniMapBar.cs" />
     <Compile Include="UserInterface\MiniMap\MiniMapModel.cs" />
@@ -100,6 +113,7 @@
     <Compile Include="UserInterface\UIView.cs" />
     <Compile Include="utils\CoordsCalculator.cs" />
     <Compile Include="utils\CoordsConsoleUtil.cs" />
+    <Compile Include="utils\ActionButtonPosition.cs" />
     <Compile Include="utils\DistanceCalculator.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="utils\WorldPositionCalculator.cs" />
@@ -116,18 +130,25 @@
     <Compile Include="WorldEntity\Building\BuildingDef.cs" />
     <Compile Include="WorldEntity\Building\BuildingFactory.cs" />
     <Compile Include="WorldEntity\Building\BuildingMVC\BuildingView.cs" />
-    <Compile Include="WorldEntity\Building\BuildingMVC\Building_Controller.cs" />
+    <Compile Include="WorldEntity\Building\BuildingMVC\BuildingController.cs" />
     <Compile Include="WorldEntity\Building\BuildingMVC\Building_Model.cs" />
     <Compile Include="WorldEntity\Building\BuildingUnderConstruction.cs" />
+    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\ConstructingBuildingDef.cs" />
     <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\ConstructionCounter.cs" />
     <Compile Include="WorldEntity\Building\FactoryMVC\FactoryController.cs" />
     <Compile Include="WorldEntity\Building\FactoryMVC\FactoryModel.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
-    <Compile Include="WorldEntity\Interfaces\IHasActions.cs" />
+    <Compile Include="WorldEntity\Interfaces\IHasGameActions.cs" />
     <Compile Include="WorldEntity\Interfaces\IMoveable.cs" />
-    <Compile Include="WorldEntity\Interfaces\ISelectable.cs" />
+    <Compile Include="WorldEntity\Interfaces\ISpawnable.cs" />
+    <Compile Include="WorldEntity\Interfaces\ISpawnableDef.cs" />
+    <Compile Include="WorldEntity\Interfaces\IStructure.cs" />
+    <Compile Include="WorldEntity\Interfaces\IStructureDef.cs" />
+    <Compile Include="WorldEntity\Interfaces\ITargetable.cs" />
+    <Compile Include="WorldEntity\Interfaces\IWorldEntity.cs" />
+    <Compile Include="WorldEntity\Interfaces\IWorldEntityDef.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
     <Compile Include="WorldEntity\Pathfinder\Exceptions\NoPathFoundException.cs" />
@@ -142,7 +163,8 @@
     <Compile Include="WorldEntity\Structs\BattleValue.cs" />
     <Compile Include="WorldEntity\Structs\CostValue.cs" />
     <Compile Include="WorldEntity\Structs\Level.cs" />
-    <Compile Include="WorldEntity\Unit\MVC\Unit_Controller.cs" />
+    <Compile Include="WorldEntity\Structs\ViewValues.cs" />
+    <Compile Include="WorldEntity\Unit\MVC\UnitController.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_Model.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_View.cs" />
     <Compile Include="WorldEntity\Unit\UnitDef.cs" />
@@ -167,7 +189,7 @@
     <Compile Include="World\Enums\TerrainType.cs" />
     <Compile Include="World\Enums\ViewMode.cs" />
     <Compile Include="GamePackage\Enums\GameState.cs" />
-    <Compile Include="Faction\Interfaces\IHasFaction.cs" />
+    <Compile Include="Faction\Interfaces\IFactionMember.cs" />
     <Compile Include="World\Def\TerrainDef.cs" />
     <Compile Include="World\World\WorldController.cs" />
     <Compile Include="World\World\WorldFactory.cs" />
@@ -178,10 +200,10 @@
     <Compile Include="Factory\ResourceMVC\ResourceController.cs" />
     <Compile Include="Factory\ResourceMVC\ResourceModel.cs" />
     <Compile Include="Factory\Enums\ResourceType.cs" />
-    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCModel.cs" />
-    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCController.cs" />
-    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCView.cs" />
-    <Compile Include="WorldEntity\Building\BUCFactory.cs" />
+    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\ConstructingBuildingModel.cs" />
+    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\ConstructingBuildingController.cs" />
+    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\ConstructingBuildingView.cs" />
+    <Compile Include="WorldEntity\Building\ConstructingBuildingFactory.cs" />
     <Compile Include="WorldEntity\Interfaces\IImpassable.cs" />
     <Compile Include="WorldEntity\WorldEntitySpawner\EntitySpawner.cs" />
   </ItemGroup>
@@ -294,7 +316,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\DesktopGL\AnyCPU\Debug\DefDex.db" />
     <Content Include="DefDex.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
