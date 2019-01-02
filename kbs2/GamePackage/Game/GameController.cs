@@ -225,22 +225,6 @@ namespace kbs2.GamePackage
             onTick += GameModel.MouseInput.Selection.Update;
             GameModel.MouseInput.Selection.onSelectionChanged += ChangeSelection;
 
-            StatusBarView statusBarView = new StatusBarView(this);
-            LeftButtonBar leftButtonBar = new LeftButtonBar(this);
-            RightButtonBar rightButtonBar = new RightButtonBar(this);
-
-            BottomBarView bottomBarView = new BottomBarView(this);
-            MiniMapBar miniMap = new MiniMapBar(this);
-            ActionBarView actionBar = new ActionBarView(this);
-
-            GameModel.GuiItemList.Add(statusBarView);
-            GameModel.GuiItemList.Add(leftButtonBar);
-            GameModel.GuiItemList.Add(rightButtonBar);
-            GameModel.GuiItemList.Add(bottomBarView);
-            GameModel.GuiItemList.Add(miniMap);
-            GameModel.GuiItemList.Add(actionBar);
-
-
             //TESTCODE
             DBController.OpenConnection("DefDex.db");
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
@@ -357,6 +341,8 @@ namespace kbs2.GamePackage
             GameModel.GuiTextList.Clear();
 
             // ============== Temp Code ===================================================================
+
+
 
             MouseState temp = Mouse.GetState();
             Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
