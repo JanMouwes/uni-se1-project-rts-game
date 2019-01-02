@@ -90,7 +90,6 @@ namespace kbs2
                 {
                     while (reader.Read())
                     {
-                        Console.WriteLine(reader["Speed"]);
                         returnedUnitDef.Speed = float.Parse(reader["Speed"].ToString());
                         returnedUnitDef.Image = reader["Image"].ToString();
                         returnedUnitDef.Width = float.Parse(reader["Width"].ToString());
