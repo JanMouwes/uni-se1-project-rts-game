@@ -149,7 +149,8 @@ namespace kbs2.GamePackage
                             && BottomRight.y >= Item.StartCoords.y + (Item.Heigth / 2)
                             select Item).Cast<IHasGameActions>().ToList();
             }
-            return Selected;
+
+            return selected;
         }
 
         // selects units in selectionbox
@@ -188,7 +189,7 @@ namespace kbs2.GamePackage
             {
                 if(unit.GetType() == typeof(UnitController))
                 {
-                    ((IMoveable)unit).MoveTo(target, CTRL);
+                    ((IMoveable) unit).MoveTo(target, CTRL);
                 }
             }
         }
@@ -199,13 +200,13 @@ namespace kbs2.GamePackage
             LeftView.Coords = TopLeft;
             LeftView.Height = Math.Abs(BottomRight.y - TopLeft.y);
 
-            RightView.Coords = new FloatCoords {x = BottomRight.x - RightView.Width, y = TopLeft.y };
+            RightView.Coords = new FloatCoords {x = BottomRight.x - RightView.Width, y = TopLeft.y};
             RightView.Height = Math.Abs(BottomRight.y - TopLeft.y);
 
             TopView.Coords = TopLeft;
             TopView.Width = Math.Abs(BottomRight.x - TopLeft.x);
 
-            BottomView.Coords = new FloatCoords { x = TopLeft.x, y = BottomRight.y - BottomView.Height };
+            BottomView.Coords = new FloatCoords {x = TopLeft.x, y = BottomRight.y - BottomView.Height};
             BottomView.Width = Math.Abs(BottomRight.x - TopLeft.x);
 
 

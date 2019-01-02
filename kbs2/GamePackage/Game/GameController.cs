@@ -32,6 +32,7 @@ using kbs2.Faction.FactionMVC;
 using kbs2.UserInterface.GameActionGui;
 using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Pathfinder;
 using kbs2.WorldEntity.Structs;
 using kbs2.WorldEntity.WorldEntitySpawner;
 using MonoGame.Extended.Timers;
@@ -71,7 +72,7 @@ namespace kbs2.GamePackage
         public GameActionGuiController GameActionGui { get; set; }
         public bool PreviousQPressed { get; set; }
         public bool APressed { get; set; }
-        public Terraintester Terraintester { get; set; }
+        public TerrainTester TerrainTester { get; set; }
         public FogController FogController { get; set; }
 
         public event ElapsedEventHandler GameTick
@@ -190,7 +191,7 @@ namespace kbs2.GamePackage
             GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.SimplexFractal);
 
             // Pathfinder 
-            GameModel.pathfinder = new Pathfinder(GameModel.World.WorldModel, 500);
+            gameModel.pathfinder = new Pathfinder(gameModel.World, 500);
 
             // Spawner
             Spawner = new EntitySpawner(this);
@@ -228,7 +229,7 @@ namespace kbs2.GamePackage
             //TESTCODE
             PreviousQPressed = false;
             APressed = false;
-            Terraintester = new Terraintester();
+            TerrainTester = new TerrainTester();
 
 
             onTick += SetBuilding;
@@ -259,13 +260,14 @@ namespace kbs2.GamePackage
 
             for (int i = 0; i < 12; i++)
             {
-                FloatCoords coords = new FloatCoords {x = i, y = 5};
-                UnitController unit = UnitFactory.CreateNewUnit(unitdef, coords, GameModel.World.WorldModel, PlayerFaction);
+                Unit_Controller unit =
+                    UnitFactory.CreateNewUnit(unitdef, new Coords {x = i, y = 5}, gameModel.World);
 
                 unit.UnitModel.Speed = 0.05f;
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 Spawner.SpawnUnit(unit, (Coords) coords);
                 PlayerFaction.currency_Controller.AddUpkeepCost(unitdef.Upkeep);
+                onTick += unit.LocationController.Update;
             }
 
             //============= More TestCode ===============
@@ -377,11 +379,20 @@ namespace kbs2.GamePackage
             Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
             if (GameModel.World.GetCellFromCoords(coords) != null)
             {
-                Terraintester.Text = $"{coords.x},{coords.y}  {GameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}";
-                Terraintester.Colour = GameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop != null ? Color.Red : Color.Blue;
-            }
+                TerrainTester.Text =
+                    $"{coords.x},{coords.y}  {gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}";
+                if (gameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop != null)
+                {
+                    TerrainTester.Text += " b";
+                }
 
-            GameModel.GuiTextList.Add(Terraintester);
+                gameModel.GuiTextList.Add(TerrainTester);
+                TerrainTester tester = new TerrainTester(new FloatCoords {x = 0, y = 120})
+                {
+                    Text = $"Chunk: {WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).x},{WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).y} "
+                };
+                gameModel.GuiTextList.Add(tester);
+            }
 
             // Update Buildings on screen
             List<IViewImage> buildings = (
