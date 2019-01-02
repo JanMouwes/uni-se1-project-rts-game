@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
@@ -9,12 +10,16 @@ using kbs2.World.World;
 using kbs2.WorldEntity.Location;
 using kbs2.WorldEntity.Pathfinder.Exceptions;
 using kbs2.WorldEntity.Structs;
+using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Pathfinder
 {
     public class Pathfinder
     {
-        public const int DEFAULT_SEARCH_LIMIT = 500;
+        private const int DEFAULT_SEARCH_LIMIT = 500;
+
+        private const bool ENABLE_ANIMATION = false;
+        private const int ANIMATION_DELAY_MILLIS = 200;
 
         private WorldController worldController;
         private int SearchLimit { get; }
@@ -52,22 +57,19 @@ namespace kbs2.WorldEntity.Pathfinder
 
             FloatCoords currentCoords = unit.FloatCoords;
 
+            bool IsPreviousNode(Coords target) => currentPath.Last?.Previous != null && (Coords) currentPath.Last.Previous.Value == target;
+
             while ((Coords) currentCoords != (Coords) targetCoords)
             {
-                //    Check if we took a step back and thus are on a node we were previously
-                if (!visitedCoords.Contains((Coords) currentCoords))
-                {
-                    visitedCoords.Add((Coords) currentCoords);
-                }
-
                 Dictionary<Coords, CellWeightValues> currentNeighbours = CalculateNeighboursWeights((Coords) currentCoords, (Coords) targetCoords, unit);
 
-                //    Find most probable cell
+                //    Find most probable cell,
+                //    WHERE:
+                //    1. NOT Cell has been visited and isn't the previous node
                 List<FloatCoords> mostProbableCandidates = (
                     from KeyValuePair<Coords, CellWeightValues> pair in currentNeighbours
-                    where !(visitedCoords.Contains(pair.Key) //    Coords' been visited AND isn't the previous Coords AND isn't blocked by diagonals
-                            && currentPath.Last.Previous != null
-                            && currentPath.Last.Previous.Value != (FloatCoords) pair.Key)
+                    where !(visitedCoords.Contains(pair.Key)
+                            && !IsPreviousNode(pair.Key))
                           && !IsDiagonalPathBlocked((Coords) currentCoords, pair.Key, unit)
                     let cellWeightValues = pair.Value
                     orderby cellWeightValues.Weight, cellWeightValues.AbsoluteDistanceToTarget
@@ -77,13 +79,35 @@ namespace kbs2.WorldEntity.Pathfinder
 
                 FloatCoords mostProbableCoords = mostProbableCandidates.First();
 
-                //    Take a step back if all other options invalid
-                if (currentPath.Last == null
-                    || !(currentPath.Last.Previous != null
-                         && mostProbableCoords == currentPath.Last.Previous.Value
-                         || unitCoordsCalculator.DistanceToFloatCoords(mostProbableCoords) > SearchLimit) || targetCoordsCalculator.DistanceToFloatCoords(mostProbableCoords) > SearchLimit)
+                if (ENABLE_ANIMATION)
+                {
+                    worldController.GetCellFromCoords((Coords) currentCoords).worldCellView.Colour = Color.Red;
+                    worldController.GetCellFromCoords((Coords) mostProbableCoords).worldCellView.Colour = Color.Blue;
+                    Thread.Sleep(ANIMATION_DELAY_MILLIS);
+                }
+
+                if (!visitedCoords.Contains((Coords) mostProbableCoords))
+                {
+                    visitedCoords.Add((Coords) mostProbableCoords);
+                }
+
+                //    Add to list if mostProbableCoords:
+                //    1. The path is empty
+                //    2. OR the node isn't in the path AND it isn't too far away
+                //    Else, if mostProbableCoords is already known, move to that node
+                if (!currentPath.Any()
+                    || !currentPath.Contains(mostProbableCoords)
+                    && !(unitCoordsCalculator.DistanceToFloatCoords(mostProbableCoords) > SearchLimit
+                         || targetCoordsCalculator.DistanceToFloatCoords(mostProbableCoords) > SearchLimit))
                 {
                     currentPath.AddLast(mostProbableCoords);
+                }
+                else if (currentPath.Contains(mostProbableCoords))
+                {
+                    while ((Coords) currentPath.Last.Value != (Coords) mostProbableCoords)
+                    {
+                        currentPath.RemoveLast();
+                    }
                 }
 
                 currentCoords = currentPath.Last.Value;
@@ -100,7 +124,9 @@ namespace kbs2.WorldEntity.Pathfinder
         private Dictionary<Coords, CellWeightValues> CalculateNeighboursWeights(Coords currentCell, Coords targetCoords, LocationModel unit)
         {
             CoordsCalculator coordsCalculator = new CoordsCalculator((FloatCoords) currentCell);
-            FloatCoords[] neighbours = coordsCalculator.GetNeighbours();
+            FloatCoords[] neighbours = new FloatCoords[8];
+
+            coordsCalculator.GetNeighbours().CopyTo(neighbours, 0);
 
             return (from neighbour in neighbours
                 where worldController.GetCellFromCoords((Coords) neighbour) != null

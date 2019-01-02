@@ -95,6 +95,7 @@ namespace kbs2
                         returnedUnitDef.Width = float.Parse(reader["Width"].ToString());
                         returnedUnitDef.Height = float.Parse(reader["Height"].ToString());
                         returnedUnitDef.Upkeep = float.Parse(reader["Upkeep"].ToString());
+                        returnedUnitDef.PurchaseCost = float.Parse(reader["Cost"].ToString());
 
 
                         // This is for the different defs not implemented yet
