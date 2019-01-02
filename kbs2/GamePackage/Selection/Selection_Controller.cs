@@ -130,19 +130,19 @@ namespace kbs2.GamePackage
         // get all buildings from selectionbox
         public List<IHasGameActions> SelectBuildings()
         {
-            List<IHasGameActions> Selected;
-            if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
+            List<IHasGameActions> selected;
+            if (DistanceCalculator.DiagonalDistance(TopLeft, BottomRight) < 0.5)
             {
-                Selected = new List<IHasGameActions>();
+                selected = new List<IHasGameActions>();
                 WorldCellModel cell = gameController.GameModel.World.GetCellFromCoords((Coords)TopLeft).worldCellModel;
                 if (cell.BuildingOnTop != null)
                 {
-                    Selected.Add((IHasGameActions)cell.BuildingOnTop);
+                    selected.Add((IHasGameActions)cell.BuildingOnTop);
                 }
             }
             else
             {
-                Selected = (from Item in gameController.PlayerFaction.FactionModel.Buildings
+                selected = (from Item in gameController.PlayerFaction.FactionModel.Buildings
                             where TopLeft.x <= Item.StartCoords.x + (Item.With / 2)
                             && TopLeft.y <= Item.StartCoords.y + (Item.Heigth / 2)
                             && BottomRight.x >= Item.StartCoords.x + (Item.With / 2)
@@ -156,24 +156,24 @@ namespace kbs2.GamePackage
         // selects units in selectionbox
         public List<IHasGameActions> SelectUnits()
         {
-            List<UnitController> Selected;
-            if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
+            List<UnitController> selected;
+            if (DistanceCalculator.DiagonalDistance(TopLeft, BottomRight) < 0.5)
             {
-                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                            where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.FloatCoords) < 0.5
-                            || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.FloatCoords) < Item.UnitView.Height
+                selected = (from Item in gameController.PlayerFaction.FactionModel.Units
+                            where DistanceCalculator.DiagonalDistance(TopLeft, Item.LocationController.LocationModel.FloatCoords) < 0.5
+                            || DistanceCalculator.DiagonalDistance(TopLeft, Item.LocationController.LocationModel.FloatCoords) < Item.UnitView.Height
                             select Item).ToList();
             }
             else
             {
-                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
+                selected = (from Item in gameController.PlayerFaction.FactionModel.Units
                             where TopLeft.x <= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
                             && TopLeft.y <= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
                             && BottomRight.x >= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
                             && BottomRight.y >= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
                             select Item).ToList();
             }
-            return Selected.Cast<IHasGameActions>().ToList();
+            return selected.Cast<IHasGameActions>().ToList();
             
         }
 

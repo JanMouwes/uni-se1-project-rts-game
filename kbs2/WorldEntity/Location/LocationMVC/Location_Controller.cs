@@ -63,20 +63,20 @@ namespace kbs2.WorldEntity.Location.LocationMVC
         {
             if (!Waypoints.Any()) return;
 
-            float speed = LocationModel.parent.UnitModel.Speed;
+            float speed = LocationModel.Parent.UnitModel.Speed;
 
-            if (DistanceCalculator.DiagonalDistance(Waypoints.Peek(), LocationModel.floatCoords) < speed)
+            if (DistanceCalculator.DiagonalDistance(Waypoints.Peek(), LocationModel.FloatCoords) < speed)
             {
                 // Arrived near destination
-                LocationModel.floatCoords = Waypoints.Dequeue();
+                LocationModel.FloatCoords = Waypoints.Dequeue();
 
-                if (!Waypoints.Any()) MoveComplete?.Invoke(this, new EventArgsWithPayload<FloatCoords>(LocationModel.floatCoords));
+                if (!Waypoints.Any()) MoveComplete?.Invoke(this, new EventArgsWithPayload<FloatCoords>(LocationModel.FloatCoords));
 
                 return;
             }
 
-            float xDifference = (float) DistanceCalculator.CalcDistance(LocationModel.floatCoords.x, Waypoints.Peek().x);
-            float yDifference = (float) DistanceCalculator.CalcDistance(LocationModel.floatCoords.y, Waypoints.Peek().y);
+            float xDifference = (float) DistanceCalculator.CalcDistance(LocationModel.FloatCoords.x, Waypoints.Peek().x);
+            float yDifference = (float) DistanceCalculator.CalcDistance(LocationModel.FloatCoords.y, Waypoints.Peek().y);
 
             // calculate new coords
             float diagonalDifference = (float) DistanceCalculator.Pythagoras(xDifference, yDifference);
@@ -88,11 +88,11 @@ namespace kbs2.WorldEntity.Location.LocationMVC
                 y = yDifference / v
             };
 
-            difference.x = Waypoints.Peek().x < LocationModel.floatCoords.x ? -difference.x : difference.x;
-            LocationModel.floatCoords.x = LocationModel.floatCoords.x + difference.x;
+            difference.x = Waypoints.Peek().x < LocationModel.FloatCoords.x ? -difference.x : difference.x;
+            LocationModel.FloatCoords.x = LocationModel.FloatCoords.x + difference.x;
 
-            difference.y = Waypoints.Peek().y < LocationModel.floatCoords.y ? -difference.y : difference.y;
-            LocationModel.floatCoords.y = LocationModel.floatCoords.y + difference.y;
+            difference.y = Waypoints.Peek().y < LocationModel.FloatCoords.y ? -difference.y : difference.y;
+            LocationModel.FloatCoords.y = LocationModel.FloatCoords.y + difference.y;
         }
     }
 }

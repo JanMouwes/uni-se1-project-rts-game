@@ -45,9 +45,10 @@ namespace kbs2.WorldEntity.Unit
             return unitController;
         }
 
-        public UnitFactory(Faction_Controller faction)
+        public UnitFactory(Faction_Controller faction, GameController game)
         {
             this.faction = faction;
+            this.game = game;
         }
 
         public UnitController CreateNewUnit(UnitDef def)

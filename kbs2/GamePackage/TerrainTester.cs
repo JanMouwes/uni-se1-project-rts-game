@@ -10,17 +10,9 @@ using System.Threading.Tasks;
 
 namespace kbs2.GamePackage
 {
-    public class Terraintester : IViewText
+    public class TerrainTester : IViewText
     {
-        public FloatCoords Coords
-        {
-            get => new FloatCoords()
-            {
-                x = 0,
-                y = 100
-            };
-            set => throw new NotImplementedException();
-        }
+        public FloatCoords Coords { get; set; }
 
         public string SpriteFont
         {
@@ -39,5 +31,10 @@ namespace kbs2.GamePackage
         }
 
         public ViewMode ViewMode => ViewMode.Full;
+
+        public TerrainTester(FloatCoords coords)
+        {
+            Coords = coords;
+        }
     }
 }
