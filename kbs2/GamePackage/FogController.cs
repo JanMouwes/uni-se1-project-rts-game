@@ -99,7 +99,9 @@ namespace kbs2.GamePackage
         {
             foreach (UnitController unit in worldController.WorldModel.Units)
             {
-                if (worldController.GetCellFromCoords(unit.LocationController.LocationModel.Coords).worldCellView.ViewMode == ViewMode.Full)
+                
+                
+                if (worldController.GetCellFromCoords((Coords) unit.FloatCoords).worldCellView.ViewMode == ViewMode.Full)
                 {
                     unit.UnitView.ViewMode = ViewMode.Full;
                 }
@@ -125,7 +127,6 @@ namespace kbs2.GamePackage
                 foreach (var cell in grid.Value.WorldChunkModel.grid)
                 {
                     cell.worldCellModel.ViewMode = ViewMode.Full;
-                    cell.worldCellView.ViewMode = ViewMode.Full;
                 }
             }
         }

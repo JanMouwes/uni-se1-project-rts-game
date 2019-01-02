@@ -83,7 +83,7 @@ namespace kbs2.GamePackage
 
         public event GameSpeedObserver GameSpeedChange;
 
-        DayController f = new DayController();
+        private readonly DayController f = new DayController();
 
         public Faction_Controller PlayerFaction = new Faction_Controller("PlayerFaction");
 
@@ -456,7 +456,7 @@ namespace kbs2.GamePackage
             //updates the viewmode for everything on screen
 
             // comment line bellow to turn on fog
-            FogController.UpdateEverythingVisible();
+//            FogController.UpdateEverythingVisible();
 
             // Calls the game update
 
