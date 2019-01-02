@@ -2,6 +2,7 @@
 using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
+using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building.BuildingMVC;
@@ -98,5 +99,26 @@ namespace kbs2.GamePackage
                 }
             }
         }
+
+        /// <summary>
+        /// Makes everything visible on screen
+        /// </summary>
+        public void UpdateEverythingVisible()
+        {
+            foreach (UnitController unit in worldController.WorldModel.Units)
+            {
+                    unit.UnitView.ViewMode = ViewMode.Full;
+            }
+
+            foreach (KeyValuePair<Coords, WorldChunkController> grid in worldController.WorldModel.ChunkGrid)
+            {
+                foreach (var cell in grid.Value.WorldChunkModel.grid)
+                {
+                    cell.worldCellModel.ViewMode = ViewMode.Full;
+                    cell.worldCellView.ViewMode = ViewMode.Full;
+                }
+            }
+        }
+
     }
 }

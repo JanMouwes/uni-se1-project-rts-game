@@ -477,12 +477,17 @@ namespace kbs2.GamePackage
             // Chunks generate when hovered over
             mouseChunkLoadUpdate(gameTime);
 
+            // Sets the world full of fog
             FogController.UpdateViewModes(ViewMode.Fog);
 
             // fire Ontick event
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this, args);
+            //updates the viewmode for everything on screen
             FogController.UpdateViewModes(ViewMode.Full);
+
+            // comment line bellow to turn on fog
+            FogController.UpdateEverythingVisible();
 
             // Calls the game update
 
