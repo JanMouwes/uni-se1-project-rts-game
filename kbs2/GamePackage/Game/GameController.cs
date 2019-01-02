@@ -53,7 +53,7 @@ namespace kbs2.GamePackage
     {
         public int Id { get; } = -1;
 
-        public GameModel GameModel { get; set; } = new GameModel();
+        public GameModel GameModel { get; set; }
         public GameView GameView { get; set; }
         public EntitySpawner Spawner;
 
@@ -63,22 +63,10 @@ namespace kbs2.GamePackage
 
         public MouseInput MouseInput { get; set; }
 
-        public const int TicksPerSecond = 30;
-
-        public static int TickIntervalMilliseconds => 1000 / TicksPerSecond;
-
-        private Timer gameTimer; //TODO
-
         public GameActionGuiController GameActionGui { get; set; }
         public bool PreviousQPressed { get; set; }
         public bool APressed { get; set; }
         public FogController FogController { get; set; }
-
-        public event ElapsedEventHandler GameTick
-        {
-            add => gameTimer.Elapsed += value;
-            remove => gameTimer.Elapsed -= value;
-        }
 
         //    GameSpeed and its event
         private GameSpeed gameSpeed;
@@ -115,8 +103,7 @@ namespace kbs2.GamePackage
             set
             {
                 gameState = value;
-                GameStateChange?.Invoke(this,
-                    new EventArgsWithPayload<GameState>(gameState)); //Invoke event if has subscribers
+                GameStateChange?.Invoke(this, new EventArgsWithPayload<GameState>(gameState)); //Invoke event if has subscribers
             }
         }
 
@@ -132,6 +119,8 @@ namespace kbs2.GamePackage
         {
             this.GameSpeed = gameSpeed;
             this.GameState = gameState;
+
+            GameModel = new GameModel();
 
             GameStateChange += PauseGame;
             GameStateChange += UnPauseGame;
@@ -188,6 +177,10 @@ namespace kbs2.GamePackage
 
             // Generate world
             GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.SimplexFractal);
+            
+            FogController = new FogController(PlayerFaction, GameModel.World);
+
+            onTick += FogController.Update;
 
             // Pathfinder 
             GameModel.pathfinder = new Pathfinder(GameModel.World, 500);
@@ -202,8 +195,6 @@ namespace kbs2.GamePackage
             Camera = new CameraController(GraphicsDevice);
 
             GameView = new GameView(GameModel, graphicsDeviceManager, spriteBatch, Camera, GraphicsDevice, Content);
-
-            gameTimer = new Timer(TickIntervalMilliseconds);
 
             GameModel.MouseInput = new MouseInput(this);
 
@@ -272,10 +263,6 @@ namespace kbs2.GamePackage
             MouseStateChange += GameModel.MouseInput.OnMouseStateChange;
             MouseStateChange += GameModel.ActionBox.OnRightClick;
             //TESTCODE
-
-            FogController = new FogController();
-            FogController.faction = PlayerFaction;
-            FogController.worldController = GameModel.World;
         }
 
 
@@ -477,14 +464,10 @@ namespace kbs2.GamePackage
             // Chunks generate when hovered over
             mouseChunkLoadUpdate(gameTime);
 
-            // Sets the world full of fog
-            FogController.UpdateViewModes(ViewMode.Fog);
-
             // fire Ontick event
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this, args);
             //updates the viewmode for everything on screen
-            FogController.UpdateViewModes(ViewMode.Full);
 
             // comment line bellow to turn on fog
             FogController.UpdateEverythingVisible();
