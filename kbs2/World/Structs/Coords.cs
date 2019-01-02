@@ -56,5 +56,8 @@ namespace kbs2.World
 
 
         public static bool operator !=(Coords value1, Coords value2) => !(value1.x == value2.x && value1.y == value2.y);
+
+
+        public override string ToString() => $"X: {x}, Y: {y}";
     }
 }

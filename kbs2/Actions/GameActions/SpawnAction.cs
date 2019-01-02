@@ -67,9 +67,9 @@ namespace kbs2.Actions.GameActions
 
                     break;
                 case UnitDef unitDef:
-                    using (UnitFactory factory = new UnitFactory(factionController))
+                    using (UnitFactory factory = new UnitFactory(factionController, gameController))
                     {
-                        UnitController unit = factory.CreateNewUnit(unitDef, new WorldModel());
+                        UnitController unit = factory.CreateNewUnit(unitDef);
                         SpawnUnit(unit, target);
                     }
 

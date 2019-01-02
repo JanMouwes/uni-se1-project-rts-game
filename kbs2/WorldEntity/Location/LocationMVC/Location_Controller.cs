@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using kbs2.Desktop.GamePackage.EventArgs;
-using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
 using kbs2.utils;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Pathfinder;
+using kbs2.World.World;
 using kbs2.WorldEntity.Pathfinder.Exceptions;
 
 namespace kbs2.WorldEntity.Location.LocationMVC
@@ -17,7 +14,7 @@ namespace kbs2.WorldEntity.Location.LocationMVC
     {
         private Thread pathfinderThread;
         public Pathfinder.Pathfinder Pathfinder;
-        public Location_Model LocationModel;
+        public LocationModel LocationModel;
         public Queue<FloatCoords> Waypoints = new Queue<FloatCoords>();
 
         public delegate void MoveCompleteDelegate(object sender, EventArgsWithPayload<FloatCoords> eventArgs);
@@ -26,7 +23,7 @@ namespace kbs2.WorldEntity.Location.LocationMVC
 
         public Location_Controller(WorldController worldModel, float lx, float ly)
         {
-            LocationModel = new Location_Model(lx, ly);
+            LocationModel = new LocationModel(lx, ly);
             Pathfinder = new Pathfinder.Pathfinder(worldModel);
         }
 
@@ -66,20 +63,20 @@ namespace kbs2.WorldEntity.Location.LocationMVC
         {
             if (!Waypoints.Any()) return;
 
-            float speed = LocationModel.parent.UnitModel.Speed;
+            float speed = LocationModel.Parent.UnitModel.Speed;
 
-            if (DistanceCalculator.DiagonalDistance(Waypoints.Peek(), LocationModel.floatCoords) < speed)
+            if (DistanceCalculator.DiagonalDistance(Waypoints.Peek(), LocationModel.FloatCoords) < speed)
             {
                 // Arrived near destination
-                LocationModel.floatCoords = Waypoints.Dequeue();
+                LocationModel.FloatCoords = Waypoints.Dequeue();
 
-                if (!Waypoints.Any()) MoveComplete?.Invoke(this, new EventArgsWithPayload<FloatCoords>(LocationModel.floatCoords));
+                if (!Waypoints.Any()) MoveComplete?.Invoke(this, new EventArgsWithPayload<FloatCoords>(LocationModel.FloatCoords));
 
                 return;
             }
 
-            float xDifference = (float) DistanceCalculator.CalcDistance(LocationModel.floatCoords.x, Waypoints.Peek().x);
-            float yDifference = (float) DistanceCalculator.CalcDistance(LocationModel.floatCoords.y, Waypoints.Peek().y);
+            float xDifference = (float) DistanceCalculator.CalcDistance(LocationModel.FloatCoords.x, Waypoints.Peek().x);
+            float yDifference = (float) DistanceCalculator.CalcDistance(LocationModel.FloatCoords.y, Waypoints.Peek().y);
 
             // calculate new coords
             float diagonalDifference = (float) DistanceCalculator.Pythagoras(xDifference, yDifference);
@@ -91,11 +88,11 @@ namespace kbs2.WorldEntity.Location.LocationMVC
                 y = yDifference / v
             };
 
-            difference.x = Waypoints.Peek().x < LocationModel.floatCoords.x ? -difference.x : difference.x;
-            LocationModel.floatCoords.x = LocationModel.floatCoords.x + difference.x;
+            difference.x = Waypoints.Peek().x < LocationModel.FloatCoords.x ? -difference.x : difference.x;
+            LocationModel.FloatCoords.x = LocationModel.FloatCoords.x + difference.x;
 
-            difference.y = Waypoints.Peek().y < LocationModel.floatCoords.y ? -difference.y : difference.y;
-            LocationModel.floatCoords.y = LocationModel.floatCoords.y + difference.y;
+            difference.y = Waypoints.Peek().y < LocationModel.FloatCoords.y ? -difference.y : difference.y;
+            LocationModel.FloatCoords.y = LocationModel.FloatCoords.y + difference.y;
         }
     }
 }

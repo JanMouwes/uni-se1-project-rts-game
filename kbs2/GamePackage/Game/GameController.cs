@@ -72,7 +72,6 @@ namespace kbs2.GamePackage
         public GameActionGuiController GameActionGui { get; set; }
         public bool PreviousQPressed { get; set; }
         public bool APressed { get; set; }
-        public TerrainTester TerrainTester { get; set; }
         public FogController FogController { get; set; }
 
         public event ElapsedEventHandler GameTick
@@ -191,7 +190,7 @@ namespace kbs2.GamePackage
             GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.SimplexFractal);
 
             // Pathfinder 
-            gameModel.pathfinder = new Pathfinder(gameModel.World, 500);
+            GameModel.pathfinder = new Pathfinder(GameModel.World, 500);
 
             // Spawner
             Spawner = new EntitySpawner(this);
@@ -229,8 +228,6 @@ namespace kbs2.GamePackage
             //TESTCODE
             PreviousQPressed = false;
             APressed = false;
-            TerrainTester = new TerrainTester();
-
 
             onTick += SetBuilding;
             onTick += f.UpdateTime;
@@ -260,8 +257,8 @@ namespace kbs2.GamePackage
 
             for (int i = 0; i < 12; i++)
             {
-                Unit_Controller unit =
-                    UnitFactory.CreateNewUnit(unitdef, new Coords {x = i, y = 5}, gameModel.World);
+                FloatCoords coords = new FloatCoords() {x = i, y = 5};
+                UnitController unit = UnitFactory.CreateNewUnit(unitdef, coords, GameModel.World, PlayerFaction);
 
                 unit.UnitModel.Speed = 0.05f;
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
@@ -379,19 +376,23 @@ namespace kbs2.GamePackage
             Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
             if (GameModel.World.GetCellFromCoords(coords) != null)
             {
-                TerrainTester.Text =
-                    $"{coords.x},{coords.y}  {gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}";
-                if (gameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop != null)
+                TerrainTester terrainTester = new TerrainTester(new FloatCoords() {x = 0, y = 100})
                 {
-                    TerrainTester.Text += " b";
+                    Text = $"{coords.x},{coords.y}  {GameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}"
+                };
+                if (GameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop != null)
+                {
+                    terrainTester.Text += " b";
                 }
 
-                gameModel.GuiTextList.Add(TerrainTester);
+                GameModel.GuiTextList.Add(terrainTester);
+
                 TerrainTester tester = new TerrainTester(new FloatCoords {x = 0, y = 120})
                 {
                     Text = $"Chunk: {WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).x},{WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).y} "
                 };
-                gameModel.GuiTextList.Add(tester);
+
+                GameModel.GuiTextList.Add(tester);
             }
 
             // Update Buildings on screen
@@ -559,7 +560,7 @@ namespace kbs2.GamePackage
 
                         onTick -= structure.Update;
                         GameModel.World.RemoveStructure(structure);
-                        BuildingController building2 = BuildingFactory.CreateNewBuilding((BuildingDef)structure.Def.CompletedBuildingDef);
+                        BuildingController building2 = BuildingFactory.CreateNewBuilding((BuildingDef) structure.Def.CompletedBuildingDef);
                         Spawner.SpawnStructure(structure.StartCoords, building2);
                         PlayerFaction.AddBuildingToFaction(building2);
                     };
@@ -588,13 +589,13 @@ namespace kbs2.GamePackage
             {
                 PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D1), PreviousQPressed, 1, Mouse.GetState(),
                     new List<TerrainType>()
-                        {
-                            TerrainType.Grass,
-                            TerrainType.Rock,
-                            TerrainType.Soil,
-                            TerrainType.Default
-                        }
-                    );
+                    {
+                        TerrainType.Grass,
+                        TerrainType.Rock,
+                        TerrainType.Soil,
+                        TerrainType.Default
+                    }
+                );
                 return;
             }
 
@@ -602,13 +603,13 @@ namespace kbs2.GamePackage
             {
                 PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D2), PreviousQPressed, 2, Mouse.GetState(),
                     new List<TerrainType>()
-                        {
-                            TerrainType.Grass,
-                            TerrainType.Rock,
-                            TerrainType.Soil,
-                            TerrainType.Default
-                        }
-                    );
+                    {
+                        TerrainType.Grass,
+                        TerrainType.Rock,
+                        TerrainType.Soil,
+                        TerrainType.Default
+                    }
+                );
                 return;
             }
 
@@ -616,10 +617,10 @@ namespace kbs2.GamePackage
             {
                 PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), PreviousQPressed, 3, Mouse.GetState(),
                     new List<TerrainType>()
-                        {
-                            TerrainType.Rock
-                        }
-                    );
+                    {
+                        TerrainType.Rock
+                    }
+                );
                 return;
             }
 
@@ -627,12 +628,12 @@ namespace kbs2.GamePackage
             {
                 PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), PreviousQPressed, 4, Mouse.GetState(),
                     new List<TerrainType>()
-                        {
-                            TerrainType.Grass,
-                            TerrainType.Rock,
-                            TerrainType.Default
-                        }
-                    );
+                    {
+                        TerrainType.Grass,
+                        TerrainType.Rock,
+                        TerrainType.Default
+                    }
+                );
                 return;
             }
 
@@ -640,10 +641,10 @@ namespace kbs2.GamePackage
             {
                 PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), PreviousQPressed, 5, Mouse.GetState(),
                     new List<TerrainType>()
-                        {
-                            TerrainType.Trees
-                        }
-                    );
+                    {
+                        TerrainType.Trees
+                    }
+                );
                 return;
             }
 
@@ -651,13 +652,13 @@ namespace kbs2.GamePackage
             {
                 PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), PreviousQPressed, 6, Mouse.GetState(),
                     new List<TerrainType>()
-                        {
-                            TerrainType.Grass,
-                            TerrainType.Soil,
-                            TerrainType.Sand,
-                            TerrainType.Default
-                        }
-                    );
+                    {
+                        TerrainType.Grass,
+                        TerrainType.Soil,
+                        TerrainType.Sand,
+                        TerrainType.Default
+                    }
+                );
                 return;
             }
         }

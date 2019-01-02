@@ -59,7 +59,7 @@ namespace kbs2.GamePackage
                     // set coords relative to the given coords
                     Coords tempcoords = (Coords)new FloatCoords { x = x + coords.x, y = y + coords.y };
                     // check if the coords are within viewrange
-                    if (!(DistanceCalculator.getDistance2d((FloatCoords)tempcoords, coords) < viewrange)) continue;
+                    if (!(DistanceCalculator.DiagonalDistance((FloatCoords)tempcoords, coords) < viewrange)) continue;
                     // get the cell from the tempcoords
                     WorldCellController cellController = worldController.GetCellFromCoords(tempcoords);
                     // check if the cellcontroller exists

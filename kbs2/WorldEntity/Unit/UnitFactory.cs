@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using kbs2.Faction.FactionMVC;
+using kbs2.GamePackage;
 using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Location;
+using kbs2.WorldEntity.Location.LocationMVC;
 using kbs2.WorldEntity.Unit.MVC;
 
 namespace kbs2.WorldEntity.Unit
@@ -15,8 +17,9 @@ namespace kbs2.WorldEntity.Unit
     public class UnitFactory : IDisposable
     {
         private Faction_Controller faction;
+        private GameController game;
 
-        public static UnitController CreateNewUnit(UnitDef def, FloatCoords TopLeft, WorldModel worldModel, Faction_Controller factionController)
+        public static UnitController CreateNewUnit(UnitDef def, FloatCoords TopLeft, WorldController world, Faction_Controller factionController)
         {
             UnitController unitController = new UnitController
             {
@@ -31,7 +34,7 @@ namespace kbs2.WorldEntity.Unit
                 }
             };
 
-            Location_Controller location = new Location_Controller(worldModel, TopLeft.x, TopLeft.y)
+            Location_Controller location = new Location_Controller(world, TopLeft.x, TopLeft.y)
             {
                 LocationModel =
                 {
@@ -42,14 +45,15 @@ namespace kbs2.WorldEntity.Unit
             return unitController;
         }
 
-        public UnitFactory(Faction_Controller faction)
+        public UnitFactory(Faction_Controller faction, GameController game)
         {
             this.faction = faction;
+            this.game = game;
         }
 
-        public UnitController CreateNewUnit(UnitDef def, WorldModel worldModel)
+        public UnitController CreateNewUnit(UnitDef def)
         {
-            return CreateNewUnit(def, new FloatCoords(), worldModel, faction);
+            return CreateNewUnit(def, new FloatCoords(), game.GameModel.World, faction);
         }
 
         public void Dispose()

@@ -120,10 +120,10 @@ namespace kbs2.World.World
             Coords chunkCoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords);
             if (WorldModel.ChunkGrid.ContainsKey(chunkCoords))
             {
-                return WorldModel.ChunkGrid[chunkCoords].WorldChunkModel
-                    .grid[ModulusUtils.mod(coords.x, 20), ModulusUtils.mod(coords.y, 20)];
+                return WorldModel.ChunkGrid[chunkCoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x, 20), ModulusUtils.mod(coords.y, 20)];
             }
 
+            //FIXME throw new CellNotFoundException();
             return null;
         }
 
