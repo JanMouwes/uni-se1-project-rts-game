@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using kbs2.Desktop.GamePackage.EventArgs;
-using kbs2.Desktop.World.World;
 using kbs2.GamePackage.EventArgs;
 using kbs2.utils;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Pathfinder;
+using kbs2.World.World;
 using kbs2.WorldEntity.Pathfinder.Exceptions;
 
 namespace kbs2.WorldEntity.Location.LocationMVC
@@ -17,7 +14,7 @@ namespace kbs2.WorldEntity.Location.LocationMVC
     {
         private Thread pathfinderThread;
         public Pathfinder.Pathfinder Pathfinder;
-        public Location_Model LocationModel;
+        public LocationModel LocationModel;
         public Queue<FloatCoords> Waypoints = new Queue<FloatCoords>();
 
         public delegate void MoveCompleteDelegate(object sender, EventArgsWithPayload<FloatCoords> eventArgs);
@@ -26,7 +23,7 @@ namespace kbs2.WorldEntity.Location.LocationMVC
 
         public Location_Controller(WorldController worldModel, float lx, float ly)
         {
-            LocationModel = new Location_Model(lx, ly);
+            LocationModel = new LocationModel(lx, ly);
             Pathfinder = new Pathfinder.Pathfinder(worldModel);
         }
 

@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using kbs2.Desktop.World.World;
-using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
+using kbs2.World.World;
 using kbs2.WorldEntity.Location;
-using kbs2.WorldEntity.Pathfinder.Exceptions;
-using kbs2.WorldEntity.Structs;
-using kbs2.WorldEntity.Unit.MVC;
-using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Pathfinder
 {
@@ -41,18 +36,18 @@ namespace kbs2.WorldEntity.Pathfinder
         /// <param name="unit">Model containing info about the unit's location</param>
         /// <returns>Path</returns>
         /// <exception cref="NoPathFoundException">Throws exception when no path found</exception>
-        public List<FloatCoords> FindPath(FloatCoords targetCoords, Location_Model unit)
+        public List<FloatCoords> FindPath(FloatCoords targetCoords, LocationModel unit)
         {
             if (IsCellImpassable(worldController.GetCellFromCoords((Coords) targetCoords).worldCellModel, unit))
                 throw new NoPathFoundException(unit.coords, (Coords) targetCoords);
 
-            CoordsCalculator unitCoordsCalculator = new CoordsCalculator(unit.floatCoords);
+            CoordsCalculator unitCoordsCalculator = new CoordsCalculator(unit.FloatCoords);
             CoordsCalculator targetCoordsCalculator = new CoordsCalculator(targetCoords);
 
             LinkedList<FloatCoords> currentPath = new LinkedList<FloatCoords>();
             List<Coords> visitedCoords = new List<Coords>();
 
-            FloatCoords currentCoords = unit.floatCoords;
+            FloatCoords currentCoords = unit.FloatCoords;
 
             while ((Coords) currentCoords != (Coords) targetCoords)
             {
@@ -95,7 +90,7 @@ namespace kbs2.WorldEntity.Pathfinder
         }
 
         // sets the weight-values of all the neighbours of a cell
-        private Dictionary<Coords, CellWeightValues> CalculateNeighboursWeights(Coords currentCell, Coords targetCoords, Location_Model unit)
+        private Dictionary<Coords, CellWeightValues> CalculateNeighboursWeights(Coords currentCell, Coords targetCoords, LocationModel unit)
         {
             CoordsCalculator coordsCalculator = new CoordsCalculator((FloatCoords) currentCell);
             FloatCoords[] neighbours = coordsCalculator.GetNeighbours();
@@ -130,7 +125,7 @@ namespace kbs2.WorldEntity.Pathfinder
         /// <param name="cell">Cell in question</param>
         /// <param name="unit">Unit that tries to pass</param>
         /// <returns>Impassibility</returns>
-        private bool IsCellImpassable(WorldCellModel cell, Location_Model unit)
+        private bool IsCellImpassable(WorldCellModel cell, LocationModel unit)
         {
             CoordsCalculator coordsCalculator = new CoordsCalculator((FloatCoords) cell.RealCoords);
 
@@ -138,7 +133,7 @@ namespace kbs2.WorldEntity.Pathfinder
         }
 
         // checks if a cell is an obstacle for the specifeid unit
-        private bool CellIsObstacle(WorldCellModel cell, Location_Model unit) => unit.UnwalkableTerrain.Contains(cell.Terrain) || cell.BuildingOnTop != null;
+        private bool CellIsObstacle(WorldCellModel cell, LocationModel unit) => unit.UnwalkableTerrain.Contains(cell.Terrain) || cell.BuildingOnTop != null;
 
         /// <summary>
         /// Asserts unit's traversability of all cells on a path
@@ -146,7 +141,7 @@ namespace kbs2.WorldEntity.Pathfinder
         /// <param name="path"></param>
         /// <param name="unitLocationModel"></param>
         /// <returns></returns>
-        private bool AreAllCellsLegal(IEnumerable<Coords> path, Location_Model unitLocationModel)
+        private bool AreAllCellsLegal(IEnumerable<Coords> path, LocationModel unitLocationModel)
         {
             return path.Select(coords => worldController.GetCellFromCoords(coords)).All(cell => cell != null && !IsCellImpassable(cell.worldCellModel, unitLocationModel));
         }
@@ -157,7 +152,7 @@ namespace kbs2.WorldEntity.Pathfinder
         /// <param name="routeTemp"></param>
         /// <param name="unitLocationModel"></param>
         /// <returns></returns>
-        private Queue<FloatCoords> ReduceWaypoints(IEnumerable<FloatCoords> routeTemp, Location_Model unitLocationModel)
+        private Queue<FloatCoords> ReduceWaypoints(IEnumerable<FloatCoords> routeTemp, LocationModel unitLocationModel)
         {
             Queue<FloatCoords> route = new Queue<FloatCoords>(routeTemp);
 
@@ -190,7 +185,7 @@ namespace kbs2.WorldEntity.Pathfinder
 
 
         // Checks if Diagonal move is possible/not blocked 
-        public bool IsDiagonalPathBlocked(Coords originCoords, Coords destinationCoords, Location_Model unitLocationModel)
+        public bool IsDiagonalPathBlocked(Coords originCoords, Coords destinationCoords, LocationModel unitLocationModel)
         {
             CoordsCalculator coordsCalculator = new CoordsCalculator((FloatCoords) originCoords);
 

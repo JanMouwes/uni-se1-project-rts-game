@@ -1,17 +1,11 @@
 ﻿using System.Collections.Generic;
-using kbs2.Actions.ActionMVC;
-using kbs2.Actions.GameActionDefs;
-using kbs2.Actions.GameActions;
 using kbs2.Actions.Interfaces;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Model;
-using kbs2.utils;
-using kbs2.World;
-using kbs2.World.Cell;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Interfaces;
-using kbs2.WorldEntity.Location;
+using kbs2.WorldEntity.Location.LocationMVC;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
@@ -49,7 +43,7 @@ namespace kbs2.WorldEntity.Unit.MVC
         }
 
 
-        public void Update(object sender, OnTickEventArgs eventArgs)=>LocationController.Ontick(sender, eventArgs);
+        public void Update(object sender, OnTickEventArgs eventArgs)=>LocationController.Update(sender, eventArgs);
         
 
         
