@@ -44,7 +44,7 @@ namespace kbs2.GamePackage
             // lino of sight buildings
             foreach (IStructure building in faction.FactionModel.Buildings)
             {
-                UpdateViewMode(mode, building.viewrange, building.center);
+                UpdateViewMode(mode, building.ViewRange, building.Centre);
             }
 
             // set units in line of sight to full view

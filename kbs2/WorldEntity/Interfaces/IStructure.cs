@@ -27,13 +27,23 @@ namespace kbs2.WorldEntity.Interfaces
         TStructureDef Def { get; }
 
         /// <summary>
-        /// midle of the building
+        /// Entity's view-range in cells
         /// </summary>
-        FloatCoords center { get; }
+        int ViewRange { get; }
+
+        /// <summary>
+        /// Centre coords of the building
+        /// </summary>
+        FloatCoords Centre { get; }
+
+        /// <summary>
+        /// Entity's width in cells
+        /// </summary>
+        float Width { get; }
         
-        int viewrange { get; }
-        
-        float With { get; }
-        float Heigth { get; }
+        /// <summary>
+        /// Entity's height in cells
+        /// </summary>
+        float Height { get; }
     }
 }

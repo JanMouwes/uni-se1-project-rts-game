@@ -3,18 +3,22 @@ using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 using System;
+
 namespace kbs2.WorldEntity.Building.BuildingMVC
 {
     public class BuildingView : IViewImage
     {
         public BuildingModel BuildingModel { get; set; }
-        public string ImageSrc { get; set; }
-        public float Height { get; set; }
-        public float Width { get; set; }
-        public FloatCoords Coords { get { return (FloatCoords)BuildingModel.TopLeft; } set {; } }
-        public string Texture { get { return ImageSrc; } set {; } }
-        public Color Colour { get { return Color.White; } set {; } }
-        public int ZIndex { get { return 2; } set {; } }
+
+        //    FIXME move to Model.
+        public float Height { get; }
+        public float Width { get; }
+
+        public FloatCoords Coords => (FloatCoords) BuildingModel.TopLeft;
+
+        public string Texture { get; }
+        public Color Colour => Color.White;
+        public int ZIndex => 2;
 
         public ViewMode ViewMode { get; set; }
 
@@ -23,7 +27,7 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
         {
             Height = height;
             Width = width;
-            ImageSrc = imageSrc;
+            Texture = imageSrc;
             ViewMode = ViewMode.Fog;
         }
     }

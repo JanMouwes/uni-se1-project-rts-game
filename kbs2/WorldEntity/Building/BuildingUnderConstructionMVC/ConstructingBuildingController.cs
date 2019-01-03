@@ -33,7 +33,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
         public event ConstructionCompleteObserver ConstructionComplete;
 
-        public FloatCoords center
+        public FloatCoords Centre
         {
             get
             {
@@ -45,7 +45,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             }
         }
 
-        public int viewrange => 8;
+        public int ViewRange => 8;
 
         public ConstructingBuildingController(ConstructingBuildingDef def)
         {
@@ -82,8 +82,8 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         public ConstructingBuildingDef Def => ConstructingBuildingModel.BuildingDef;
         public Faction_Controller Faction => ConstructingBuildingModel.FactionController;
 
-        public float With => ConstructingBuildingView.Width;
+        public float Width => ConstructingBuildingView.Width;
 
-        public float Heigth => ConstructingBuildingView.Height;
+        public float Height => ConstructingBuildingView.Height;
     }
 }

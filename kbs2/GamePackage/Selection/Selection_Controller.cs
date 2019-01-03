@@ -143,10 +143,10 @@ namespace kbs2.GamePackage
             else
             {
                 selected = (from Item in gameController.PlayerFaction.FactionModel.Buildings
-                            where TopLeft.x <= Item.StartCoords.x + (Item.With / 2)
-                            && TopLeft.y <= Item.StartCoords.y + (Item.Heigth / 2)
-                            && BottomRight.x >= Item.StartCoords.x + (Item.With / 2)
-                            && BottomRight.y >= Item.StartCoords.y + (Item.Heigth / 2)
+                            where TopLeft.x <= Item.StartCoords.x + (Item.Width / 2)
+                            && TopLeft.y <= Item.StartCoords.y + (Item.Height / 2)
+                            && BottomRight.x >= Item.StartCoords.x + (Item.Width / 2)
+                            && BottomRight.y >= Item.StartCoords.y + (Item.Height / 2)
                             select Item).Cast<IHasGameActions>().ToList();
             }
 

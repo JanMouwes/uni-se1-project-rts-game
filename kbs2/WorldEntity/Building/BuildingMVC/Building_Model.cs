@@ -13,6 +13,7 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
 
         public List<GameAction<GameActionDef>> Actions { get; }
 
+        //    FIXME change to WorldCellController. Never access a Model directly
         // all the cells the building is on
         public List<WorldCellModel> LocationCells { get; }
 
