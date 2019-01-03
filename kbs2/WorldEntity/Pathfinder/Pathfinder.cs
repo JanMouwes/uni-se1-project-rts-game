@@ -18,8 +18,18 @@ namespace kbs2.WorldEntity.Pathfinder
     {
         private const int DEFAULT_SEARCH_LIMIT = 500;
 
+        /// <summary>
+        /// <para>Constants related to pathfinding-animation.</para>
+        /// <para>Only relevant if ENABLE_ANIMATION is true/</para>
+        /// </summary>
+        #region Animation constants
+
         private const bool ENABLE_ANIMATION = false;
+
         private const int ANIMATION_DELAY_MILLIS = 200;
+
+        #endregion
+
 
         private WorldController worldController;
         private int SearchLimit { get; }
