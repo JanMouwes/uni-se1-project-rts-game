@@ -1,16 +1,16 @@
 using System.Collections.Generic;
+using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
 
 namespace kbs2.WorldEntity.Interfaces
 {
-    public interface IStructure : IStructure<IStructureDef>
-    {
-    }
 
     public interface IStructure<out TStructureDef> : IWorldEntity, IImpassable where TStructureDef : IStructureDef
     {
+        IViewImage View { get; }
+
         /// <summary>
         /// Cells which the structure occupies
         /// </summary>
@@ -40,7 +40,7 @@ namespace kbs2.WorldEntity.Interfaces
         /// Entity's width in cells
         /// </summary>
         float Width { get; }
-        
+
         /// <summary>
         /// Entity's height in cells
         /// </summary>

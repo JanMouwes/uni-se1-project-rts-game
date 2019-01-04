@@ -4,6 +4,6 @@ namespace kbs2.Faction.Interfaces
 {
     public interface IFactionMember
     {
-        Faction_Controller Faction { get; }
+        Faction_Controller Faction { get; set; }
     }
 }

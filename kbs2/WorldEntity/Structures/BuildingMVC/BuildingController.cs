@@ -1,23 +1,25 @@
 ﻿using System.Collections.Generic;
-using kbs2.Actions.ActionMVC;
 using kbs2.Actions.Interfaces;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
-using kbs2.utils;
+using kbs2.GamePackage.EventArgs;
+using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structs;
 
-namespace kbs2.WorldEntity.Building.BuildingMVC
+namespace kbs2.WorldEntity.Structures.BuildingMVC
 {
-    public class BuildingController : IStructure, IHasGameActions
+    public class BuildingController : IStructure<IStructureDef>, IHasGameActions
     {
-        private readonly List<IGameAction> actions = new List<IGameAction>();
-        public List<IGameAction> GameActions => actions;
+        public List<IGameAction> GameActions { get; } = new List<IGameAction>();
 
         public BuildingModel Model { get; } = new BuildingModel();
-        public BuildingView View { get; set; }
+        public BuildingView BuildingView { get; }
+
+        public IViewImage View => BuildingView;
 
         public FloatCoords FloatCoords => (FloatCoords) Model.TopLeft;
         public FloatCoords Centre => new FloatCoords {x = (Model.TopLeft.x + View.Width / 2), y = (Model.TopLeft.y + View.Height / 2)};
@@ -30,7 +32,7 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
             set => Model.TopLeft = value;
         }
 
-        public IStructureDef Def { get; }
+        public IStructureDef Def => Model.Def;
 
         public int ViewRange => 8;
 
@@ -42,7 +44,9 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
 
         public BuildingController(IStructureDef def)
         {
-            Def = def;
+            Model.Def = def;
+
+            BuildingView = new BuildingView(Model);
         }
 
         public void Update(object sender, OnTickEventArgs eventArgs)
@@ -53,12 +57,13 @@ namespace kbs2.WorldEntity.Building.BuildingMVC
         /// <para>If user has enough the cost price will be removed from balance and upkeep cost will be added to the total upkeepcost of there faction</para>
         /// </summary>
         /// TODO rewrite. This is an awful method.
+        /// Does nothing. Only keeping this in as an example of what not to do.
         public void EnoughCurrencyCheck(IStructureDef def)
         {
-            if (Faction.currency_Controller.model.currency < def.Cost) return;
+            if (Faction.CurrencyController.Model.currency < def.Cost) return;
 
-            Faction.currency_Controller.RemoveCurrency((float) def.Cost);
-            Faction.currency_Controller.AddUpkeepCost((float) def.UpkeepCost);
+//            Faction.CurrencyController.RemoveCurrency((float) def.Cost);
+//            Faction.CurrencyController.AddUpkeepCost((float) def.UpkeepCost);
         }
     }
 }

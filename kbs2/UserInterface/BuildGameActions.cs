@@ -19,7 +19,7 @@ namespace kbs2.UserInterface
         // generate test actionlist
         public BuildGameActions(GameController controller)
         {
-            BuildingDef buildingDef = DBController.GetDefinitionBuilding(1); //FIXME
+            BuildingDef buildingDef = DBController.GetBuildingDef<BuildingDef>(1); //FIXME
 
             GameActions = new List<IGameAction>();
         }

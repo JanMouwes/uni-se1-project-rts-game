@@ -2,6 +2,7 @@
 using kbs2.Actions.Interfaces;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
+using kbs2.GamePackage.EventArgs;
 using kbs2.Unit.Model;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Interfaces;
@@ -18,23 +19,24 @@ namespace kbs2.WorldEntity.Unit.MVC
         public List<IGameAction> GameActions => UnitModel.Actions;
 
         public FloatCoords FloatCoords => LocationController.LocationModel.FloatCoords;
-        public Faction_Controller Faction => UnitModel.Faction;
-
-        public FloatCoords center { get {
-                return new FloatCoords
-                {
-                    x = LocationController.LocationModel.FloatCoords.x + UnitView.Width / 2,
-                    y = LocationController.LocationModel.FloatCoords.y + UnitView.Height / 2
-                };
-            }
+        public Faction_Controller Faction
+        {
+            get => UnitModel.Faction;
+            set => UnitModel.Faction = value;
         }
 
-        public int viewrange = 8;
+        public FloatCoords Center => new FloatCoords
+        {
+            x = LocationController.LocationModel.FloatCoords.x + UnitView.Width / 2,
+            y = LocationController.LocationModel.FloatCoords.y + UnitView.Height / 2
+        };
 
-        public UnitController()
+        public int ViewRange => UnitModel.Def.ViewRange;
+
+        public UnitController(UnitDef def)
         {
             UnitView = new Unit_View(this);
-            UnitModel = new Unit_Model();
+            UnitModel = new Unit_Model(def);
         }
 
         public void MoveTo(FloatCoords target, bool isQueueKeyPressed)
@@ -43,10 +45,6 @@ namespace kbs2.WorldEntity.Unit.MVC
         }
 
 
-        public void Update(object sender, OnTickEventArgs eventArgs)=>LocationController.Update(sender, eventArgs);
-        
-
-        
-
+        public void Update(object sender, OnTickEventArgs eventArgs) => LocationController.Update(sender, eventArgs);
     }
 }

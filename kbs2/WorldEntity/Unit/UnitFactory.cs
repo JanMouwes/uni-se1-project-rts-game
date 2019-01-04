@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
+using kbs2.Unit.Model;
 using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.World.World;
@@ -19,9 +20,9 @@ namespace kbs2.WorldEntity.Unit
         private Faction_Controller faction;
         private GameController game;
 
-        public static UnitController CreateNewUnit(UnitDef def, FloatCoords TopLeft, WorldController world, Faction_Controller factionController)
+        public static UnitController CreateNewUnit(UnitDef def, FloatCoords topLeft, WorldController world, Faction_Controller factionController)
         {
-            UnitController unitController = new UnitController
+            UnitController unitController = new UnitController(def)
             {
                 UnitView =
                 {
@@ -34,7 +35,7 @@ namespace kbs2.WorldEntity.Unit
                 }
             };
 
-            Location_Controller location = new Location_Controller(world, TopLeft.x, TopLeft.y)
+            Location_Controller location = new Location_Controller(world, topLeft.x, topLeft.y)
             {
                 LocationModel =
                 {
@@ -58,6 +59,8 @@ namespace kbs2.WorldEntity.Unit
 
         public void Dispose()
         {
+            faction = null;
+            game = null;
         }
     }
 }

@@ -25,9 +25,9 @@ namespace Tests
         {
             controller = new Currency_Controller();
             float expected = 500 + amount;
-            controller.AddCurrency(amount);
+            controller.AlterCurrency(amount);
 
-            Assert.IsTrue(controller.model.currency == expected);
+            Assert.IsTrue(controller.Model.currency == expected);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace Tests
             float expected = 500 - amount;
             controller.RemoveCurrency(amount);
 
-            Assert.IsTrue(controller.model.currency == expected);
+            Assert.IsTrue(controller.Model.currency == expected);
         }
 
 
@@ -52,7 +52,7 @@ namespace Tests
             float expected = amount;
             controller.AddUpkeepCost(amount);
 
-            Assert.IsTrue(controller.model.UpkeepCost == expected);
+            Assert.IsTrue(controller.Model.UpkeepCost == expected);
         }
 
 

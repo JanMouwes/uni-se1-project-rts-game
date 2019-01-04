@@ -30,10 +30,13 @@ using kbs2.Actions.GameActions;
 using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
 using kbs2.UserInterface.GameActionGui;
-using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Pathfinder;
 using kbs2.WorldEntity.Structs;
+using kbs2.WorldEntity.Structures;
+using kbs2.WorldEntity.Structures.BuildingMVC;
+using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
+using kbs2.WorldEntity.Structures.Defs;
 using kbs2.WorldEntity.WorldEntitySpawner;
 using MonoGame.Extended.Timers;
 
@@ -83,9 +86,9 @@ namespace kbs2.GamePackage
 
         public event GameSpeedObserver GameSpeedChange;
 
-        private readonly DayController f = new DayController();
+        public readonly TimeController TimeController = new TimeController();
 
-        public Faction_Controller PlayerFaction = new Faction_Controller("PlayerFaction");
+        public Faction_Controller PlayerFaction;
 
         public event MouseStateObserver MouseStateChange;
 
@@ -124,6 +127,8 @@ namespace kbs2.GamePackage
 
             GameStateChange += PauseGame;
             GameStateChange += UnPauseGame;
+
+            PlayerFaction = new Faction_Controller("PlayerFaction", this);
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
@@ -177,7 +182,7 @@ namespace kbs2.GamePackage
 
             // Generate world
             GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.SimplexFractal);
-            
+
             FogController = new FogController(PlayerFaction, GameModel.World);
 
             onTick += FogController.Update;
@@ -221,13 +226,13 @@ namespace kbs2.GamePackage
             APressed = false;
 
             onTick += SetBuilding;
-            onTick += f.UpdateTime;
+            onTick += TimeController.UpdateTime;
             onTick += GameModel.MouseInput.Selection.Update;
             GameModel.MouseInput.Selection.onSelectionChanged += ChangeSelection;
 
             //TESTCODE
             DBController.OpenConnection("DefDex.db");
-            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
+            UnitDef unitdef = DBController.GetUnitDef(1);
             DBController.CloseConnection();
 
             for (int i = 0; i < 12; i++)
@@ -235,11 +240,10 @@ namespace kbs2.GamePackage
                 FloatCoords coords = new FloatCoords() {x = i, y = 5};
                 UnitController unit = UnitFactory.CreateNewUnit(unitdef, coords, GameModel.World, PlayerFaction);
 
-                unit.UnitModel.Speed = 0.05f;
+                PlayerFaction.RegisterUnit(unit);
+
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 Spawner.SpawnUnit(unit, (Coords) coords);
-                PlayerFaction.currency_Controller.AddUpkeepCost(unitdef.Upkeep);
-                onTick += unit.LocationController.Update;
             }
 
             //============= More TestCode ===============
@@ -289,27 +293,20 @@ namespace kbs2.GamePackage
                 GameView.TileSize
             );
 
+            Coords chunkCoords = WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords);
 
-            generateNewChunkIfNotExisting(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool chunkExists(Coords chunkCoords) => GameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
-                                                        GameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void generateNewChunkIfNotExisting(Coords chunkCoords)
-        {
-            if (chunkExists(chunkCoords)) return;
+            if (ChunkExists(chunkCoords)) return;
 
             GameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
-
             shader();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private bool ChunkExists(Coords chunkCoords) => GameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
+                                                        GameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -343,7 +340,6 @@ namespace kbs2.GamePackage
             // ============== Temp Code ===================================================================
 
 
-
             MouseState temp = Mouse.GetState();
             Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
             Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
@@ -368,25 +364,9 @@ namespace kbs2.GamePackage
                 GameModel.GuiTextList.Add(tester);
             }
 
-            // Update Buildings on screen
-            List<IViewImage> buildings = (
-                from structure in GameModel.World.WorldModel.Structures
-                let building = structure as BuildingController
-                select building.View as IViewImage).ToList();
-
-            GameModel.ItemList.AddRange(buildings);
-
-
-            List<IViewImage> constructingBuildingViews = new List<IViewImage>();
-            List<IViewText> counters = new List<IViewText>();
-            foreach (ConstructingBuildingController building in GameModel.World.WorldModel.UnderConstruction)
-            {
-                constructingBuildingViews.Add(building.ConstructingBuildingView);
-                counters.Add(building.Counter);
-            }
-
-            GameModel.ItemList.AddRange(constructingBuildingViews);
-            GameModel.TextList.AddRange(counters);
+            // Update Buildings & constructing buildings on screen
+            GameModel.ItemList.AddRange(GameModel.World.WorldModel.Structures.Select(building => building.View));
+            GameModel.TextList.AddRange(GameModel.World.WorldModel.UnderConstruction.Select(building => building.Counter));
 
 
             List<IViewImage> units = (from unit in GameModel.World.WorldModel.Units select unit.UnitView).Cast<IViewImage>().ToList();
@@ -444,8 +424,7 @@ namespace kbs2.GamePackage
 
             GameModel.ItemList.AddRange(cells);
 
-            GameModel.GuiTextList.Add(PlayerFaction.currency_Controller.view);
-            onTick += PlayerFaction.currency_Controller.DailyReward;
+            GameModel.GuiTextList.Add(PlayerFaction.CurrencyController.View);
 
             // Chunks generate when hovered over
             mouseChunkLoadUpdate(gameTime);
@@ -500,12 +479,12 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SetBuilding(object sender, OnTickEventArgs eventArgs)
         {
-            bool CheckKeysAndPlaceBuilding(bool isKeyPressed, bool wasKeyPressed, int buildingId, MouseState mouseState, List<TerrainType> legalTerrainTypes)
+            bool CheckKeysAndPlaceBuilding(bool isKeyPressed, int buildingId, MouseState mouseState, List<TerrainType> legalTerrainTypes)
             {
                 if (!isKeyPressed) return true;
 
                 DBController.OpenConnection("DefDex.db");
-                IStructureDef def = DBController.GetDefinitionBuilding(buildingId);
+                BuildingDef def = DBController.GetBuildingDef(buildingId);
                 DBController.CloseConnection();
 
                 Coords tempCoords = new Coords {x = mouseState.X, y = mouseState.Y};
@@ -519,25 +498,9 @@ namespace kbs2.GamePackage
 
                 using (ConstructingBuildingFactory constructionFactory = new ConstructingBuildingFactory(PlayerFaction))
                 {
-                    ViewValues viewValues = new ViewValues(ConstructingBuildingFactory.ConstructionImageSource, def.ViewValues.Width, def.ViewValues.Height);
-
-                    ConstructingBuildingDef buildingDef = new ConstructingBuildingDef(def, 20) {BuildingShape = def.BuildingShape, ViewValues = viewValues};
-
-                    ConstructingBuildingController building = constructionFactory.CreateBUC(buildingDef);
+                    ConstructingBuildingController building = constructionFactory.CreateConstructingBuildingControllerOf(def);
                     Spawner.SpawnStructure(coords, building);
-                    PlayerFaction.AddBuildingToFaction(building);
-                    onTick += building.Update;
-
-                    building.ConstructionComplete += (o, args) =>
-                    {
-                        if (!(o is ConstructingBuildingController structure)) return;
-
-                        onTick -= structure.Update;
-                        GameModel.World.RemoveStructure(structure);
-                        BuildingController building2 = BuildingFactory.CreateNewBuilding((BuildingDef) structure.Def.CompletedBuildingDef);
-                        Spawner.SpawnStructure(structure.StartCoords, building2);
-                        PlayerFaction.AddBuildingToFaction(building2);
-                    };
+                    building.ConstructionComplete += (o, args) => Spawner.ReplaceBuilding(o, args);
                 }
 
                 return true;
@@ -561,7 +524,7 @@ namespace kbs2.GamePackage
 
             if (keyboardState.IsKeyDown(Keys.D1))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D1), PreviousQPressed, 1, Mouse.GetState(),
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D1), 1, Mouse.GetState(),
                     new List<TerrainType>()
                     {
                         TerrainType.Grass,
@@ -575,7 +538,7 @@ namespace kbs2.GamePackage
 
             if (keyboardState.IsKeyDown(Keys.D2))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D2), PreviousQPressed, 2, Mouse.GetState(),
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D2), 2, Mouse.GetState(),
                     new List<TerrainType>()
                     {
                         TerrainType.Grass,
@@ -589,7 +552,7 @@ namespace kbs2.GamePackage
 
             if (keyboardState.IsKeyDown(Keys.D3))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), PreviousQPressed, 3, Mouse.GetState(),
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), 3, Mouse.GetState(),
                     new List<TerrainType>()
                     {
                         TerrainType.Rock
@@ -600,7 +563,7 @@ namespace kbs2.GamePackage
 
             if (keyboardState.IsKeyDown(Keys.D4))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), PreviousQPressed, 4, Mouse.GetState(),
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), 4, Mouse.GetState(),
                     new List<TerrainType>()
                     {
                         TerrainType.Grass,
@@ -613,7 +576,7 @@ namespace kbs2.GamePackage
 
             if (keyboardState.IsKeyDown(Keys.D5))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), PreviousQPressed, 5, Mouse.GetState(),
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), 5, Mouse.GetState(),
                     new List<TerrainType>()
                     {
                         TerrainType.Trees
@@ -624,7 +587,7 @@ namespace kbs2.GamePackage
 
             if (keyboardState.IsKeyDown(Keys.D6))
             {
-                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), PreviousQPressed, 6, Mouse.GetState(),
+                PreviousQPressed = CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), 6, Mouse.GetState(),
                     new List<TerrainType>()
                     {
                         TerrainType.Grass,
@@ -705,7 +668,7 @@ namespace kbs2.GamePackage
 
         public void RandomPattern2()
         {
-            Random random = new Random(WorldModel.seed);
+            Random random = new Random(WorldModel.Seed);
 
             foreach (var Chunk in GameModel.World.WorldModel.ChunkGrid)
             {

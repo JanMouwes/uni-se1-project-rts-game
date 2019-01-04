@@ -7,9 +7,12 @@ using kbs2.World.Cell;
 using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
-using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structures;
+using kbs2.WorldEntity.Structures.BuildingMVC;
+using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
+using kbs2.WorldEntity.Structures.Defs;
 using kbs2.WorldEntity.Unit.MVC;
 
 namespace kbs2.WorldEntity.WorldEntitySpawner
@@ -33,58 +36,61 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
         }
 
         // replace buc with building
-        private void ReplaceBuilding(object sender, EventArgsWithPayload<IStructure> eventArgs)
+        public void ReplaceBuilding(object sender, EventArgsWithPayload<IStructureDef> eventArgs)
         {
-            IStructure<ConstructingBuildingDef> buildingConstruction = (ConstructingBuildingController) sender;
-            World.RemoveStructure((IStructure) buildingConstruction);
+            if (!(sender is ConstructingBuildingController structure)) return;
 
-            // Remove references to this from cells
-            buildingConstruction.OccupiedCells.ForEach(cellModel => cellModel.BuildingOnTop = null);
+            //    Remove old structure
+            DespawnStructure(structure);
 
-            // make building
-            BuildingController building = BuildingFactory.CreateNewBuilding((BuildingDef) buildingConstruction.Def.CompletedBuildingDef);
-            SpawnStructure(buildingConstruction.StartCoords, building);
-            buildingConstruction.Faction.AddBuildingToFaction(building);
+            //    Add new structure
+            BuildingFactory factory = new BuildingFactory(structure.Faction);
 
-            // unsub from ontick event
-            Game.onTick -= buildingConstruction.Update;
+            IStructure<IStructureDef> building = factory.CreateNewBuilding(structure.Def.CompletedBuildingDef);
+
+            SpawnStructure(structure.StartCoords, building);
         }
 
         /// <summary>
-        /// Spawns IStructure according to underlying subclass 
+        /// Spawns IStructure:
+        /// <para>- Adds structure to world</para> 
+        /// <para>- Registers building to faction</para> 
+        /// <para>- Subscribes Update to Game's onTick</para> 
+        /// <para>- If ConstructingBuilding, Registers finish-time</para> 
         /// </summary>
         /// <param name="spawnCoords">Where to spawn, 'StartCoords'</param>
         /// <param name="structure">What to spawn</param>
-        /// <exception cref="NotImplementedException">When structure isn't implemented yet</exception>
-        public virtual void SpawnStructure(Coords spawnCoords, IStructure structure)
+        public virtual void SpawnStructure(Coords spawnCoords, IStructure<IStructureDef> structure)
         {
             structure.StartCoords = spawnCoords;
-            switch (structure)
-            {
-                case ConstructingBuildingController building:
-                    SpawnConstructingBuilding(building, building.Def.ConstructionTime);
-                    break;
-                case BuildingController building:
-                    SpawnBuilding(building);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+
+            World.AddStructure(structure);
+
+            structure.Faction.RegisterBuilding(structure);
+
+            Game.onTick += structure.Update;
+
+            if (!(structure is ConstructingBuildingController)) return;
+
+            ConstructingBuildingController constructingBuilding = (ConstructingBuildingController) structure;
+            constructingBuilding.ConstructingBuildingModel.FinishTime = (int) (constructingBuilding.Def.ConstructionTime + Game.LastUpdateGameTime.TotalGameTime.TotalSeconds);
         }
 
-        public void SpawnBuilding(BuildingController buildingController)
+        /// <summary>
+        /// Despawns IStructure:
+        /// <para>- Removes structure from world</para> 
+        /// <para>- Unregisters building to faction</para> 
+        /// <para>- Unsubscribes Update from Game's onTick</para>  
+        /// </summary>
+        /// <param name="structure">What to spawn</param>
+        /// <exception cref="NotImplementedException">When structure isn't implemented yet</exception>
+        public virtual void DespawnStructure(IStructure<IStructureDef> structure)
         {
-            World.AddBuilding(buildingController);
+            World.RemoveStructure(structure);
 
-            Game.onTick += buildingController.Update;
-        }
+            structure.Faction.UnregisterBuilding(structure);
 
-        public void SpawnConstructingBuilding(ConstructingBuildingController constructingBuilding, int constructionTime)
-        {
-            World.AddBuildingUnderConstruction(constructingBuilding.Def, constructingBuilding);
-            constructingBuilding.ConstructingBuildingModel.FinishTime = (int) (constructionTime + Game.LastUpdateGameTime.TotalGameTime.TotalSeconds);
-
-            Game.onTick += constructingBuilding.Update;
+            Game.onTick -= structure.Update;
         }
 
         public void SpawnWorldEntity(IWorldEntity entity)

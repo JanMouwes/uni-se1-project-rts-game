@@ -5,7 +5,6 @@ using kbs2.World.Cell;
 using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.World;
-using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Unit.MVC;
@@ -15,6 +14,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using kbs2.Desktop.GamePackage.EventArgs;
+using kbs2.GamePackage.EventArgs;
+using kbs2.WorldEntity.Structures.BuildingMVC;
+using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
 
 namespace kbs2.GamePackage
 {
@@ -38,11 +40,11 @@ namespace kbs2.GamePackage
             // line of sight units
             foreach (UnitController unit in faction.FactionModel.Units)
             {
-                UpdateViewMode(mode, unit.viewrange, unit.center);
+                UpdateViewMode(mode, unit.ViewRange, unit.Center);
             }
 
             // lino of sight buildings
-            foreach (IStructure building in faction.FactionModel.Buildings)
+            foreach (IStructure<IStructureDef> building in faction.FactionModel.Buildings)
             {
                 UpdateViewMode(mode, building.ViewRange, building.Centre);
             }
@@ -80,7 +82,7 @@ namespace kbs2.GamePackage
                     // set viewmode of the building on the cell
                     if (cellController.worldCellModel.BuildingOnTop.GetType() == typeof(BuildingController))
                     {
-                        ((BuildingController) cellController.worldCellModel.BuildingOnTop).View.ViewMode = mode;
+                        ((BuildingController) cellController.worldCellModel.BuildingOnTop).BuildingView.ViewMode = mode;
                     }
 
                     // set viewmode of the ConstructingBuilding on the cell

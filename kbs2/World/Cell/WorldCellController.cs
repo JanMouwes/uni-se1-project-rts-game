@@ -28,11 +28,6 @@ namespace kbs2.World.Cell
             worldCellModel.Terrain = type;
         }
 
-        // Linkes the building on top of the cell to the model
-        public void Construct(IConstructable constructable)
-        {
-        }
-
         // Switches the viewmode between enum ViewMode ( full, fog and none )
         public void ChangeViewMode(ViewMode mode)
         {

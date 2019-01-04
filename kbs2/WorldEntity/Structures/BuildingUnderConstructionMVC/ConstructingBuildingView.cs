@@ -1,19 +1,19 @@
-﻿using System;
-using kbs2.GamePackage.Interfaces;
+﻿using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Structs;
+using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using Microsoft.Xna.Framework;
 
-namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
+namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 {
     public class ConstructingBuildingView : IViewImage
     {
         public ConstructingBuildingModel Model { get; set; }
-        public string ImageSrc { get; }
+        private string ImageSrc { get; }
 
 
         // Implementation IViewable
-        public FloatCoords Coords => (FloatCoords)Model.StartCoords;
+        public FloatCoords Coords => (FloatCoords) Model.StartCoords;
 
         public float Width => Model.BuildingDef.ViewValues.Width;
 
@@ -25,7 +25,7 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
         public int ZIndex => 2;
 
-        public ViewMode ViewMode {get;set;}
+        public ViewMode ViewMode { get; set; }
 
 
         // constructor

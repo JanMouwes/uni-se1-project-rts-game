@@ -15,7 +15,19 @@ namespace kbs2.WorldEntity.Unit
         public BattleDef BattleDef { get; set; }
         public HPDef HPDef { get; set; }
         public LevelXPDef LevelXPDef { get; set; }
-        public ViewValues ViewValues => new ViewValues(Image, Width, Height);
+
+        public ViewValues ViewValues
+        {
+            get => new ViewValues(Image, Width, Height);
+            set
+            {
+                Image = value.Image;
+                Width = value.Width;
+                Height = value.Height;
+            }
+        }
+
+        public int ViewRange { get; set; }
         public float PurchaseCost { get; set; }
         public float Upkeep { get; set; }
     }

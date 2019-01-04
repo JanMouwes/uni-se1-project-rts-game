@@ -58,7 +58,7 @@ namespace Tests
             var result = false;
             var result2 = false;
 
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
+            foreach (KeyValuePair<FactionModel, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
             {
                 if (relationship.Key.Name == Friend.FactionModel.Name && relationship.Value == RelationCheck)
                 {
@@ -66,7 +66,7 @@ namespace Tests
                 }
             }
 
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
+            foreach (KeyValuePair<FactionModel, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
             {
                 if (relationship.Key.Name == Unit.FactionModel.Name && relationship.Value == RelationCheck)
                 {
@@ -92,7 +92,7 @@ namespace Tests
 
             Unit.ChangeRelationship(Friend.FactionModel, ChangedRelation);
 
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
+            foreach (KeyValuePair<FactionModel, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
             {
                 if (relationship.Key.Name == Friend.FactionModel.Name && relationship.Value != relation)
                 {
@@ -100,7 +100,7 @@ namespace Tests
                 }
             }
 
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
+            foreach (KeyValuePair<FactionModel, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
             {
                 if (relationship.Key.Name == Unit.FactionModel.Name && relationship.Value != relation)
                 {

@@ -1,8 +1,6 @@
-﻿using kbs2.GamePackage;
-using Microsoft.Xna.Framework;
-using System.Timers;
+﻿using Microsoft.Xna.Framework;
 
-namespace kbs2.Desktop.GamePackage.EventArgs
+namespace kbs2.GamePackage.EventArgs
 {
     public class OnTickEventArgs : System.EventArgs
     {

@@ -1,8 +1,8 @@
 ﻿using kbs2.Faction.FactionMVC;
 using kbs2.World;
 using kbs2.WorldEntity.Building;
-using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structures.BuildingMVC;
 using NUnit.Framework;
 
 namespace Tests
@@ -32,19 +32,19 @@ namespace Tests
         [Test]
         public void EnoughCurrencyCheck_RemoveCurrency_Test()
         {
-            float expected = controller.Faction.currency_Controller.model.currency - (float)def.Cost;
+            float expected = controller.Faction.CurrencyController.Model.currency - (float)def.Cost;
             controller.EnoughCurrencyCheck(def);
 
-            Assert.AreEqual(expected, controller.Faction.currency_Controller.model.currency);
+            Assert.AreEqual(expected, controller.Faction.CurrencyController.Model.currency);
         }
 
         [Test]
         public void EnoughCurrencyCheck_AddUpkeepCosts_Test()
         {
-            float expected = controller.Faction.currency_Controller.model.UpkeepCost - (float)def.UpkeepCost;
+            float expected = controller.Faction.CurrencyController.Model.UpkeepCost - (float)def.UpkeepCost;
             controller.EnoughCurrencyCheck(def);
 
-            Assert.AreEqual(expected, controller.Faction.currency_Controller.model.UpkeepCost);
+            Assert.AreEqual(expected, controller.Faction.CurrencyController.Model.UpkeepCost);
         }
 
     }

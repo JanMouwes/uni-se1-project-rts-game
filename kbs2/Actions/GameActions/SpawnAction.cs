@@ -6,9 +6,10 @@ using kbs2.GamePackage;
 using kbs2.World;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
-using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structures;
+using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Unit;
 using kbs2.WorldEntity.Unit.MVC;
 
@@ -44,7 +45,7 @@ namespace kbs2.Actions.GameActions
         /// </summary>
         /// <param name="building">building to be spawned</param>
         /// <param name="spawntarget">The target</param>
-        private void SpawnBuilding(IStructure building, ITargetable spawntarget)
+        private void SpawnBuilding(IStructure<IStructureDef> building, ITargetable spawntarget)
         {
             ConstructingBuildingController constructingBuilding = ConstructingBuildingFactory.CreateNewBUCAt(building.Def, (Coords)spawntarget.FloatCoords, factionController);
             gameController.Spawner.SpawnStructure((Coords)spawntarget.FloatCoords, constructingBuilding);
