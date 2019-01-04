@@ -21,10 +21,11 @@ namespace Tests
         {
             calculator = new ResourceCalculator();
             calculator.AddResource(type1, ResourceType.Food);
-            calculator.AddResource(type1, ResourceType.Stone);
-            calculator.AddResource(type1, ResourceType.Wood);
+            calculator.AddResource(type2, ResourceType.Stone);
+            calculator.AddResource(type3, ResourceType.Wood);
 
             float actual = calculator.CalculateResourceWorth();
+            
             // this test contains an error
             Assert.AreEqual(result, actual);
         }

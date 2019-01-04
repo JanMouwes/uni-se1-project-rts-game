@@ -44,7 +44,7 @@ namespace kbs2.WorldEntity.Structures.ResourceFactory
         public float Width => Def.ViewValues.Width;
         public float Height => Def.ViewValues.Height;
 
-        public float ResourceValue => 100; //FIXME calculate according to environment. Base is 1
+        public float ResourceValue => 50; //FIXME calculate according to environment. Set to 50 for now
         public ResourceType ResourceType => Def.ResourceType;
 
         public ResourceFactoryController(ResourceFactoryDef def, Faction_Controller faction)

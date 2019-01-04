@@ -26,7 +26,7 @@ namespace Tests
             float expected = 500 + amount;
             controller.AlterCurrency(amount);
 
-            Assert.AreEqual(expected, controller.Model.currency);
+            Assert.AreEqual(expected, controller.Model.Currency);
         }
 
         [Test]
@@ -38,20 +38,7 @@ namespace Tests
             float expected = 500 - amount;
             controller.AlterCurrency(-amount);
 
-            Assert.AreEqual(expected, controller.Model.currency);
-        }
-
-
-        [Test]
-        [TestCase(20f)]
-        [TestCase(30f)]
-        public void AddUpkeepCost(float amount)
-        {
-            controller = new Currency_Controller(500);
-            float expected = amount;
-            controller.AlterCurrency(amount);
-
-            Assert.AreEqual(expected, controller.Model.UpkeepCost);
+            Assert.AreEqual(expected, controller.Model.Currency);
         }
     }
 }

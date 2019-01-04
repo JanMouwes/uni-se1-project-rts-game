@@ -60,7 +60,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
         /// Does nothing. Only keeping this in as an example of what not to do.
         public void EnoughCurrencyCheck(IStructureDef def)
         {
-            if (Faction.CurrencyController.Model.currency < def.Cost) return;
+            if (Faction.CurrencyController.Model.Currency < def.Cost) return;
 
 //            Faction.CurrencyController.RemoveCurrency((float) def.Cost);
 //            Faction.CurrencyController.AddUpkeepCost((float) def.UpkeepCost);

@@ -7,12 +7,11 @@ namespace kbs2.Faction.CurrencyMVC
     public class Currency_Model
     {
         //default 500 
-        public float currency;
-        public float UpkeepCost { get; set; }
+        public float Currency;
 
         public Currency_Model(float startingCurrency)
         {
-            currency = startingCurrency;
+            Currency = startingCurrency;
         }
     }
 }

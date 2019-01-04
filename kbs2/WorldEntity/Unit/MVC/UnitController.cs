@@ -45,6 +45,6 @@ namespace kbs2.WorldEntity.Unit.MVC
         }
 
 
-        public void Update(object sender, OnTickEventArgs eventArgs) => LocationController.Update(sender, eventArgs);
+        public virtual void Update(object sender, OnTickEventArgs eventArgs) => LocationController.Update(sender, eventArgs);
     }
 }

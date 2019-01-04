@@ -31,12 +31,17 @@ namespace kbs2.Faction.FactionMVC
         public Faction_Controller(string name, GameController game, float startingBalance)
         {
             FactionModel = new FactionModel(name);
-            CurrencyController = new Currency_Controller(500);
+            CurrencyController = new Currency_Controller(startingBalance);
 
             game.TimeController.DayPassed += OnDayPassed;
         }
 
-        // if new day gives reward
+        /// <summary>
+        /// TODO move to (new) BalanceManager-class
+        /// Calculates balance based on income and upkeep.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private void OnDayPassed(object sender, EventArgsWithPayload<IngameTime> eventArgs)
         {
             double balance = 0;
@@ -56,17 +61,13 @@ namespace kbs2.Faction.FactionMVC
             CurrencyController.AlterCurrency((float) balance);
         }
 
+        public virtual void RegisterBuilding(IStructure<IStructureDef> building) => FactionModel.Buildings.Add(building);
 
-        // Adds a unit to the faction units list
-        public void AddUnitToFaction(UnitController unit) => FactionModel.Units.Add(unit);
+        public virtual void UnregisterBuilding(IStructure<IStructureDef> building) => FactionModel.Buildings.Remove(building);
 
-        public void RegisterBuilding(IStructure<IStructureDef> building) => FactionModel.Buildings.Add(building);
+        public virtual void RegisterUnit(UnitController unit) => FactionModel.Units.Add(unit);
 
-        public void UnregisterBuilding(IStructure<IStructureDef> building) => FactionModel.Buildings.Remove(building);
-
-        public void RegisterUnit(UnitController unit) => FactionModel.Units.Add(unit);
-
-        public void UnregisterUnit(UnitController unit) => FactionModel.Units.Remove(unit);
+        public virtual void UnregisterUnit(UnitController unit) => FactionModel.Units.Remove(unit);
 
         // Checks if the given faction is hostile to this faction
         public bool IsHostileTo(FactionModel faction) => FactionModel.FactionRelationships[faction] == Faction_Relations.hostile;

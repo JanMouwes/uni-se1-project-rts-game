@@ -95,7 +95,7 @@ namespace kbs2.GamePackage
 
         public MouseState PreviousMouseButtonsStatus { get; set; }
 
-        public event OnTick onTick;
+        public virtual event OnTick onTick;
 
         //    GameState and its event
         private GameState gameState;

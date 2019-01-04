@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using kbs2.Actions.GameActionDefs;
 using kbs2.Faction.Enums;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
 using kbs2.GamePackage.DayCycle;
+using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Interfaces;
 using Moq;
 using NUnit.Framework;
 
@@ -16,14 +19,14 @@ namespace Tests
         private Faction_Controller Enemy;
         private Faction_Controller Friend;
         private Faction_Controller Neutral;
-
+        private GameController game;
 
         [SetUp]
         public void init()
         {
             Mock<GameController> gameMock = new Mock<GameController>(GameSpeed.Regular, GameState.Paused);
 
-            GameController game = gameMock.Object;
+            game = gameMock.Object;
 
             Unit = new Faction_Controller("Water", game);
             Enemy = new Faction_Controller("Earth", game);
@@ -58,6 +61,8 @@ namespace Tests
         [TestCase(Faction_Relations.neutral, Faction_Relations.friendly, false)]
         public void AddRelationshipToFaction(Faction_Relations relation, Faction_Relations RelationCheck, bool ExpectedResult)
         {
+            //    [Review] wtf? Why loop through relationships when you can access them like FactionRelationships[Key]?
+
             Unit.AddRelationship(Friend.FactionModel, relation);
 
             var result = false;
@@ -90,6 +95,8 @@ namespace Tests
         [TestCase(Faction_Relations.hostile, Faction_Relations.hostile, false)]
         public void ChangeRelationshipOfFaction(Faction_Relations relation, Faction_Relations ChangedRelation, bool ExpectedResult)
         {
+            //    [Review] wtf? Why loop through relationships when you can access them like FactionRelationships[Key]?
+
             Unit.AddRelationship(Friend.FactionModel, relation);
 
             var result = false;
@@ -115,6 +122,29 @@ namespace Tests
 
             Assert.IsTrue(result == ExpectedResult);
             Assert.IsTrue(result2 == ExpectedResult);
+        }
+
+        [TestCase()]
+        public void Test_ShouldAlterCurrency_WhenDayPassed()
+        {
+            //TODO
+            //    Arrange
+            Faction_Controller faction = new Faction_Controller("test", game, 500);
+
+            Mock<IStructure<IStructureDef>> structureMock = new Mock<IStructure<IStructureDef>>();
+
+            structureMock.SetupGet(structureParam => structureParam.Def).Returns(new BuildingDef()
+            {
+                UpkeepCost = 100
+            });
+            IStructure<IStructureDef> structure = structureMock.Object;
+
+            faction.RegisterBuilding(structure);
+
+            //    Act
+//            game.TimeController = new TimeController();
+
+            //    Assert
         }
     }
 }

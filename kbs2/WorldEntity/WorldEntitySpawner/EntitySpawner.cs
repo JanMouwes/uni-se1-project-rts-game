@@ -31,7 +31,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
         {
             unit.LocationController.LocationModel.FloatCoords = (FloatCoords) coords;
             World.WorldModel.Units.Add(unit);
-            unit.Faction.AddUnitToFaction(unit);
+            unit.Faction.RegisterUnit(unit);
             Game.onTick += unit.Update;
         }
 

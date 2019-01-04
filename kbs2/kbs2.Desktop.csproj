@@ -68,7 +68,6 @@
     <Compile Include="Faction\Enums\Faction_Relations.cs" />
     <Compile Include="Faction\FactionMVC\Faction_Controller.cs" />
     <Compile Include="Faction\FactionMVC\Faction_Model.cs" />
-    <Compile Include="Faction\FactionMVC\Faction_View.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionBuilding.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionRelationship.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionUnit.cs" />

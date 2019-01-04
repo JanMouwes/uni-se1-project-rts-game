@@ -38,20 +38,10 @@ namespace UnitTests
         [Test]
         public void EnoughCurrencyCheck_RemoveCurrency_Test()
         {
-            float expected = controller.Faction.CurrencyController.Model.currency - (float) def.Cost;
+            float expected = controller.Faction.CurrencyController.Model.Currency - (float) def.Cost;
             controller.EnoughCurrencyCheck(def);
 
-            Assert.AreEqual(expected, controller.Faction.CurrencyController.Model.currency);
-        }
-
-        [Obsolete]
-        [Test]
-        public void EnoughCurrencyCheck_AddUpkeepCosts_Test()
-        {
-            float expected = controller.Faction.CurrencyController.Model.UpkeepCost - (float) def.UpkeepCost;
-            controller.EnoughCurrencyCheck(def);
-
-            Assert.AreEqual(expected, controller.Faction.CurrencyController.Model.UpkeepCost);
+            Assert.AreEqual(expected, controller.Faction.CurrencyController.Model.Currency);
         }
     }
 }

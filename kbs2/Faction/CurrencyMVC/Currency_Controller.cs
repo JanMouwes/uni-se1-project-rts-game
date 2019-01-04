@@ -18,6 +18,6 @@ namespace kbs2.Faction.CurrencyMVC
         }
 
         // Alter currency
-        public void AlterCurrency(float amount) => Model.currency += amount;
+        public void AlterCurrency(float amount) => Model.Currency += amount;
     }
 }
