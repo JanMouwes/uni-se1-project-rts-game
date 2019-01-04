@@ -27,6 +27,11 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             Game = game;
         }
 
+        /// <summary>
+        /// Spawns Unit at coords, registers unit to faction, subscribes unit's Update to onTick
+        /// </summary>
+        /// <param name="unit">Unit to be spawned</param>
+        /// <param name="coords">Location at which to spawn unit</param>
         public virtual void SpawnUnit(UnitController unit, Coords coords)
         {
             unit.LocationController.LocationModel.FloatCoords = (FloatCoords) coords;
@@ -35,7 +40,11 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             Game.onTick += unit.Update;
         }
 
-        // replace buc with building
+        /// <summary>
+        /// Replaces one ConstructingBuilding with an IStructure.
+        /// </summary>
+        /// <param name="sender">ConstructingBuilding to be replaced</param>
+        /// <param name="eventArgs">EventArgs containing new structure's definition</param>
         public void ReplaceBuilding(object sender, EventArgsWithPayload<IStructureDef> eventArgs)
         {
             if (!(sender is ConstructingBuildingController structure)) return;

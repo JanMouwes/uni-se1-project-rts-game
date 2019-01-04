@@ -13,13 +13,15 @@ namespace kbs2.WorldEntity.Building
 {
     public class BuildingDef : IStructureDef
     {
-        // list of cells that contain the building
         public List<Coords> BuildingShape { get; set; }
 
-        // sprite info
-        public string Image { get; set; }
-        public float Height { get; set; }
-        public float Width { get; set; }
+        #region Sprite info
+
+        [Obsolete] public string Image { get; set; }
+        [Obsolete] public float Height { get; set; }
+        [Obsolete] public float Width { get; set; }
+
+        #endregion
 
         //Cost info
         public double Cost { get; set; }

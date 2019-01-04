@@ -12,11 +12,21 @@ namespace kbs2.WorldEntity.Structures
     {
         private Faction_Controller faction;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="faction">Factory's faction</param>
+        /// <exception cref="ArgumentNullException">Thrown when faction is null</exception>
         public BuildingFactory(Faction_Controller faction)
         {
             this.faction = faction ?? throw new ArgumentNullException(nameof(faction));
         }
 
+        /// <summary>
+        /// Creates new structure according to def belonging to factory's faction
+        /// </summary>
+        /// <param name="def">Definition of structure to be created</param>
+        /// <returns>Structure defined by Def belonging to factory's faction</returns>
         public IStructure<IStructureDef> CreateNewBuilding(IStructureDef def)
         {
             IStructure<IStructureDef> buildingController;

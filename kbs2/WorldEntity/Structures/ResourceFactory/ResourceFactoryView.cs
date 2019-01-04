@@ -20,6 +20,10 @@ namespace kbs2.WorldEntity.Structures.ResourceFactory
         public int ZIndex => 2;
         public Color Colour => Color.White;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="model">Data-model</param>
         public ResourceFactoryView(ResourceFactoryModel model)
         {
             this.model = model;

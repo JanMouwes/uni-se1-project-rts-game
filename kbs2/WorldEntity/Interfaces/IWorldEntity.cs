@@ -10,6 +10,9 @@ namespace kbs2.WorldEntity.Interfaces
 {
     public interface IWorldEntity : IHasPersonalSpace, ISpawnable, ITargetable, IFactionMember
     {
+        /// <summary>
+        /// Entity's image to be displayed on the map
+        /// </summary>
         IViewImage View { get; }
         
         /// <summary>

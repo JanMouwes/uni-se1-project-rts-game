@@ -7,6 +7,11 @@ namespace kbs2.WorldEntity.Structures.Defs
 {
     public class ConstructingBuildingDef : IStructureDef
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="completedBuildingDef">Definition of the to-be-built structure</param>
+        /// <param name="constructionTime">Time it takes to build structure</param>
         public ConstructingBuildingDef(IStructureDef completedBuildingDef, int constructionTime)
         {
             CompletedBuildingDef = completedBuildingDef;

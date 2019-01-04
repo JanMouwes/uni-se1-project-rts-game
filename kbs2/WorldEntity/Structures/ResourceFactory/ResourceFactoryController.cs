@@ -19,6 +19,8 @@ namespace kbs2.WorldEntity.Structures.ResourceFactory
 
         public ResourceFactoryDef Def => Model.Def;
         private ResourceFactoryModel Model { get; } = new ResourceFactoryModel();
+
+        /// <inheritdoc cref="View"/>
         public ResourceFactoryView ResourceFactoryView { get; }
 
         public IViewImage View => ResourceFactoryView;
@@ -44,9 +46,21 @@ namespace kbs2.WorldEntity.Structures.ResourceFactory
         public float Width => Def.ViewValues.Width;
         public float Height => Def.ViewValues.Height;
 
+        /// <summary>
+        /// Amount of resources that this structure produces
+        /// </summary>
         public float ResourceValue => 50; //FIXME calculate according to environment. Set to 50 for now
+        
+        /// <summary>
+        /// Type of resources that this structure produces
+        /// </summary>
         public ResourceType ResourceType => Def.ResourceType;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="def">Structure's definition</param>
+        /// <param name="faction">Structure's faction</param>
         public ResourceFactoryController(ResourceFactoryDef def, Faction_Controller faction)
         {
             Model.Def = def;
