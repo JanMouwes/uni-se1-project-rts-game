@@ -3,10 +3,15 @@ using kbs2.World;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;
 
-namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
+namespace kbs2.WorldEntity.Structures.Defs
 {
     public class ConstructingBuildingDef : IStructureDef
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="completedBuildingDef">Definition of the to-be-built structure</param>
+        /// <param name="constructionTime">Time it takes to build structure</param>
         public ConstructingBuildingDef(IStructureDef completedBuildingDef, int constructionTime)
         {
             CompletedBuildingDef = completedBuildingDef;
@@ -14,10 +19,21 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
         }
 
         public ViewValues ViewValues { get; set; }
+        public int ViewRange { get; set; }
         public List<Coords> BuildingShape { get; set; }
         public int ConstructionTime { get; }
         public IStructureDef CompletedBuildingDef { get; }
-        public double Cost { get { return 0; } set => throw new System.NotImplementedException(); }
-        public double UpkeepCost { get { return 0; } set => throw new System.NotImplementedException(); }
+
+        public double Cost
+        {
+            get => 0;
+            set => throw new System.NotImplementedException();
+        }
+
+        public double UpkeepCost
+        {
+            get => 0;
+            set => throw new System.NotImplementedException();
+        }
     }
 }

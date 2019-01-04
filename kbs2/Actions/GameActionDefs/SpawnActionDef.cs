@@ -12,7 +12,7 @@ namespace kbs2.Actions.GameActionDefs
             get
             {
                 DBController.OpenConnection("DefDex.db");
-                SpawnActionDef def = new SpawnActionDef(10, "raichu_idle", DBController.GetDefinitionFromUnit(1));
+                SpawnActionDef def = new SpawnActionDef(10, "raichu_idle", DBController.GetUnitDef(1));
                 DBController.CloseConnection();
                 return def;
             }
@@ -23,7 +23,7 @@ namespace kbs2.Actions.GameActionDefs
             get
             {
                 DBController.OpenConnection("DefDex.db");
-                SpawnActionDef def = new SpawnActionDef(10, "pikachu_idle", DBController.GetDefinitionFromUnit(2));
+                SpawnActionDef def = new SpawnActionDef(10, "pikachu_idle", DBController.GetUnitDef(2));
                 DBController.CloseConnection();
                 return def;
             }

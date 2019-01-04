@@ -1,6 +1,12 @@
 ﻿using System.Collections.Generic;
+using kbs2.Actions.GameActionDefs;
 using kbs2.Faction.Enums;
 using kbs2.Faction.FactionMVC;
+using kbs2.GamePackage;
+using kbs2.GamePackage.DayCycle;
+using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Interfaces;
+using Moq;
 using NUnit.Framework;
 
 
@@ -13,16 +19,19 @@ namespace Tests
         private Faction_Controller Enemy;
         private Faction_Controller Friend;
         private Faction_Controller Neutral;
-
+        private GameController game;
 
         [SetUp]
         public void init()
         {
-            Unit = new Faction_Controller("Water");
-            Enemy = new Faction_Controller("Earth");
-            Friend = new Faction_Controller("Fire");
-            Neutral = new Faction_Controller("Äir");
+            Mock<GameController> gameMock = new Mock<GameController>(GameSpeed.Regular, GameState.Paused);
 
+            game = gameMock.Object;
+
+            Unit = new Faction_Controller("Water", game);
+            Enemy = new Faction_Controller("Earth", game);
+            Friend = new Faction_Controller("Fire", game);
+            Neutral = new Faction_Controller("Äir", game);
         }
 
 
@@ -41,7 +50,6 @@ namespace Tests
 
             Assert.IsTrue(result == ExpectedResult);
             Assert.IsTrue(result2 == ExpectedResult);
-
         }
 
         [Test]
@@ -53,12 +61,14 @@ namespace Tests
         [TestCase(Faction_Relations.neutral, Faction_Relations.friendly, false)]
         public void AddRelationshipToFaction(Faction_Relations relation, Faction_Relations RelationCheck, bool ExpectedResult)
         {
+            //    [Review] wtf? Why loop through relationships when you can access them like FactionRelationships[Key]?
+
             Unit.AddRelationship(Friend.FactionModel, relation);
 
             var result = false;
             var result2 = false;
 
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
+            foreach (KeyValuePair<FactionModel, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
             {
                 if (relationship.Key.Name == Friend.FactionModel.Name && relationship.Value == RelationCheck)
                 {
@@ -66,7 +76,7 @@ namespace Tests
                 }
             }
 
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
+            foreach (KeyValuePair<FactionModel, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
             {
                 if (relationship.Key.Name == Unit.FactionModel.Name && relationship.Value == RelationCheck)
                 {
@@ -85,6 +95,8 @@ namespace Tests
         [TestCase(Faction_Relations.hostile, Faction_Relations.hostile, false)]
         public void ChangeRelationshipOfFaction(Faction_Relations relation, Faction_Relations ChangedRelation, bool ExpectedResult)
         {
+            //    [Review] wtf? Why loop through relationships when you can access them like FactionRelationships[Key]?
+
             Unit.AddRelationship(Friend.FactionModel, relation);
 
             var result = false;
@@ -92,7 +104,7 @@ namespace Tests
 
             Unit.ChangeRelationship(Friend.FactionModel, ChangedRelation);
 
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
+            foreach (KeyValuePair<FactionModel, Faction_Relations> relationship in Unit.FactionModel.FactionRelationships)
             {
                 if (relationship.Key.Name == Friend.FactionModel.Name && relationship.Value != relation)
                 {
@@ -100,7 +112,7 @@ namespace Tests
                 }
             }
 
-            foreach (KeyValuePair<Faction_Model, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
+            foreach (KeyValuePair<FactionModel, Faction_Relations> relationship in Friend.FactionModel.FactionRelationships)
             {
                 if (relationship.Key.Name == Unit.FactionModel.Name && relationship.Value != relation)
                 {
@@ -110,9 +122,29 @@ namespace Tests
 
             Assert.IsTrue(result == ExpectedResult);
             Assert.IsTrue(result2 == ExpectedResult);
-
         }
 
+        [TestCase()]
+        public void Test_ShouldAlterCurrency_WhenDayPassed()
+        {
+            //TODO
+            //    Arrange
+            Faction_Controller faction = new Faction_Controller("test", game, 500);
+
+            Mock<IStructure<IStructureDef>> structureMock = new Mock<IStructure<IStructureDef>>();
+
+            structureMock.SetupGet(structureParam => structureParam.Def).Returns(new BuildingDef()
+            {
+                UpkeepCost = 100
+            });
+            IStructure<IStructureDef> structure = structureMock.Object;
+
+            faction.RegisterBuilding(structure);
+
+            //    Act
+//            game.TimeController = new TimeController();
+
+            //    Assert
+        }
     }
 }
-

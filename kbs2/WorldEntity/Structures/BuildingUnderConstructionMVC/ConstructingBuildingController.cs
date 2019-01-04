@@ -1,28 +1,22 @@
 ﻿using System.Collections.Generic;
-using kbs2.Actions;
-using kbs2.Actions.ActionMVC;
-using kbs2.Actions.GameActionDefs;
-using kbs2.Actions.GameActions;
 using kbs2.Actions.Interfaces;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
-using kbs2.GamePackage;
 using kbs2.GamePackage.EventArgs;
+using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Building.BuildingMVC;
+using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Interfaces;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using kbs2.WorldEntity.Structures.Defs;
 
-namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
+namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 {
-    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>, IHasGameActions, IStructure
+    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>, IHasGameActions
     {
         public delegate void ConstructionCompleteObserver(object sender, EventArgsWithPayload<IStructureDef> eventArgs);
 
-        public float CurrentTimer;
         public ConstructingBuildingModel ConstructingBuildingModel { get; set; } = new ConstructingBuildingModel();
         public ConstructingBuildingView ConstructingBuildingView { get; set; }
         public ConstructionCounter Counter { get; }
@@ -33,19 +27,34 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
 
         public event ConstructionCompleteObserver ConstructionComplete;
 
-        public FloatCoords center
+        public FloatCoords Centre => new FloatCoords
         {
-            get
-            {
-                return new FloatCoords
-                {
-                    x = StartCoords.x + ConstructingBuildingView.Width / 2,
-                    y = StartCoords.y + ConstructingBuildingView.Height / 2
-                };
-            }
+            x = StartCoords.x + ConstructingBuildingView.Width / 2,
+            y = StartCoords.y + ConstructingBuildingView.Height / 2
+        };
+
+        public int ViewRange => 8;
+
+        public IViewImage View => ConstructingBuildingView;
+
+        public List<WorldCellModel> OccupiedCells => ConstructingBuildingModel.LocationCells;
+
+        public Coords StartCoords
+        {
+            get => ConstructingBuildingModel.StartCoords;
+            set => ConstructingBuildingModel.StartCoords = value;
         }
 
-        public int viewrange => 8;
+        public ConstructingBuildingDef Def => ConstructingBuildingModel.BuildingDef;
+        public Faction_Controller Faction
+        {
+            get => ConstructingBuildingModel.FactionController;
+            set => ConstructingBuildingModel.FactionController = value;
+        }
+
+        public float Width => ConstructingBuildingView.Width;
+
+        public float Height => ConstructingBuildingView.Height;
 
         public ConstructingBuildingController(ConstructingBuildingDef def)
         {
@@ -66,24 +75,6 @@ namespace kbs2.WorldEntity.Building.BuildingUnderConstructionMVC
             }
 
             Counter.Text = ((int) (ConstructingBuildingModel.FinishTime - eventArgs.GameTime.TotalGameTime.TotalSeconds)).ToString();
-            CurrentTimer = (float) eventArgs.GameTime.ElapsedGameTime.TotalSeconds;
         }
-
-        public List<WorldCellModel> OccupiedCells => ConstructingBuildingModel.LocationCells;
-
-        public Coords StartCoords
-        {
-            get => ConstructingBuildingModel.StartCoords;
-            set => ConstructingBuildingModel.StartCoords = value;
-        }
-
-        IStructureDef IStructure<IStructureDef>.Def => Def;
-
-        public ConstructingBuildingDef Def => ConstructingBuildingModel.BuildingDef;
-        public Faction_Controller Faction => ConstructingBuildingModel.FactionController;
-
-        public float With => ConstructingBuildingView.Width;
-
-        public float Heigth => ConstructingBuildingView.Height;
     }
 }

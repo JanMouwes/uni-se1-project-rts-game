@@ -1,33 +1,36 @@
 ﻿using kbs2.Faction.Enums;
 using kbs2.Faction.Interfaces;
-using kbs2.Unit.Model;
-using kbs2.WorldEntity.Building;
-using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Unit.MVC;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kbs2.WorldEntity.Building.BuildingMVC;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structures.ResourceFactory;
 
 namespace kbs2.Faction.FactionMVC
 {
-    public class Faction_Model : IHasFactionUnit, IHasFactionBuilding
+    public class FactionModel : IHasFactionUnit, IHasFactionBuilding
     {
         public string Name { get; set; }
-        public Dictionary<Faction_Model, Faction_Relations> FactionRelationships { get; set; }
-        public List<UnitController> Units { get; set; }
-        public List<IStructure> Buildings { get; set; }
+        
+        public Dictionary<FactionModel, Faction_Relations> FactionRelationships { get; set; }
 
-        public Faction_Model(string name)
+        public List<IWorldEntity> Entities { get; } = new List<IWorldEntity>();
+
+        public List<UnitController> Units { get; set; }
+
+        public List<IStructure<IStructureDef>> Buildings { get; set; }
+
+        public IEnumerable<ResourceFactoryController> ResourceFactories => from building in Buildings
+            where building is ResourceFactoryController
+            select (ResourceFactoryController) building;
+
+
+        public FactionModel(string name)
         {
-			Name = name;
-			FactionRelationships = new Dictionary<Faction_Model, Faction_Relations>();
+            Name = name;
+            FactionRelationships = new Dictionary<FactionModel, Faction_Relations>();
             Units = new List<UnitController>();
-            //TODO use central 'List<IStructure>' with LINQ-queries for filtering
-            Buildings = new List<IStructure>(); 
+            Buildings = new List<IStructure<IStructureDef>>();
         }
     }
 }

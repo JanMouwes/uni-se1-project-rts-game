@@ -137,17 +137,18 @@ namespace kbs2.GamePackage
                 WorldCellModel cell = gameController.GameModel.World.GetCellFromCoords((Coords)TopLeft).worldCellModel;
                 if (cell.BuildingOnTop != null)
                 {
-                    selected.Add((IHasGameActions)cell.BuildingOnTop);
+                    selected.Add(cell.BuildingOnTop as IHasGameActions);
                 }
             }
             else
             {
-                selected = (from Item in gameController.PlayerFaction.FactionModel.Buildings
-                            where TopLeft.x <= Item.StartCoords.x + (Item.With / 2)
-                            && TopLeft.y <= Item.StartCoords.y + (Item.Heigth / 2)
-                            && BottomRight.x >= Item.StartCoords.x + (Item.With / 2)
-                            && BottomRight.y >= Item.StartCoords.y + (Item.Heigth / 2)
-                            select Item).Cast<IHasGameActions>().ToList();
+                //    TODO optimise
+                selected = (from item in gameController.PlayerFaction.FactionModel.Buildings
+                            where TopLeft.x <= item.StartCoords.x + (item.Width / 2)
+                            && TopLeft.y <= item.StartCoords.y + (item.Height / 2)
+                            && BottomRight.x >= item.StartCoords.x + (item.Width / 2)
+                            && BottomRight.y >= item.StartCoords.y + (item.Height / 2)
+                            select item).Cast<IHasGameActions>().ToList();
             }
 
             return selected;

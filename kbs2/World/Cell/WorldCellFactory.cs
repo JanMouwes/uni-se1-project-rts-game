@@ -12,7 +12,7 @@ namespace kbs2.World.Cell
 {
     class WorldCellFactory
     {
-        private static FastNoise myNoise = new FastNoise(WorldModel.seed);
+        private static FastNoise myNoise = new FastNoise(WorldModel.Seed);
 
         /// <summary>
         /// Generates a new chunk with new cells

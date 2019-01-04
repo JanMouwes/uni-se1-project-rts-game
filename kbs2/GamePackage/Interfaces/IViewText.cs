@@ -11,7 +11,7 @@ namespace kbs2.GamePackage.Interfaces
 {
     public interface IViewText : IViewItem
     {
-        string SpriteFont { get; set; }
-        string Text { get; set; }
+        string SpriteFont { get; }
+        string Text { get; }
     }
 }

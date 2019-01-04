@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using kbs2.Faction.CurrencyMVC;
 using kbs2.Faction.Enums;
-using kbs2.Factory.Enums;
-using kbs2.Factory.ResourceMVC;
+using kbs2.Resources;
+using kbs2.Resources.Enums;
 using NUnit.Framework;
 
 namespace Tests
@@ -12,27 +12,22 @@ namespace Tests
     [TestFixture]
     public class ResourceTests
     {
-
-        ResourceController controller;
-
-
+        ResourceCalculator calculator;
 
 
         [Test]
-        [TestCase(1, 2, 3, 10 + 500)]
+        [TestCase(1f, 2f, 3f, 10f + 500f)]
         public void ResourcesToCurrencyTest(float type1, float type2, float type3, float result)
         {
-            controller = new ResourceController();
-            controller.AddResource(type1, ResourceType.Food);
-            controller.AddResource(type1, ResourceType.Stone);
-            controller.AddResource(type1, ResourceType.Wood);
+            calculator = new ResourceCalculator();
+            calculator.AddResource(type1, ResourceType.Food);
+            calculator.AddResource(type2, ResourceType.Stone);
+            calculator.AddResource(type3, ResourceType.Wood);
 
-            controller.ResourcesToCurrency();
+            float actual = calculator.CalculateResourceWorth();
+            
             // this test contains an error
-            // Assert.AreEqual(controller.model.currency, result);
+            Assert.AreEqual(result, actual);
         }
-
-
     }
 }
-

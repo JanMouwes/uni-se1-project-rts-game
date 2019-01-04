@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using kbs2.Desktop.View.Camera;
 using kbs2.GamePackage.Interfaces;
+using kbs2.UserInterface;
 using kbs2.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -50,6 +51,8 @@ namespace kbs2.GamePackage
         {
             // Clears the graphicsDevice to make room for the new draw items
             graphicsDevice.Clear(Color.Black);
+
+            AddGui();
 
             // Updates everything on screen
             UpdateOnScreen();
@@ -182,6 +185,26 @@ namespace kbs2.GamePackage
                 new Vector2(0, 0), // point in line about which to rotate
                 SpriteEffects.None,
                 0);
+        }
+
+        /// <summary>
+        /// This function and its actions need to be refactord
+        /// </summary>
+        private void AddGui()
+        {
+            StatusBarView statusBarView = new StatusBarView(graphicsDevice);
+            LeftButtonBar leftButtonBar = new LeftButtonBar(graphicsDevice);
+            RightButtonBar rightButtonBar = new RightButtonBar(graphicsDevice);
+            BottomBarView bottomBarView = new BottomBarView(graphicsDevice);
+            MiniMapBar miniMap = new MiniMapBar(graphicsDevice);
+            ActionBarView actionBar = new ActionBarView(graphicsDevice);
+
+            gameModel.GuiItemList.Add(statusBarView);
+            gameModel.GuiItemList.Add(leftButtonBar);
+            gameModel.GuiItemList.Add(rightButtonBar);
+            gameModel.GuiItemList.Add(bottomBarView);
+            gameModel.GuiItemList.Add(miniMap);
+            gameModel.GuiItemList.Add(actionBar);
         }
     }
 }

@@ -4,6 +4,8 @@ namespace kbs2.WorldEntity.Interfaces
 {
     public interface IWorldEntityDef : ISpawnableDef
     {
-        ViewValues ViewValues { get; }
+        ViewValues ViewValues { get; set; }
+
+        int ViewRange { get; set; }
     }
 }
