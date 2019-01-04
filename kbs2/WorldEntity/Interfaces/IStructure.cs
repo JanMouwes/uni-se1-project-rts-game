@@ -9,7 +9,7 @@ namespace kbs2.WorldEntity.Interfaces
 
     public interface IStructure<out TStructureDef> : IWorldEntity, IImpassable where TStructureDef : IStructureDef
     {
-        IViewImage View { get; }
+
 
         /// <summary>
         /// Cells which the structure occupies

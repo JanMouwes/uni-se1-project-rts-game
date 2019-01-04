@@ -3,6 +3,7 @@ using kbs2.Actions.Interfaces;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage.EventArgs;
+using kbs2.GamePackage.Interfaces;
 using kbs2.Unit.Model;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Interfaces;
@@ -15,6 +16,8 @@ namespace kbs2.WorldEntity.Unit.MVC
         public Location_Controller LocationController;
         public Unit_Model UnitModel;
         public Unit_View UnitView;
+
+        public IViewImage View => UnitView;
 
         public List<IGameAction> GameActions => UnitModel.Actions;
 
