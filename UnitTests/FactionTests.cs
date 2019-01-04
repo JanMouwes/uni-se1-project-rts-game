@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using kbs2.Faction.Enums;
 using kbs2.Faction.FactionMVC;
+using kbs2.GamePackage;
+using kbs2.GamePackage.DayCycle;
+using Moq;
 using NUnit.Framework;
 
 
@@ -18,11 +21,14 @@ namespace Tests
         [SetUp]
         public void init()
         {
-            Unit = new Faction_Controller("Water");
-            Enemy = new Faction_Controller("Earth");
-            Friend = new Faction_Controller("Fire");
-            Neutral = new Faction_Controller("Äir");
+            Mock<GameController> gameMock = new Mock<GameController>(GameSpeed.Regular, GameState.Paused);
 
+            GameController game = gameMock.Object;
+
+            Unit = new Faction_Controller("Water", game);
+            Enemy = new Faction_Controller("Earth", game);
+            Friend = new Faction_Controller("Fire", game);
+            Neutral = new Faction_Controller("Äir", game);
         }
 
 
@@ -41,7 +47,6 @@ namespace Tests
 
             Assert.IsTrue(result == ExpectedResult);
             Assert.IsTrue(result2 == ExpectedResult);
-
         }
 
         [Test]
@@ -110,9 +115,6 @@ namespace Tests
 
             Assert.IsTrue(result == ExpectedResult);
             Assert.IsTrue(result2 == ExpectedResult);
-
         }
-
     }
 }
-

@@ -10,53 +10,48 @@ namespace Tests
     [TestFixture]
     public class CurrencyTests
     {
-
         public CurrencyTests()
         {
         }
+
         Currency_Controller controller;
 
 
-
         [Test]
-        [TestCase(20)]
-        [TestCase(30)]
+        [TestCase(20f)]
+        [TestCase(30f)]
         public void AddCurrency(float amount)
         {
-            controller = new Currency_Controller();
+            controller = new Currency_Controller(500);
             float expected = 500 + amount;
             controller.AlterCurrency(amount);
 
-            Assert.IsTrue(controller.Model.currency == expected);
+            Assert.AreEqual(expected, controller.Model.currency);
         }
 
         [Test]
-        [TestCase(20)]
-        [TestCase(30)]
+        [TestCase(20f)]
+        [TestCase(30f)]
         public void RemoveCurrency(float amount)
         {
-            controller = new Currency_Controller();
+            controller = new Currency_Controller(500);
             float expected = 500 - amount;
-            controller.RemoveCurrency(amount);
+            controller.AlterCurrency(-amount);
 
-            Assert.IsTrue(controller.Model.currency == expected);
+            Assert.AreEqual(expected, controller.Model.currency);
         }
 
 
         [Test]
-        [TestCase(20)]
-        [TestCase(30)]
+        [TestCase(20f)]
+        [TestCase(30f)]
         public void AddUpkeepCost(float amount)
         {
-            controller = new Currency_Controller();
+            controller = new Currency_Controller(500);
             float expected = amount;
-            controller.AddUpkeepCost(amount);
+            controller.AlterCurrency(amount);
 
-            Assert.IsTrue(controller.Model.UpkeepCost == expected);
+            Assert.AreEqual(expected, controller.Model.UpkeepCost);
         }
-
-
-
     }
 }
-

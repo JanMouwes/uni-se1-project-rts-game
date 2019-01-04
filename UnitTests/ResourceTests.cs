@@ -12,14 +12,11 @@ namespace Tests
     [TestFixture]
     public class ResourceTests
     {
-
         ResourceCalculator calculator;
 
 
-
-
         [Test]
-        [TestCase(1, 2, 3, 10 + 500)]
+        [TestCase(1f, 2f, 3f, 10f + 500f)]
         public void ResourcesToCurrencyTest(float type1, float type2, float type3, float result)
         {
             calculator = new ResourceCalculator();
@@ -27,12 +24,9 @@ namespace Tests
             calculator.AddResource(type1, ResourceType.Stone);
             calculator.AddResource(type1, ResourceType.Wood);
 
-            calculator.CalculateResourceWorth();
+            float actual = calculator.CalculateResourceWorth();
             // this test contains an error
-            // Assert.AreEqual(controller.model.currency, result);
+            Assert.AreEqual(result, actual);
         }
-
-
     }
 }
-

@@ -8,11 +8,12 @@ namespace kbs2.Faction.CurrencyMVC
 {
     public class Currency_Controller
     {
-        public readonly Currency_Model Model = new Currency_Model();
+        public readonly Currency_Model Model;
         public readonly CurrencyView View;
 
-        public Currency_Controller()
+        public Currency_Controller(float startingBalance)
         {
+            Model = new Currency_Model(startingBalance);
             View = new CurrencyView(Model);
         }
 

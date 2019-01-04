@@ -34,7 +34,7 @@ namespace Tests
             gameController = gameControllerMock.Object;
 
             //    Faction
-            factionController = new Faction_Controller("test-faction");
+            factionController = new Faction_Controller("test-faction", gameController);
         }
 
 
@@ -45,7 +45,7 @@ namespace Tests
             //    Arrange
             Mock<EntitySpawner> spawner = new Mock<EntitySpawner>(MockBehavior.Loose, new object[] {gameController});
 
-            
+
             spawner.Setup(entitySpawner => entitySpawner.SpawnUnit(It.IsAny<UnitController>(), It.IsAny<Coords>())).Verifiable();
 
             gameController.Spawner = spawner.Object;
@@ -75,7 +75,7 @@ namespace Tests
 
             spawner.VerifyAll();
         }
-        
+
         [TestCase(1, 1)]
         [TestCase(2, 2)]
         public void Test_ShouldSpawnStructure_WhenExecuteInvoked(int x, int y)
@@ -83,7 +83,7 @@ namespace Tests
             //    Arrange
             Mock<EntitySpawner> spawner = new Mock<EntitySpawner>(MockBehavior.Loose, new object[] {gameController});
 
-            spawner.Setup(entitySpawner => entitySpawner.SpawnStructure(It.IsAny<Coords>(), It.IsAny<IStructure>())).Verifiable();
+            spawner.Setup(entitySpawner => entitySpawner.SpawnStructure(It.IsAny<Coords>(), It.IsAny<IStructure<IStructureDef>>())).Verifiable();
 
             gameController.Spawner = spawner.Object;
 

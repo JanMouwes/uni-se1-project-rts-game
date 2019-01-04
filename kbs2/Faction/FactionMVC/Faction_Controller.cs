@@ -24,10 +24,14 @@ namespace kbs2.Faction.FactionMVC
         public FactionModel FactionModel { get; set; }
         public readonly Currency_Controller CurrencyController;
 
-        public Faction_Controller(string name, GameController game)
+        public Faction_Controller(string name, GameController game) : this(name, game, 500)
+        {
+        }
+
+        public Faction_Controller(string name, GameController game, float startingBalance)
         {
             FactionModel = new FactionModel(name);
-            CurrencyController = new Currency_Controller();
+            CurrencyController = new Currency_Controller(500);
 
             game.TimeController.DayPassed += OnDayPassed;
         }
