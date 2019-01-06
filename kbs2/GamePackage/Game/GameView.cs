@@ -30,7 +30,7 @@ namespace kbs2.GamePackage
         public List<IViewImage> DrawList => SortByZIndex(gameModel.ItemList);
 
         // List for drawing items without offset
-        public List<IViewImage> DrawGuiList => SortByZIndex(gameModel.GuiItemList);
+        public List<IViewImage> DrawGuiList => SortByZIndex(gameModel.GuiItemList.Select(item => (IViewImage) item));
 
         // List for drawing text with the camera offset
         public List<IViewText> DrawText

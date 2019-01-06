@@ -6,8 +6,10 @@ namespace kbs2.Actions.GameActions
     public class GameAction : IGameAction
     {
         public event TabActionDelegate Clicked;
-        
+
         public ViewValues IconValues { get; set; }
+        
+        public void InvokeClick() => Clicked?.Invoke();
 
         public GameAction(ViewValues iconValues)
         {

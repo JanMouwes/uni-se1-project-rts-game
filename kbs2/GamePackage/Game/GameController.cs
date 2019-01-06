@@ -33,6 +33,7 @@ using kbs2.Actions.GameActionSelector;
 using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
 using kbs2.UserInterface.GameActionGui;
+using kbs2.View.GUI;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Pathfinder;
 using kbs2.WorldEntity.Structs;
@@ -335,7 +336,7 @@ namespace kbs2.GamePackage
             GameModel.GuiItemList.Add(miniMap);
             GameModel.GuiItemList.Add(actionBar);
 
-            GameModel.GuiItemList.AddRange(actionBar.GetContents.Select(item => (IViewImage) item));
+            GameModel.GuiItemList.AddRange(actionBar.GetContents.Select(item => (IGuiViewImage) item));
         }
 
 
@@ -408,7 +409,7 @@ namespace kbs2.GamePackage
 
             if (GameModel.ActionBox.BoxModel.Show)
             {
-                GameModel.GuiItemList.Add(GameModel.ActionBox.BoxView);
+//                GameModel.GuiItemList.Add(GameModel.ActionBox.BoxView);
                 GameModel.GuiTextList.Add(GameModel.ActionBox.BoxModel.Text);
             }
 

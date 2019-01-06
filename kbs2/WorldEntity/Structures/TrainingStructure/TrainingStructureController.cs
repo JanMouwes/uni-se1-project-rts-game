@@ -49,7 +49,9 @@ namespace kbs2.WorldEntity.Structures.TrainingStructure
 
         public int TimeFinished { get; private set; }
         public int TimeRemaining { get; private set; }
-        public int TotalTimeRemaining { get; private set; }
+        public int TotalTimeRemaining => (int) Math.Ceiling((double) (TrainingQueue.Sum(item => item.Def.TrainingTime) + TimeRemaining));
+
+        public Coords SpawnPosition => StartCoords + new Coords() {y = -2};
 
         public ITrainable CurrentlyTraining { get; private set; }
 
@@ -82,7 +84,7 @@ namespace kbs2.WorldEntity.Structures.TrainingStructure
             if (CurrentlyTraining == null)
             {
                 if (!TrainingQueue.Any()) return;
-                
+
                 CurrentlyTraining = TrainingQueue.Dequeue();
                 TimeFinished = totalTimeElapsed + (int) CurrentlyTraining.Def.TrainingTime;
                 return;
@@ -90,7 +92,7 @@ namespace kbs2.WorldEntity.Structures.TrainingStructure
 
             if (totalTimeElapsed >= TimeFinished)
             {
-                spawner.SpawnWorldEntity(CurrentlyTraining);
+                spawner.SpawnWorldEntity(SpawnPosition, CurrentlyTraining);
                 CurrentlyTraining = null;
                 return;
             }

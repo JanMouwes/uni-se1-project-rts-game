@@ -6,8 +6,9 @@ namespace kbs2.Actions.ActionTabActions
     public class SelectMapAction_GameAction : IGameAction
     {
         public event TabActionDelegate Clicked;
-        
+
         public ViewValues IconValues { get; set; }
+        public void InvokeClick() => Clicked?.Invoke();
 
         public SelectMapAction_GameAction(GameActionSelector.MapActionSelector selector, IMapAction mapAction, ViewValues iconValues)
         {
@@ -15,7 +16,7 @@ namespace kbs2.Actions.ActionTabActions
             Clicked += () =>
             {
                 if (mapAction == null) return;
-                
+
                 selector.Select(mapAction);
             };
         }

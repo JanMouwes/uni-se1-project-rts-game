@@ -102,11 +102,17 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             Game.onTick -= structure.Update;
         }
 
-        public void SpawnWorldEntity(IWorldEntity entity)
+        public void SpawnWorldEntity(Coords location, IWorldEntity entity)
         {
-            throw new NotImplementedException();
-            //    FIXME Unfinished
-            World.WorldModel.Units.Add(entity as UnitController);
+            switch (entity)
+            {
+                case IStructure<IStructureDef> structure:
+                    SpawnStructure(location, structure);
+                    break;
+                case UnitController unit:
+                    SpawnUnit(unit, location);
+                    break;
+            }
         }
     }
 }

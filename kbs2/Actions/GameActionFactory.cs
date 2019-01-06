@@ -21,9 +21,16 @@ namespace kbs2.Actions
         {
             IGameAction gameAction = new GameAction(trainableDef.IconData);
 
-            UnitFactory unitFactory = new UnitFactory(trainingEntity.Faction, game);
-            ITrainable spawnable = unitFactory.CreateNewTrainable(trainableDef);
-            gameAction.Clicked += () => trainingEntity.TrainingQueue.Enqueue(spawnable);
+            gameAction.Clicked += () =>
+            {
+                UnitFactory unitFactory = new UnitFactory(trainingEntity.Faction, game);
+                ITrainable spawnable = unitFactory.CreateNewTrainable(trainableDef);
+
+                if (!trainingEntity.Faction.CanPurchase(spawnable.Def)) return;
+
+                trainingEntity.Faction.Purchase(spawnable.Def);
+                trainingEntity.TrainingQueue.Enqueue(spawnable);
+            };
 
             return gameAction;
         }

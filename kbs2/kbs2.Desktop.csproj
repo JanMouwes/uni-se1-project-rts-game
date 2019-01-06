@@ -65,7 +65,6 @@
     <Compile Include="Actions\MapActions\ActionView.cs" />
     <Compile Include="Actions\MapActions\CooldownView.cs" />
     <Compile Include="Actions\MapActions\SpawnAction.cs" />
-    <Compile Include="Actions\MapActions\TrainAction.cs" />
     <Compile Include="Actions\IActionModel.cs" />
     <Compile Include="Actions\Interfaces\IGameAction.cs" />
     <Compile Include="Actions\Interfaces\IMapAction.cs" />

@@ -6,7 +6,12 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.View.GUI
 {
-    public abstract class GuiViewImage : IViewImage
+    public interface IGuiViewImage : IViewImage
+    {
+        void Click();
+    }
+
+    public abstract class GuiViewImage : IGuiViewImage
     {
         public int ZIndex => 2;
         public Color Colour => Color.White;
@@ -24,5 +29,7 @@ namespace kbs2.View.GUI
         public virtual float Width { get; protected set; }
         public virtual float Height { get; protected set; }
         public virtual string Texture { get; protected set; }
+
+        public abstract void Click();
     }
 }

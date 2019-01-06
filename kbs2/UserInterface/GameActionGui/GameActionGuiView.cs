@@ -4,6 +4,7 @@ using kbs2.Actions.GameActionGrid;
 using kbs2.GamePackage;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
+using kbs2.View.GUI;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
@@ -11,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.UserInterface.GameActionGui
 {
-    public class GameActionGuiView : IViewImage
+    public class GameActionGuiView : IGuiViewImage
     {
         private GameActionGuiModel model;
 
@@ -31,7 +32,13 @@ namespace kbs2.UserInterface.GameActionGui
 
         public ViewMode ViewMode => ViewMode.Full;
 
-        public IEnumerable<IViewItem> GetContents => (model.CurrentTab != null) ? model.CurrentTab.GameActionTabItems.Where(item => item != null).Select(item => (IViewItem) item).ToList() : new List<IViewItem>();
+        public IEnumerable<IViewItem> GetContents => ((model.CurrentTab != null) 
+            ? model.CurrentTab.GameActionTabItems.Where(item => item != null).Select(item => (IViewItem) item).ToList() 
+            : new List<IViewItem>()).Concat(new List<IViewItem>() { });
+
+        public void Click()
+        {
+        }
 
         public GameActionGuiView(GameActionGuiModel model)
         {

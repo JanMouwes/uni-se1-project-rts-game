@@ -58,7 +58,7 @@ namespace kbs2
         private static bool IsBuildingResourceFactory(int id)
         {
             DBConn = OpenConnection("DefDex.db");
-            
+
             const string query = "SELECT * FROM Def_ResourceFactory WHERE id=@i";
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
@@ -85,7 +85,7 @@ namespace kbs2
         private static bool IsWorldEntityTrainingEntity(int id, int worldEntityTypeId)
         {
             DBConn = OpenConnection("DefDex.db");
-            
+
             const string query = "SELECT * FROM Def_TrainingEntity WHERE entity_id=@i AND entity_type_id = @j";
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
@@ -103,7 +103,7 @@ namespace kbs2
         private static IEnumerable<ITrainableDef> GetTrainingEntityTrainables(int trainingEntityId)
         {
             DBConn = OpenConnection("DefDex.db");
-            
+
             const string query = "SELECT unit_id FROM Def_TrainingEntity_Trainable WHERE training_entity_id = @i";
 
             List<ITrainableDef> returnList = new List<ITrainableDef>();
@@ -130,7 +130,7 @@ namespace kbs2
         private static ResourceType GetResourceBuildingValues(int structureId)
         {
             DBConn = OpenConnection("DefDex.db");
-            
+
             const string query = "SELECT Def_ResourceType.name as resource_type" +
                                  "FROM BuildingDef " +
                                  "JOIN Def_ResourceFactory ON BuildingDef.Id = Def_ResourceFactory.id " +
@@ -174,7 +174,7 @@ namespace kbs2
         public static TStructureDef GetBuildingDef<TStructureDef>(int buildingId) where TStructureDef : BuildingDef
         {
             DBConn = OpenConnection("DefDex.db");
-            
+
             string query = "SELECT * FROM BuildingDef WHERE Id=@i";
 
             bool isResourceFactory = IsBuildingResourceFactory(buildingId);
@@ -259,6 +259,7 @@ namespace kbs2
                         returnedUnitDef.Upkeep = float.Parse(reader["Upkeep"].ToString());
                         returnedUnitDef.PurchaseCost = float.Parse(reader["Cost"].ToString());
                         returnedUnitDef.ViewRange = int.Parse(reader["ViewRange"].ToString());
+                        returnedUnitDef.TrainingTime = uint.Parse(reader["TrainingTime"].ToString());
 
                         // This is for the different defs not implemented yet
                         /*returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());

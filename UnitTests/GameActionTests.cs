@@ -61,7 +61,7 @@ namespace Tests
 
             Mock<SpawnActionDef> actionDef = new Mock<SpawnActionDef>(new object[] {(uint) 10, "image", unitDef});
 
-            actionDef.Setup(def => def.SpawnableDef).Returns(() => unitDef);
+            actionDef.SetupGet(def => def.SpawnableDef).Returns(() => unitDef);
 
             Mock<ITargetable> target = new Mock<ITargetable>();
 
@@ -98,7 +98,7 @@ namespace Tests
 
             Mock<SpawnActionDef> actionDef = new Mock<SpawnActionDef>(new object[] {(uint) 10, "image", buildingDef});
 
-            actionDef.Setup(def => def.SpawnableDef).Returns(() => buildingDef);
+            actionDef.SetupGet(def => def.SpawnableDef).Returns(() => buildingDef);
 
             Mock<ITargetable> target = new Mock<ITargetable>();
 

@@ -17,7 +17,8 @@ namespace kbs2.Actions.GameActionGrid
 
         public const int GAME_ACTIONS_PER_TAB = ROWS * COLUMNS;
 
-        private int guiWidth => (int) parent.View.Width;
+        private int GuiWidth => (int) parent.View.Width;
+        private int GuiHeight => (int) parent.View.Height;
 
         /// <summary>
         /// Times the size of the moats in between the items
@@ -27,9 +28,10 @@ namespace kbs2.Actions.GameActionGrid
         /// <summary>
         /// ITEM_WEIGHT times as big as the 'moats' in between
         /// </summary>
-        private int ItemWidth => (int) (guiWidth / (COLUMNS * (ITEM_WEIGHT + 1) + 1) * ITEM_WEIGHT);
+        private int ItemWidth => (int) (GuiWidth / (COLUMNS * (ITEM_WEIGHT + 1) + 1) * ITEM_WEIGHT);
 
-        private int MoatSize => (int) (guiWidth / (COLUMNS * (ITEM_WEIGHT + 1) + 1));
+        private int HMoatSize => (int) (GuiWidth / (COLUMNS * (ITEM_WEIGHT + 1) + 1));
+        private int VMoatSize => (int) ((GuiHeight - (ROWS * ItemWidth)) / ROWS + 1);
 
         private GameActionGuiController parent;
 
@@ -49,8 +51,8 @@ namespace kbs2.Actions.GameActionGrid
                 IGameAction gameAction = gameActions[i];
                 FloatCoords location = new FloatCoords()
                 {
-                    x = column * (ItemWidth + MoatSize) + MoatSize,
-                    y = row * (ItemWidth + MoatSize) + MoatSize
+                    x = column * (ItemWidth + HMoatSize) + HMoatSize,
+                    y = row * (ItemWidth + VMoatSize) + VMoatSize
                 };
 
                 location += parent.View.Coords;

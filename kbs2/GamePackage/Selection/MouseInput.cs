@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using kbs2.GamePackage.EventArgs;
-using kbs2.GamePackage.Interfaces;
 using kbs2.utils;
+using kbs2.View.GUI;
 using kbs2.World;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Structs;
-using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.GamePackage
@@ -55,58 +52,57 @@ namespace kbs2.GamePackage
 
         public void GuiOrMap(FloatCoords mouseCoords, MouseState mouseState, MouseButton activeButton)
         {
-            List<IViewImage> clickedGuiItems = (from item in game.GameModel.GuiItemList
+            List<IGuiViewImage> clickedGuiItems = (from item in game.GameModel.GuiItemList
                 where mouseCoords.x >= item.Coords.x
                       && mouseCoords.y >= item.Coords.y
                       && mouseCoords.x <= item.Coords.x + item.Width
                       && mouseCoords.y <= item.Coords.y + item.Height
+                orderby item.ZIndex descending
                 select item).ToList();
 
-            if (clickedGuiItems.Count > 0)
+
+            switch (activeButton)
             {
-                //TODO geef door aan gui
-                Console.WriteLine("gui Click");
-            }
-            else
-            {
-                switch (activeButton)
-                {
-                    case MouseButton.Left:
-                        switch (mouseState.LeftButton)
-                        {
-                            //TODO LeftButtonPressed?.Invoke()
-                            //TODO LeftButtonReleased?.Invoke()
-                            case ButtonState.Pressed:
-
-
-                                Selection.ButtonPressed(mouseCoords);
-                                break;
-                            case ButtonState.Released:
-                                game.MapActionSelector.Clear();
-
-                                Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
-                                break;
-                        }
-
-                        break;
-                    case MouseButton.Right:
-                        switch (mouseState.RightButton)
-                        {
-                            //TODO RightButtonPressed?.Invoke()
-                            //TODO RightButtonReleased?.Invoke()
-                            case ButtonState.Pressed:
-                                Selection.move(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
-                                break;
-                            case ButtonState.Released:
+                case MouseButton.Left:
+                    switch (mouseState.LeftButton)
+                    {
+                        //TODO LeftButtonPressed?.Invoke()
+                        //TODO LeftButtonReleased?.Invoke()
+                        case ButtonState.Pressed:
+                            if (clickedGuiItems.Any())
                             {
-                                FloatCoords cellCoords = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, game.Camera.GetViewMatrix()), game.GameView.TileSize);
-                                if (PreviousMouseState.RightButton == ButtonState.Pressed) game.SelectedMapAction?.Execute(game.GameModel.World.GetCellFromCoords((Coords) cellCoords));
-                                break;
+                                if (PreviousMouseState.LeftButton != ButtonState.Released) return;
+                                clickedGuiItems.First().Click();
+                                return;
                             }
-                        }
 
-                        break;
-                }
+                            Selection.ButtonPressed(mouseCoords);
+                            break;
+                        case ButtonState.Released:
+                            game.MapActionSelector.Clear();
+
+                            Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
+                            break;
+                    }
+
+                    break;
+                case MouseButton.Right:
+                    switch (mouseState.RightButton)
+                    {
+                        //TODO RightButtonPressed?.Invoke()
+                        //TODO RightButtonReleased?.Invoke()
+                        case ButtonState.Pressed:
+                            Selection.move(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
+                            break;
+                        case ButtonState.Released:
+                        {
+                            FloatCoords cellCoords = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, game.Camera.GetViewMatrix()), game.GameView.TileSize);
+                            if (PreviousMouseState.RightButton == ButtonState.Pressed) game.SelectedMapAction?.Execute(game.GameModel.World.GetCellFromCoords((Coords) cellCoords));
+                            break;
+                        }
+                    }
+
+                    break;
             }
         }
     }

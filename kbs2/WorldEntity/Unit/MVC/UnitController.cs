@@ -10,7 +10,7 @@ using kbs2.WorldEntity.Location.LocationMVC;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-    public class UnitController : ITrainable, IMoveable, IGameActionHolder
+    public class UnitController : ITrainable, IMoveable
     {
         public event OnMoveHandler OnMove
         {

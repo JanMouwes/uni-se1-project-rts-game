@@ -9,5 +9,7 @@ namespace kbs2.Actions.Interfaces
         event TabActionDelegate Clicked;
 
         ViewValues IconValues { get; set; }
+
+        void InvokeClick();
     }
 }

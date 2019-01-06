@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using kbs2.Faction.Interfaces;
+using kbs2.World;
 
 namespace kbs2.WorldEntity.Interfaces
 {
@@ -7,7 +8,9 @@ namespace kbs2.WorldEntity.Interfaces
     {
         int TimeRemaining { get; }
         int TotalTimeRemaining { get; }
-        
+
+        Coords SpawnPosition { get; }
+
         ITrainable CurrentlyTraining { get; }
 
         Queue<ITrainable> TrainingQueue { get; set; }
