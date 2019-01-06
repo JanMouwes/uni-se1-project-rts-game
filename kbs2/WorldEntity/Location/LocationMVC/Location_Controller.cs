@@ -89,10 +89,14 @@ namespace kbs2.WorldEntity.Location.LocationMVC
             };
 
             difference.x = Waypoints.Peek().x < LocationModel.FloatCoords.x ? -difference.x : difference.x;
-            LocationModel.FloatCoords.x = LocationModel.FloatCoords.x + difference.x;
 
             difference.y = Waypoints.Peek().y < LocationModel.FloatCoords.y ? -difference.y : difference.y;
-            LocationModel.FloatCoords.y = LocationModel.FloatCoords.y + difference.y;
+
+            LocationModel.FloatCoords = new FloatCoords()
+            {
+                x = LocationModel.FloatCoords.x + difference.x,
+                y = LocationModel.FloatCoords.y + difference.y
+            };
         }
     }
 }

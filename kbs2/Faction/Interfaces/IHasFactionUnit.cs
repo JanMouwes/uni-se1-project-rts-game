@@ -1,5 +1,4 @@
-﻿using kbs2.Unit.Model;
-using kbs2.WorldEntity.Unit.MVC;
+﻿using kbs2.WorldEntity.Unit.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;

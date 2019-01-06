@@ -1,7 +1,6 @@
 ﻿using kbs2.Faction.CurrencyMVC;
 using kbs2.Faction.Enums;
 using kbs2.Faction.Interfaces;
-using kbs2.Unit.Model;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit.MVC;
 using System;

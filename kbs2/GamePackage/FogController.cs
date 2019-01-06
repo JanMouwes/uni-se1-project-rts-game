@@ -29,6 +29,12 @@ namespace kbs2.GamePackage
         {
             this.faction = faction;
             this.worldController = worldController;
+
+//            foreach (UnitController unit in faction.FactionModel.Units)
+//            {
+//                unit.OnMove += (sender, newLocation) => UpdateViewMode(ViewMode.Fog, unit.ViewRange, newLocation.Value);
+//                unit.OnMove += (sender, newLocation) => UpdateViewMode(ViewMode.Full, unit.ViewRange, newLocation.Value);
+//            }
         }
 
         /// <summary>
@@ -40,7 +46,6 @@ namespace kbs2.GamePackage
             // line of sight units
             foreach (UnitController unit in faction.FactionModel.Units)
             {
-                UpdateViewMode(mode, unit.ViewRange, unit.Center);
             }
 
             // lino of sight buildings
@@ -101,8 +106,6 @@ namespace kbs2.GamePackage
         {
             foreach (UnitController unit in worldController.WorldModel.Units)
             {
-                
-                
                 if (worldController.GetCellFromCoords((Coords) unit.FloatCoords).worldCellView.ViewMode == ViewMode.Full)
                 {
                     unit.UnitView.ViewMode = ViewMode.Full;

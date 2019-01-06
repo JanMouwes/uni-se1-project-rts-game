@@ -1,14 +1,25 @@
 ﻿using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Structs;
+using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Structures.BuildingMVC
 {
-    public class BuildingView : IViewImage
+    public class BuildingView : BuildingView<BuildingModel, BuildingDef>
     {
-        public BuildingModel BuildingModel { get; set; }
+        public BuildingView(BuildingModel model) : base(model)
+        {
+        }
+    }
+
+    public class BuildingView<TModelType, TDefType> : IViewImage
+        where TDefType : IStructureDef
+        where TModelType : BuildingModel<TDefType>
+    {
+        public TModelType BuildingModel { get; set; }
 
         //    FIXME move to Model.
         public float Height { get; }
@@ -23,12 +34,12 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
         public ViewMode ViewMode { get; set; }
 
         // sets height, width and image for a buildingview
-        public BuildingView(BuildingModel model)
+        public BuildingView(TModelType model)
         {
             BuildingModel = model;
 
             ViewValues viewValues = model.Def.ViewValues;
-            
+
             Height = viewValues.Height;
             Width = viewValues.Width;
             Texture = viewValues.Image;

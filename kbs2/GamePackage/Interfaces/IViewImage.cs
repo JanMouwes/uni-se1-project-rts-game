@@ -1,10 +1,7 @@
-﻿using kbs2.World.Structs;
+﻿using kbs2.World;
+using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.GamePackage.Interfaces
 {

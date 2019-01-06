@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using kbs2.Actions.GameActionGrid;
+using kbs2.Actions.Interfaces;
 using kbs2.GamePackage;
 using kbs2.GamePackage.Interfaces;
 
@@ -7,18 +9,17 @@ namespace kbs2.UserInterface.GameActionGui
 {
     public class GameActionGuiController
     {
-        private readonly GameActionGuiView view;
+        public readonly GameActionGuiView View;
         private readonly GameActionGuiModel model;
-        
 
 
         public GameActionGuiController(GameController gameController)
         {
-            model = new GameActionGuiModel
+            model = new GameActionGuiModel(gameController.GraphicsDevice)
             {
                 GameController = gameController
             };
-            view = new GameActionGuiView();
+            View = new GameActionGuiView(model);
         }
 
         // switch to next group of nine
@@ -37,9 +38,9 @@ namespace kbs2.UserInterface.GameActionGui
             model.CurrentTabIndex--;
         }
 
-        public void SetActions(List<GameActionTabModel> gameActionTabModels)
+        public void SetActions(IEnumerable<GameActionTabModel> gameActionTabModels)
         {
-            model.TabModels.Clear();
+            ClearActions();
             foreach (GameActionTabModel gameActionTabModel in gameActionTabModels)
             {
                 model.TabModels.Add(gameActionTabModel);

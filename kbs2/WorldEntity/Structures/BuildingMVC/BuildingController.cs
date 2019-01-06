@@ -7,12 +7,13 @@ using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
+using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;
 
 namespace kbs2.WorldEntity.Structures.BuildingMVC
 {
-    public class BuildingController : IStructure<IStructureDef>, IHasGameActions
+    public class BuildingController : IStructure<BuildingDef>, IGameActionHolder
     {
         public List<IGameAction> GameActions { get; } = new List<IGameAction>();
 
@@ -32,7 +33,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
             set => Model.TopLeft = value;
         }
 
-        public IStructureDef Def => Model.Def;
+        public BuildingDef Def => Model.Def;
 
         public int ViewRange => 8;
 
@@ -42,7 +43,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
 
         public Faction_Controller Faction { get; set; }
 
-        public BuildingController(IStructureDef def)
+        public BuildingController(BuildingDef def)
         {
             Model.Def = def;
 

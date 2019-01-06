@@ -8,7 +8,13 @@ using kbs2.World.Cell;
 
 namespace kbs2.WorldEntity.Interfaces
 {
-    public interface IWorldEntity : IHasPersonalSpace, ISpawnable, ITargetable, IFactionMember
+    public enum WorldEntityType
+    {
+        Structure,
+        Unit
+    }
+    
+    public interface IWorldEntity : IHasPersonalSpace, ITargetable, IFactionMember, IGameActionHolder
     {
         /// <summary>
         /// Entity's image to be displayed on the map

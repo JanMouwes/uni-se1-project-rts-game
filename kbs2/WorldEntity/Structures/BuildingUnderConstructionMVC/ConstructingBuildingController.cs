@@ -13,7 +13,7 @@ using kbs2.WorldEntity.Structures.Defs;
 
 namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 {
-    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>, IHasGameActions
+    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>, IGameActionHolder
     {
         public delegate void ConstructionCompleteObserver(object sender, EventArgsWithPayload<IStructureDef> eventArgs);
 

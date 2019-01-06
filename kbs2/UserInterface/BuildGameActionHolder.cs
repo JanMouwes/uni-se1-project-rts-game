@@ -9,15 +9,16 @@ using kbs2.Actions.GameActionDefs;
 using kbs2.Actions.GameActions;
 using kbs2.Actions.Interfaces;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Structures;
 
 namespace kbs2.UserInterface
 {
-    public class BuildGameActions : IHasGameActions
+    public class BuildGameActionHolder : IGameActionHolder
     {
         public List<IGameAction> GameActions { get; set; }
 
         // generate test actionlist
-        public BuildGameActions(GameController controller)
+        public BuildGameActionHolder(GameController controller)
         {
             BuildingDef buildingDef = DBController.GetBuildingDef<BuildingDef>(1); //FIXME
 

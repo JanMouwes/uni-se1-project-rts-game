@@ -12,6 +12,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.GamePackage
 {
+    public enum MouseButton
+    {
+        Left,
+        Right
+    }
+
     public class MouseInput
     {
         public MouseState PreviousMouseState { get; set; }
@@ -33,25 +39,27 @@ namespace kbs2.GamePackage
             {
                 MouseInputStatus = mouseEvent.Value.LeftButton;
                 MouseState temp = Mouse.GetState();
-                GuiOrMap(new FloatCoords {x = temp.X, y = temp.Y}, mouseEvent.Value, true);
+                GuiOrMap(new FloatCoords {x = temp.X, y = temp.Y}, mouseEvent.Value, MouseButton.Left);
             }
 
             if (mouseEvent.Value.RightButton != PreviousMouseState.RightButton)
             {
                 MouseInputStatus = mouseEvent.Value.RightButton;
                 MouseState temp = Mouse.GetState();
-                GuiOrMap(new FloatCoords {x = temp.X, y = temp.Y}, mouseEvent.Value, false);
+                GuiOrMap(new FloatCoords {x = temp.X, y = temp.Y}, mouseEvent.Value, MouseButton.Right);
             }
 
 
             PreviousMouseState = mouseEvent.Value;
         }
 
-        public void GuiOrMap(FloatCoords mouseCoords, MouseState mouseState, bool leftButton)
+        public void GuiOrMap(FloatCoords mouseCoords, MouseState mouseState, MouseButton activeButton)
         {
             List<IViewImage> clickedGuiItems = (from item in game.GameModel.GuiItemList
-                where mouseCoords.x >= item.Coords.x && mouseCoords.y >= item.Coords.y
-                                                     && mouseCoords.x <= item.Coords.x + item.Width && mouseCoords.y <= item.Coords.y + item.Height
+                where mouseCoords.x >= item.Coords.x
+                      && mouseCoords.y >= item.Coords.y
+                      && mouseCoords.x <= item.Coords.x + item.Width
+                      && mouseCoords.y <= item.Coords.y + item.Height
                 select item).ToList();
 
             if (clickedGuiItems.Count > 0)
@@ -61,23 +69,43 @@ namespace kbs2.GamePackage
             }
             else
             {
-                switch (mouseState.LeftButton)
+                switch (activeButton)
                 {
-                    case ButtonState.Pressed when leftButton:
-                        FloatCoords cellCoords = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, game.Camera.GetViewMatrix()), game.GameView.TileSize);
+                    case MouseButton.Left:
+                        switch (mouseState.LeftButton)
+                        {
+                            //TODO LeftButtonPressed?.Invoke()
+                            //TODO LeftButtonReleased?.Invoke()
+                            case ButtonState.Pressed:
 
-                        game.selectedGameAction?.Execute(game.GameModel.World.GetCellFromCoords((Coords) cellCoords));
 
-                        Selection.ButtonPressed(mouseCoords);
+                                Selection.ButtonPressed(mouseCoords);
+                                break;
+                            case ButtonState.Released:
+                                game.MapActionSelector.Clear();
+
+                                Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
+                                break;
+                        }
+
                         break;
-                    case ButtonState.Released when leftButton:
-                        Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
-                        break;
-                }
+                    case MouseButton.Right:
+                        switch (mouseState.RightButton)
+                        {
+                            //TODO RightButtonPressed?.Invoke()
+                            //TODO RightButtonReleased?.Invoke()
+                            case ButtonState.Pressed:
+                                Selection.move(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
+                                break;
+                            case ButtonState.Released:
+                            {
+                                FloatCoords cellCoords = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, game.Camera.GetViewMatrix()), game.GameView.TileSize);
+                                if (PreviousMouseState.RightButton == ButtonState.Pressed) game.SelectedMapAction?.Execute(game.GameModel.World.GetCellFromCoords((Coords) cellCoords));
+                                break;
+                            }
+                        }
 
-                if (mouseState.RightButton == ButtonState.Pressed && !leftButton)
-                {
-                    Selection.move(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
+                        break;
                 }
             }
         }

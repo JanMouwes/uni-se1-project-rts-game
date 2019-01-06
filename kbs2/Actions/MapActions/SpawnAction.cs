@@ -8,6 +8,7 @@ using kbs2.World.World;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structs;
 using kbs2.WorldEntity.Structures;
 using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Unit;
@@ -16,15 +17,16 @@ using kbs2.WorldEntity.Unit.MVC;
 namespace kbs2.Actions.GameActions
 {
     //    TODO Generic ISpawnableDef (type of spawn-action, building vs unit vs ...?)
-    public class SpawnAction : GameAction<SpawnActionDef>
+    public class SpawnAction : MapAction<SpawnActionDef>
     {
         private ISpawnableDef SpawnableDef => ActionDef.SpawnableDef;
 
         private GameController gameController;
         private Faction_Controller factionController;
 
-        public SpawnAction(SpawnActionDef actionDef, GameController gameController,
-            Faction_Controller factionController) : base(actionDef)
+        private ViewValues IconValues => SpawnableDef.ViewValues;
+
+        public SpawnAction(SpawnActionDef actionDef, GameController gameController, Faction_Controller factionController) : base(actionDef, actionDef.SpawnableDef.ViewValues)
         {
             this.gameController = gameController;
             this.factionController = factionController;
@@ -37,7 +39,7 @@ namespace kbs2.Actions.GameActions
         /// <param name="targetable">The target</param>
         private void SpawnUnit(UnitController unit, ITargetable targetable)
         {
-            gameController.Spawner.SpawnUnit(unit, (Coords)targetable.FloatCoords);
+            gameController.Spawner.SpawnUnit(unit, (Coords) targetable.FloatCoords);
         }
 
         /// <summary>
@@ -47,8 +49,8 @@ namespace kbs2.Actions.GameActions
         /// <param name="spawntarget">The target</param>
         private void SpawnBuilding(IStructure<IStructureDef> building, ITargetable spawntarget)
         {
-            ConstructingBuildingController constructingBuilding = ConstructingBuildingFactory.CreateNewBUCAt(building.Def, (Coords)spawntarget.FloatCoords, factionController);
-            gameController.Spawner.SpawnStructure((Coords)spawntarget.FloatCoords, constructingBuilding);
+            ConstructingBuildingController constructingBuilding = ConstructingBuildingFactory.CreateNewBUCAt(building.Def, (Coords) spawntarget.FloatCoords, factionController);
+            gameController.Spawner.SpawnStructure((Coords) spawntarget.FloatCoords, constructingBuilding);
         }
 
         /// <summary>

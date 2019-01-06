@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
-using kbs2.Unit.Model;
 using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.World.World;
+using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Location;
 using kbs2.WorldEntity.Location.LocationMVC;
 using kbs2.WorldEntity.Unit.MVC;
@@ -55,6 +55,17 @@ namespace kbs2.WorldEntity.Unit
         public UnitController CreateNewUnit(UnitDef def)
         {
             return CreateNewUnit(def, new FloatCoords(), game.GameModel.World, faction);
+        }
+
+        //    TODO rewrite. this is risky
+        public ISpawnable CreateNewSpawnable(ISpawnableDef def)
+        {
+            return CreateNewUnit((UnitDef) def, new FloatCoords(), game.GameModel.World, faction);
+        }
+
+        public ITrainable CreateNewTrainable(ITrainableDef def)
+        {
+            return CreateNewSpawnable(def) as ITrainable;
         }
 
         public void Dispose()

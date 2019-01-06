@@ -3,6 +3,7 @@ using kbs2.World.Cell;
 using kbs2.World.Chunk;
 using kbs2.World.World;
 using kbs2.WorldEntity.Building;
+using kbs2.WorldEntity.Structures;
 
 namespace kbs2.GamePackage.GameSaveManager
 {

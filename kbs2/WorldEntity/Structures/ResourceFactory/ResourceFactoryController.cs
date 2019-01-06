@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using kbs2.Actions.Interfaces;
 using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
@@ -72,5 +73,7 @@ namespace kbs2.WorldEntity.Structures.ResourceFactory
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
         }
+
+        public List<IGameAction> GameActions { get; } = new List<IGameAction>();
     }
 }

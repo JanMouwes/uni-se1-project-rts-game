@@ -6,6 +6,7 @@ using kbs2.GamePackage;
 using kbs2.GamePackage.DayCycle;
 using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structures;
 using Moq;
 using NUnit.Framework;
 

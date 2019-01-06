@@ -53,7 +53,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             DespawnStructure(structure);
 
             //    Add new structure
-            BuildingFactory factory = new BuildingFactory(structure.Faction);
+            BuildingFactory factory = new BuildingFactory(structure.Faction, Game);
 
             IStructure<IStructureDef> building = factory.CreateNewBuilding(structure.Def.CompletedBuildingDef);
 

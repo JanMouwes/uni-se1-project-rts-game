@@ -5,7 +5,7 @@ using kbs2.Actions.Interfaces;
 
 namespace kbs2.WorldEntity.Interfaces
 {
-    public interface IHasGameActions
+    public interface IGameActionHolder
     {
         List<IGameAction> GameActions { get; }
     }
