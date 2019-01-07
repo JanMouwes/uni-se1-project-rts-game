@@ -25,7 +25,14 @@ namespace kbs2.Actions.GameActionGrid
         /// </summary>
         private int ItemWidth => (int) (GuiWidth / (COLUMNS * (ITEM_WEIGHT + 1) + 1) * ITEM_WEIGHT);
 
+        /// <summary>
+        /// Horizontal moat size
+        /// </summary>
         private int HMoatSize => (int) (GuiWidth / (COLUMNS * (ITEM_WEIGHT + 1) + 1));
+        
+        /// <summary>
+        /// Vertical moat size
+        /// </summary>
         private int VMoatSize => (int) ((GuiHeight - (ROWS * ItemWidth)) / ROWS + 1);
 
         private GameActionGuiController parent;
