@@ -1,11 +1,6 @@
 ﻿using kbs2.GamePackage.EventArgs;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace kbs2.View.GUI.ActionBox
 {

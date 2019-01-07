@@ -1,32 +1,19 @@
-﻿using kbs2.Actions.GameActionDefs;
 using kbs2.Actions.Interfaces;
-using kbs2.Desktop.GamePackage.EventArgs;
-using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structs;
 
 namespace kbs2.Actions.GameActions
 {
-    public abstract class GameAction<TGameActionDef> : IGameAction where TGameActionDef : IGameActionDef
+    public class GameAction : IGameAction
     {
-        protected TGameActionDef ActionDef { get; }
+        public event TabActionDelegate Clicked;
+
+        public ViewValues IconValues { get; set; }
         
-        public uint CurrentCooldown { get; set; }
+        public void InvokeClick() => Clicked?.Invoke();
 
-        public abstract void Execute(ITargetable target);
-
-        protected GameAction(TGameActionDef actionDef)
+        public GameAction(ViewValues iconValues)
         {
-            ActionDef = actionDef;
-            CurrentCooldown = actionDef.Cooldown;
-        }
-
-        /// <summary>
-        /// updates the cooldown of the actions
-        /// </summary>
-        /// <param name="sender">Event sender</param>
-        /// <param name="eventArgs">EventArgs in gametime</param>
-        public void Update(object sender, OnTickEventArgs eventArgs)
-        {
-            CurrentCooldown -= (uint) eventArgs.GameTime.ElapsedGameTime.TotalSeconds;
+            IconValues = iconValues;
         }
     }
 }

@@ -1,4 +1,3 @@
-using MonoGame.Extended.ViewportAdapters;
 using System;
 using MonoGame.Extended;
 

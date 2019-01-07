@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kbs2.World.Chunk;
+﻿using kbs2.World.Chunk;
 using kbs2.World.Enums;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
 
 namespace kbs2.World.Cell
@@ -26,7 +20,7 @@ namespace kbs2.World.Cell
         // ViewMode defines the current ViewMode Enum state ( full, fog or none )
         public ViewMode ViewMode { get; set; } = ViewMode.None;
 
-        public IImpassable BuildingOnTop { get; set; }
+        public IStructure<IStructureDef> BuildingOnTop { get; set; }
 
         public WorldCellModel(TerrainType terrain, Coords realCoords)
         {

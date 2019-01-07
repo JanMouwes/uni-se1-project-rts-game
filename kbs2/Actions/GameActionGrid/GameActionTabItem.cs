@@ -1,16 +1,18 @@
-using kbs2.Actions.GameActionDefs;
-using kbs2.Actions.GameActions;
 using kbs2.Actions.Interfaces;
+using kbs2.View.GUI;
+using kbs2.World.Structs;
 
 namespace kbs2.Actions.GameActionGrid
 {
-    public class GameActionTabItem
+    public class GameActionTabItem : GuiViewImage
     {
-        public IGameAction GameAction { get; }
+        private IGameAction GameAction { get; }
 
-        public GameActionTabItem(IGameAction gameAction)
+        public GameActionTabItem(IGameAction gameAction, FloatCoords location) : base(location, gameAction.IconValues)
         {
             this.GameAction = gameAction;
         }
+
+        public override void Click() => GameAction.InvokeClick();
     }
 }

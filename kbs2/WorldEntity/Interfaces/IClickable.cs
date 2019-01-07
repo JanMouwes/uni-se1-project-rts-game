@@ -1,5 +1,4 @@
-﻿using System;
-using kbs2.Unit.Abstract;
+﻿using kbs2.Unit.Abstract;
 
 namespace kbs2.Unit.Interfaces
 {

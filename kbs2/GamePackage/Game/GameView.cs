@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using kbs2.Desktop.View.Camera;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World;
@@ -20,17 +19,35 @@ namespace kbs2.GamePackage
         private GraphicsDevice graphicsDevice;
         private ContentManager content;
 
+        private Dictionary<string, Texture2D> cachedTextures = new Dictionary<string, Texture2D>();
+        private Dictionary<string, SpriteFont> cachedSpritefonts = new Dictionary<string, SpriteFont>();
+
         // List for drawing items with the camera offset
-        public List<IViewImage> DrawList = new List<IViewImage>();
+        public List<IViewImage> DrawList => SortByZIndex(gameModel.ItemList);
 
         // List for drawing items without offset
-        public List<IViewImage> DrawGuiList = new List<IViewImage>();
+        public List<IViewImage> DrawGuiList => SortByZIndex(gameModel.GuiItemList.Select(item => (IViewImage) item));
 
         // List for drawing text with the camera offset
-        public List<IViewText> DrawText = new List<IViewText>();
+        public List<IViewText> DrawText
+        {
+            get
+            {
+                Vector2 topLeft = Vector2.Transform(new Vector2(graphicsDevice.Viewport.X, graphicsDevice.Viewport.Y), camera.GetInverseViewMatrix()) / 20;
+
+                Vector2 bottomRight = Vector2.Transform(new Vector2(graphicsDevice.Viewport.X + graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Y + graphicsDevice.Viewport.Height), camera.GetInverseViewMatrix()) / 20;
+
+                return (from viewText in SortByZIndex(gameModel.TextList)
+                    where !(viewText.Coords.x >= topLeft.X
+                            && viewText.Coords.y >= topLeft.Y
+                            && viewText.Coords.x <= bottomRight.X
+                            && viewText.Coords.y <= bottomRight.Y)
+                    select viewText).ToList();
+            }
+        }
 
         // List for drawing text without offset
-        public List<IViewText> DrawGuiText = new List<IViewText>();
+        public List<IViewText> DrawGuiText => SortByZIndex(gameModel.GuiTextList);
 
         // Calculate the size (Width) of a tile
         public int TileSize => (int) (graphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
@@ -51,31 +68,42 @@ namespace kbs2.GamePackage
             // Clears the graphicsDevice to make room for the new draw items
             graphicsDevice.Clear(Color.Black);
 
-            // Updates everything on screen
-            UpdateOnScreen();
-
             DrawNonGui();
 
             DrawGui();
+        }
+
+        private Texture2D ProvideTexture(string texture)
+        {
+            if (!cachedTextures.ContainsKey(texture)) cachedTextures[texture] = content.Load<Texture2D>(texture);
+
+            return cachedTextures[texture];
+        }
+
+        private SpriteFont ProvideSpritefont(string spritefont)
+        {
+            if (!cachedSpritefonts.ContainsKey(spritefont)) cachedSpritefonts[spritefont] = content.Load<SpriteFont>(spritefont);
+
+            return cachedSpritefonts[spritefont];
         }
 
         // Draws every item in the DrawList with camera offset
         private void DrawNonGui()
         {
             spriteBatch.Begin(transformMatrix: camera.GetViewMatrix());
-
-            foreach (IViewImage DrawItem in DrawList)
+            foreach (IViewImage drawItem in DrawList)
             {
-                Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
-                Color color = DrawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : DrawItem.Colour;
-                spriteBatch.Draw(texture, new Rectangle((int)(DrawItem.Coords.x * TileSize), (int)(DrawItem.Coords.y * TileSize), (int)(DrawItem.Width * TileSize), (int)(DrawItem.Height * TileSize)), color);
+                Texture2D texture = ProvideTexture(drawItem.Texture);
+
+                Color color = drawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : drawItem.Colour;
+                spriteBatch.Draw(texture, new Rectangle((int) (drawItem.Coords.x * TileSize), (int) (drawItem.Coords.y * TileSize), (int) (drawItem.Width * TileSize), (int) (drawItem.Height * TileSize)), color);
             }
 
-            foreach (IViewText DrawItem in DrawText)
+            foreach (IViewText drawItem in DrawText)
             {
-                SpriteFont font = content.Load<SpriteFont>(DrawItem.SpriteFont);
-                Color color = DrawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : DrawItem.Colour;
-                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x * TileSize, DrawItem.Coords.y * TileSize), color);
+                SpriteFont font = ProvideSpritefont(drawItem.SpriteFont);
+                Color color = drawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : drawItem.Colour;
+                spriteBatch.DrawString(font, drawItem.Text, new Vector2(drawItem.Coords.x * TileSize, drawItem.Coords.y * TileSize), color);
             }
 
             spriteBatch.End();
@@ -86,16 +114,16 @@ namespace kbs2.GamePackage
         {
             spriteBatch.Begin();
 
-            foreach (IViewImage DrawItem in DrawGuiList)
+            foreach (IViewImage drawItem in DrawGuiList)
             {
-                Texture2D texture = content.Load<Texture2D>(DrawItem.Texture);
-                spriteBatch.Draw(texture, new Rectangle((int) DrawItem.Coords.x, (int) DrawItem.Coords.y, (int) DrawItem.Width, (int) DrawItem.Height), DrawItem.Colour);
+                Texture2D texture = ProvideTexture(drawItem.Texture);
+                spriteBatch.Draw(texture, new Rectangle((int) drawItem.Coords.x, (int) drawItem.Coords.y, (int) drawItem.Width, (int) drawItem.Height), drawItem.Colour);
             }
 
-            foreach (IViewText DrawItem in DrawGuiText)
+            foreach (IViewText drawItem in DrawGuiText)
             {
-                SpriteFont font = content.Load<SpriteFont>(DrawItem.SpriteFont);
-                spriteBatch.DrawString(font, DrawItem.Text, new Vector2(DrawItem.Coords.x, DrawItem.Coords.y), DrawItem.Colour);
+                SpriteFont font = ProvideSpritefont(drawItem.SpriteFont);
+                spriteBatch.DrawString(font, drawItem.Text, new Vector2(drawItem.Coords.x, drawItem.Coords.y), drawItem.Colour);
             }
 
             spriteBatch.End();
@@ -115,45 +143,34 @@ namespace kbs2.GamePackage
             return returnList;
         }
 
-        private async Task UpdateCellsOnScreen(IEnumerable<IViewImage> drawList, Vector2 topLeft, Vector2 bottomRight)
+        private List<TItem> SortByZIndex<TItem>(IEnumerable<TItem> listToSort) where TItem : IViewItem => (from item in listToSort where item != null orderby item.ZIndex ascending select item).ToList();
+
+        /// <summary>
+        /// Draws line. Stolen from <see href="https://gamedev.stackexchange.com/questions/44015/how-can-i-draw-a-simple-2d-line-in-xna-without-using-3d-primitives-and-shders">here</see>.
+        /// </summary>
+        /// <param name="sb"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="texture"></param>
+        private void DrawLine(SpriteBatch sb, Vector2 start, Vector2 end, Texture2D texture)
         {
-            await Task.Run(() => DrawList = GetCellsOnScreen(drawList, topLeft, bottomRight));
-        }
+            Vector2 edge = end - start;
 
-        // Returns everything that is in the view
-        public void UpdateOnScreen()
-        {            
-            // Clears the Draw Lists 
-            DrawList.Clear();
-            DrawGuiList.Clear();
-            DrawText.Clear();
-            DrawGuiText.Clear();
+            // calculate angle to rotate line
+            float angle = (float) Math.Atan2(edge.Y, edge.X);
 
-            List<TItem> SortByZIndex<TItem>(IEnumerable<TItem> listToSort) where TItem : IViewItem =>
-                (from item in listToSort orderby item.ZIndex ascending select item).ToList();
-
-            Vector2 topLeft = Vector2.Transform(new Vector2(graphicsDevice.Viewport.X, graphicsDevice.Viewport.Y), camera.GetInverseViewMatrix());
-
-            Vector2 bottomRight = Vector2.Transform(new Vector2( graphicsDevice.Viewport.X + graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Y + graphicsDevice.Viewport.Height), camera.GetInverseViewMatrix());
-
-            // Gets the cells in the current view and adds them to the Drawlist
-            DrawList.AddRange(GetCellsOnScreen(gameModel.ItemList, topLeft, bottomRight));
-
-            // Add all items to the DrawGuiList in the correct Zindex order
-            DrawGuiList = SortByZIndex(gameModel.GuiItemList);
-
-            // Add sorted Text to the drawList in the correct z-index order
-            foreach (IViewText item in gameModel.TextList)
-            {
-                if (item.Coords.x < (topLeft.X / TileSize) || item.Coords.y < (topLeft.Y / TileSize) ||
-                    item.Coords.x > bottomRight.X / TileSize || item.Coords.y > bottomRight.Y / TileSize) continue;
-                DrawText.Add(item);
-            }
-
-            DrawText = SortByZIndex(DrawText);
-
-            // Add all Text to the DrawGuiList in the correct Zindex order
-            DrawGuiText = SortByZIndex(gameModel.GuiTextList);
+            sb.Draw(texture,
+                new Rectangle( // rectangle defines shape of line and position of start of line
+                    (int) start.X,
+                    (int) start.Y,
+                    (int) edge.Length(), //sb will strech the texture to fill this rectangle
+                    1), //width of line, change this to make thicker line
+                null,
+                Color.Red, //colour of line
+                angle, //angle of line (calulated above)
+                new Vector2(0, 0), // point in line about which to rotate
+                SpriteEffects.None,
+                0);
         }
     }
 }

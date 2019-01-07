@@ -5,8 +5,8 @@ using kbs2.GamePackage;
 using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.World.World;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structures;
 using kbs2.WorldEntity.Unit;
 using kbs2.WorldEntity.Unit.MVC;
 using kbs2.WorldEntity.WorldEntitySpawner;
@@ -34,7 +34,7 @@ namespace Tests
             gameController = gameControllerMock.Object;
 
             //    Faction
-            factionController = new Faction_Controller("test-faction");
+            factionController = new Faction_Controller("test-faction", gameController);
         }
 
 
@@ -45,7 +45,7 @@ namespace Tests
             //    Arrange
             Mock<EntitySpawner> spawner = new Mock<EntitySpawner>(MockBehavior.Loose, new object[] {gameController});
 
-            
+
             spawner.Setup(entitySpawner => entitySpawner.SpawnUnit(It.IsAny<UnitController>(), It.IsAny<Coords>())).Verifiable();
 
             gameController.Spawner = spawner.Object;
@@ -60,7 +60,7 @@ namespace Tests
 
             Mock<SpawnActionDef> actionDef = new Mock<SpawnActionDef>(new object[] {(uint) 10, "image", unitDef});
 
-            actionDef.Setup(def => def.SpawnableDef).Returns(() => unitDef);
+            actionDef.SetupGet(def => def.SpawnableDef).Returns(() => unitDef);
 
             Mock<ITargetable> target = new Mock<ITargetable>();
 
@@ -75,7 +75,7 @@ namespace Tests
 
             spawner.VerifyAll();
         }
-        
+
         [TestCase(1, 1)]
         [TestCase(2, 2)]
         public void Test_ShouldSpawnStructure_WhenExecuteInvoked(int x, int y)
@@ -83,7 +83,7 @@ namespace Tests
             //    Arrange
             Mock<EntitySpawner> spawner = new Mock<EntitySpawner>(MockBehavior.Loose, new object[] {gameController});
 
-            spawner.Setup(entitySpawner => entitySpawner.SpawnStructure(It.IsAny<Coords>(), It.IsAny<IStructure>())).Verifiable();
+            spawner.Setup(entitySpawner => entitySpawner.SpawnStructure(It.IsAny<Coords>(), It.IsAny<IStructure<IStructureDef>>())).Verifiable();
 
             gameController.Spawner = spawner.Object;
 
@@ -97,7 +97,7 @@ namespace Tests
 
             Mock<SpawnActionDef> actionDef = new Mock<SpawnActionDef>(new object[] {(uint) 10, "image", buildingDef});
 
-            actionDef.Setup(def => def.SpawnableDef).Returns(() => buildingDef);
+            actionDef.SetupGet(def => def.SpawnableDef).Returns(() => buildingDef);
 
             Mock<ITargetable> target = new Mock<ITargetable>();
 
