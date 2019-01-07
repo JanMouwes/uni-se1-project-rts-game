@@ -32,6 +32,7 @@ using kbs2.UserInterface.BottomBar;
 using kbs2.Actions;
 using kbs2.Actions.ActionMVC;
 using kbs2.Faction;
+using kbs2.GamePackage.CPU;
 
 namespace kbs2.GamePackage
 {
@@ -167,22 +168,17 @@ namespace kbs2.GamePackage
             gameModel.World = WorldFactory.GetNewWorld();
 
             // Generate Player Faction
-            PlayerFaction = FactionFactory.CreatePlayerFaction("Byzantine Empire");
+            PlayerFaction = FactionFactory.CreateFaction("Byzantine Empire");
+            Faction_Controller OverworldFaction = FactionFactory.CreateFaction("Overworld");
+
             gameModel.Factions.Add(PlayerFaction);
+            gameModel.Factions.Add(OverworldFaction);
 
-            // Generate CPU Faction (1)
-            gameModel.Factions.Add(FactionFactory.CreateCPUFaction("OverworldFaction"));
-            gameModel.Factions[1].AddRelationship(PlayerFaction, Faction.Enums.Faction_Relations.hostile);
+            // Generate a simple CPU player
+            gameModel.CPUPlayers.Add(CPU_Factory.CreateSimpleCpu(OverworldFaction));
 
-            // Give Factions starting units
-            DBController.OpenConnection("DefDex");
-
-            foreach (Faction_Controller faction in gameModel.Factions)
-            {
-                faction.AddUnitToFaction(UnitFactory.CreateNewUnit(DBController.GetDefinitionFromUnit(1), this));
-            }
-
-            DBController.CloseConnection();
+            //gameModel.Factions.Add(FactionFactory.CreateCPUFaction("OverworldFaction"));
+            //gameModel.Factions[1].AddRelationship(PlayerFaction, Faction.Enums.Faction_Relations.hostile);
 
             // Pathfinder 
             gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
@@ -251,7 +247,16 @@ namespace kbs2.GamePackage
 
             //TESTCODE
             DBController.OpenConnection("DefDex");
+
             UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
+            
+            // Give Factions starting units
+            foreach (Faction_Controller faction in gameModel.Factions)
+            {
+                faction.AddUnitToFaction(UnitFactory.CreateNewUnit(unitdef, this));
+                //faction.AddUnitToFaction(UnitFactory.CreateNewUnit(unitdef, this));
+            }
+
             DBController.CloseConnection();
 
             foreach(Faction_Controller faction in gameModel.Factions)
@@ -350,7 +355,7 @@ namespace kbs2.GamePackage
             // ============== Temp Code ===================================================================
 
             MouseState temp = Mouse.GetState();
-            Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
+            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
             Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
                 WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
             if (gameModel.World.GetCellFromCoords(coords) != null)
@@ -388,7 +393,7 @@ namespace kbs2.GamePackage
 
 
             List<IViewImage> Units = (from unit in gameModel.World.WorldModel.Units
-                select unit.UnitView).Cast<IViewImage>().ToList();
+                                      select unit.UnitView).Cast<IViewImage>().ToList();
 
             gameModel.ItemList.AddRange(Units);
 
@@ -398,32 +403,32 @@ namespace kbs2.GamePackage
                 gameModel.TextList.Add(gameModel.ActionBox.BoxModel.Text);
             }
 
-            int TileSize = (int) (GraphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
+            int TileSize = (int)(GraphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
 
             List<IViewImage> Cells = new List<IViewImage>();
             List<WorldChunkController> chunks = (from chunk in gameModel.World.WorldModel.ChunkGrid
-                let rightBottomViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
-                    WorldPositionCalculator.TransformWindowCoords(
-                        new Coords()
-                        {
-                            x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width,
-                            y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height
-                        }, camera.GetViewMatrix()), TileSize)
-                let topLeftViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
-                    WorldPositionCalculator.TransformWindowCoords(
-                        new Coords() {x = GraphicsDevice.Viewport.X, y = GraphicsDevice.Viewport.Y},
-                        camera.GetViewMatrix()), TileSize)
-                let rightBottomBound = new Coords() {x = 20 + WorldChunkModel.ChunkSize, y = 20}
-                let leftTopBound = new Coords()
-                    {x = (chunk.Key.x * WorldChunkModel.ChunkSize), y = (chunk.Key.y * WorldChunkModel.ChunkSize)}
-                let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y,
-                    (rightBottomBound.x < 0 ? rightBottomBound.x * -1 : rightBottomBound.x),
-                    (rightBottomBound.y < 0 ? rightBottomBound.y * -1 : rightBottomBound.y))
-                let viewRectangle = new Rectangle(topLeftViewBound.x, topLeftViewBound.y,
-                    Math.Abs(topLeftViewBound.x - rightBottomViewBound.x),
-                    Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
-                where (chunkRectangle.Intersects(viewRectangle))
-                select chunk.Value).ToList();
+                                                 let rightBottomViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
+                                                     WorldPositionCalculator.TransformWindowCoords(
+                                                         new Coords()
+                                                         {
+                                                             x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width,
+                                                             y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height
+                                                         }, camera.GetViewMatrix()), TileSize)
+                                                 let topLeftViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
+                                                     WorldPositionCalculator.TransformWindowCoords(
+                                                         new Coords() { x = GraphicsDevice.Viewport.X, y = GraphicsDevice.Viewport.Y },
+                                                         camera.GetViewMatrix()), TileSize)
+                                                 let rightBottomBound = new Coords() { x = 20 + WorldChunkModel.ChunkSize, y = 20 }
+                                                 let leftTopBound = new Coords()
+                                                 { x = (chunk.Key.x * WorldChunkModel.ChunkSize), y = (chunk.Key.y * WorldChunkModel.ChunkSize) }
+                                                 let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y,
+                                                     (rightBottomBound.x < 0 ? rightBottomBound.x * -1 : rightBottomBound.x),
+                                                     (rightBottomBound.y < 0 ? rightBottomBound.y * -1 : rightBottomBound.y))
+                                                 let viewRectangle = new Rectangle(topLeftViewBound.x, topLeftViewBound.y,
+                                                     Math.Abs(topLeftViewBound.x - rightBottomViewBound.x),
+                                                     Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
+                                                 where (chunkRectangle.Intersects(viewRectangle))
+                                                 select chunk.Value).ToList();
 
             foreach (WorldChunkController chunk in chunks)
             {
@@ -477,6 +482,13 @@ namespace kbs2.GamePackage
                 PreviousMouseButtonsStatus = CurrentMouseButtonsStatus;
             }
 
+            PlayerFaction.AddRelationship(gameModel.Factions[1], Faction.Enums.Faction_Relations.hostile);
+
+            //============= CPU PLAYER TEST CODE ====================
+            foreach (CPU_Controller cpu in gameModel.CPUPlayers)
+            {
+                cpu.CpuModel.AI.Update(gameModel.Factions);
+            }
 
             //if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
 

@@ -8,6 +8,7 @@ using kbs2.Actions.ActionMVC;
 using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
+using kbs2.GamePackage.AIPackage.Enums;
 using kbs2.Unit.Model;
 using kbs2.Unit.Unit;
 using kbs2.World;
@@ -47,7 +48,8 @@ namespace kbs2.WorldEntity.Unit
                         CurrentHP = def.HPDef.CurrentHP,
                         MaxHP = def.HPDef.MaxHP
                     }
-                }
+                },
+                Order = Command.Idle
             };
             // Unit_view needs a Unit_Controller for some reason
             UnitController.UnitView.Unit_Controller = UnitController;

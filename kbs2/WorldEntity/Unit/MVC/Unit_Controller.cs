@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using kbs2.Actions;
 using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
+using kbs2.GamePackage.AIPackage.Enums;
+using kbs2.Unit.Interfaces;
 using kbs2.Unit.Model;
 using kbs2.World;
 using kbs2.World.Structs;
@@ -19,7 +21,7 @@ using MonoGame.Extended;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-	public class Unit_Controller : IMoveable, IHasActions
+	public class Unit_Controller : IMoveable, IHasActions, IHasPersonalSpace, IHasCommand
 	{
 		public Location_Controller LocationController;
 		public Unit_Model UnitModel;
@@ -28,11 +30,11 @@ namespace kbs2.WorldEntity.Unit.MVC
 
         public List<ActionController> Actions { get {return UnitModel.actions; } }
 
-        // Create a new unit and add it to a faction
-        public void CreateUnit(Faction_Model faction)
-        {
-            faction.Units.Add(this);
-        }
+        public int TriggerRadius { get; set; }
+        public int ChaseRadius { get; set; }
+        public Command Order { get; set; }
+        public IHasPersonalSpace Target { get; set; }
+        public bool FinishedOrder { get; set; }
 
         public void MoveTo(FloatCoords target,bool CTRL)
         {

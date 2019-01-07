@@ -1,4 +1,5 @@
 ﻿using kbs2.Actions;
+using kbs2.Unit.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.WorldEntity.Building
 {
-    public class Building_Model
+    public class Building_Model : IHasPersonalSpace
     {
 
         public Coords TopLeft { get; set; }
@@ -20,6 +21,8 @@ namespace kbs2.WorldEntity.Building
 
         // all the cells the building is on
         public List<WorldCellModel> LocationCells { get; set; }
+        public int TriggerRadius { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int ChaseRadius { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public Building_Model(Coords topLeft)
         {

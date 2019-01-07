@@ -14,7 +14,7 @@ using kbs2.Actions;
 
 namespace kbs2.Unit.Model
 {
-    public class Unit_Model : IHasPersonalSpace, IPurchasable, IElemental, IHasFaction
+    public class Unit_Model : IPurchasable, IElemental, IHasFaction
     {
         public Faction_Model Faction { get; set; }
 
@@ -32,7 +32,7 @@ namespace kbs2.Unit.Model
 
         public List<ActionController> actions { get; set; }
 
-		public Unit_Model()
+        public Unit_Model()
         {
             Selected = false;
             actions = new List<ActionController>();
