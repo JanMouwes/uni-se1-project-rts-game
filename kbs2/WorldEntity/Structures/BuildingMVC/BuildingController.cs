@@ -39,6 +39,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
         public float Height => View.Height;
 
         public Faction_Controller Faction { get; set; }
+        public ViewMode ViewMode { set => Model.ViewMode = value; }
 
         public BuildingController(BuildingDef def)
         {

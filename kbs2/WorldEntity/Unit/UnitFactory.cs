@@ -1,6 +1,7 @@
 ﻿using System;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
+using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Interfaces;
@@ -20,7 +21,7 @@ namespace kbs2.WorldEntity.Unit
             {
                 UnitView =
                 {
-                    Texture = def.Image, Width = def.Width, Height = def.Height
+                    Texture = def.Image, Width = def.Width, Height = def.Height, ViewMode = ViewMode.Full
                 },
                 UnitModel =
                 {

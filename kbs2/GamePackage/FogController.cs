@@ -78,18 +78,9 @@ namespace kbs2.GamePackage
                     // set the viewmode
                     cellController.ChangeViewMode(mode);
                     // check if there is a building in the cell
-                    if (cellController.worldCellModel.BuildingOnTop == null) continue;
-                    // set viewmode of the building on the cell
-                    if (cellController.worldCellModel.BuildingOnTop.GetType() == typeof(BuildingController))
-                    {
-                        ((BuildingController) cellController.worldCellModel.BuildingOnTop).BuildingView.ViewMode = mode;
-                    }
+                    if (!(cellController.worldCellModel.BuildingOnTop is IStructure<IStructureDef>)) continue;
+                    cellController.worldCellModel.BuildingOnTop.ViewMode = mode;
 
-                    // set viewmode of the ConstructingBuilding on the cell
-                    if (cellController.worldCellModel.BuildingOnTop.GetType() == typeof(ConstructingBuildingController))
-                    {
-                        ((ConstructingBuildingController) cellController.worldCellModel.BuildingOnTop).ConstructingBuildingView.ViewMode = mode;
-                    }
                 }
             }
         }
@@ -143,6 +134,9 @@ namespace kbs2.GamePackage
                 foreach (var cell in grid.Value.WorldChunkModel.grid)
                 {
                     cell.worldCellModel.ViewMode = viewMode;
+
+                    if (!(cell.worldCellModel.BuildingOnTop is IStructure<IStructureDef>)) continue;
+                    cell.worldCellModel.BuildingOnTop.ViewMode = viewMode;
                 }
             }
         }

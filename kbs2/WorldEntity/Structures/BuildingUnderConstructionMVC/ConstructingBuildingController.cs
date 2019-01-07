@@ -54,6 +54,8 @@ namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 
         public float Height => ConstructingBuildingView.Height;
 
+        public ViewMode ViewMode { set => ConstructingBuildingView.ViewMode = value; }
+
         public ConstructingBuildingController(ConstructingBuildingDef def)
         {
             ConstructingBuildingModel.BuildingDef = def;
