@@ -36,7 +36,9 @@ namespace kbs2.WorldEntity.Unit
                 {
                     Parent = unitController
                 }
+                
             };
+
             unitController.LocationController = location;
             return unitController;
         }
@@ -49,7 +51,9 @@ namespace kbs2.WorldEntity.Unit
 
         public UnitController CreateNewUnit(UnitDef def)
         {
-            return CreateNewUnit(def, new FloatCoords(), game.GameModel.World, faction);
+            UnitController unit = CreateNewUnit(def, new FloatCoords(), game.GameModel.World, faction);
+            unit.LocationController.chunkChanged += game.LoadNewChunks;
+            return unit;
         }
 
         //    TODO rewrite. this is risky

@@ -48,6 +48,8 @@ namespace kbs2.GamePackage
 
     public class GameController : Game
     {
+        public const int CHUNK_LOAD_RANGE = 2;
+
         public int Id { get; } = -1;
 
         public GameModel GameModel { get; set; }
@@ -244,7 +246,7 @@ namespace kbs2.GamePackage
             {
                 FloatCoords coords = new FloatCoords() {x = i, y = 5};
                 UnitController unit = UnitFactory.CreateNewUnit(unitdef, coords, GameModel.World, PlayerFaction);
-
+                unit.LocationController.chunkChanged += LoadNewChunks;
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 Spawner.SpawnUnit(unit, (Coords) coords);
             }
@@ -304,6 +306,26 @@ namespace kbs2.GamePackage
             GameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
             shader();
         }
+
+        public void LoadNewChunks(object sender, EventArgsWithPayload<Coords> eventArgs)
+        {
+            for(int x = -CHUNK_LOAD_RANGE; x<=CHUNK_LOAD_RANGE; x++)
+            {
+                for(int y = -CHUNK_LOAD_RANGE; y <= CHUNK_LOAD_RANGE; y++)
+                {
+                    Coords chunkCoords = new Coords{ x = x, y = y }+eventArgs.Value;
+                    if (ChunkExists(chunkCoords)) continue;
+
+                    GameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
+                    shader();
+                }
+            }
+            if (!GameModel.FogEnabled)
+            {
+                FogController.SetEverything(ViewMode.Full);
+            }
+        }
+
 
         /// <summary>
         /// 
@@ -454,7 +476,7 @@ namespace kbs2.GamePackage
             GameModel.GuiTextList.Add(PlayerFaction.CurrencyController.View);
 
             // Chunks generate when hovered over
-            mouseChunkLoadUpdate(gameTime);
+            //mouseChunkLoadUpdate(gameTime);
 
             // fire Ontick event
             Stopwatch tick_stopwatch = new Stopwatch();
