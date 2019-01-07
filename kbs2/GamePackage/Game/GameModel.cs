@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using kbs2.Faction.FactionMVC;
-using kbs2.GamePackage.CPU;
 using kbs2.GamePackage.Interfaces;
 using kbs2.View.GUI;
 using kbs2.View.GUI.ActionBox;
@@ -15,7 +14,6 @@ namespace kbs2.GamePackage
 		public WorldController World { get; set; }
 		public MouseInput MouseInput { get; set; }
 		public List<Faction_Controller> Factions { get; set; }
-        public List<CPU_Controller> CPUPlayers { get; set; }
 		public ActionBoxController ActionBox { get; set; }
 		public float Time { get; set; }
 		public GameState GameState { get; set; }
@@ -39,7 +37,6 @@ namespace kbs2.GamePackage
         public GameModel()
         {
             Factions = new List<Faction_Controller>();
-            CPUPlayers = new List<CPU_Controller>();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using kbs2.Actions;
 using kbs2.Desktop.World.World;
+using kbs2.Faction.FactionMVC;
 using kbs2.Unit.Model;
 using kbs2.World;
 using kbs2.World.Structs;
@@ -18,7 +19,7 @@ using MonoGame.Extended;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-	public class Unit_Controller : IMoveable, IHasActions, IHasPersonalSpace, IHasCommand
+	public class Unit_Controller : IMoveable, IHasActions
 	{
 		public Location_Controller LocationController;
 		public Unit_Model UnitModel;

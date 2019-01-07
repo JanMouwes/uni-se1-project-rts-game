@@ -37,7 +37,6 @@ using kbs2.UserInterface.BottomBar;
 using kbs2.Actions;
 using kbs2.Actions.ActionMVC;
 using kbs2.Faction;
-using kbs2.GamePackage.CPU;
 
 namespace kbs2.GamePackage
 {
@@ -189,9 +188,23 @@ namespace kbs2.GamePackage
             // Generate world
             GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.SimplexFractal);
 
-            FogController = new FogController(PlayerFaction, GameModel.World);
+            // Generate Player Faction
+            PlayerFaction = FactionFactory.CreatePlayerFaction("Byzantine Empire");
+            gameModel.Factions.Add(PlayerFaction);
 
-//            onTick += FogController.Update;
+            // Generate CPU Faction (1)
+            gameModel.Factions.Add(FactionFactory.CreateCPUFaction("OverworldFaction"));
+            gameModel.Factions[1].AddRelationship(PlayerFaction, Faction.Enums.Faction_Relations.hostile);
+
+            // Give Factions starting units
+            DBController.OpenConnection("DefDex");
+
+            foreach (Faction_Controller faction in gameModel.Factions)
+            {
+                faction.AddUnitToFaction(UnitFactory.CreateNewUnit(DBController.GetDefinitionFromUnit(1), this));
+            }
+
+            DBController.CloseConnection();
 
             // Pathfinder 
             GameModel.pathfinder = new Pathfinder(GameModel.World);
@@ -257,8 +270,8 @@ namespace kbs2.GamePackage
             ActionInterface.SetActions(BuildActions);
 
             //TESTCODE
-            DBController.OpenConnection("DefDex.db");
-            UnitDef unitdef = DBController.GetUnitDef(1);
+            DBController.OpenConnection("DefDex");
+            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
             DBController.CloseConnection();
 
             for (int i = 0; i < 12; i++)
@@ -395,8 +408,9 @@ namespace kbs2.GamePackage
 
             MouseState temp = Mouse.GetState();
             Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
-            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords((Coords) WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
-            if (GameModel.World.GetCellFromCoords(coords) != null)
+            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
+                WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
+            if (gameModel.World.GetCellFromCoords(coords) != null)
             {
                 TerrainTester terrainTester = new TerrainTester(new FloatCoords() {x = 0, y = 100})
                 {
@@ -428,36 +442,45 @@ namespace kbs2.GamePackage
                 GameModel.GuiTextList.Add(GameModel.ActionBox.BoxModel.Text);
             }
 
-            //    Calculate viewport-bounds
-            Coords leftTopViewBound = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
-            {
-                x = GraphicsDevice.Viewport.X,
-                y = GraphicsDevice.Viewport.Y
-            }, Camera.GetViewMatrix(), GameView.TileSize);
-            Coords rightBottomViewBound = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
-            {
-                x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width,
-                y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height
-            }, Camera.GetViewMatrix(), GameView.TileSize);
-            Rectangle viewRectangle = new Rectangle(leftTopViewBound.x, leftTopViewBound.y,
-                Math.Abs(leftTopViewBound.x - rightBottomViewBound.x),
-                Math.Abs(leftTopViewBound.y - rightBottomViewBound.y));
+            gameModel.ItemList.AddRange(BUCs);
+            gameModel.TextList.AddRange(Counters);
 
-            List<WorldChunkController> chunks = (from chunk in GameModel.World.WorldModel.ChunkGrid
-                let rightBottomBound = new Coords
-                {
-                    x = 20 + WorldChunkModel.ChunkSize,
-                    y = 20
-                }
-                let leftTopBound = new Coords
-                {
-                    x = (chunk.Key.x * WorldChunkModel.ChunkSize),
-                    y = (chunk.Key.y * WorldChunkModel.ChunkSize)
-                }
+
+            List<IViewImage> Units = (from unit in gameModel.World.WorldModel.Units
+                select unit.UnitView).Cast<IViewImage>().ToList();
+
+            gameModel.ItemList.AddRange(Units);
+
+            if (gameModel.ActionBox.BoxModel.Show)
+            {
+                gameModel.ItemList.Add(gameModel.ActionBox.BoxView);
+                gameModel.TextList.Add(gameModel.ActionBox.BoxModel.Text);
+            }
+
+            int TileSize = (int) (GraphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
+
+            List<IViewImage> Cells = new List<IViewImage>();
+            List<WorldChunkController> chunks = (from chunk in gameModel.World.WorldModel.ChunkGrid
+                let rightBottomViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
+                    WorldPositionCalculator.TransformWindowCoords(
+                        new Coords()
+                        {
+                            x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width,
+                            y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height
+                        }, camera.GetViewMatrix()), TileSize)
+                let topLeftViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
+                    WorldPositionCalculator.TransformWindowCoords(
+                        new Coords() {x = GraphicsDevice.Viewport.X, y = GraphicsDevice.Viewport.Y},
+                        camera.GetViewMatrix()), TileSize)
+                let rightBottomBound = new Coords() {x = 20 + WorldChunkModel.ChunkSize, y = 20}
+                let leftTopBound = new Coords()
+                    {x = (chunk.Key.x * WorldChunkModel.ChunkSize), y = (chunk.Key.y * WorldChunkModel.ChunkSize)}
                 let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y,
-                    Math.Abs(rightBottomBound.x),
-                    Math.Abs(rightBottomBound.y)
-                )
+                    (rightBottomBound.x < 0 ? rightBottomBound.x * -1 : rightBottomBound.x),
+                    (rightBottomBound.y < 0 ? rightBottomBound.y * -1 : rightBottomBound.y))
+                let viewRectangle = new Rectangle(topLeftViewBound.x, topLeftViewBound.y,
+                    Math.Abs(topLeftViewBound.x - rightBottomViewBound.x),
+                    Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
                 where (chunkRectangle.Intersects(viewRectangle))
                 select chunk.Value).ToList();
 
@@ -524,19 +547,6 @@ namespace kbs2.GamePackage
                 FramesThisSecond = 0;
             }
 
-            FramesThisSecond++;
-        }
-
-        /// <summary>
-        /// This checks if a new shader needs to be applied and applies shader to new chunks
-        /// </summary>
-        private void AddShader()
-        {
-            ShaderDelegate tempShader = null;
-
-            if (Keyboard.GetState().IsKeyDown(Keys.R)) tempShader = RandomPattern2;
-            if (Keyboard.GetState().IsKeyDown(Keys.C)) tempShader = CellChunkCheckered;
-            if (Keyboard.GetState().IsKeyDown(Keys.D)) tempShader = DefaultPattern;
 
             if (tempShader == null) return;
 

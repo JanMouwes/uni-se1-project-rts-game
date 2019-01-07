@@ -8,6 +8,8 @@ namespace kbs2.GamePackage.CPU
 {
     public class CPU_Controller
     {
-        public CPU_Model CpuModel { get; set; }
+        private CPU_Model CpuModel { get; set; }
+        
+
     }
 }

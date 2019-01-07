@@ -1,11 +1,15 @@
 ﻿using System;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
+using kbs2.Unit.Model;
+using kbs2.Unit.Unit;
+using kbs2.World;
+using kbs2.World.Enums;
 using kbs2.World.Structs;
-using kbs2.World.World;
-using kbs2.WorldEntity.Interfaces;
-using kbs2.WorldEntity.Location.LocationMVC;
+using kbs2.WorldEntity.Health;
+using kbs2.WorldEntity.Location;
 using kbs2.WorldEntity.Unit.MVC;
+using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Unit
 {
@@ -24,16 +28,17 @@ namespace kbs2.WorldEntity.Unit
                 },
                 UnitModel =
                 {
-                    Speed = def.Speed,
-                    Faction = factionController
-                }
-            };
-
-            Location_Controller location = new Location_Controller(world, topLeft.x, topLeft.y)
-            {
-                LocationModel =
+                    Speed = 0.05f,
+                    Name = def.Name,
+                    //Faction = faction             Uncomment when merge has happened DO NOT REMOVE
+                },
+                HPController = new HP_Controller
                 {
-                    Parent = unitController
+                    HPModel = new HP_Model
+                    {
+                        CurrentHP = def.HPDef.CurrentHP,
+                        MaxHP = def.HPDef.MaxHP
+                    }
                 }
             };
             unitController.LocationController = location;
