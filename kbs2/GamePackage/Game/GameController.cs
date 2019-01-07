@@ -89,6 +89,10 @@ namespace kbs2.GamePackage
 
         public virtual event OnTickHandler onTick;
 
+        // testcode
+        public bool F7Pressed { get; set; } = false;
+
+
         //    GameState and its event
         private GameState gameState;
 
@@ -186,7 +190,7 @@ namespace kbs2.GamePackage
 
             FogController = new FogController(PlayerFaction, GameModel.World);
 
-//            onTick += FogController.Update;
+
 
             // Pathfinder 
             GameModel.pathfinder = new Pathfinder(GameModel.World);
@@ -388,6 +392,12 @@ namespace kbs2.GamePackage
                 };
 
                 GameModel.GuiTextList.Add(tester);
+                TerrainTester fogtester = new TerrainTester(new FloatCoords { x = 0, y = 140 })
+                {
+                    Text = $"view: {GameModel.World.GetCellFromCoords(coords).worldCellView.ViewMode}"
+                };
+
+                GameModel.GuiTextList.Add(fogtester);
             }
 
             // Update Buildings & constructing buildings on screen
@@ -450,8 +460,15 @@ namespace kbs2.GamePackage
             Stopwatch tick_stopwatch = new Stopwatch();
             tick_stopwatch.Start();
 
+
+            if(GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Fog);
+
+
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this, args);
+
+
+            if(GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Full);
 
             tick_stopwatch.Stop();
 
@@ -459,7 +476,7 @@ namespace kbs2.GamePackage
             //updates the viewmode for everything on screen
 
             // comment line bellow to turn on fog
-            FogController.UpdateEverythingVisible();
+            //FogController.UpdateEverythingVisible();
 
             // Calls the game update
 
@@ -475,6 +492,23 @@ namespace kbs2.GamePackage
             AddShader();
 
             if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F7)&& !F7Pressed) {
+                GameModel.FogEnabled = !GameModel.FogEnabled;
+                if (!GameModel.FogEnabled)
+                {
+                    FogController.SetEverything(ViewMode.Full);
+                }
+                else
+                {
+                    FogController.SetEverything(ViewMode.None);
+                }
+                F7Pressed = true;
+            }
+            if(!Keyboard.GetState().IsKeyDown(Keys.F7) && F7Pressed)
+            {
+                F7Pressed = false;
+            }
 
             stopwatch.Stop();
 

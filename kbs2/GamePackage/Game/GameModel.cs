@@ -11,6 +11,8 @@ namespace kbs2.GamePackage
 {
     public class GameModel
     {
+        public bool FogEnabled { get; set; } = true;
+
         public WorldController World { get; set; }
         public MouseInput MouseInput { get; set; }
         public List<Faction_Controller> Factions { get; set; }
