@@ -1,4 +1,3 @@
-using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.GamePackage.EventArgs;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;

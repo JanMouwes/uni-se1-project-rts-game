@@ -1,5 +1,4 @@
-﻿using System;
-namespace kbs2.Unit
+﻿namespace kbs2.Unit
 {
     public enum ElementType
     {

@@ -1,12 +1,7 @@
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
-using kbs2.Actions.GameActionDefs;
-using kbs2.Actions.GameActions;
 using kbs2.Actions.Interfaces;
 using kbs2.UserInterface.GameActionGui;
-using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Structs;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.Actions.GameActionGrid
 {

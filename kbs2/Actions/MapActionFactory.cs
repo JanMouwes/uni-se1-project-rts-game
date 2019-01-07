@@ -4,7 +4,6 @@ using kbs2.Actions.GameActions;
 using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
-using kbs2.WorldEntity.Interfaces;
 
 namespace kbs2.Actions
 {

@@ -1,9 +1,6 @@
 using kbs2.Actions.Interfaces;
 using kbs2.View.GUI;
-using kbs2.World;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Structs;
-using Microsoft.Xna.Framework;
 
 namespace kbs2.Actions.GameActionGrid
 {

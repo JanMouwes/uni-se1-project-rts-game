@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using kbs2.Desktop.View.Camera;
 using kbs2.GamePackage.Interfaces;
-using kbs2.UserInterface;
 using kbs2.World;
-using kbs2.World.Cell;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using NUnit.Framework;
 
 namespace kbs2.GamePackage
 {

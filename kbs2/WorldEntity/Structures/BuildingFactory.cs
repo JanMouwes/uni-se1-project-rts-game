@@ -3,7 +3,6 @@ using kbs2.Actions;
 using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structures.BuildingMVC;
 using kbs2.WorldEntity.Structures.Defs;

@@ -1,4 +1,3 @@
-using kbs2.GamePackage.Interfaces;
 using kbs2.WorldEntity.Structures.BuildingMVC;
 using kbs2.WorldEntity.Structures.Defs;
 

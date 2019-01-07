@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using kbs2.World.Chunk;
-using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Structures.ResourceFactory;

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.GamePackage.EventArgs;
 using kbs2.utils;
 using kbs2.World.Structs;

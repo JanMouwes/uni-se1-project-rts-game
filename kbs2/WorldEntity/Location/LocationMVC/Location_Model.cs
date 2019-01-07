@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using kbs2.GamePackage.EventArgs;
 using kbs2.World;
 using kbs2.World.Enums;

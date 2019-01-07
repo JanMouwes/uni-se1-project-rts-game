@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using kbs2.Desktop.World.World;
 using kbs2.World;
 using kbs2.World.Enums;
 using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Location;
 using kbs2.WorldEntity.Pathfinder;
-using kbs2.WorldEntity.Unit;
 
 namespace PathfindingConsoleApp
 {

@@ -9,7 +9,6 @@ using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Interfaces;
-using kbs2.WorldEntity.Structures.BuildingMVC;
 using kbs2.WorldEntity.Structures.Defs;
 using kbs2.WorldEntity.WorldEntitySpawner;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using kbs2.GamePackage.Interfaces;
 using kbs2.World.Enums;
 using kbs2.WorldEntity.Battle;
 using kbs2.WorldEntity.Health;

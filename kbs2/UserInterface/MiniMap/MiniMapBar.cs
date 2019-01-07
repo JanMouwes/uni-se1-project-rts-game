@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kbs2.GamePackage;
-using kbs2.GamePackage.Interfaces;
-using kbs2.View.GUI;
+﻿using kbs2.View.GUI;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;

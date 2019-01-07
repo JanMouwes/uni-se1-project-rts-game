@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;

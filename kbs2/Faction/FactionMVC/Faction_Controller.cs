@@ -1,13 +1,8 @@
 ﻿using kbs2.Faction.CurrencyMVC;
 using kbs2.Faction.Enums;
 using kbs2.Faction.Interfaces;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit.MVC;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using kbs2.GamePackage;
 using kbs2.GamePackage.DayCycle;
 using kbs2.GamePackage.EventArgs;
@@ -15,7 +10,6 @@ using kbs2.Resources;
 using kbs2.Unit.Interfaces;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structures.ResourceFactory;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.Faction.FactionMVC
 {

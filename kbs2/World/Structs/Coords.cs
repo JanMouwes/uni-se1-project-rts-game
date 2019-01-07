@@ -1,5 +1,4 @@
 ﻿using kbs2.World.Structs;
-using System;
 
 namespace kbs2.World
 {

@@ -3,7 +3,6 @@ using kbs2.Actions.GameActionDefs;
 using kbs2.Actions.GameActions;
 using kbs2.World;
 using kbs2.World.Cell;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
 
 namespace kbs2.WorldEntity.Structures.BuildingMVC

@@ -1,6 +1,4 @@
-using kbs2.Actions.Interfaces;
 using kbs2.WorldEntity.Interfaces;
-using kbs2.WorldEntity.Unit;
 
 namespace kbs2.Actions.GameActionDefs
 {

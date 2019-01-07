@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Timers;
-using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Desktop.View.Camera;
 using kbs2.GamePackage.DayCycle;
 using kbs2.GamePackage.EventArgs;
-using kbs2.GamePackage.Interfaces;
 using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
@@ -17,15 +14,12 @@ using kbs2.World.TerrainDef;
 using kbs2.UserInterface;
 using kbs2.View.GUI.ActionBox;
 using kbs2.World.World;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit;
 using kbs2.WorldEntity.Unit.MVC;
-using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
-using System.Threading;
 using kbs2.Actions.GameActionDefs;
 using kbs2.Actions.GameActionGrid;
 using kbs2.Actions.GameActions;
@@ -36,13 +30,9 @@ using kbs2.UserInterface.GameActionGui;
 using kbs2.View.GUI;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Pathfinder;
-using kbs2.WorldEntity.Structs;
 using kbs2.WorldEntity.Structures;
-using kbs2.WorldEntity.Structures.BuildingMVC;
 using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
-using kbs2.WorldEntity.Structures.Defs;
 using kbs2.WorldEntity.WorldEntitySpawner;
-using MonoGame.Extended.Timers;
 
 namespace kbs2.GamePackage
 {

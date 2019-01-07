@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using kbs2.Faction.CurrencyMVC;
-using kbs2.Faction.Enums;
+﻿using kbs2.Faction.CurrencyMVC;
 using NUnit.Framework;
 
 namespace Tests

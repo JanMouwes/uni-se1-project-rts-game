@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using kbs2.Actions.Interfaces;
-using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;

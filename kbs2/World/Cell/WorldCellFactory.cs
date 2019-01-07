@@ -1,12 +1,6 @@
-﻿using kbs2.GamePackage;
-using kbs2.World.Enums;
+﻿using kbs2.World.Enums;
 using kbs2.World.Structs;
 using kbs2.World.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace kbs2.World.Cell
 {

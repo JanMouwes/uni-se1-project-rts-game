@@ -1,5 +1,4 @@
-﻿using System;
-using kbs2.World;
+﻿using kbs2.World;
 
 namespace kbs2.Unit.Abstract
 {

@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using kbs2.Resources.Enums;
 using kbs2.utils;
-using kbs2.WorldEntity.Building;
-using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;
 using kbs2.WorldEntity.Structures;
@@ -131,10 +129,11 @@ namespace kbs2
         {
             DBConn = OpenConnection("DefDex.db");
 
-            const string query = "SELECT Def_ResourceType.name as resource_type" +
+            const string query = "SELECT Def_ResourceType.name as resource_type " +
                                  "FROM BuildingDef " +
                                  "JOIN Def_ResourceFactory ON BuildingDef.Id = Def_ResourceFactory.id " +
-                                 "JOIN Def_ResourceType ON Def_ResourceFactory.resource_type_id = Def_ResourceType.id WHERE BuildingDef.Id = @i";
+                                 "JOIN Def_ResourceType ON Def_ResourceFactory.resource_type_id = Def_ResourceType.id " +
+                                 "WHERE BuildingDef.Id = @i";
             ResourceType resourceType;
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))

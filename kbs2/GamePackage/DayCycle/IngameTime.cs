@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace kbs2.GamePackage.DayCycle
+﻿namespace kbs2.GamePackage.DayCycle
 {
     public struct IngameTime
     {

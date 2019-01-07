@@ -1,13 +1,11 @@
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
-using kbs2.GamePackage.EventArgs;
 using kbs2.World;
 using kbs2.World.World;
 using kbs2.WorldEntity.Location.LocationMVC;
 using kbs2.WorldEntity.Unit;
 using kbs2.WorldEntity.Unit.MVC;
 using kbs2.WorldEntity.WorldEntitySpawner;
-using Microsoft.Xna.Framework;
 using Moq;
 using NUnit.Framework;
 

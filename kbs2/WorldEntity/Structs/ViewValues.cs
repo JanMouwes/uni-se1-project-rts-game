@@ -1,5 +1,3 @@
-using kbs2.GamePackage.Interfaces;
-
 namespace kbs2.WorldEntity.Structs
 {
     public struct ViewValues
