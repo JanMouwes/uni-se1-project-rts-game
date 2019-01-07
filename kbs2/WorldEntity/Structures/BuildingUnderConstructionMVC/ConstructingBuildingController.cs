@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
 using kbs2.Actions.Interfaces;
-using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structures.Defs;
 
 namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 {
-    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>, IHasGameActions
+    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>, IGameActionHolder
     {
         public delegate void ConstructionCompleteObserver(object sender, EventArgsWithPayload<IStructureDef> eventArgs);
 

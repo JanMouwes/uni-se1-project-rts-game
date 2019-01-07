@@ -1,10 +1,8 @@
-using kbs2.Actions.Interfaces;
 using kbs2.WorldEntity.Interfaces;
-using kbs2.WorldEntity.Unit;
 
 namespace kbs2.Actions.GameActionDefs
 {
-    public class SpawnActionDef : GameActionDef
+    public class SpawnActionDef : MapActionDef
     {
         //TEMP
         public static SpawnActionDef Raichu
@@ -30,12 +28,11 @@ namespace kbs2.Actions.GameActionDefs
         }
         //TEMP
 
-        public virtual ISpawnableDef SpawnableDef { get; }
+        public virtual ISpawnableDef SpawnableDef { get; set; }
 
-        public SpawnActionDef(uint cooldown, string imageSource, ISpawnableDef spawnableDef) : base(cooldown,
-            imageSource)
+        public SpawnActionDef(uint cooldown, string imageSource, ISpawnableDef spawnableDef) : base(cooldown, imageSource)
         {
-            SpawnableDef = spawnableDef;
+            this.SpawnableDef = spawnableDef;
         }
     }
 }

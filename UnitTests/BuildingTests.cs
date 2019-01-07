@@ -1,10 +1,9 @@
 ﻿using System;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
-using kbs2.GamePackage.DayCycle;
 using kbs2.World;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structures;
 using kbs2.WorldEntity.Structures.BuildingMVC;
 using Moq;
 using NUnit.Framework;
@@ -27,7 +26,7 @@ namespace UnitTests
                 Cost = 50,
                 UpkeepCost = 1.4,
             };
-            controller = new BuildingController(def)
+            controller = new BuildingController((BuildingDef) def)
             {
                 Faction = new Faction_Controller("test-faction", gameMock.Object),
                 StartCoords = new Coords()

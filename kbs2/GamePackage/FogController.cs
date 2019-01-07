@@ -5,15 +5,9 @@ using kbs2.World.Cell;
 using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.World;
-using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Unit.MVC;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.GamePackage.EventArgs;
 using kbs2.WorldEntity.Structures.BuildingMVC;
 using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
@@ -29,6 +23,12 @@ namespace kbs2.GamePackage
         {
             this.faction = faction;
             this.worldController = worldController;
+
+//            foreach (UnitController unit in faction.FactionModel.Units)
+//            {
+//                unit.OnMove += (sender, newLocation) => UpdateViewMode(ViewMode.Fog, unit.ViewRange, newLocation.Value);
+//                unit.OnMove += (sender, newLocation) => UpdateViewMode(ViewMode.Full, unit.ViewRange, newLocation.Value);
+//            }
         }
 
         /// <summary>
@@ -40,7 +40,6 @@ namespace kbs2.GamePackage
             // line of sight units
             foreach (UnitController unit in faction.FactionModel.Units)
             {
-                UpdateViewMode(mode, unit.ViewRange, unit.Center);
             }
 
             // lino of sight buildings
@@ -101,8 +100,6 @@ namespace kbs2.GamePackage
         {
             foreach (UnitController unit in worldController.WorldModel.Units)
             {
-                
-                
                 if (worldController.GetCellFromCoords((Coords) unit.FloatCoords).worldCellView.ViewMode == ViewMode.Full)
                 {
                     unit.UnitView.ViewMode = ViewMode.Full;

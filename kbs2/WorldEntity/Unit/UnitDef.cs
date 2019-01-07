@@ -1,4 +1,6 @@
-﻿using kbs2.WorldEntity.Battle;
+﻿using System.Collections.Generic;
+using kbs2.World.Enums;
+using kbs2.WorldEntity.Battle;
 using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;
@@ -6,7 +8,7 @@ using kbs2.WorldEntity.XP;
 
 namespace kbs2.WorldEntity.Unit
 {
-    public class UnitDef : IWorldEntityDef
+    public class UnitDef : ITrainableDef
     {
         public float Speed;
         public string Image { get; set; }
@@ -28,7 +30,26 @@ namespace kbs2.WorldEntity.Unit
         }
 
         public int ViewRange { get; set; }
-        public float PurchaseCost { get; set; }
-        public float Upkeep { get; set; }
+
+        public float PurchaseCost
+        {
+            get => (float) Cost;
+            set => Cost = value;
+        }
+
+        public float Upkeep
+        {
+            get => (float) UpkeepCost;
+            set => UpkeepCost = value;
+        }
+
+        public List<TerrainType> LegalTerrain { get; set; }
+        public uint TrainingTime { get; set; }
+
+        public ViewValues IconData => new ViewValues(ViewValues.Image, 20, 20);
+
+        public double Cost { get; set; }
+
+        public double UpkeepCost { get; set; }
     }
 }

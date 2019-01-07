@@ -50,19 +50,25 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Actions\GameActionDefs\GameActionDef.cs" />
-    <Compile Include="Actions\GameActionDefs\SpawnActionDef.cs" />
+    <Compile Include="Actions\ActionTabActions\SelectMapAction_GameAction.cs" />
     <Compile Include="Actions\GameActionFactory.cs" />
+    <Compile Include="Actions\GameActions\GameAction.cs" />
+    <Compile Include="Actions\MapActionDefs\MapActionDef.cs" />
+    <Compile Include="Actions\MapActionDefs\SpawnActionDef.cs" />
+    <Compile Include="Actions\MapActionDefs\TrainActionDef.cs" />
+    <Compile Include="Actions\MapActionFactory.cs" />
     <Compile Include="Actions\ActionModels\SpawnActionModel.cs" />
     <Compile Include="Actions\GameActionGrid\GameActionTabItem.cs" />
     <Compile Include="Actions\GameActionGrid\GameActionTabModel.cs" />
-    <Compile Include="Actions\GameActions\GameAction.cs" />
-    <Compile Include="Actions\GameActions\ActionView.cs" />
-    <Compile Include="Actions\GameActions\CooldownView.cs" />
-    <Compile Include="Actions\GameActions\SpawnAction.cs" />
+    <Compile Include="Actions\MapActionSelector\MapActionSelector.cs" />
+    <Compile Include="Actions\MapActions\MapAction.cs" />
+    <Compile Include="Actions\MapActions\ActionView.cs" />
+    <Compile Include="Actions\MapActions\CooldownView.cs" />
+    <Compile Include="Actions\MapActions\SpawnAction.cs" />
     <Compile Include="Actions\IActionModel.cs" />
     <Compile Include="Actions\Interfaces\IGameAction.cs" />
-    <Compile Include="Actions\Interfaces\IGameActionDef.cs" />
+    <Compile Include="Actions\Interfaces\IMapAction.cs" />
+    <Compile Include="Actions\Interfaces\IMapActionDef.cs" />
     <Compile Include="DBController.cs" />
     <Compile Include="Faction\CurrencyMVC\CurrencyView.cs" />
     <Compile Include="Faction\Enums\Faction_Relations.cs" />
@@ -96,9 +102,8 @@
     <Compile Include="GamePackage\Selection\Selection_View.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserInterface\ActionBar\ActionBarView.cs" />
     <Compile Include="UserInterface\ActionBar\ActionBarModel.cs" />
-    <Compile Include="UserInterface\BuildGameActions.cs" />
+    <Compile Include="UserInterface\BuildGameActionHolder.cs" />
     <Compile Include="UserInterface\GameActionGui\GameActionGuiController.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarView.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarModel.cs" />
@@ -125,9 +130,13 @@
     <Compile Include="View\GUI\ActionBox\ActionBoxModel.cs" />
     <Compile Include="View\GUI\ActionBox\ActionBoxTextView.cs" />
     <Compile Include="View\GUI\ActionBox\ActionBoxView.cs" />
+    <Compile Include="View\GUI\GuiViewImage.cs" />
     <Compile Include="WorldEntity\Battle\BattleDef.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Controller.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Model.cs" />
+    <Compile Include="WorldEntity\Interfaces\ITrainable.cs" />
+    <Compile Include="WorldEntity\Interfaces\ITrainableDef.cs" />
+    <Compile Include="WorldEntity\Interfaces\ITrainingEntity.cs" />
     <Compile Include="WorldEntity\Structures\BuildingDef.cs" />
     <Compile Include="WorldEntity\Structures\BuildingFactory.cs" />
     <Compile Include="WorldEntity\Structures\BuildingMVC\BuildingView.cs" />
@@ -136,12 +145,13 @@
     <Compile Include="WorldEntity\Structures\BuildingUnderConstructionMVC\ConstructionCounter.cs" />
     <Compile Include="WorldEntity\Structures\Defs\ConstructingBuildingDef.cs" />
     <Compile Include="WorldEntity\Structures\Defs\ResourceFactoryDef.cs" />
+    <Compile Include="WorldEntity\Structures\Defs\TrainingStructureDef.cs" />
     <Compile Include="WorldEntity\Structures\ResourceFactory\ResourceFactoryController.cs" />
     <Compile Include="WorldEntity\Structures\ResourceFactory\ResourceFactoryModel.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
-    <Compile Include="WorldEntity\Interfaces\IHasGameActions.cs" />
+    <Compile Include="WorldEntity\Interfaces\IGameActionHolder.cs" />
     <Compile Include="WorldEntity\Interfaces\IMoveable.cs" />
     <Compile Include="WorldEntity\Interfaces\ISpawnable.cs" />
     <Compile Include="WorldEntity\Interfaces\ISpawnableDef.cs" />
@@ -166,6 +176,9 @@
     <Compile Include="WorldEntity\Structs\Level.cs" />
     <Compile Include="WorldEntity\Structs\ViewValues.cs" />
     <Compile Include="WorldEntity\Structures\ResourceFactory\ResourceFactoryView.cs" />
+    <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureController.cs" />
+    <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureModel.cs" />
+    <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureView.cs" />
     <Compile Include="WorldEntity\Unit\MVC\UnitController.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_Model.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_View.cs" />

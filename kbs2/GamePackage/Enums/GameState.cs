@@ -1,5 +1,4 @@
-﻿using System;
-namespace kbs2.GamePackage
+﻿namespace kbs2.GamePackage
 {
     public enum GameState
     {

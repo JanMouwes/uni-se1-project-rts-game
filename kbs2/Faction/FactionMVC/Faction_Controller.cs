@@ -1,21 +1,15 @@
 ﻿using kbs2.Faction.CurrencyMVC;
 using kbs2.Faction.Enums;
 using kbs2.Faction.Interfaces;
-using kbs2.Unit.Model;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit.MVC;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using kbs2.GamePackage;
 using kbs2.GamePackage.DayCycle;
 using kbs2.GamePackage.EventArgs;
 using kbs2.Resources;
+using kbs2.Unit.Interfaces;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structures.ResourceFactory;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.Faction.FactionMVC
 {
@@ -68,6 +62,10 @@ namespace kbs2.Faction.FactionMVC
         public virtual void RegisterUnit(UnitController unit) => FactionModel.Units.Add(unit);
 
         public virtual void UnregisterUnit(UnitController unit) => FactionModel.Units.Remove(unit);
+
+        public bool CanPurchase(IPurchasable purchasable) => CurrencyController.Model.Currency > purchasable.Cost;
+
+        public void Purchase(IPurchasable purchasable) => CurrencyController.AlterCurrency((float) -purchasable.Cost);
 
         // Checks if the given faction is hostile to this faction
         public bool IsHostileTo(FactionModel faction) => FactionModel.FactionRelationships[faction] == Faction_Relations.hostile;

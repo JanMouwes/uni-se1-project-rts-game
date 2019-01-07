@@ -1,15 +1,7 @@
 ﻿using kbs2.GamePackage.Interfaces;
-using kbs2.Unit.Model;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {

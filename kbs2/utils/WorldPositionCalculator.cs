@@ -9,18 +9,30 @@ namespace kbs2.utils
     public static class WorldPositionCalculator
     {
         //    Transforms window-coords in pixels to map-coords in pixels (draw-coords)
-        public static Coords TransformWindowCoords(Coords windowCoordsInPixels, Matrix matrix)
+        public static FloatCoords TransformWindowCoords(Coords windowCoordsInPixels, Matrix matrix)
         {
             Vector2 transformed = Vector2.Transform(new Vector2(windowCoordsInPixels.x, windowCoordsInPixels.y),
                 Matrix.Invert(matrix));
 
-            return new Coords
+            return new FloatCoords()
             {
-                x = (int) transformed.X,
-                y = (int) transformed.Y
+                x = transformed.X,
+                y = transformed.Y
             };
         }
 
+        /// <summary>
+        /// Transforms coordinates on the window to map-coordinates
+        /// </summary>
+        /// <param name="windowCoords">Coords on the window</param>
+        /// <param name="viewMatrix">Transform-matrix</param>
+        /// <param name="tileSize">Size of the map-tiles</param>
+        /// <returns></returns>
+        public static FloatCoords WindowCoordsToCellCoords(Coords windowCoords, Matrix viewMatrix, int tileSize)
+        {
+            return DrawCoordsToCellFloatCoords(TransformWindowCoords(windowCoords, viewMatrix), tileSize);
+        }
+        
         //    Calculates cell-coords from draw-coords.
         public static Coords DrawCoordsToCellCoords(Coords drawCoords, int tileSize) =>
             (Coords) DrawCoordsToCellFloatCoords((FloatCoords) drawCoords, tileSize);

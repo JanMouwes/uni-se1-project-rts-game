@@ -1,15 +1,12 @@
-﻿using kbs2.World;
-using kbs2.WorldEntity.Health;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using kbs2.World;
+using kbs2.World.Enums;
+using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;
-using kbs2.Unit;
 
-namespace kbs2.WorldEntity.Building
+namespace kbs2.WorldEntity.Structures
 {
     public class BuildingDef : IStructureDef
     {
@@ -17,9 +14,8 @@ namespace kbs2.WorldEntity.Building
 
         #region Sprite info
 
-        [Obsolete] public string Image { get; set; }
-        [Obsolete] public float Height { get; set; }
-        [Obsolete] public float Width { get; set; }
+        [Obsolete] public float Height => ViewValues.Height;
+        [Obsolete] public float Width => ViewValues.Width;
 
         #endregion
 
@@ -30,19 +26,12 @@ namespace kbs2.WorldEntity.Building
         public HPDef HPDef { get; set; } = new HPDef();
 
 
-        public ViewValues ViewValues
-        {
-            get => new ViewValues(Image, Width, Height);
-            set
-            {
-                Image = value.Image;
-                Width = value.Width;
-                Height = value.Height;
-            }
-        }
+        public ViewValues ViewValues { get; set; }
 
         public int ViewRange { get; set; }
 
         public uint ConstructionTime { get; set; }
+
+        public List<TerrainType> LegalTerrain { get; set; }
     }
 }

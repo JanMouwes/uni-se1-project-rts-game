@@ -2,22 +2,28 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using kbs2.Resources.Enums;
 using kbs2.utils;
-using kbs2.Unit.Model;
-using kbs2.WorldEntity.Building;
-using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;
+using kbs2.WorldEntity.Structures;
 using kbs2.WorldEntity.Structures.Defs;
 using kbs2.WorldEntity.Unit;
 using Mono.Data.Sqlite;
 
 namespace kbs2
 {
-    public class BuildingNotFoundException : Exception
+    public class BuildingNotFoundException : DataNotFoundException
     {
-        public BuildingNotFoundException(int buildingId) : base($"Building with id {buildingId} not found")
+        public BuildingNotFoundException(int buildingId) : base($"Building with id {buildingId}")
+        {
+        }
+    }
+
+    public class DataNotFoundException : Exception
+    {
+        public DataNotFoundException(string notFoundDescription) : base($"{notFoundDescription} not found")
         {
         }
     }
@@ -49,6 +55,8 @@ namespace kbs2
 
         private static bool IsBuildingResourceFactory(int id)
         {
+            DBConn = OpenConnection("DefDex.db");
+
             const string query = "SELECT * FROM Def_ResourceFactory WHERE id=@i";
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
@@ -62,23 +70,134 @@ namespace kbs2
             }
         }
 
+        private static bool IsStructureTrainingEntity(int id)
+        {
+            return IsWorldEntityTrainingEntity(id, 1);
+        }
+
+        private static bool IsUnitTrainingEntity(int id)
+        {
+            return IsWorldEntityTrainingEntity(id, 2);
+        }
+
+        private static bool IsWorldEntityTrainingEntity(int id, int worldEntityTypeId)
+        {
+            DBConn = OpenConnection("DefDex.db");
+
+            const string query = "SELECT * FROM Def_TrainingEntity WHERE entity_id=@i AND entity_type_id = @j";
+
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@i", id));
+                cmd.Parameters.Add(new SqliteParameter("@j", worldEntityTypeId));
+
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    return reader.Read();
+                }
+            }
+        }
+
+        private static IEnumerable<ITrainableDef> GetTrainingEntityTrainables(int trainingEntityId)
+        {
+            DBConn = OpenConnection("DefDex.db");
+
+            const string query = "SELECT unit_id FROM Def_TrainingEntity_Trainable WHERE training_entity_id = @i";
+
+            List<ITrainableDef> returnList = new List<ITrainableDef>();
+
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@i", trainingEntityId));
+
+
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int unit_id = int.Parse(reader["unit_id"].ToString());
+
+                        returnList.Add(GetUnitDef(unit_id));
+                    }
+                }
+            }
+
+            return returnList;
+        }
+
+        private static ResourceType GetResourceBuildingValues(int structureId)
+        {
+            DBConn = OpenConnection("DefDex.db");
+
+            const string query = "SELECT Def_ResourceType.name as resource_type " +
+                                 "FROM BuildingDef " +
+                                 "JOIN Def_ResourceFactory ON BuildingDef.Id = Def_ResourceFactory.id " +
+                                 "JOIN Def_ResourceType ON Def_ResourceFactory.resource_type_id = Def_ResourceType.id " +
+                                 "WHERE BuildingDef.Id = @i";
+            ResourceType resourceType;
+
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@i", structureId));
+
+
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read()) throw new DataNotFoundException($"ResourceBuilding with id {structureId}");
+
+                    ResourceFactoryDef resourceFactoryDef = new ResourceFactoryDef();
+                    switch (reader["resource_type"].ToString().ToLower())
+                    {
+                        case "wood":
+                            resourceType = ResourceType.Wood;
+                            break;
+                        case "stone":
+                            resourceType = ResourceType.Stone;
+                            break;
+                        case "food":
+                            resourceType = ResourceType.Food;
+                            break;
+                        default: throw new DataException($"Invalid ResourceType {reader["resource_type"]}");
+                    }
+                }
+            }
+
+            return resourceType;
+        }
 
         public static BuildingDef GetBuildingDef(int buildingId) => GetBuildingDef<BuildingDef>(buildingId);
 
         //FIXME split into multiple methods, GetBuildingDef, GetResourceFactoryDef, etc.
+        //FIXME this is horribly designed. Do the above.   
         // get the Def from a given building
         public static TStructureDef GetBuildingDef<TStructureDef>(int buildingId) where TStructureDef : BuildingDef
         {
+            DBConn = OpenConnection("DefDex.db");
+
             string query = "SELECT * FROM BuildingDef WHERE Id=@i";
 
             bool isResourceFactory = IsBuildingResourceFactory(buildingId);
 
+            BuildingDef buildingDef = new BuildingDef();
+
             if (isResourceFactory)
             {
-                query = "SELECT image, width, height, shape, Cost, Upkeep, ViewRange, Def_ResourceType.name as resource_type, ConstructionTime " +
-                        "FROM BuildingDef " +
-                        "JOIN Def_ResourceFactory ON BuildingDef.Id = Def_ResourceFactory.id " +
-                        "JOIN Def_ResourceType ON Def_ResourceFactory.resource_type_id = Def_ResourceType.id WHERE BuildingDef.Id = @i";
+                ResourceFactoryDef factoryDef = new ResourceFactoryDef
+                {
+                    ResourceType = GetResourceBuildingValues(buildingId)
+                };
+                buildingDef = factoryDef;
+            }
+
+            bool isTrainingStructure = IsStructureTrainingEntity(buildingId);
+
+            if (isTrainingStructure)
+            {
+                TrainingStructureDef factoryDef = new TrainingStructureDef
+                {
+                    TrainableDefs = GetTrainingEntityTrainables(buildingId).ToList()
+                };
+                buildingDef = factoryDef;
             }
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
@@ -89,27 +208,6 @@ namespace kbs2
                 {
                     if (!reader.Read()) throw new BuildingNotFoundException(buildingId);
 
-                    BuildingDef buildingDef = new BuildingDef();
-
-                    if (isResourceFactory)
-                    {
-                        ResourceFactoryDef resourceFactoryDef = new ResourceFactoryDef();
-                        switch (reader["resource_type"].ToString().ToLower())
-                        {
-                            case "wood":
-                                resourceFactoryDef.ResourceType = ResourceType.Wood;
-                                break;
-                            case "stone":
-                                resourceFactoryDef.ResourceType = ResourceType.Stone;
-                                break;
-                            case "food":
-                                resourceFactoryDef.ResourceType = ResourceType.Food;
-                                break;
-                            default: throw new DataException($"Invalid ResourceType {reader["resource_type"]}");
-                        }
-
-                        buildingDef = resourceFactoryDef;
-                    }
 
                     //buildingDef.HPDef.CurrentHP = int.Parse(reader["CurrentHp"].ToString());
                     //buildingDef.HPDef.MaxHP = int.Parse(reader["MaxHp"].ToString());
@@ -128,12 +226,12 @@ namespace kbs2
                     buildingDef.UpkeepCost = float.Parse(reader["Upkeep"].ToString());
 
                     buildingDef.ViewRange = int.Parse(reader["ViewRange"].ToString());
-                    
-                    buildingDef.ConstructionTime = uint.Parse(reader["ConstructionTime"].ToString());
 
-                    return (TStructureDef) buildingDef;
+                    buildingDef.ConstructionTime = uint.Parse(reader["ConstructionTime"].ToString());
                 }
             }
+
+            return (TStructureDef) buildingDef;
         }
 
 
@@ -160,6 +258,7 @@ namespace kbs2
                         returnedUnitDef.Upkeep = float.Parse(reader["Upkeep"].ToString());
                         returnedUnitDef.PurchaseCost = float.Parse(reader["Cost"].ToString());
                         returnedUnitDef.ViewRange = int.Parse(reader["ViewRange"].ToString());
+                        returnedUnitDef.TrainingTime = uint.Parse(reader["TrainingTime"].ToString());
 
                         // This is for the different defs not implemented yet
                         /*returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());

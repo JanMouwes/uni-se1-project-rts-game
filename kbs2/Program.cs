@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using kbs2.GamePackage;
-using kbs2.GamePackage.GameSaveManager;
-using kbs2.World.TerrainDef;
-using kbs2.World;
-using kbs2.WorldEntity.Building;
 
 namespace kbs2.Desktop
 {

@@ -1,7 +1,6 @@
 ﻿using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC

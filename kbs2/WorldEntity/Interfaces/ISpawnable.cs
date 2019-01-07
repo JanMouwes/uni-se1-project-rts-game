@@ -1,6 +1,6 @@
 namespace kbs2.WorldEntity.Interfaces
 {
-    public interface ISpawnable
+    public interface ISpawnable : IWorldEntity
     {
         
     }

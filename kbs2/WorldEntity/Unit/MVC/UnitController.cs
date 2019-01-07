@@ -1,18 +1,22 @@
 ﻿using System.Collections.Generic;
 using kbs2.Actions.Interfaces;
-using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
-using kbs2.Unit.Model;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Location.LocationMVC;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-    public class UnitController : IWorldEntity, IMoveable, IHasGameActions
+    public class UnitController : ITrainable, IMoveable
     {
+        public event OnMoveHandler OnMove
+        {
+            remove => LocationController.LocationModel.OnMove -= value;
+            add => LocationController.LocationModel.OnMove += value;
+        }
+
         public Location_Controller LocationController;
         public Unit_Model UnitModel;
         public Unit_View UnitView;
@@ -22,6 +26,7 @@ namespace kbs2.WorldEntity.Unit.MVC
         public List<IGameAction> GameActions => UnitModel.Actions;
 
         public FloatCoords FloatCoords => LocationController.LocationModel.FloatCoords;
+
         public Faction_Controller Faction
         {
             get => UnitModel.Faction;
@@ -49,5 +54,7 @@ namespace kbs2.WorldEntity.Unit.MVC
 
 
         public virtual void Update(object sender, OnTickEventArgs eventArgs) => LocationController.Update(sender, eventArgs);
+
+        public ITrainableDef Def => UnitModel.Def;
     }
 }

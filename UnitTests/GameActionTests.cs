@@ -5,8 +5,8 @@ using kbs2.GamePackage;
 using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.World.World;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structures;
 using kbs2.WorldEntity.Unit;
 using kbs2.WorldEntity.Unit.MVC;
 using kbs2.WorldEntity.WorldEntitySpawner;
@@ -60,7 +60,7 @@ namespace Tests
 
             Mock<SpawnActionDef> actionDef = new Mock<SpawnActionDef>(new object[] {(uint) 10, "image", unitDef});
 
-            actionDef.Setup(def => def.SpawnableDef).Returns(() => unitDef);
+            actionDef.SetupGet(def => def.SpawnableDef).Returns(() => unitDef);
 
             Mock<ITargetable> target = new Mock<ITargetable>();
 
@@ -97,7 +97,7 @@ namespace Tests
 
             Mock<SpawnActionDef> actionDef = new Mock<SpawnActionDef>(new object[] {(uint) 10, "image", buildingDef});
 
-            actionDef.Setup(def => def.SpawnableDef).Returns(() => buildingDef);
+            actionDef.SetupGet(def => def.SpawnableDef).Returns(() => buildingDef);
 
             Mock<ITargetable> target = new Mock<ITargetable>();
 

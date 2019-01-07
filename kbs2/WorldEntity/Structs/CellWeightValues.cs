@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace kbs2.WorldEntity.Structs
+﻿namespace kbs2.WorldEntity.Structs
 {
     public struct CellWeightValues
     {

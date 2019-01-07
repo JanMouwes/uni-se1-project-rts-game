@@ -1,7 +1,5 @@
 ﻿using System;
-using kbs2.Desktop.GamePackage.EventArgs;
 using kbs2.GamePackage.EventArgs;
-using Microsoft.Xna.Framework;
 
 namespace kbs2.GamePackage.DayCycle
 {
