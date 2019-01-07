@@ -1,77 +1,71 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kbs2.Actions;
-using kbs2.Actions.ActionMVC;
-using kbs2.Desktop.World.World;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage;
-using kbs2.GamePackage.AIPackage.Enums;
-using kbs2.Unit.Model;
-using kbs2.Unit.Unit;
-using kbs2.World;
-using kbs2.World.Enums;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Health;
-using kbs2.WorldEntity.Location;
+using kbs2.World.World;
+using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Location.LocationMVC;
 using kbs2.WorldEntity.Unit.MVC;
-using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Unit
 {
-	public class UnitFactory
-	{
-		public static Unit_Controller CreateNewUnit(UnitDef def, GameController gc)
+    public class UnitFactory : IDisposable
+    {
+        private Faction_Controller faction;
+        private GameController game;
+
+        public static UnitController CreateNewUnit(UnitDef def, FloatCoords topLeft, WorldController world, Faction_Controller factionController)
         {
-            Unit_Controller UnitController = new Unit_Controller
+            UnitController unitController = new UnitController(def)
             {
-                UnitView = new Unit_View
+                UnitView =
                 {
-                    Texture = def.Image,
-                    Width = def.Width,
-                    Height = def.Height,
-                    Colour = Color.White,
-                    ZIndex = 12
+                    Texture = def.Image, Width = def.Width, Height = def.Height
                 },
-                UnitModel = new Unit_Model
+                UnitModel =
                 {
-                    Speed = 0.05f,
-                    Name = def.Name,
-                    //Faction = faction             Uncomment when merge has happened DO NOT REMOVE
-                },
-                HPController = new HP_Controller
-                {
-                    HPModel = new HP_Model
-                    {
-                        CurrentHP = def.HPDef.CurrentHP,
-                        MaxHP = def.HPDef.MaxHP
-                    }
-                },
-                Order = Command.Idle
+                    Speed = def.Speed,
+                    Faction = factionController
+                }
             };
-            // Unit_view needs a Unit_Controller for some reason
-            UnitController.UnitView.Unit_Controller = UnitController;
 
-            // Location can still be refactored
-            Random number = new Random();
-            int x = number.Next(1, 25);
-            int y = number.Next(1, 25);
-
-            Location_Controller location = new Location_Controller(gc.gameModel.World.WorldModel, x, y);
-            location.LocationModel.parent = UnitController;
-            UnitController.LocationController = location;
-            location.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
-            for (int act = 0; act < 9; act++)
+            Location_Controller location = new Location_Controller(world, topLeft.x, topLeft.y)
             {
-                UnitController.UnitModel.actions.Add(new ActionController { View = new ActionView { Texture = "pichu_idle", Colour = Color.White, ZIndex = 2, gameController = gc } });
-            }
+                LocationModel =
+                {
+                    Parent = unitController
+                }
+            };
+            unitController.LocationController = location;
+            return unitController;
+        }
 
-            return UnitController;
+        public UnitFactory(Faction_Controller faction, GameController game)
+        {
+            this.faction = faction;
+            this.game = game;
+        }
+
+        public UnitController CreateNewUnit(UnitDef def)
+        {
+            return CreateNewUnit(def, new FloatCoords(), game.GameModel.World, faction);
+        }
+
+        //    TODO rewrite. this is risky
+        public ISpawnable CreateNewSpawnable(ISpawnableDef def)
+        {
+            return CreateNewUnit((UnitDef) def, new FloatCoords(), game.GameModel.World, faction);
+        }
+
+        public ITrainable CreateNewTrainable(ITrainableDef def)
+        {
+            return CreateNewSpawnable(def) as ITrainable;
+        }
+
+        public void Dispose()
+        {
+            faction = null;
+            game = null;
         }
     }
 }
-
-
-

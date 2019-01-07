@@ -1,14 +1,10 @@
-﻿using kbs2.WorldEntity.Building;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using kbs2.WorldEntity.Interfaces;
 
 namespace kbs2.Faction.Interfaces
 {
     public interface IHasFactionBuilding
     {
-        List<Building_Controller> Buildings { get; }
+        List<IStructure<IStructureDef>> Buildings { get; }
     }
 }

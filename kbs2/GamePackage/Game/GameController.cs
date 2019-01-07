@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Timers;
-using kbs2.Desktop.GamePackage.EventArgs;
+using System.Diagnostics;
 using kbs2.Desktop.View.Camera;
 using kbs2.GamePackage.DayCycle;
 using kbs2.GamePackage.EventArgs;
-using kbs2.GamePackage.Interfaces;
-using kbs2.Unit.Unit;
 using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
@@ -17,16 +14,24 @@ using kbs2.World.TerrainDef;
 using kbs2.UserInterface;
 using kbs2.View.GUI.ActionBox;
 using kbs2.World.World;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Unit;
 using kbs2.WorldEntity.Unit.MVC;
-using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
+using kbs2.Actions.GameActionDefs;
+using kbs2.Actions.GameActionGrid;
+using kbs2.Actions.GameActions;
+using kbs2.Actions.GameActionSelector;
+using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
+using kbs2.UserInterface.GameActionGui;
+using kbs2.View.GUI;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Pathfinder;
+using kbs2.WorldEntity.Structures;
+using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.WorldEntitySpawner;
 using kbs2.UserInterface.BottomBar;
 using kbs2.Actions;
@@ -42,28 +47,27 @@ namespace kbs2.GamePackage
 
     public delegate void MouseStateObserver(object sender, EventArgsWithPayload<MouseState> e);
 
-    public delegate void OnTick(object sender, OnTickEventArgs eventArgs);
+    public delegate void OnTickHandler(object sender, OnTickEventArgs eventArgs);
 
     public delegate void ShaderDelegate();
 
     public class GameController : Game
     {
-        public GameModel gameModel { get; set; } = new GameModel();
-        public GameView gameView { get; set; }
-        public SpriteBatch spriteBatch;
+        public int Id { get; } = -1;
+
+        public GameModel GameModel { get; set; }
+        public GameView GameView { get; set; }
+        public EntitySpawner Spawner;
+
+        public IMapAction SelectedMapAction => MapActionSelector.SelectedMapAction;
+        public readonly MapActionSelector MapActionSelector;
+
+        public GameTime LastUpdateGameTime { get; private set; }
+
         public MouseInput MouseInput { get; set; }
 
-        public const int TicksPerSecond = 30;
-
-        public static int TickIntervalMilliseconds => 1000 / TicksPerSecond;
-
-        private Timer GameTimer; //TODO
-
-        public event ElapsedEventHandler GameTick
-        {
-            add => GameTimer.Elapsed += value;
-            remove => GameTimer.Elapsed -= value;
-        }
+        public GameActionGuiController GameActionGui { get; set; }
+        public FogController FogController { get; set; }
 
         //    GameSpeed and its event
         private GameSpeed gameSpeed;
@@ -80,7 +84,15 @@ namespace kbs2.GamePackage
 
         public event GameSpeedObserver GameSpeedChange;
 
-        public event OnTick onTick;
+        public readonly TimeController TimeController = new TimeController();
+
+        public Faction_Controller PlayerFaction;
+
+        public event MouseStateObserver MouseStateChange;
+
+        public MouseState PreviousMouseButtonsStatus { get; set; }
+
+        public virtual event OnTickHandler onTick;
 
         //    GameState and its event
         private GameState gameState;
@@ -91,8 +103,7 @@ namespace kbs2.GamePackage
             set
             {
                 gameState = value;
-                GameStateChange?.Invoke(this,
-                    new EventArgsWithPayload<GameState>(gameState)); //Invoke event if has subscribers
+                GameStateChange?.Invoke(this, new EventArgsWithPayload<GameState>(gameState)); //Invoke event if has subscribers
             }
         }
 
@@ -100,36 +111,34 @@ namespace kbs2.GamePackage
 
         private readonly GraphicsDeviceManager graphicsDeviceManager;
 
-        public CameraController camera;
+        public CameraController Camera;
 
         private ShaderDelegate shader;
 
-        // Temp code position ===============
-        public Faction_Controller PlayerFaction { get; set; }
+        #region FPS-debug-info
 
-        public event MouseStateObserver MouseStateChange;
-        public MouseState PreviousMouseButtonsStatus { get; set; }
+        private int ThisSecond;
+        private int FramesThisSecond;
+        private int FramesOutput;
 
-        DayController f = new DayController();
-
-        public EntitySpawner spawner;
-        public ActionInterface ActionInterface { get; set; }
-        public BuildActions BuildActions { get; set; }
-        public bool QPressed { get; set; }
-        public bool APressed { get; set; }
-        public Terraintester Terraintester { get; set; }
-
-        private BottomBarView bottomBarView;
-        // End temp code ===============
+        #endregion
 
         public GameController(GameSpeed gameSpeed, GameState gameState)
         {
             this.GameSpeed = gameSpeed;
             this.GameState = gameState;
 
+            GameModel = new GameModel();
+
             GameStateChange += PauseGame;
+            GameStateChange += UnPauseGame;
+
+            PlayerFaction = new Faction_Controller("PlayerFaction", this);
+
+            MapActionSelector = new MapActionSelector();
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
+
 
             shader = RandomPattern2;
 
@@ -137,14 +146,27 @@ namespace kbs2.GamePackage
         }
 
         /// <summary>
-        /// Is subscribed to the gamestate so this is called every time the gamestate is changed
+        /// Is subscribed to the GameState so this is called every time the GameState is changed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
         public void PauseGame(object sender, EventArgsWithPayload<GameState> eventArgs)
         {
             if (eventArgs.Value != GameState.Paused) return;
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            Console.WriteLine("pause");
+        }
+
+        /// <summary>
+        /// Is subscribed to the gamestate so this is called every time the gamestate is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        public void UnPauseGame(object sender, EventArgsWithPayload<GameState> eventArgs)
+        {
+            if (eventArgs.Value != GameState.Running) return;
+            //throw new NotImplementedException();
+            Console.WriteLine("unpause");
         }
 
         /// <summary>
@@ -165,36 +187,29 @@ namespace kbs2.GamePackage
             TerrainDef.TerrainDictionary.Add(TerrainType.Trees, "Tree-2");
 
             // Generate world
-            gameModel.World = WorldFactory.GetNewWorld();
+            GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.SimplexFractal);
 
-            // Generate Player Faction
-            PlayerFaction = FactionFactory.CreateFaction("Byzantine Empire");
-            Faction_Controller OverworldFaction = FactionFactory.CreateFaction("Overworld");
+            FogController = new FogController(PlayerFaction, GameModel.World);
 
-            gameModel.Factions.Add(PlayerFaction);
-            gameModel.Factions.Add(OverworldFaction);
-
-            // Generate a simple CPU player
-            gameModel.CPUPlayers.Add(CPU_Factory.CreateSimpleCpu(OverworldFaction));
-
-            //gameModel.Factions.Add(FactionFactory.CreateCPUFaction("OverworldFaction"));
-            //gameModel.Factions[1].AddRelationship(PlayerFaction, Faction.Enums.Faction_Relations.hostile);
+//            onTick += FogController.Update;
 
             // Pathfinder 
-            gameModel.pathfinder = new Pathfinder(gameModel.World.WorldModel, 500);
+            GameModel.pathfinder = new Pathfinder(GameModel.World);
 
             // Spawner
-            spawner = new EntitySpawner(gameModel.World, ref onTick);
+            Spawner = new EntitySpawner(this);
 
-            gameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
+            GameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
 
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            camera = new CameraController(GraphicsDevice);
-            gameView = new GameView(gameModel, graphicsDeviceManager, spriteBatch, camera, GraphicsDevice, Content);
+            SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            GameTimer = new Timer(TickIntervalMilliseconds);
+            Camera = new CameraController(GraphicsDevice);
 
-            gameModel.MouseInput = new MouseInput(this);
+            GameView = new GameView(GameModel, graphicsDeviceManager, spriteBatch, Camera, GraphicsDevice, Content);
+
+            GameActionGui = new GameActionGuiController(this);
+
+            GameModel.MouseInput = new MouseInput(this);
 
             // Allows the user to resize the window
             base.Window.AllowUserResizing = true;
@@ -215,15 +230,11 @@ namespace kbs2.GamePackage
 
         {
             //TESTCODE
-            QPressed = false;
-            APressed = false;
-            Terraintester = new Terraintester();
 
             onTick += SetBuilding;
-            onTick += f.UpdateTime;
-            onTick += gameModel.MouseInput.Selection.Update;
-            gameModel.MouseInput.Selection.onSelectionChanged += ChangeSelection;
-            gameModel.MouseInput.Selection.onSelectionChanged += UpdateHUDOnSelect;
+            onTick += TimeController.UpdateTime;
+            onTick += GameModel.MouseInput.Selection.Update;
+            GameModel.MouseInput.Selection.OnSelectionChanged += ChangeSelection;
 
 			StatusBarView statusBarView = new StatusBarView(this);
 			LeftButtonBar leftButtonBar = new LeftButtonBar(this);
@@ -246,32 +257,23 @@ namespace kbs2.GamePackage
             ActionInterface.SetActions(BuildActions);
 
             //TESTCODE
-            DBController.OpenConnection("DefDex");
-
-            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
-            
-            // Give Factions starting units
-            foreach (Faction_Controller faction in gameModel.Factions)
-            {
-                faction.AddUnitToFaction(UnitFactory.CreateNewUnit(unitdef, this));
-                //faction.AddUnitToFaction(UnitFactory.CreateNewUnit(unitdef, this));
-            }
-
+            DBController.OpenConnection("DefDex.db");
+            UnitDef unitdef = DBController.GetUnitDef(1);
             DBController.CloseConnection();
 
-            foreach(Faction_Controller faction in gameModel.Factions)
+            for (int i = 0; i < 12; i++)
             {
-                foreach (Unit_Controller unit in faction.FactionModel.Units.ToList())
-                {
-                    spawner.SpawnUnit(unit, faction);
-                    onTick += unit.LocationController.Ontick;
-                }
+                FloatCoords coords = new FloatCoords() {x = i, y = 5};
+                UnitController unit = UnitFactory.CreateNewUnit(unitdef, coords, GameModel.World, PlayerFaction);
+
+                unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
+                Spawner.SpawnUnit(unit, (Coords) coords);
             }
 
             //============= More TestCode ===============
 
-            MouseStateChange += gameModel.MouseInput.OnMouseStateChange;
-            MouseStateChange += gameModel.ActionBox.OnRightClick;
+            MouseStateChange += GameModel.MouseInput.OnMouseStateChange;
+            MouseStateChange += GameModel.ActionBox.OnRightClick;
             //TESTCODE
         }
 
@@ -289,9 +291,9 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SaveToDB()
         {
-            //GameState = GameState.Paused;
+            GameState = GameState.Paused;
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -308,34 +310,50 @@ namespace kbs2.GamePackage
             };
 
             FloatCoords cellCoords = (FloatCoords) WorldPositionCalculator.DrawCoordsToCellCoords(
-                WorldPositionCalculator.TransformWindowCoords(
+                (Coords) WorldPositionCalculator.TransformWindowCoords(
                     windowCoords,
-                    camera.GetViewMatrix()
+                    Camera.GetViewMatrix()
                 ),
-                gameView.TileSize
+                GameView.TileSize
             );
 
+            Coords chunkCoords = WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords);
 
-            loadChunkIfUnloaded(WorldPositionCalculator.ChunkCoordsOfCellCoords(cellCoords));
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private bool chunkExists(Coords chunkCoords) => gameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
-                                                        gameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
+            if (ChunkExists(chunkCoords)) return;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private void loadChunkIfUnloaded(Coords chunkCoords)
-        {
-            if (chunkExists(chunkCoords)) return;
-
-            gameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
-
+            GameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
             shader();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private bool ChunkExists(Coords chunkCoords) => GameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
+                                                        GameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
+
+        /// <summary>
+        /// This function and its actions need to be refactored
+        /// </summary>
+        public void AddGui()
+        {
+            StatusBarView statusBarView = new StatusBarView(GraphicsDevice);
+            LeftButtonBar leftButtonBar = new LeftButtonBar(GraphicsDevice);
+            RightButtonBar rightButtonBar = new RightButtonBar(GraphicsDevice);
+            BottomBarView bottomBarView = new BottomBarView(GraphicsDevice);
+            MiniMapBar miniMap = new MiniMapBar(GraphicsDevice);
+            GameActionGuiView actionBar = GameActionGui.View;
+
+            GameModel.GuiItemList.Add(statusBarView);
+            GameModel.GuiItemList.Add(leftButtonBar);
+            GameModel.GuiItemList.Add(rightButtonBar);
+            GameModel.GuiItemList.Add(bottomBarView);
+            GameModel.GuiItemList.Add(miniMap);
+            GameModel.GuiItemList.Add(actionBar);
+
+            GameModel.GuiItemList.AddRange(actionBar.GetContents.Select(item => (IGuiViewImage) item));
+        }
+
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -345,155 +363,185 @@ namespace kbs2.GamePackage
         protected override void Update(GameTime gameTime)
         {
             // Exit game if escape is pressed
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                GameState = GameState.Paused;
+//                SaveToDB();
+//                Exit();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Z)) GameState = GameState.Running;
+
+            if (gameState == GameState.Paused) return;
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            LastUpdateGameTime = gameTime;
 
             // Updates camera according to the pressed buttons
-            camera.MoveCamera();
+            Camera.MoveCamera();
+
+            // Clears the itemList
+            GameModel.ItemList.Clear();
+            GameModel.TextList.Clear();
+            GameModel.GuiItemList.Clear();
+            GameModel.GuiTextList.Clear();
+
+            AddGui();
 
             // ============== Temp Code ===================================================================
 
+
             MouseState temp = Mouse.GetState();
-            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
-            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
-                WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
-            if (gameModel.World.GetCellFromCoords(coords) != null)
+            Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
+            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords((Coords) WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
+            if (GameModel.World.GetCellFromCoords(coords) != null)
             {
-                Terraintester.Text =
-                    $"{coords.x},{coords.y}  {gameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}";
-                if (gameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop != null)
+                TerrainTester terrainTester = new TerrainTester(new FloatCoords() {x = 0, y = 100})
                 {
-                    Terraintester.Text += " b";
+                    Text = $"{coords.x},{coords.y}  {GameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}"
+                };
+                terrainTester.Colour = GameModel.World.GetCellFromCoords(coords).worldCellModel.BuildingOnTop != null ? Color.Red : Color.Blue;
+
+
+                GameModel.GuiTextList.Add(terrainTester);
+
+                TerrainTester tester = new TerrainTester(new FloatCoords {x = 0, y = 120})
+                {
+                    Text = $"Chunk: {WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).x},{WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).y} "
+                };
+
+                GameModel.GuiTextList.Add(tester);
+            }
+
+            // Update Buildings & constructing buildings on screen
+            GameModel.ItemList.AddRange(GameModel.World.WorldModel.Structures.Select(building => building.View));
+            GameModel.TextList.AddRange(GameModel.World.WorldModel.UnderConstruction.Select(building => building.Counter));
+
+            //    Update Units on screen
+            GameModel.ItemList.AddRange(GameModel.World.WorldModel.Units.Select(unit => unit.View));
+
+            if (GameModel.ActionBox.BoxModel.Show)
+            {
+//                GameModel.GuiItemList.Add(GameModel.ActionBox.BoxView);
+                GameModel.GuiTextList.Add(GameModel.ActionBox.BoxModel.Text);
+            }
+
+            //    Calculate viewport-bounds
+            Coords leftTopViewBound = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
+            {
+                x = GraphicsDevice.Viewport.X,
+                y = GraphicsDevice.Viewport.Y
+            }, Camera.GetViewMatrix(), GameView.TileSize);
+            Coords rightBottomViewBound = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
+            {
+                x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width,
+                y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height
+            }, Camera.GetViewMatrix(), GameView.TileSize);
+            Rectangle viewRectangle = new Rectangle(leftTopViewBound.x, leftTopViewBound.y,
+                Math.Abs(leftTopViewBound.x - rightBottomViewBound.x),
+                Math.Abs(leftTopViewBound.y - rightBottomViewBound.y));
+
+            List<WorldChunkController> chunks = (from chunk in GameModel.World.WorldModel.ChunkGrid
+                let rightBottomBound = new Coords
+                {
+                    x = 20 + WorldChunkModel.ChunkSize,
+                    y = 20
                 }
-            }
-
-            //gameModel.GuiTextList.Add(Terraintester);
-
-            // Update Buildings on screen
-            List<IViewImage> buildings = new List<IViewImage>();
-            foreach (Building_Controller building in gameModel.World.WorldModel.buildings)
-            {
-                buildings.Add(building.View);
-            }
-
-            gameModel.ItemList.AddRange(buildings);
-
-
-            List<IViewImage> BUCs = new List<IViewImage>();
-            List<IViewText> Counters = new List<IViewText>();
-            foreach (BUCController BUC in gameModel.World.WorldModel.UnderConstruction)
-            {
-                BUCs.Add(BUC.BUCView);
-                Counters.Add(BUC.counter);
-            }
-
-            gameModel.ItemList.AddRange(BUCs);
-            gameModel.TextList.AddRange(Counters);
-
-
-            List<IViewImage> Units = (from unit in gameModel.World.WorldModel.Units
-                                      select unit.UnitView).Cast<IViewImage>().ToList();
-
-            gameModel.ItemList.AddRange(Units);
-
-            if (gameModel.ActionBox.BoxModel.Show)
-            {
-                gameModel.ItemList.Add(gameModel.ActionBox.BoxView);
-                gameModel.TextList.Add(gameModel.ActionBox.BoxModel.Text);
-            }
-
-            int TileSize = (int)(GraphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
-
-            List<IViewImage> Cells = new List<IViewImage>();
-            List<WorldChunkController> chunks = (from chunk in gameModel.World.WorldModel.ChunkGrid
-                                                 let rightBottomViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
-                                                     WorldPositionCalculator.TransformWindowCoords(
-                                                         new Coords()
-                                                         {
-                                                             x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width,
-                                                             y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height
-                                                         }, camera.GetViewMatrix()), TileSize)
-                                                 let topLeftViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
-                                                     WorldPositionCalculator.TransformWindowCoords(
-                                                         new Coords() { x = GraphicsDevice.Viewport.X, y = GraphicsDevice.Viewport.Y },
-                                                         camera.GetViewMatrix()), TileSize)
-                                                 let rightBottomBound = new Coords() { x = 20 + WorldChunkModel.ChunkSize, y = 20 }
-                                                 let leftTopBound = new Coords()
-                                                 { x = (chunk.Key.x * WorldChunkModel.ChunkSize), y = (chunk.Key.y * WorldChunkModel.ChunkSize) }
-                                                 let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y,
-                                                     (rightBottomBound.x < 0 ? rightBottomBound.x * -1 : rightBottomBound.x),
-                                                     (rightBottomBound.y < 0 ? rightBottomBound.y * -1 : rightBottomBound.y))
-                                                 let viewRectangle = new Rectangle(topLeftViewBound.x, topLeftViewBound.y,
-                                                     Math.Abs(topLeftViewBound.x - rightBottomViewBound.x),
-                                                     Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
-                                                 where (chunkRectangle.Intersects(viewRectangle))
-                                                 select chunk.Value).ToList();
+                let leftTopBound = new Coords
+                {
+                    x = (chunk.Key.x * WorldChunkModel.ChunkSize),
+                    y = (chunk.Key.y * WorldChunkModel.ChunkSize)
+                }
+                let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y,
+                    Math.Abs(rightBottomBound.x),
+                    Math.Abs(rightBottomBound.y)
+                )
+                where (chunkRectangle.Intersects(viewRectangle))
+                select chunk.Value).ToList();
 
             foreach (WorldChunkController chunk in chunks)
             {
-                foreach (WorldCellController cell in chunk.WorldChunkModel.grid)
-                {
-                    Cells.Add(cell.worldCellView);
-                }
+                GameModel.ItemList.AddRange(from WorldCellController cell in chunk.WorldChunkModel.grid where cell.worldCellView.ViewMode != ViewMode.None select cell.worldCellView);
             }
 
+            GameModel.GuiTextList.Add(PlayerFaction.CurrencyController.View);
 
-            gameModel.ItemList.AddRange(Cells);
+            // Chunks generate when hovered over
+            mouseChunkLoadUpdate(gameTime);
+
+            // fire Ontick event
+            Stopwatch tick_stopwatch = new Stopwatch();
+            tick_stopwatch.Start();
+
+            OnTickEventArgs args = new OnTickEventArgs(gameTime);
+            onTick?.Invoke(this, args);
+
+            tick_stopwatch.Stop();
 
 
-            gameModel.GuiTextList.Add(PlayerFaction.currency_Controller.view);
-            onTick += PlayerFaction.currency_Controller.DailyReward;
+            //updates the viewmode for everything on screen
 
+            // comment line bellow to turn on fog
+            FogController.UpdateEverythingVisible();
 
+            // Calls the game update
+
+            //======= Fire MOUSESTATE ================
+            MouseState currentMouseButtonsStatus = Mouse.GetState();
+            if (currentMouseButtonsStatus.LeftButton != PreviousMouseButtonsStatus.LeftButton ||
+                currentMouseButtonsStatus.RightButton != PreviousMouseButtonsStatus.RightButton)
+            {
+                MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(currentMouseButtonsStatus));
+                PreviousMouseButtonsStatus = currentMouseButtonsStatus;
+            }
+
+            AddShader();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
+
+            stopwatch.Stop();
+
+            // Calls the game update
+            base.Update(gameTime);
+
+            Console.Clear();
+            printStopWatchResults(tick_stopwatch, "OnTick");
+            printStopWatchResults(stopwatch, "Update");
+            Console.WriteLine($"OnTick's percentage: {(tick_stopwatch.Elapsed.Ticks / (float) stopwatch.Elapsed.Ticks) * 100}%");
+            Console.WriteLine("frames: " + FramesOutput);
+        }
+
+        public static void printStopWatchResults(Stopwatch toPrint, string description) => Console.WriteLine($"{description} took: {toPrint.Elapsed.Ticks} ticks or {toPrint.Elapsed.Milliseconds} ms");
+
+        private void updateFrames(GameTime gameTime)
+        {
+            if (ThisSecond < gameTime.TotalGameTime.Seconds)
+            {
+                ThisSecond = gameTime.TotalGameTime.Seconds;
+                FramesOutput = FramesThisSecond;
+                FramesThisSecond = 0;
+            }
+
+            FramesThisSecond++;
+        }
+
+        /// <summary>
+        /// This checks if a new shader needs to be applied and applies shader to new chunks
+        /// </summary>
+        private void AddShader()
+        {
             ShaderDelegate tempShader = null;
 
             if (Keyboard.GetState().IsKeyDown(Keys.R)) tempShader = RandomPattern2;
             if (Keyboard.GetState().IsKeyDown(Keys.C)) tempShader = CellChunkCheckered;
             if (Keyboard.GetState().IsKeyDown(Keys.D)) tempShader = DefaultPattern;
 
-            mouseChunkLoadUpdate(gameTime);
+            if (tempShader == null) return;
 
-            if (tempShader != null)
-            {
-                shader = tempShader;
-                shader();
-            }
-
-            // ======================================================================================
-
-            //  gameModel.Selection.Model.SelectionBox.DrawSelectionBox(Mouse.GetState(), camera.GetViewMatrix(), gameView.TileSize);
-
-            // gameModel.Selection.CheckClickedBox(gameModel.World.WorldModel.Units, camera.GetInverseViewMatrix(), gameView.TileSize, camera.Zoom);
-
-            // fire Ontick event
-            OnTickEventArgs args = new OnTickEventArgs(gameTime);
-            onTick?.Invoke(this, args);
-
-
-            // Calls the game update
-
-            //======= Fire MOUSESTATE ================
-            MouseState CurrentMouseButtonsStatus = Mouse.GetState();
-            if (CurrentMouseButtonsStatus.LeftButton != PreviousMouseButtonsStatus.LeftButton ||
-                CurrentMouseButtonsStatus.RightButton != PreviousMouseButtonsStatus.RightButton)
-            {
-                MouseStateChange?.Invoke(this, new EventArgsWithPayload<MouseState>(CurrentMouseButtonsStatus));
-                PreviousMouseButtonsStatus = CurrentMouseButtonsStatus;
-            }
-
-            PlayerFaction.AddRelationship(gameModel.Factions[1], Faction.Enums.Faction_Relations.hostile);
-
-            //============= CPU PLAYER TEST CODE ====================
-            foreach (CPU_Controller cpu in gameModel.CPUPlayers)
-            {
-                cpu.CpuModel.AI.Update(gameModel.Factions);
-            }
-
-            //if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
-
-            // Calls the game update
-            base.Update(gameTime);
+            shader = tempShader;
+            shader();
         }
 
         /// <summary>
@@ -501,52 +549,137 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SetBuilding(object sender, OnTickEventArgs eventArgs)
         {
-            if ((!QPressed) && Keyboard.GetState().IsKeyDown(Keys.Q))
+            void CheckKeysAndPlaceBuilding(bool isKeyPressed, int buildingId, MouseState mouseState, List<TerrainType> legalTerrainTypes)
             {
-                DBController.OpenConnection("DefDex");
-                BuildingDef def = DBController.GetDefinitionBuilding(1);
+                if (!isKeyPressed) return;
+
+                DBController.OpenConnection("DefDex.db");
+                BuildingDef def = DBController.GetBuildingDef(buildingId);
                 DBController.CloseConnection();
 
-                MouseState temp = Mouse.GetState();
-                Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
-                Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
-                    WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()),
-                    gameView.TileSize);
+                Coords tempCoords = new Coords {x = mouseState.X, y = mouseState.Y};
 
-                List<Coords> buidlingcoords = new List<Coords>();
-                foreach (Coords stuff in def.BuildingShape)
+                Coords coords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(tempCoords, Camera.GetViewMatrix(), GameView.TileSize);
+
+                List<Coords> buildingCoords = new List<Coords>();
+                foreach (Coords buildingShape in def.BuildingShape) buildingCoords.Add(coords + buildingShape);
+
+                if (!GameModel.World.AreTerrainCellsLegal(buildingCoords, legalTerrainTypes)) return;
+
+                using (ConstructingBuildingFactory constructionFactory = new ConstructingBuildingFactory(PlayerFaction))
                 {
-                    buidlingcoords.Add(coords + stuff);
+                    ConstructingBuildingController building = constructionFactory.CreateConstructingBuildingControllerOf(def);
+                    Spawner.SpawnStructure(coords, building);
+                    building.ConstructionComplete += (o, args) => Spawner.ReplaceBuilding(o, args);
                 }
-
-                List<TerrainType> whitelist = new List<TerrainType>();
-                whitelist.Add(TerrainType.Grass);
-                whitelist.Add(TerrainType.Default);
-
-
-                if (gameModel.World.checkTerainCells(buidlingcoords, whitelist))
-                {
-                    BUCController building = BUCFactory.CreateNewBUC(def, coords,
-                        30 + (int) eventArgs.GameTime.TotalGameTime.TotalSeconds, PlayerFaction);
-                    gameModel.World.AddBuildingUnderCunstruction(def, building);
-                    building.World = gameModel.World;
-                    building.gameController = this;
-                    onTick += building.Update;
-                }
-
-                QPressed = true;
             }
 
-            if ((!Keyboard.GetState().IsKeyDown(Keys.Q)) && QPressed == true)
+            KeyboardState keyboardState = Keyboard.GetState();
+
+            if (keyboardState.IsKeyDown(Keys.D8))
             {
-                QPressed = false;
+                SpawnActionDef def = SpawnActionDef.Pikachu;
+                MapActionSelector.Select(new SpawnAction(def, this, PlayerFaction));
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D7))
+            {
+                SpawnActionDef def = SpawnActionDef.Raichu;
+                MapActionSelector.Select(new SpawnAction(def, this, PlayerFaction));
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D1))
+            {
+                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D1), 1, Mouse.GetState(),
+                    new List<TerrainType>()
+                    {
+                        TerrainType.Grass,
+                        TerrainType.Rock,
+                        TerrainType.Soil,
+                        TerrainType.Default
+                    }
+                );
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D2))
+            {
+                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D2), 2, Mouse.GetState(),
+                    new List<TerrainType>()
+                    {
+                        TerrainType.Grass,
+                        TerrainType.Rock,
+                        TerrainType.Soil,
+                        TerrainType.Default
+                    }
+                );
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D3))
+            {
+                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), 3, Mouse.GetState(),
+                    new List<TerrainType>()
+                    {
+                        TerrainType.Rock
+                    }
+                );
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D4))
+            {
+                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), 4, Mouse.GetState(),
+                    new List<TerrainType>()
+                    {
+                        TerrainType.Grass,
+                        TerrainType.Rock,
+                        TerrainType.Default
+                    }
+                );
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D5))
+            {
+                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), 5, Mouse.GetState(),
+                    new List<TerrainType>()
+                    {
+                        TerrainType.Trees
+                    }
+                );
+                return;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D6))
+            {
+                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), 6, Mouse.GetState(),
+                    new List<TerrainType>()
+                    {
+                        TerrainType.Grass,
+                        TerrainType.Soil,
+                        TerrainType.Sand,
+                        TerrainType.Default
+                    }
+                );
+                return;
             }
         }
 
-        public void ChangeSelection(object sender, EventArgsWithPayload<List<IHasActions>> eventArgs)
+        public void ChangeSelection(object sender, EventArgsWithPayload<List<IGameActionHolder>> eventArgs)
         {
-            IHasActions actions = eventArgs.Value.Count > 0 ? eventArgs.Value.First() : BuildActions;
-            ActionInterface.SetActions(actions);
+            List<IGameActionHolder> gameActionHolders = eventArgs.Value;
+            List<GameActionTabModel> gameActionTabModels = new List<GameActionTabModel>();
+            foreach (IGameActionHolder gameActionHolder in gameActionHolders)
+            {
+                IGameAction[] mapActions = gameActionHolder.GameActions.ToArray();
+                GameActionTabModel gameActionTabModel = new GameActionTabModel(mapActions, GameActionGui);
+                gameActionTabModels.Add(gameActionTabModel);
+            }
+
+            GameActionGui.SetActions(gameActionTabModels);
         }
 
 
@@ -608,10 +741,22 @@ namespace kbs2.GamePackage
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            gameView.Draw();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            GameView.Draw();
 
             // Calls the game's draw function
             base.Draw(gameTime);
+
+            stopwatch.Stop();
+            updateFrames(gameTime);
+            printStopWatchResults(stopwatch, "Drawing");
+
+
+//            Uncomment the line below to show all view-items in the console
+//            Console.Clear();
+//            Console.WriteLine(this.GameModel.AllDrawItems.GroupBy(item => item.GetType(), (typeKey, typeSource) => new KeyValuePair<string, int>(typeKey.Name, typeSource.Count())).Select((pair => $"{pair.Key}: {pair.Value}")).Aggregate((s, s1) => $"{s}\n{s1}"));
         }
 
 
@@ -621,7 +766,7 @@ namespace kbs2.GamePackage
         /// </summary>
         public void CellChunkCheckered()
         {
-            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            foreach (var Chunk in GameModel.World.WorldModel.ChunkGrid)
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
@@ -644,7 +789,7 @@ namespace kbs2.GamePackage
         // Draws a random pattern on the cells
         public void DefaultPattern()
         {
-            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            foreach (var Chunk in GameModel.World.WorldModel.ChunkGrid)
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {
@@ -655,9 +800,9 @@ namespace kbs2.GamePackage
 
         public void RandomPattern2()
         {
-            Random random = new Random(gameModel.World.WorldModel.seed);
+            Random random = new Random(WorldModel.Seed);
 
-            foreach (var Chunk in gameModel.World.WorldModel.ChunkGrid)
+            foreach (var Chunk in GameModel.World.WorldModel.ChunkGrid)
             {
                 foreach (var item2 in Chunk.Value.WorldChunkModel.grid)
                 {

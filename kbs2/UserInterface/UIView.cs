@@ -1,10 +1,8 @@
-﻿using System;
-using kbs2.GamePackage;
+﻿using kbs2.GamePackage;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.UserInterface
 {
@@ -24,6 +22,7 @@ namespace kbs2.UserInterface
         public Color Colour { get { return Color.White; } set {; } }
         public int ZIndex { get { return 1; } set {; } }
 
+        public ViewMode ViewMode => ViewMode.Full;
 
         public UIView(GameController gameController)
         {

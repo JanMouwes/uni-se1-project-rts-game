@@ -1,6 +1,5 @@
 using System;
 using kbs2.World.Cell;
-using kbs2.World.Enums;
 
 namespace kbs2.World.Chunk
 {

@@ -8,15 +8,20 @@ namespace kbs2.Faction.CurrencyMVC
 {
     public class CurrencyView : IViewText
     {
-        public Currency_Model model;
+        private readonly Currency_Model model;
 
-        public FloatCoords Coords { get => new FloatCoords() { x = 135, y = 3}; set {; } }
-        public string SpriteFont { get => "Currency"; set {; } }
-        public string Text { get => "PokeYen: " + model.currency.ToString(); set {; } }
-        public Color Colour { get => Color.White; set {; } }
-        public int ZIndex { get => 1; set {; } }
+        public FloatCoords Coords => new FloatCoords() {x = 135, y = 3};
+
+        public string SpriteFont => "Currency";
+
+        public string Text => $"PokeYen: {Math.Round(model.Currency, 2)}";
+
+        public Color Colour => Color.White;
+
+        public int ZIndex => 1;
+
+        public ViewMode ViewMode => ViewMode.Full;
 
         public CurrencyView(Currency_Model model) => this.model = model;
-
     }
 }

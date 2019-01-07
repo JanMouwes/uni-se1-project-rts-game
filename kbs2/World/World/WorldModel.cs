@@ -1,31 +1,37 @@
 using System;
 using System.Collections.Generic;
-using kbs2.World;
+using System.Linq;
 using kbs2.World.Chunk;
-using kbs2.WorldEntity.Building;
-using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
+using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
+using kbs2.WorldEntity.Structures.ResourceFactory;
 using kbs2.WorldEntity.Unit.MVC;
 
-namespace kbs2.Desktop.World.World
+namespace kbs2.World.World
 {
+    public class WorldModel
+    {
+        //	Grid of chunks. Dictionary because it's expandable
+        public Dictionary<Coords, WorldChunkController> ChunkGrid { get; set; }
 
-	public class WorldModel
-	{
-    
-		//	Grid of chunks. Dictionary because it's expandable
-		public Dictionary<Coords, WorldChunkController> ChunkGrid { get; set; }
-        public List<Building_Controller> buildings { get; set; }
-        public List<BUCController> UnderConstruction { get; set; }
-        public List<Unit_Controller> Units { get; set; }
+        public List<IStructure<IStructureDef>> Structures { get; }
 
-        public readonly int seed = new Random().Next(0, 10000);
+        public IEnumerable<ConstructingBuildingController> UnderConstruction => from structure in Structures
+            where structure is ConstructingBuildingController
+            select (ConstructingBuildingController) structure;
+
+        public IEnumerable<ResourceFactoryController> ResourceBuildings => from structure in Structures
+            where structure is ResourceFactoryController
+            select (ResourceFactoryController) structure;
+
+        public List<UnitController> Units { get; }
+
+        public static readonly int Seed = new Random().Next(0, 9999);
 
         public WorldModel()
         {
-            buildings = new List<Building_Controller>();
-            UnderConstruction = new List<BUCController>();
-            Units = new List<Unit_Controller>();
+            Structures = new List<IStructure<IStructureDef>>();
+            Units = new List<UnitController>();
         }
     }
-
 }

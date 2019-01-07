@@ -1,89 +1,109 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using kbs2.GamePackage.EventArgs;
-using kbs2.GamePackage.Interfaces;
+using kbs2.utils;
+using kbs2.View.GUI;
+using kbs2.World;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.GamePackage
 {
+    public enum MouseButton
+    {
+        Left,
+        Right
+    }
 
     public class MouseInput
     {
-
         public MouseState PreviousMouseState { get; set; }
         public ButtonState MouseInputStatus { get; set; }
-        public GameModel gameModel { get; set; }
+        public GameController game { get; set; }
         public Selection_Controller Selection { get; set; }
 
-		public MouseInput(GameController game)
-		{
-            gameModel = game.gameModel;
-			PreviousMouseState = new MouseState();
+        public MouseInput(GameController game)
+        {
+            this.game = game;
+            PreviousMouseState = new MouseState();
             Selection = new Selection_Controller(game, "PurpleLine");
-		}
-
-
-
-		public void OnMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
-		{
-			
-			if (mouseEvent.Value.LeftButton != PreviousMouseState.LeftButton)
-            { 
-				MouseInputStatus = mouseEvent.Value.LeftButton;
-                MouseState temp = Mouse.GetState();
-                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y },mouseEvent.Value,true);
-
-            }
-			if (mouseEvent.Value.RightButton != PreviousMouseState.RightButton)
-			{
-				MouseInputStatus = mouseEvent.Value.RightButton;
-                MouseState temp = Mouse.GetState();
-                GuiOrMap(new FloatCoords { x = temp.X, y = temp.Y }, mouseEvent.Value,false);
-
-            }
-            
-
-			PreviousMouseState = mouseEvent.Value;
-		}
-
-        public void GuiOrMap(FloatCoords mousecoords,MouseState mouseState,bool leftButton)
-        {
-            List<IViewImage> Clicked = (from Item in gameModel.GuiItemList
-                                        where mousecoords.x>= Item.Coords.x && mousecoords.y >= Item.Coords.y
-                                        && mousecoords.x <= Item.Coords.x + Item.Width && mousecoords.y <= Item.Coords.y + Item.Height
-                                        select Item).ToList();
-
-            if(Clicked.Count > 0)
-            {
-                //TODO geef door aan gui
-                // Betere naam suggesties worden gewaardeerd 
-                CheckWhichGuiIsClicked(Clicked);
-                Console.WriteLine("gui Click");
-            }
-            else
-            {
-                if (mouseState.LeftButton == ButtonState.Pressed && leftButton) 
-                {
-                    Selection.ButtonPressed(mousecoords);
-                }
-                if (mouseState.LeftButton == ButtonState.Released && leftButton) 
-                {
-                    Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
-                }
-                if(mouseState.RightButton == ButtonState.Pressed && !leftButton)
-                {
-                    Selection.move(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
-                }
-            }
         }
 
-        private void CheckWhichGuiIsClicked(List<IViewImage> buttons)
+
+        public void OnMouseStateChange(object sender, EventArgsWithPayload<MouseState> mouseEvent)
         {
-            
+            if (mouseEvent.Value.LeftButton != PreviousMouseState.LeftButton)
+            {
+                MouseInputStatus = mouseEvent.Value.LeftButton;
+                MouseState temp = Mouse.GetState();
+                GuiOrMap(new FloatCoords {x = temp.X, y = temp.Y}, mouseEvent.Value, MouseButton.Left);
+            }
+
+            if (mouseEvent.Value.RightButton != PreviousMouseState.RightButton)
+            {
+                MouseInputStatus = mouseEvent.Value.RightButton;
+                MouseState temp = Mouse.GetState();
+                GuiOrMap(new FloatCoords {x = temp.X, y = temp.Y}, mouseEvent.Value, MouseButton.Right);
+            }
+
+
+            PreviousMouseState = mouseEvent.Value;
         }
-        
-	}
+
+        public void GuiOrMap(FloatCoords mouseCoords, MouseState mouseState, MouseButton activeButton)
+        {
+            List<IGuiViewImage> clickedGuiItems = (from item in game.GameModel.GuiItemList
+                where mouseCoords.x >= item.Coords.x
+                      && mouseCoords.y >= item.Coords.y
+                      && mouseCoords.x <= item.Coords.x + item.Width
+                      && mouseCoords.y <= item.Coords.y + item.Height
+                orderby item.ZIndex descending
+                select item).ToList();
+
+
+            switch (activeButton)
+            {
+                case MouseButton.Left:
+                    switch (mouseState.LeftButton)
+                    {
+                        //TODO LeftButtonPressed?.Invoke()
+                        //TODO LeftButtonReleased?.Invoke()
+                        case ButtonState.Pressed:
+                            if (clickedGuiItems.Any())
+                            {
+                                if (PreviousMouseState.LeftButton != ButtonState.Released) return;
+                                clickedGuiItems.First().Click();
+                                return;
+                            }
+
+                            Selection.ButtonPressed(mouseCoords);
+                            break;
+                        case ButtonState.Released:
+                            game.MapActionSelector.Clear();
+
+                            Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
+                            break;
+                    }
+
+                    break;
+                case MouseButton.Right:
+                    switch (mouseState.RightButton)
+                    {
+                        //TODO RightButtonPressed?.Invoke()
+                        //TODO RightButtonReleased?.Invoke()
+                        case ButtonState.Pressed:
+                            Selection.move(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
+                            break;
+                        case ButtonState.Released:
+                        {
+                            FloatCoords cellCoords = WorldPositionCalculator.DrawCoordsToCellFloatCoords((FloatCoords) WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, game.Camera.GetViewMatrix()), game.GameView.TileSize);
+                            if (PreviousMouseState.RightButton == ButtonState.Pressed) game.SelectedMapAction?.Execute(game.GameModel.World.GetCellFromCoords((Coords) cellCoords));
+                            break;
+                        }
+                    }
+
+                    break;
+            }
+        }
+    }
 }

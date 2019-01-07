@@ -9,32 +9,36 @@ using kbs2.UserInterface.BottomBar;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.UserInterface
 {
-	public class BottomBarView : IViewImage
+	class BottomBarView : IGuiViewImage
 	{
-		public GameController gameController { get; set; }
-        public BottomBarModel Model { get; set; }
-
+		public GraphicsDevice GraphicsDevice { get; set; }
 		public Coords coords => new Coords
 		{
-			x = (int) (gameController.GraphicsDevice.Viewport.Width * .15),
-			y = (int) (gameController.GraphicsDevice.Viewport.Height * .81)
+			x = (int) (GraphicsDevice.Viewport.Width * .15),
+			y = (int) (GraphicsDevice.Viewport.Height * .81)
 		};
 
 		public FloatCoords Coords { get { return (FloatCoords)coords; } set {; } }
-		public float Height { get { return (int)(gameController.GraphicsDevice.Viewport.Height * .19); } set {; } }
-		public float Width { get { return (int)(gameController.GraphicsDevice.Viewport.Width * .70); } set {; } }
+		public float Height { get { return (int)(GraphicsDevice.Viewport.Height * .19); } set {; } }
+		public float Width { get { return (int)(GraphicsDevice.Viewport.Width * .70); } set {; } }
 		public string Texture { get { return "bottombarmid"; } set {; } }
+
 		public Color Colour { get { return Color.White; } set {; } }
 		public int ZIndex { get { return 1; } set {; } }
 
-
-		public BottomBarView(GameController gameController)
+        public ViewMode ViewMode => ViewMode.Full;
+		
+		public void Click()
 		{
-			this.gameController = gameController;
-            Model = new BottomBarModel(this);
+		}
+
+        public BottomBarView(GraphicsDevice GraphicsDevice)
+		{
+			this.GraphicsDevice = GraphicsDevice;
 		}
 	}
 }

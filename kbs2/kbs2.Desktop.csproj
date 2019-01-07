@@ -50,9 +50,25 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Actions\ActionMVC\ActionController.cs" />
-    <Compile Include="Actions\ActionMVC\ActionModel.cs" />
-    <Compile Include="Actions\ActionMVC\ActionView.cs" />
+    <Compile Include="Actions\ActionTabActions\SelectMapAction_GameAction.cs" />
+    <Compile Include="Actions\GameActionFactory.cs" />
+    <Compile Include="Actions\GameActions\GameAction.cs" />
+    <Compile Include="Actions\MapActionDefs\MapActionDef.cs" />
+    <Compile Include="Actions\MapActionDefs\SpawnActionDef.cs" />
+    <Compile Include="Actions\MapActionDefs\TrainActionDef.cs" />
+    <Compile Include="Actions\MapActionFactory.cs" />
+    <Compile Include="Actions\ActionModels\SpawnActionModel.cs" />
+    <Compile Include="Actions\GameActionGrid\GameActionTabItem.cs" />
+    <Compile Include="Actions\GameActionGrid\GameActionTabModel.cs" />
+    <Compile Include="Actions\MapActionSelector\MapActionSelector.cs" />
+    <Compile Include="Actions\MapActions\MapAction.cs" />
+    <Compile Include="Actions\MapActions\ActionView.cs" />
+    <Compile Include="Actions\MapActions\CooldownView.cs" />
+    <Compile Include="Actions\MapActions\SpawnAction.cs" />
+    <Compile Include="Actions\IActionModel.cs" />
+    <Compile Include="Actions\Interfaces\IGameAction.cs" />
+    <Compile Include="Actions\Interfaces\IMapAction.cs" />
+    <Compile Include="Actions\Interfaces\IMapActionDef.cs" />
     <Compile Include="DBController.cs" />
     <Compile Include="Faction\CurrencyMVC\CurrencyView.cs" />
     <Compile Include="Faction\Enums\Faction_Relations.cs" />
@@ -71,6 +87,13 @@
     <Compile Include="GamePackage\Terraintester.cs" />
     <Compile Include="GamePackage\DayCycle\DayController.cs" />
     <Compile Include="GamePackage\DayCycle\DayModel.cs" />
+    <Compile Include="Resources\ResourceCalculator.cs" />
+    <Compile Include="GamePackage\FogController.cs" />
+    <Compile Include="GamePackage\GameSaveManager\DataBaseContext.cs" />
+    <Compile Include="GamePackage\GameSaveManager\GameSaveManager.cs" />
+    <Compile Include="GamePackage\TerrainTester.cs" />
+    <Compile Include="GamePackage\DayCycle\TimeController.cs" />
+    <Compile Include="GamePackage\DayCycle\IngameTime.cs" />
     <Compile Include="GamePackage\Enums\GameSpeed.cs" />
     <Compile Include="GamePackage\EventArgs\EventArgsWithPayload.cs" />
     <Compile Include="GamePackage\EventArgs\GameSpeedEventArgs.cs" />
@@ -89,16 +112,17 @@
     <Compile Include="GamePackage\Selection\Selection_View.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserInterface\ActionBar\ActionBarView.cs" />
     <Compile Include="UserInterface\ActionBar\ActionBarModel.cs" />
-    <Compile Include="UserInterface\ActionInterface.cs" />
-    <Compile Include="UserInterface\BottomBar\BottomBarStatView.cs" />
+    <Compile Include="UserInterface\BuildGameActionHolder.cs" />
+    <Compile Include="UserInterface\GameActionGui\GameActionGuiController.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarView.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarModel.cs" />
     <Compile Include="UserInterface\BottomBar\StatImageView.cs" />
     <Compile Include="UserInterface\BottomBar\StatTextView.cs" />
     <Compile Include="UserInterface\BuildActions.cs" />
     <Compile Include="UserInterface\Interfaces\IButton.cs" />
+    <Compile Include="UserInterface\GameActionGui\GameActionGuiModel.cs" />
+    <Compile Include="UserInterface\GameActionGui\GameActionGuiView.cs" />
     <Compile Include="UserInterface\LeftButtonBar.cs" />
     <Compile Include="UserInterface\MenuBar\MenuBarModel.cs" />
     <Compile Include="UserInterface\MenuBar\MenuButton.cs" />
@@ -108,6 +132,10 @@
     <Compile Include="UserInterface\StatusBar\StatusBarView.cs" />
     <Compile Include="UserInterface\StatusBar\StatusBarModel.cs" />
     <Compile Include="UserInterface\UIView.cs" />
+    <Compile Include="utils\BuildingShapeCalculator.cs" />
+    <Compile Include="utils\CoordsCalculator.cs" />
+    <Compile Include="utils\CoordsConsoleUtil.cs" />
+    <Compile Include="utils\ActionButtonPosition.cs" />
     <Compile Include="utils\DistanceCalculator.cs" />
     <Compile Include="utils\ModulusUtils.cs" />
     <Compile Include="utils\WorldPositionCalculator.cs" />
@@ -118,25 +146,41 @@
     <Compile Include="View\GUI\ActionBox\ActionBoxModel.cs" />
     <Compile Include="View\GUI\ActionBox\ActionBoxTextView.cs" />
     <Compile Include="View\GUI\ActionBox\ActionBoxView.cs" />
-    <Compile Include="View\MapView\MapView.cs" />
+    <Compile Include="View\GUI\GuiViewImage.cs" />
     <Compile Include="WorldEntity\Battle\BattleDef.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Controller.cs" />
     <Compile Include="WorldEntity\Battle\BattleMVC\Battle_Model.cs" />
-    <Compile Include="WorldEntity\Building\BuildingDef.cs" />
-    <Compile Include="WorldEntity\Building\BuildingFactory.cs" />
-    <Compile Include="WorldEntity\Building\BuildingMVC\BuildingView.cs" />
-    <Compile Include="WorldEntity\Building\BuildingMVC\Building_Controller.cs" />
-    <Compile Include="WorldEntity\Building\BuildingMVC\Building_Model.cs" />
-    <Compile Include="WorldEntity\Building\BuildingUnderConstruction.cs" />
-    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\ConstructionCounter.cs" />
+    <Compile Include="WorldEntity\Interfaces\ITrainable.cs" />
+    <Compile Include="WorldEntity\Interfaces\ITrainableDef.cs" />
+    <Compile Include="WorldEntity\Interfaces\ITrainingEntity.cs" />
+    <Compile Include="WorldEntity\Structures\BuildingDef.cs" />
+    <Compile Include="WorldEntity\Structures\BuildingFactory.cs" />
+    <Compile Include="WorldEntity\Structures\BuildingMVC\BuildingView.cs" />
+    <Compile Include="WorldEntity\Structures\BuildingMVC\BuildingController.cs" />
+    <Compile Include="WorldEntity\Structures\BuildingMVC\Building_Model.cs" />
+    <Compile Include="WorldEntity\Structures\BuildingUnderConstructionMVC\ConstructionCounter.cs" />
+    <Compile Include="WorldEntity\Structures\Defs\ConstructingBuildingDef.cs" />
+    <Compile Include="WorldEntity\Structures\Defs\ResourceFactoryDef.cs" />
+    <Compile Include="WorldEntity\Structures\Defs\TrainingStructureDef.cs" />
+    <Compile Include="WorldEntity\Structures\ResourceFactory\ResourceFactoryController.cs" />
+    <Compile Include="WorldEntity\Structures\ResourceFactory\ResourceFactoryModel.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
     <Compile Include="WorldEntity\Interfaces\IHasActions.cs" />
     <Compile Include="WorldEntity\Interfaces\IHasCommand.cs" />
+    <Compile Include="WorldEntity\Interfaces\IGameActionHolder.cs" />
     <Compile Include="WorldEntity\Interfaces\IMoveable.cs" />
+    <Compile Include="WorldEntity\Interfaces\ISpawnable.cs" />
+    <Compile Include="WorldEntity\Interfaces\ISpawnableDef.cs" />
+    <Compile Include="WorldEntity\Interfaces\IStructure.cs" />
+    <Compile Include="WorldEntity\Interfaces\IStructureDef.cs" />
+    <Compile Include="WorldEntity\Interfaces\ITargetable.cs" />
+    <Compile Include="WorldEntity\Interfaces\IWorldEntity.cs" />
+    <Compile Include="WorldEntity\Interfaces\IWorldEntityDef.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Controller.cs" />
     <Compile Include="WorldEntity\Location\LocationMVC\Location_Model.cs" />
+    <Compile Include="WorldEntity\Pathfinder\Exceptions\NoPathFoundException.cs" />
     <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
     <Compile Include="WorldEntity\Abstract\Hitbox.cs" />
     <Compile Include="WorldEntity\Enums\ElementType.cs" />
@@ -147,7 +191,12 @@
     <Compile Include="WorldEntity\Structs\BattleValue.cs" />
     <Compile Include="WorldEntity\Structs\CostValue.cs" />
     <Compile Include="WorldEntity\Structs\Level.cs" />
-    <Compile Include="WorldEntity\Unit\MVC\Unit_Controller.cs" />
+    <Compile Include="WorldEntity\Structs\ViewValues.cs" />
+    <Compile Include="WorldEntity\Structures\ResourceFactory\ResourceFactoryView.cs" />
+    <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureController.cs" />
+    <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureModel.cs" />
+    <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureView.cs" />
+    <Compile Include="WorldEntity\Unit\MVC\UnitController.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_Model.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_View.cs" />
     <Compile Include="WorldEntity\Unit\UnitDef.cs" />
@@ -172,26 +221,41 @@
     <Compile Include="World\Enums\TerrainType.cs" />
     <Compile Include="World\Enums\ViewMode.cs" />
     <Compile Include="GamePackage\Enums\GameState.cs" />
-    <Compile Include="Faction\Interfaces\IHasFaction.cs" />
+    <Compile Include="Faction\Interfaces\IFactionMember.cs" />
     <Compile Include="World\Def\TerrainDef.cs" />
     <Compile Include="World\World\WorldController.cs" />
     <Compile Include="World\World\WorldFactory.cs" />
     <Compile Include="World\World\WorldModel.cs" />
-    <Compile Include="WorldEntity\Structs\CellWeight.cs" />
-    <Compile Include="WorldEntity\Structs\WeightDictionarys.cs" />
+    <Compile Include="WorldEntity\Structs\CellWeightValues.cs" />
     <Compile Include="Faction\CurrencyMVC\Currency_Model.cs" />
     <Compile Include="Faction\CurrencyMVC\Currency_Controller.cs" />
-    <Compile Include="Factory\ResourceMVC\ResourceController.cs" />
-    <Compile Include="Factory\ResourceMVC\ResourceModel.cs" />
-    <Compile Include="Factory\Enums\ResourceType.cs" />
-    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCModel.cs" />
-    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCController.cs" />
-    <Compile Include="WorldEntity\Building\BuildingUnderConstructionMVC\BUCView.cs" />
-    <Compile Include="WorldEntity\Building\BUCFactory.cs" />
+    <Compile Include="Resources\Enums\ResourceType.cs" />
+    <Compile Include="WorldEntity\Structures\BuildingUnderConstructionMVC\ConstructingBuildingModel.cs" />
+    <Compile Include="WorldEntity\Structures\BuildingUnderConstructionMVC\ConstructingBuildingController.cs" />
+    <Compile Include="WorldEntity\Structures\BuildingUnderConstructionMVC\ConstructingBuildingView.cs" />
+    <Compile Include="WorldEntity\Structures\ConstructingBuildingFactory.cs" />
     <Compile Include="WorldEntity\Interfaces\IImpassable.cs" />
     <Compile Include="WorldEntity\WorldEntitySpawner\EntitySpawner.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework.PowerShell, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\EntityFramework.6.2.0\tools\EntityFramework.PowerShell.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.PowerShell.Utility, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\EntityFramework.6.2.0\tools\EntityFramework.PowerShell.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Sqlite, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\packages\Microsoft.Data.Sqlite.Core.2.2.0\lib\netstandard2.0\Microsoft.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DotNet.PlatformAbstractions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\packages\Microsoft.DotNet.PlatformAbstractions.2.1.0\lib\net45\Microsoft.DotNet.PlatformAbstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.2.2.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Sqlite, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\packages\Microsoft.EntityFrameworkCore.Sqlite.Core.2.2.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Sqlite.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Data.Sqlite.1.0.61\lib\net40\Mono.Data.Sqlite.dll</HintPath>
     </Reference>
@@ -214,6 +278,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.109.0\lib\net45\System.Data.SQLite.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -278,6 +346,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DefDex.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="World\.DS_Store" />
   </ItemGroup>
   <ItemGroup />

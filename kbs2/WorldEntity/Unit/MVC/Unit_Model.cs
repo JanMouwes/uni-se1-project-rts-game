@@ -1,16 +1,10 @@
-﻿using kbs2.World;
-using kbs2.World.Structs;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
-using kbs2.Unit.Unit;
-using kbs2.Unit.Interfaces;
 using kbs2.Faction.Interfaces;
-using kbs2.WorldEntity;
-using kbs2.GamePackage.Interfaces;
+using kbs2.Unit;
+using kbs2.Unit.Interfaces;
 using kbs2.World.Enums;
-using Microsoft.Xna.Framework;
-using kbs2.Actions;
 
 namespace kbs2.Unit.Model
 {

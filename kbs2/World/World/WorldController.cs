@@ -1,16 +1,11 @@
-using kbs2.Faction.FactionMVC;
-using kbs2.utils;
-using kbs2.World;
-using kbs2.World.World;
-using kbs2.World.Chunk;
-using kbs2.WorldEntity.Building;
-using kbs2.WorldEntity.Building.BuildingUnderConstructionMVC;
 using System.Collections.Generic;
-using kbs2.World.Enums;
+using kbs2.utils;
 using kbs2.World.Cell;
+using kbs2.World.Enums;
 using kbs2.World.Structs;
+using kbs2.WorldEntity.Interfaces;
 
-namespace kbs2.Desktop.World.World
+namespace kbs2.World.World
 {
     public class WorldController
     {
@@ -27,101 +22,68 @@ namespace kbs2.Desktop.World.World
         }
 
         //    Loads chunk at given coordinate
-		public void LoadChunk(Coords coords) => WorldModel.ChunkGrid[coords].Load();
+        public void LoadChunk(Coords coords) => WorldModel.ChunkGrid[coords].Load();
 
         //    Unloads chunk at given coordinate
-		public void UnloadChunk(Coords coords) => WorldModel.ChunkGrid[coords].UnLoad();
+        public void UnloadChunk(Coords coords) => WorldModel.ChunkGrid[coords].UnLoad();
 
-        public void AddBuilding(BuildingDef defenition, Building_Controller building)
+        public void AddStructure(IStructure<IStructureDef> building)
         {
-            
-            foreach(Coords coords in defenition.BuildingShape)
+            foreach (Coords coords in building.Def.BuildingShape)
             {
-                Coords actual = coords + building.Model.TopLeft;
-                // calc coordinates of chunk the cell is in
-                Coords chunkcoords = new Coords
-                {
-                    x = actual.x / WorldChunkModel.ChunkSize,
-                    y = actual.y / WorldChunkModel.ChunkSize
-                };
-                // calc location of cell within chunk
-                Coords relativecoords = new Coords
-                {
-                    x = ModulusUtils.mod( actual.x , WorldChunkModel.ChunkSize),
-                    y = ModulusUtils.mod( actual.y , WorldChunkModel.ChunkSize)
-                };
+                Coords actual = coords + building.StartCoords;
+
+                WorldCellController cell = GetCellFromCoords(actual);
+
                 // add building to the cells its on
-                WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel.BuildingOnTop = building;
+                cell.worldCellModel.BuildingOnTop = building;
                 // add cells to the building
-                building.Model.LocationCells.Add(WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel);
+                building.OccupiedCells.Add(cell.worldCellModel);
             }
+
             // add building to buildinglist
-            WorldModel.buildings.Add(building);
+            WorldModel.Structures.Add(building);
         }
 
-        public void RemoveBuilding(Building_Controller building)
+        public void RemoveStructure(IStructure<IStructureDef> structure)
         {
-            WorldModel.buildings.Remove(building);
-        }
-
-        public void RemoveBUC(BUCController building)
-        {
-            WorldModel.UnderConstruction.Remove(building);
-        }
-
-        public void AddBuildingUnderCunstruction(BuildingDef defenition, BUCController building)
-        {
-
-            foreach (Coords coords in defenition.BuildingShape)
+            foreach (WorldCellModel occupiedCell in structure.OccupiedCells)
             {
-                Coords actual = coords + building.BUCModel.TopLeft;
-                // calc coordinates of chunk the cell is in
-                Coords chunkcoords = new Coords
-                {
-                    x = actual.x / WorldChunkModel.ChunkSize,
-                    y = actual.y / WorldChunkModel.ChunkSize
-                };
-                // calc location of cell within chunk
-                Coords relativecoords = new Coords
-                {
-                    x = ModulusUtils.mod(actual.x, WorldChunkModel.ChunkSize),
-                    y = ModulusUtils.mod(actual.y, WorldChunkModel.ChunkSize)
-                };
-                // add building to the cells its on
-                WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel.BuildingOnTop = building;
-                // add cells to the building
-                building.BUCModel.LocationCells.Add(WorldModel.ChunkGrid[chunkcoords].WorldChunkModel.grid[relativecoords.x, relativecoords.y].worldCellModel);
+                occupiedCell.BuildingOnTop = null;
             }
-            // add building to buildinglist
-            WorldModel.UnderConstruction.Add(building);
+
+            WorldModel.Structures.Remove(structure);
         }
 
         public WorldCellController GetCellFromCoords(Coords coords)
         {
-            Coords ChunkCoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords);
-            if (WorldModel.ChunkGrid.ContainsKey(ChunkCoords))
-            {
-                return WorldModel.ChunkGrid[ChunkCoords].WorldChunkModel.grid[ModulusUtils.mod(coords.x,20), ModulusUtils.mod(coords.y,20)];
-            }
-            return null;
+            Coords chunkCoords = WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords);
+            Coords relativeChunkCoords = WorldPositionCalculator.RelativeChunkCoords(coords);
+            return WorldModel.ChunkGrid.ContainsKey(chunkCoords)
+                ? WorldModel.ChunkGrid[chunkCoords].WorldChunkModel.grid[relativeChunkCoords.x, relativeChunkCoords.y]
+                : null;
+
+            //FIXME throw new CellNotFoundException();
         }
 
 
-        // check if coordsrange contains building or illigal terain
-        public bool checkTerainCells(List<Coords> coords, List<TerrainType> whiteList)
+        // check if coords-range contains building or illegal terrain
+        public bool AreTerrainCellsLegal(IEnumerable<Coords> coordsList, List<TerrainType> whiteList)
         {
-            foreach(Coords coord in coords)
+            foreach (Coords coords in coordsList)
             {
-                WorldCellModel cell = GetCellFromCoords(coord).worldCellModel;
+                WorldCellModel cell = GetCellFromCoords(coords).worldCellModel;
                 if (cell.BuildingOnTop != null)
                 {
                     return false;
                 }
-                if (!(whiteList.Contains(cell.Terrain)))
+
+                if (!whiteList.Contains(cell.Terrain))
                 {
                     return false;
                 }
             }
+
             return true;
         }
     }

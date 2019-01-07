@@ -1,4 +1,3 @@
-using MonoGame.Extended.ViewportAdapters;
 using System;
 using MonoGame.Extended;
 
@@ -8,7 +7,7 @@ namespace kbs2.Desktop.View.Camera
     {
         // Defines the minimum and maximum zoom
         public const float MaximumZoom = 4.0f;
-        public const float MinimumZoom = (float) (1.0 / 4.0);
+        public const float MinimumZoom = (float) (1.0 / 10.0);
 
         // Defines the default amount of tiles on screen
         public const int DefaultTiles = 30;

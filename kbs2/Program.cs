@@ -1,8 +1,5 @@
 ﻿using System;
-using kbs2.Desktop.View.MapView;
 using kbs2.GamePackage;
-using kbs2.World.TerrainDef;
-using kbs2.World;
 
 namespace kbs2.Desktop
 {
@@ -18,6 +15,15 @@ namespace kbs2.Desktop
         static void Main()
         {
             GameController game = new GameController(GameSpeed.Regular, GameState.Running);
+            
+//            using (DataBaseContext dbContext = new DataBaseContext())
+//            {
+//                List<BuildingDef> defs = (from buildingDef in dbContext.BuildingDef select buildingDef).ToList();
+//                foreach (BuildingDef buildingDef in defs)
+//                {
+//                    Console.WriteLine(buildingDef.BuildingShape);
+//                }
+//            }
 
             using (game)
                 game.Run();

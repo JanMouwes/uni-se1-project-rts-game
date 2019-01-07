@@ -1,231 +1,208 @@
-﻿using kbs2.Desktop.GamePackage.EventArgs;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Selection;
 using kbs2.utils;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Unit.MVC;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
-using MonoGame.Extended.Sprites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace kbs2.GamePackage
 {
+    public delegate void OnSelectionChangedDelegate(object sender, EventArgsWithPayload<List<IGameActionHolder>> eventArgs);
+
     public class Selection_Controller
     {
-        public Selection_Model Model { get; set; }
-        public Selection_View LeftView { get; set; }
-        public Selection_View RightView { get; set; }
-        public Selection_View TopView { get; set; }
-        public Selection_View BottomView { get; set; }
-        public GameController gameController { get; set; }
+        private Selection_Model Model { get; set; }
 
-        public delegate void OnSelectionChanged(object sender, EventArgsWithPayload<List<IHasActions>> eventArgs);
-        public event OnSelectionChanged onSelectionChanged;
+        private Selection_View LeftView { get; set; }
+        private Selection_View RightView { get; set; }
+        private Selection_View TopView { get; set; }
+        private Selection_View BottomView { get; set; }
+
+        private GameController Game { get; set; }
 
 
-        public List<IHasActions> SelectedItems { get; set; }
-        private EventArgsWithPayload<List<IHasActions>> args { get; set; }
+        public event OnSelectionChangedDelegate OnSelectionChanged;
 
-        private FloatCoords FirstPoint;
-        private FloatCoords TopLeft;
-        private FloatCoords BottomRight;
+
+        public List<IGameActionHolder> SelectedItems { get; set; }
+
+        private FloatCoords firstPoint;
+        private FloatCoords topLeft;
+        private FloatCoords bottomRight;
         private bool active;
 
         // constructor
         public Selection_Controller(GameController game, string lineTexture)
         {
             Model = new Selection_Model();
-			SelectedItems = new List<IHasActions>();
-            gameController = game;
-
-            args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
+            SelectedItems = new List<IGameActionHolder>();
+            this.Game = game;
 
             LeftView = new Selection_View();
             // width of the selection border
-            LeftView.Width = 4f/gameController.gameView.TileSize;
+            LeftView.Width = 4f / this.Game.GameView.TileSize;
 
             RightView = new Selection_View();
             // width of the selection border
-            RightView.Width = 4f / gameController.gameView.TileSize;
+            RightView.Width = 4f / this.Game.GameView.TileSize;
 
             TopView = new Selection_View();
             // width of the selection border
-            TopView.Height = 4f / gameController.gameView.TileSize;
+            TopView.Height = 4f / this.Game.GameView.TileSize;
 
             BottomView = new Selection_View();
             // width of the selection border
-            BottomView.Height = 4f / gameController.gameView.TileSize;
+            BottomView.Height = 4f / this.Game.GameView.TileSize;
         }
 
         // name explains this I guess
         public void ButtonPressed(FloatCoords mouseCoords)
         {
             //Save current mouse location/coords
-            FirstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords)mouseCoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
+            firstPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, Game.Camera.GetViewMatrix()), Game.GameView.TileSize);
             //enable drawfunction of selectionbox
             active = true;
         }
 
         // name explains this I guess
-        public void ButtonRelease(bool CTRL)
+        public void ButtonRelease(bool QueueKeyPressed)
         {
-            UpdateSelection(CTRL);
+            UpdateSelection(QueueKeyPressed);
             //disable drawfunction
             active = false;
         }
 
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
-            if (active)
-            {
-                MouseState temp = Mouse.GetState();
-                Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
-                // saves current mouse location 
-                FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
-                //standardices coords to topleft and bottomright 
-                SetCoords(FirstPoint, SecondPoint);
-                DrawBox();
-            }
+            if (!active) return;
+
+            MouseState temp = Mouse.GetState();
+            Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
+            // saves current mouse location 
+            FloatCoords SecondPoint = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, Game.Camera.GetViewMatrix()), Game.GameView.TileSize);
+            //standardices coords to topleft and bottomright 
+            SetCoords(firstPoint, SecondPoint);
+            RegisterDrawBox();
         }
 
         //standardices coords to topleft and bottomright 
         public void SetCoords(FloatCoords firstCoords, FloatCoords secondCoords)
         {
-            TopLeft.x = firstCoords.x < secondCoords.x ? firstCoords.x : secondCoords.x;
-            TopLeft.y = firstCoords.y < secondCoords.y ? firstCoords.y : secondCoords.y;
+            topLeft.x = firstCoords.x < secondCoords.x ? firstCoords.x : secondCoords.x;
+            topLeft.y = firstCoords.y < secondCoords.y ? firstCoords.y : secondCoords.y;
 
-            BottomRight.x = firstCoords.x > secondCoords.x ? firstCoords.x : secondCoords.x;
-            BottomRight.y = firstCoords.y > secondCoords.y ? firstCoords.y : secondCoords.y;
+            bottomRight.x = firstCoords.x > secondCoords.x ? firstCoords.x : secondCoords.x;
+            bottomRight.y = firstCoords.y > secondCoords.y ? firstCoords.y : secondCoords.y;
         }
 
         // get all items in selectionbox
-        public void UpdateSelection(bool CTRL)
+        public void UpdateSelection(bool isQueueButtonPressed)
         {
-            if (CTRL && SelectedItems.OfType<IHasActions>().Any())
+            if (isQueueButtonPressed && SelectedItems.Where((actions => actions != null)).Any())
             {
-                SelectedItems.AddRange( SelectBuildings());
-                args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
-                onSelectionChanged?.Invoke(this, args);
+                SelectedItems.AddRange(SelectBuildings());
             }
             else
             {
-                
-                List<IHasActions>selection = SelectUnits();
-                if (selection.Count > 0)
-                {
-                    SelectedItems = CTRL ? SelectedItems.Union(selection).ToList() : selection;
-                    args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
-                    onSelectionChanged?.Invoke(this, args);
-                }
-                else
-                {
-                    SelectedItems = SelectBuildings();
-                    args = new EventArgsWithPayload<List<IHasActions>>(SelectedItems);
-                    onSelectionChanged?.Invoke(this, args);
-                }
+                List<IGameActionHolder> selection = SelectUnits();
+                SelectedItems = (selection.Count > 0) ? isQueueButtonPressed ? SelectedItems.Union(selection).ToList() : selection : SelectBuildings();
             }
+
+            OnSelectionChanged?.Invoke(this, new EventArgsWithPayload<List<IGameActionHolder>>(SelectedItems));
         }
 
         // get all buildings from selectionbox
-        public List<IHasActions> SelectBuildings()
+        public List<IGameActionHolder> SelectBuildings()
         {
-            List<IHasActions> Selected;
-            if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
+            List<IGameActionHolder> selected;
+            if (DistanceCalculator.DiagonalDistance(topLeft, bottomRight) < 0.5)
             {
-                Selected = new List<IHasActions>();
-                WorldCellModel cell = gameController.gameModel.World.GetCellFromCoords((Coords)TopLeft).worldCellModel;
+                selected = new List<IGameActionHolder>();
+                WorldCellModel cell = Game.GameModel.World.GetCellFromCoords((Coords) topLeft).worldCellModel;
                 if (cell.BuildingOnTop != null)
                 {
-                    Selected.Add((IHasActions)cell.BuildingOnTop);
+                    selected.Add(cell.BuildingOnTop);
                 }
             }
             else
             {
-                Selected = (from Item in gameController.PlayerFaction.FactionModel.Buildings
-                            where TopLeft.x <= Item.Model.TopLeft.x + (Item.View.Width / 2)
-                            && TopLeft.y <= Item.Model.TopLeft.y + (Item.View.Height / 2)
-                            && BottomRight.x >= Item.Model.TopLeft.x + (Item.View.Width / 2)
-                            && BottomRight.y >= Item.Model.TopLeft.y + (Item.View.Height / 2)
-                            select Item).Cast<IHasActions>().ToList();
+                //    TODO optimise
+                selected = (from item in Game.PlayerFaction.FactionModel.Buildings
+                    where topLeft.x <= item.StartCoords.x + (item.Width / 2)
+                          && topLeft.y <= item.StartCoords.y + (item.Height / 2)
+                          && bottomRight.x >= item.StartCoords.x + (item.Width / 2)
+                          && bottomRight.y >= item.StartCoords.y + (item.Height / 2)
+                    select item).Cast<IGameActionHolder>().ToList();
             }
-            return Selected;
+
+            return selected;
         }
 
         // selects units in selectionbox
-        public List<IHasActions> SelectUnits()
+        public List<IGameActionHolder> SelectUnits()
         {
-            List<Unit_Controller> Selected;
-            if (DistanceCalculator.getDistance2d(TopLeft, BottomRight) < 0.5)
+            List<UnitController> selected;
+            if (DistanceCalculator.DiagonalDistance(topLeft, bottomRight) < 0.5)
             {
-                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                            where DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < 0.5
-                            || DistanceCalculator.getDistance2d(TopLeft, Item.LocationController.LocationModel.floatCoords) < Item.UnitView.Height
-                            select Item).ToList();
+                selected = (from Item in Game.PlayerFaction.FactionModel.Units
+                    where DistanceCalculator.DiagonalDistance(topLeft, Item.LocationController.LocationModel.FloatCoords) < 0.5
+                          || DistanceCalculator.DiagonalDistance(topLeft, Item.LocationController.LocationModel.FloatCoords) < Item.UnitView.Height
+                    select Item).ToList();
             }
             else
             {
-
-
-                Selected = (from Item in gameController.PlayerFaction.FactionModel.Units
-                            where TopLeft.x <= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
-                            && TopLeft.y <= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
-                            && BottomRight.x >= Item.LocationController.LocationModel.coords.x + (Item.UnitView.Width / 2)
-                            && BottomRight.y >= Item.LocationController.LocationModel.coords.y + (Item.UnitView.Height / 2)
-                            select Item).ToList();
+                selected = (from Item in Game.PlayerFaction.FactionModel.Units
+                    where topLeft.x <= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
+                          && topLeft.y <= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
+                          && bottomRight.x >= Item.LocationController.LocationModel.Coords.x + (Item.UnitView.Width / 2)
+                          && bottomRight.y >= Item.LocationController.LocationModel.Coords.y + (Item.UnitView.Height / 2)
+                    select Item).ToList();
             }
-            return Selected.Cast<IHasActions>().ToList();
-            
+
+            return selected.Cast<IGameActionHolder>().ToList();
         }
 
         // give movecommand to all units in selection
-        public void move(bool CTRL)
+        public void move(bool isQueueKeyPressed)
         {
             MouseState temp = Mouse.GetState();
-            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
-            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, gameController.camera.GetViewMatrix()), gameController.gameView.TileSize);
-            foreach (IHasActions unit in SelectedItems)
+            Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
+            FloatCoords target = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords(tempcoords, Game.Camera.GetViewMatrix()), Game.GameView.TileSize);
+            foreach (IGameActionHolder unit in SelectedItems)
             {
-                if(unit.GetType() == typeof(Unit_Controller))
+                if (unit is IMoveable moveable)
                 {
-                    ((IMoveable)unit).MoveTo(target, CTRL);
+                    moveable.MoveTo(target, isQueueKeyPressed);
                 }
             }
         }
 
         //draws the selectionbox
-        public void DrawBox()
+        public void RegisterDrawBox()
         {
-            LeftView.Coords = TopLeft;
-            LeftView.Height = Math.Abs(BottomRight.y - TopLeft.y);
+            LeftView.Coords = topLeft;
+            LeftView.Height = Math.Abs(bottomRight.y - topLeft.y);
 
-            RightView.Coords = new FloatCoords {x = BottomRight.x - RightView.Width, y = TopLeft.y };
-            RightView.Height = Math.Abs(BottomRight.y - TopLeft.y);
+            RightView.Coords = new FloatCoords {x = bottomRight.x - RightView.Width, y = topLeft.y};
+            RightView.Height = Math.Abs(bottomRight.y - topLeft.y);
 
-            TopView.Coords = TopLeft;
-            TopView.Width = Math.Abs(BottomRight.x - TopLeft.x);
+            TopView.Coords = topLeft;
+            TopView.Width = Math.Abs(bottomRight.x - topLeft.x);
 
-            BottomView.Coords = new FloatCoords { x = TopLeft.x, y = BottomRight.y - BottomView.Height };
-            BottomView.Width = Math.Abs(BottomRight.x - TopLeft.x);
+            BottomView.Coords = new FloatCoords {x = topLeft.x, y = bottomRight.y - BottomView.Height};
+            BottomView.Width = Math.Abs(bottomRight.x - topLeft.x);
 
 
-            gameController.gameModel.ItemList.Add(LeftView);
-            gameController.gameModel.ItemList.Add(RightView);
-            gameController.gameModel.ItemList.Add(TopView);
-            gameController.gameModel.ItemList.Add(BottomView);
+            Game.GameModel.ItemList.Add(LeftView);
+            Game.GameModel.ItemList.Add(RightView);
+            Game.GameModel.ItemList.Add(TopView);
+            Game.GameModel.ItemList.Add(BottomView);
         }
-
-
-        
     }
 }

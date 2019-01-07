@@ -1,15 +1,4 @@
-﻿using kbs2.Desktop.View.Camera;
-using kbs2.GamePackage;
-using kbs2.GamePackage.Interfaces;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace kbs2.UserInterface.MiniMap
+﻿namespace kbs2.UserInterface.MiniMap
 {
     public class MiniMapModel
     {
