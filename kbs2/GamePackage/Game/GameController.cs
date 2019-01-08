@@ -202,7 +202,6 @@ namespace kbs2.GamePackage
             FogController = new FogController(PlayerFaction, GameModel.World);
 
 
-
             // Pathfinder 
             GameModel.pathfinder = new Pathfinder(GameModel.World);
 
@@ -349,17 +348,18 @@ namespace kbs2.GamePackage
 
         public void LoadNewChunks(object sender, EventArgsWithPayload<Coords> eventArgs)
         {
-            for(int x = -CHUNK_LOAD_RANGE; x<=CHUNK_LOAD_RANGE; x++)
+            for (int x = -CHUNK_LOAD_RANGE; x <= CHUNK_LOAD_RANGE; x++)
             {
-                for(int y = -CHUNK_LOAD_RANGE; y <= CHUNK_LOAD_RANGE; y++)
+                for (int y = -CHUNK_LOAD_RANGE; y <= CHUNK_LOAD_RANGE; y++)
                 {
-                    Coords chunkCoords = new Coords{ x = x, y = y }+eventArgs.Value;
+                    Coords chunkCoords = new Coords {x = x, y = y} + eventArgs.Value;
                     if (ChunkExists(chunkCoords)) continue;
 
                     GameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
                     shader();
                 }
             }
+
             if (!GameModel.FogEnabled)
             {
                 FogController.SetEverything(ViewMode.Full);
@@ -417,7 +417,13 @@ namespace kbs2.GamePackage
             GameModel.GuiItemList.Add(miniMap);
             GameModel.GuiItemList.Add(actionBar);
 
-            GameModel.GuiItemList.AddRange(actionBar.GetContents.Select(item => (IGuiViewImage) item));
+            List<IGuiViewImage> addList = new List<IGuiViewImage>();
+            foreach (IGuiViewImage guiViewImage in GameModel.GuiItemList)
+            {
+                addList.AddRange(guiViewImage.GetContents());
+            }
+
+            GameModel.GuiItemList.AddRange(addList);
         }
 
 
@@ -469,15 +475,15 @@ namespace kbs2.GamePackage
                 };
 
                 GameModel.GuiTextList.Add(tester);
-                TerrainTester fogtester = new TerrainTester(new FloatCoords { x = 0, y = 140 })
+                TerrainTester fogtester = new TerrainTester(new FloatCoords {x = 0, y = 140})
                 {
                     Text = $"view: {GameModel.World.GetCellFromCoords(coords).worldCellView.ViewMode}"
                 };
 
                 GameModel.GuiTextList.Add(fogtester);
             }
-            
-            
+
+
             if (gameState == GameState.Paused) return;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -489,7 +495,7 @@ namespace kbs2.GamePackage
             GameModel.ItemList.Clear();
             GameModel.TextList.Clear();
 
-            
+
             // Update Buildings & constructing buildings on screen
             GameModel.ItemList.AddRange(GameModel.World.WorldModel.Structures.Select(building => building.View));
             GameModel.TextList.AddRange(GameModel.World.WorldModel.UnderConstruction.Select(building => building.Counter));
@@ -551,14 +557,14 @@ namespace kbs2.GamePackage
             tick_stopwatch.Start();
 
 
-            if(GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Fog);
+            if (GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Fog);
 
 
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this, args);
 
 
-            if(GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Full);
+            if (GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Full);
 
             tick_stopwatch.Stop();
 
@@ -583,7 +589,8 @@ namespace kbs2.GamePackage
 
             if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.F7)&& !F7Pressed) {
+            if (Keyboard.GetState().IsKeyDown(Keys.F7) && !F7Pressed)
+            {
                 GameModel.FogEnabled = !GameModel.FogEnabled;
                 if (!GameModel.FogEnabled)
                 {
@@ -593,9 +600,11 @@ namespace kbs2.GamePackage
                 {
                     FogController.SetEverything(ViewMode.None);
                 }
+
                 F7Pressed = true;
             }
-            if(!Keyboard.GetState().IsKeyDown(Keys.F7) && F7Pressed)
+
+            if (!Keyboard.GetState().IsKeyDown(Keys.F7) && F7Pressed)
             {
                 F7Pressed = false;
             }

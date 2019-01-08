@@ -1,4 +1,5 @@
-﻿using kbs2.View.GUI;
+﻿using System.Collections.Generic;
+using kbs2.View.GUI;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
@@ -59,6 +60,8 @@ namespace kbs2.UserInterface
         public void Click()
         {
         }
+
+        public List<IGuiViewImage> GetContents()=> new List<IGuiViewImage>();
 
         public MiniMapBar(GraphicsDevice GraphicsDevice)
         {
