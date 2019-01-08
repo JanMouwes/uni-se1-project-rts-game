@@ -217,7 +217,7 @@ namespace kbs2.GamePackage
             // Spawner
             Spawner = new EntitySpawner(this);
 
-            GameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
+//            GameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -277,7 +277,7 @@ namespace kbs2.GamePackage
             //============= More TestCode ===============
 
             MouseStateChange += GameModel.MouseInput.OnMouseStateChange;
-            MouseStateChange += GameModel.ActionBox.OnRightClick;
+//            MouseStateChange += GameModel.ActionBox.OnRightClick;
             //TESTCODE
 
             // NOT TESTCODE
@@ -451,7 +451,7 @@ namespace kbs2.GamePackage
 
             MouseState temp = Mouse.GetState();
             Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
-            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords((Coords) WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
+            Coords coords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(tempcoords, Camera.GetViewMatrix(), GameView.TileSize);
             if (GameModel.World.GetCellFromCoords(coords) != null)
             {
                 TerrainTester terrainTester = new TerrainTester(new FloatCoords() {x = 0, y = 100})
@@ -497,11 +497,11 @@ namespace kbs2.GamePackage
             //    Update Units on screen
             GameModel.ItemList.AddRange(GameModel.World.WorldModel.Units.Select(unit => unit.View));
 
-            if (GameModel.ActionBox.BoxModel.Show)
-            {
+//            if (GameModel.ActionBox.BoxModel.Show)
+//            {
 //                GameModel.GuiItemList.Add(GameModel.ActionBox.BoxView);
-                GameModel.GuiTextList.Add(GameModel.ActionBox.BoxModel.Text);
-            }
+//                GameModel.GuiTextList.Add(GameModel.ActionBox.BoxModel.Text);
+//            }
 
             //    Calculate viewport-bounds
             Coords leftTopViewBound = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
