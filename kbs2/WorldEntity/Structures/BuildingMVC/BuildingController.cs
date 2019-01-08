@@ -6,6 +6,7 @@ using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.World.Structs;
+using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
 
 namespace kbs2.WorldEntity.Structures.BuildingMVC
@@ -16,6 +17,8 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
 
         public BuildingModel Model { get; } = new BuildingModel();
         public BuildingView BuildingView { get; }
+
+        public HP_Controller HPController => new HP_Controller();
 
         public IViewImage View => BuildingView;
 

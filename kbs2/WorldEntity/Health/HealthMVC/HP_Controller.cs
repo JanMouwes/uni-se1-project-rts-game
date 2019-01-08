@@ -2,7 +2,7 @@
 {
 	public class HP_Controller
 	{
-        public HP_Model HPModel { get; set; }
+        public HP_Model HPModel => new HP_Model();
 
 		public void AddHP()
 		{

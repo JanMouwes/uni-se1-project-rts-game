@@ -15,9 +15,9 @@ namespace kbs2.WorldEntity.Unit
         public float Width;
         public float Height;
         public string Name;
-        public BattleDef BattleDef { get; set; }
-        public HPDef HPDef { get; set; }
-        public LevelXPDef LevelXPDef { get; set; }
+        public BattleDef BattleDef => new BattleDef();
+        public HPDef HPDef => new HPDef();
+        public LevelXPDef LevelXPDef => new LevelXPDef();
 
         public ViewValues ViewValues
         {

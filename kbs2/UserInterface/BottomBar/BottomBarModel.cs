@@ -1,5 +1,4 @@
 ﻿using kbs2.Unit.Model;
-using kbs2.WorldEntity.Building;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Unit.MVC;
 using System;

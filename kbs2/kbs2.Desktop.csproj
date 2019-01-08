@@ -84,14 +84,11 @@
     <Compile Include="GamePackage\CPU\CPU_Controller.cs" />
     <Compile Include="GamePackage\CPU\CPU_Factory.cs" />
     <Compile Include="GamePackage\CPU\CPU_Model.cs" />
-    <Compile Include="GamePackage\Terraintester.cs" />
-    <Compile Include="GamePackage\DayCycle\DayController.cs" />
-    <Compile Include="GamePackage\DayCycle\DayModel.cs" />
+    <Compile Include="GamePackage\TerrainTester.cs" />
     <Compile Include="Resources\ResourceCalculator.cs" />
     <Compile Include="GamePackage\FogController.cs" />
     <Compile Include="GamePackage\GameSaveManager\DataBaseContext.cs" />
     <Compile Include="GamePackage\GameSaveManager\GameSaveManager.cs" />
-    <Compile Include="GamePackage\TerrainTester.cs" />
     <Compile Include="GamePackage\DayCycle\TimeController.cs" />
     <Compile Include="GamePackage\DayCycle\IngameTime.cs" />
     <Compile Include="GamePackage\Enums\GameSpeed.cs" />
@@ -113,13 +110,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInterface\ActionBar\ActionBarModel.cs" />
+    <Compile Include="UserInterface\BottomBar\BottomBarStatView.cs" />
     <Compile Include="UserInterface\BuildGameActionHolder.cs" />
     <Compile Include="UserInterface\GameActionGui\GameActionGuiController.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarView.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarModel.cs" />
     <Compile Include="UserInterface\BottomBar\StatImageView.cs" />
     <Compile Include="UserInterface\BottomBar\StatTextView.cs" />
-    <Compile Include="UserInterface\BuildActions.cs" />
     <Compile Include="UserInterface\Interfaces\IButton.cs" />
     <Compile Include="UserInterface\GameActionGui\GameActionGuiModel.cs" />
     <Compile Include="UserInterface\GameActionGui\GameActionGuiView.cs" />
@@ -127,7 +124,6 @@
     <Compile Include="UserInterface\MenuBar\MenuBarModel.cs" />
     <Compile Include="UserInterface\MenuBar\MenuButton.cs" />
     <Compile Include="UserInterface\MiniMap\MiniMapBar.cs" />
-    <Compile Include="UserInterface\MiniMap\MiniMapModel.cs" />
     <Compile Include="UserInterface\MenuBar\RightButtonBar.cs" />
     <Compile Include="UserInterface\StatusBar\StatusBarView.cs" />
     <Compile Include="UserInterface\StatusBar\StatusBarModel.cs" />
@@ -167,8 +163,6 @@
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Controller.cs" />
     <Compile Include="WorldEntity\Health\HealthMVC\HP_Model.cs" />
     <Compile Include="WorldEntity\Health\HPDef.cs" />
-    <Compile Include="WorldEntity\Interfaces\IHasActions.cs" />
-    <Compile Include="WorldEntity\Interfaces\IHasCommand.cs" />
     <Compile Include="WorldEntity\Interfaces\IGameActionHolder.cs" />
     <Compile Include="WorldEntity\Interfaces\IMoveable.cs" />
     <Compile Include="WorldEntity\Interfaces\ISpawnable.cs" />
@@ -196,6 +190,7 @@
     <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureController.cs" />
     <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureModel.cs" />
     <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureView.cs" />
+    <Compile Include="WorldEntity\Interfaces\IHasCommand.cs" />
     <Compile Include="WorldEntity\Unit\MVC\UnitController.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_Model.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_View.cs" />

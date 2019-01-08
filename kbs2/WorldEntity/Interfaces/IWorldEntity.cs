@@ -11,7 +11,7 @@ namespace kbs2.WorldEntity.Interfaces
         Unit
     }
     
-    public interface IWorldEntity : IHasPersonalSpace, ITargetable, IFactionMember, IGameActionHolder
+    public interface IWorldEntity : ITargetable, IFactionMember, IGameActionHolder
     {
         /// <summary>
         /// Entity's image to be displayed on the map

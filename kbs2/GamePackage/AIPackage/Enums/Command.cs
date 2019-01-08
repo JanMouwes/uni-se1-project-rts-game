@@ -9,8 +9,7 @@ namespace kbs2.GamePackage.AIPackage.Enums
     public enum Command
     {
         Move,
-        AttackUnit,
-        AttackBuilding,
+        AttackEntity,
         Idle
     }
 }

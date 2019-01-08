@@ -1,4 +1,6 @@
 ﻿using kbs2.GamePackage.Interfaces;
+using kbs2.View.GUI;
+using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.UserInterface.BottomBar
 {
-    public class StatImageView : IViewImage
+    public class StatImageView : IGuiViewImage
     {
         public float Width { get; set; }
         public float Height { get; set; }
@@ -19,6 +21,9 @@ namespace kbs2.UserInterface.BottomBar
         public FloatCoords Coords { get; set; }
         public int ZIndex { get; set; }
         public Color Colour { get; set; }
+
+        public ViewMode ViewMode => ViewMode.Full;
+
         // ENTITY IMAGE
         public StatImageView(FloatCoords coords, IViewImage entity)
         {
@@ -50,6 +55,11 @@ namespace kbs2.UserInterface.BottomBar
             Texture = image;
             ZIndex = 1003;
             Colour = Color.White;
+        }
+
+        public void Click()
+        {
+            
         }
     }
 }

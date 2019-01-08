@@ -1,4 +1,5 @@
 ﻿using kbs2.UserInterface.Interfaces;
+using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 using System;
@@ -18,5 +19,7 @@ namespace kbs2.UserInterface.MenuBar
         public FloatCoords Coords { get; set; }
         public int ZIndex { get; set; }
         public Color Colour { get; set; }
+
+        public ViewMode ViewMode => ViewMode.Full;
     }
 }

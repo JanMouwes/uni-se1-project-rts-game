@@ -10,8 +10,6 @@ namespace kbs2.GamePackage.CPU
 {
     public class CPU_Model
     {
-        private IAI AI { get; set; }
-        private Faction_Controller Faction { get; set; }
-
+        public IAI AI { get; set; }
     }
 }

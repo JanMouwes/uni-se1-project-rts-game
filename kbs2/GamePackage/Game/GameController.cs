@@ -33,10 +33,10 @@ using kbs2.WorldEntity.Pathfinder;
 using kbs2.WorldEntity.Structures;
 using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.WorldEntitySpawner;
+using kbs2.WorldEntity.Structures.BuildingMVC;
 using kbs2.UserInterface.BottomBar;
-using kbs2.Actions;
-using kbs2.Actions.ActionMVC;
-using kbs2.Faction;
+using kbs2.GamePackage.CPU;
+using kbs2.GamePackage.AIPackage;
 
 namespace kbs2.GamePackage
 {
@@ -66,6 +66,7 @@ namespace kbs2.GamePackage
         public MouseInput MouseInput { get; set; }
 
         public GameActionGuiController GameActionGui { get; set; }
+        private BottomBarView bottomBarView;
         public FogController FogController { get; set; }
 
         //    GameSpeed and its event
@@ -86,6 +87,7 @@ namespace kbs2.GamePackage
         public readonly TimeController TimeController = new TimeController();
 
         public Faction_Controller PlayerFaction;
+        public CPU_Controller CPU1;
 
         public event MouseStateObserver MouseStateChange;
 
@@ -188,23 +190,13 @@ namespace kbs2.GamePackage
             // Generate world
             GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.SimplexFractal);
 
-            // Generate Player Faction
-            PlayerFaction = FactionFactory.CreatePlayerFaction("Byzantine Empire");
-            gameModel.Factions.Add(PlayerFaction);
+            // Create CPU player
+            CPU1 = CPU_Factory.CreateSimpleCpu(new Faction_Controller("CPU1", this));
 
-            // Generate CPU Faction (1)
-            gameModel.Factions.Add(FactionFactory.CreateCPUFaction("OverworldFaction"));
-            gameModel.Factions[1].AddRelationship(PlayerFaction, Faction.Enums.Faction_Relations.hostile);
 
-            // Give Factions starting units
-            DBController.OpenConnection("DefDex");
+            FogController = new FogController(PlayerFaction, GameModel.World);
 
-            foreach (Faction_Controller faction in gameModel.Factions)
-            {
-                faction.AddUnitToFaction(UnitFactory.CreateNewUnit(DBController.GetDefinitionFromUnit(1), this));
-            }
-
-            DBController.CloseConnection();
+            //            onTick += FogController.Update;
 
             // Pathfinder 
             GameModel.pathfinder = new Pathfinder(GameModel.World);
@@ -212,7 +204,7 @@ namespace kbs2.GamePackage
             // Spawner
             Spawner = new EntitySpawner(this);
 
-            GameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
+            GameModel.ActionBox = new ActionBoxController(new FloatCoords() { x = 50, y = 50 });
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -248,40 +240,27 @@ namespace kbs2.GamePackage
             onTick += TimeController.UpdateTime;
             onTick += GameModel.MouseInput.Selection.Update;
             GameModel.MouseInput.Selection.OnSelectionChanged += ChangeSelection;
-
-			StatusBarView statusBarView = new StatusBarView(this);
-			LeftButtonBar leftButtonBar = new LeftButtonBar(this);
-			RightButtonBar rightButtonBar = new RightButtonBar(this);
-
-			bottomBarView = new BottomBarView(this);
-			MiniMapBar miniMap = new MiniMapBar(this);
-			ActionBarView actionBar = new ActionBarView(this);
-
-            gameModel.GuiItemList.Add(statusBarView);
-			gameModel.GuiItemList.Add(leftButtonBar);
-			gameModel.GuiItemList.Add(rightButtonBar);
-			gameModel.GuiItemList.Add(bottomBarView);
-			gameModel.GuiItemList.Add(miniMap);
-			gameModel.GuiItemList.Add(actionBar);
-
-
-			ActionInterface = new ActionInterface(this);
-            BuildActions = new BuildActions(this);
-            ActionInterface.SetActions(BuildActions);
+            GameModel.MouseInput.Selection.OnSelectionChanged += UpdateHUDOnSelect;
 
             //TESTCODE
-            DBController.OpenConnection("DefDex");
-            UnitDef unitdef = DBController.GetDefinitionFromUnit(1);
+            DBController.OpenConnection("DefDex.db");
+            UnitDef unitdef = DBController.GetUnitDef(1);
+            UnitDef unitdef2 = DBController.GetUnitDef(2);
             DBController.CloseConnection();
 
             for (int i = 0; i < 12; i++)
             {
-                FloatCoords coords = new FloatCoords() {x = i, y = 5};
+                FloatCoords coords = new FloatCoords() { x = i, y = 5 };
                 UnitController unit = UnitFactory.CreateNewUnit(unitdef, coords, GameModel.World, PlayerFaction);
 
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
-                Spawner.SpawnUnit(unit, (Coords) coords);
+                Spawner.SpawnUnit(unit, (Coords)coords);
             }
+
+            // Create a unit for the CPU1 Faction
+            FloatCoords coords2 = new FloatCoords() { x = 20, y = 20 };
+            UnitController unit2 = UnitFactory.CreateNewUnit(unitdef2, coords2, GameModel.World, ((SimpleAI)CPU1.CpuModel.AI).Faction);
+            Spawner.SpawnUnit(unit2, (Coords)coords2);
 
             //============= More TestCode ===============
 
@@ -322,8 +301,8 @@ namespace kbs2.GamePackage
                 y = mouseState.Y
             };
 
-            FloatCoords cellCoords = (FloatCoords) WorldPositionCalculator.DrawCoordsToCellCoords(
-                (Coords) WorldPositionCalculator.TransformWindowCoords(
+            FloatCoords cellCoords = (FloatCoords)WorldPositionCalculator.DrawCoordsToCellCoords(
+                (Coords)WorldPositionCalculator.TransformWindowCoords(
                     windowCoords,
                     Camera.GetViewMatrix()
                 ),
@@ -353,7 +332,7 @@ namespace kbs2.GamePackage
             StatusBarView statusBarView = new StatusBarView(GraphicsDevice);
             LeftButtonBar leftButtonBar = new LeftButtonBar(GraphicsDevice);
             RightButtonBar rightButtonBar = new RightButtonBar(GraphicsDevice);
-            BottomBarView bottomBarView = new BottomBarView(GraphicsDevice);
+            bottomBarView = new BottomBarView(GraphicsDevice);
             MiniMapBar miniMap = new MiniMapBar(GraphicsDevice);
             GameActionGuiView actionBar = GameActionGui.View;
 
@@ -364,7 +343,7 @@ namespace kbs2.GamePackage
             GameModel.GuiItemList.Add(miniMap);
             GameModel.GuiItemList.Add(actionBar);
 
-            GameModel.GuiItemList.AddRange(actionBar.GetContents.Select(item => (IGuiViewImage) item));
+            GameModel.GuiItemList.AddRange(actionBar.GetContents.Select(item => (IGuiViewImage)item));
         }
 
 
@@ -379,8 +358,8 @@ namespace kbs2.GamePackage
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 GameState = GameState.Paused;
-//                SaveToDB();
-//                Exit();
+                //                SaveToDB();
+                //                Exit();
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Z)) GameState = GameState.Running;
@@ -407,12 +386,11 @@ namespace kbs2.GamePackage
 
 
             MouseState temp = Mouse.GetState();
-            Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
-            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords(
-                WorldPositionCalculator.TransformWindowCoords(tempcoords, camera.GetViewMatrix()), gameView.TileSize);
-            if (gameModel.World.GetCellFromCoords(coords) != null)
+            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
+            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords((Coords)WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
+            if (GameModel.World.GetCellFromCoords(coords) != null)
             {
-                TerrainTester terrainTester = new TerrainTester(new FloatCoords() {x = 0, y = 100})
+                TerrainTester terrainTester = new TerrainTester(new FloatCoords() { x = 0, y = 100 })
                 {
                     Text = $"{coords.x},{coords.y}  {GameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}"
                 };
@@ -421,9 +399,9 @@ namespace kbs2.GamePackage
 
                 GameModel.GuiTextList.Add(terrainTester);
 
-                TerrainTester tester = new TerrainTester(new FloatCoords {x = 0, y = 120})
+                TerrainTester tester = new TerrainTester(new FloatCoords { x = 0, y = 120 })
                 {
-                    Text = $"Chunk: {WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).x},{WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).y} "
+                    Text = $"Chunk: {WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords).x},{WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords).y} "
                 };
 
                 GameModel.GuiTextList.Add(tester);
@@ -436,53 +414,47 @@ namespace kbs2.GamePackage
             //    Update Units on screen
             GameModel.ItemList.AddRange(GameModel.World.WorldModel.Units.Select(unit => unit.View));
 
+            // Fires update function for all CPU players
+            CPU1.CpuModel.AI.Update(GameModel.Factions);
+
             if (GameModel.ActionBox.BoxModel.Show)
             {
-//                GameModel.GuiItemList.Add(GameModel.ActionBox.BoxView);
+                //                GameModel.GuiItemList.Add(GameModel.ActionBox.BoxView);
                 GameModel.GuiTextList.Add(GameModel.ActionBox.BoxModel.Text);
             }
 
-            gameModel.ItemList.AddRange(BUCs);
-            gameModel.TextList.AddRange(Counters);
-
-
-            List<IViewImage> Units = (from unit in gameModel.World.WorldModel.Units
-                select unit.UnitView).Cast<IViewImage>().ToList();
-
-            gameModel.ItemList.AddRange(Units);
-
-            if (gameModel.ActionBox.BoxModel.Show)
+            //    Calculate viewport-bounds
+            Coords leftTopViewBound = (Coords)WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
             {
-                gameModel.ItemList.Add(gameModel.ActionBox.BoxView);
-                gameModel.TextList.Add(gameModel.ActionBox.BoxModel.Text);
-            }
+                x = GraphicsDevice.Viewport.X,
+                y = GraphicsDevice.Viewport.Y
+            }, Camera.GetViewMatrix(), GameView.TileSize);
+            Coords rightBottomViewBound = (Coords)WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
+            {
+                x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width,
+                y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height
+            }, Camera.GetViewMatrix(), GameView.TileSize);
+            Rectangle viewRectangle = new Rectangle(leftTopViewBound.x, leftTopViewBound.y,
+                Math.Abs(leftTopViewBound.x - rightBottomViewBound.x),
+                Math.Abs(leftTopViewBound.y - rightBottomViewBound.y));
 
-            int TileSize = (int) (GraphicsDevice.Viewport.Width / camera.CameraModel.TileCount);
-
-            List<IViewImage> Cells = new List<IViewImage>();
-            List<WorldChunkController> chunks = (from chunk in gameModel.World.WorldModel.ChunkGrid
-                let rightBottomViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
-                    WorldPositionCalculator.TransformWindowCoords(
-                        new Coords()
-                        {
-                            x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width,
-                            y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height
-                        }, camera.GetViewMatrix()), TileSize)
-                let topLeftViewBound = WorldPositionCalculator.DrawCoordsToCellCoords(
-                    WorldPositionCalculator.TransformWindowCoords(
-                        new Coords() {x = GraphicsDevice.Viewport.X, y = GraphicsDevice.Viewport.Y},
-                        camera.GetViewMatrix()), TileSize)
-                let rightBottomBound = new Coords() {x = 20 + WorldChunkModel.ChunkSize, y = 20}
-                let leftTopBound = new Coords()
-                    {x = (chunk.Key.x * WorldChunkModel.ChunkSize), y = (chunk.Key.y * WorldChunkModel.ChunkSize)}
-                let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y,
-                    (rightBottomBound.x < 0 ? rightBottomBound.x * -1 : rightBottomBound.x),
-                    (rightBottomBound.y < 0 ? rightBottomBound.y * -1 : rightBottomBound.y))
-                let viewRectangle = new Rectangle(topLeftViewBound.x, topLeftViewBound.y,
-                    Math.Abs(topLeftViewBound.x - rightBottomViewBound.x),
-                    Math.Abs(topLeftViewBound.y - rightBottomViewBound.y))
-                where (chunkRectangle.Intersects(viewRectangle))
-                select chunk.Value).ToList();
+            List<WorldChunkController> chunks = (from chunk in GameModel.World.WorldModel.ChunkGrid
+                                                 let rightBottomBound = new Coords
+                                                 {
+                                                     x = 20 + WorldChunkModel.ChunkSize,
+                                                     y = 20
+                                                 }
+                                                 let leftTopBound = new Coords
+                                                 {
+                                                     x = (chunk.Key.x * WorldChunkModel.ChunkSize),
+                                                     y = (chunk.Key.y * WorldChunkModel.ChunkSize)
+                                                 }
+                                                 let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y,
+                                                     Math.Abs(rightBottomBound.x),
+                                                     Math.Abs(rightBottomBound.y)
+                                                 )
+                                                 where (chunkRectangle.Intersects(viewRectangle))
+                                                 select chunk.Value).ToList();
 
             foreach (WorldChunkController chunk in chunks)
             {
@@ -529,11 +501,11 @@ namespace kbs2.GamePackage
             // Calls the game update
             base.Update(gameTime);
 
-            Console.Clear();
-            printStopWatchResults(tick_stopwatch, "OnTick");
-            printStopWatchResults(stopwatch, "Update");
-            Console.WriteLine($"OnTick's percentage: {(tick_stopwatch.Elapsed.Ticks / (float) stopwatch.Elapsed.Ticks) * 100}%");
-            Console.WriteLine("frames: " + FramesOutput);
+            //Console.Clear();
+            //printStopWatchResults(tick_stopwatch, "OnTick");
+            //printStopWatchResults(stopwatch, "Update");
+            //Console.WriteLine($"OnTick's percentage: {(tick_stopwatch.Elapsed.Ticks / (float)stopwatch.Elapsed.Ticks) * 100}%");
+            //Console.WriteLine("frames: " + FramesOutput);
         }
 
         public static void printStopWatchResults(Stopwatch toPrint, string description) => Console.WriteLine($"{description} took: {toPrint.Elapsed.Ticks} ticks or {toPrint.Elapsed.Milliseconds} ms");
@@ -547,6 +519,19 @@ namespace kbs2.GamePackage
                 FramesThisSecond = 0;
             }
 
+            FramesThisSecond++;
+        }
+
+        /// <summary>
+        /// This checks if a new shader needs to be applied and applies shader to new chunks
+        /// </summary>
+        private void AddShader()
+        {
+            ShaderDelegate tempShader = null;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R)) tempShader = RandomPattern2;
+            if (Keyboard.GetState().IsKeyDown(Keys.C)) tempShader = CellChunkCheckered;
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) tempShader = DefaultPattern;
 
             if (tempShader == null) return;
 
@@ -567,9 +552,9 @@ namespace kbs2.GamePackage
                 BuildingDef def = DBController.GetBuildingDef(buildingId);
                 DBController.CloseConnection();
 
-                Coords tempCoords = new Coords {x = mouseState.X, y = mouseState.Y};
+                Coords tempCoords = new Coords { x = mouseState.X, y = mouseState.Y };
 
-                Coords coords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(tempCoords, Camera.GetViewMatrix(), GameView.TileSize);
+                Coords coords = (Coords)WorldPositionCalculator.WindowCoordsToCellCoords(tempCoords, Camera.GetViewMatrix(), GameView.TileSize);
 
                 List<Coords> buildingCoords = new List<Coords>();
                 foreach (Coords buildingShape in def.BuildingShape) buildingCoords.Add(coords + buildingShape);
@@ -692,56 +677,56 @@ namespace kbs2.GamePackage
             GameActionGui.SetActions(gameActionTabModels);
         }
 
-
         /// <summary>
         /// Changes the HUD according to the selected entities
         /// </summary>
         /// <param name="eventArgs">List of selected entities</param>
-        public void UpdateHUDOnSelect(object sender, EventArgsWithPayload<List<IHasActions>> eventArgs)
+        public void UpdateHUDOnSelect(object sender, EventArgsWithPayload<List<IGameActionHolder>> eventArgs)
         {
             // Clean the GUI of selected entities
-            foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
+            /*foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
             {
-                gameModel.GuiItemList.Remove(view.StatImage);
-                gameModel.GuiItemList.Remove(view.CurHP);
-                gameModel.GuiItemList.Remove(view.MaxHP);
-                gameModel.GuiTextList.Remove(view.StatName);
-            }
+                GameModel.GuiItemList.Remove(view.StatImage);
+                GameModel.GuiItemList.Remove(view.CurHP);
+                GameModel.GuiItemList.Remove(view.MaxHP);
+                GameModel.GuiTextList.Remove(view.StatName);
+            }*/
 
-            bottomBarView.Model.StatViews.Clear();
+            //bottomBarView.Model.StatViews.Clear();
 
             // Convert all IHasActions to Unit_Controllers
-            List<IHasActions> units = gameModel.MouseInput.Selection.SelectUnits();
-            units.ConvertAll(o => (Unit_Controller) o);
+            List<IGameActionHolder> units = GameModel.MouseInput.Selection.SelectUnits();
+            units.ConvertAll(o => (UnitController)o);
             // Add new views to the model
-            foreach(Unit_Controller unit in units)
+            foreach (UnitController unit in units)
                 bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, unit.UnitView, unit.HPController.HPModel));
             // Convert all IHasActions to Unit_Controllers
-            List<IHasActions> buildings = gameModel.MouseInput.Selection.SelectBuildings();
-            buildings.ConvertAll(o => (Building_Controller)o);
+            List<IGameActionHolder> buildings = GameModel.MouseInput.Selection.SelectBuildings();
+            buildings.ConvertAll(o => (BuildingController)o);
             // Add new views to the model
-            foreach (Building_Controller building in buildings)
+            foreach (BuildingController building in buildings)
                 bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, building.View, building.HPController.HPModel));
 
             if (bottomBarView.Model.StatViews.Count == 1)
             {
                 if (units.Count > 0)
                 {
-                    bottomBarView.Model.StatViews[0].AddNameText(((Unit_Controller)units[0]).UnitModel.Name);
-                } else if(buildings.Count > 0)
+                    bottomBarView.Model.StatViews[0].AddNameText(((UnitController)units[0]).UnitModel.Name);
+                }
+                else if (buildings.Count > 0)
                 {
-                    bottomBarView.Model.StatViews[0].AddNameText(((Building_Controller)buildings[0]).Model.Name);
+                    //bottomBarView.Model.StatViews[0].AddNameText(((BuildingController)buildings[0]));
                 }
             }
-                
+
             // Adds the views to the gameModel
             foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
             {
-                gameModel.GuiItemList.Add(view.StatImage);
-                gameModel.GuiItemList.Add(view.MaxHP);
-                gameModel.GuiItemList.Add(view.CurHP);
-                    if (view.StatName != null)
-                        gameModel.GuiTextList.Add(view.StatName);
+                GameModel.GuiItemList.Add(view.StatImage);
+                GameModel.GuiItemList.Add(view.MaxHP);
+                GameModel.GuiItemList.Add(view.CurHP);
+                if (view.StatName != null)
+                    GameModel.GuiTextList.Add(view.StatName);
             }
         }
 
@@ -764,9 +749,9 @@ namespace kbs2.GamePackage
             printStopWatchResults(stopwatch, "Drawing");
 
 
-//            Uncomment the line below to show all view-items in the console
-//            Console.Clear();
-//            Console.WriteLine(this.GameModel.AllDrawItems.GroupBy(item => item.GetType(), (typeKey, typeSource) => new KeyValuePair<string, int>(typeKey.Name, typeSource.Count())).Select((pair => $"{pair.Key}: {pair.Value}")).Aggregate((s, s1) => $"{s}\n{s1}"));
+            //            Uncomment the line below to show all view-items in the console
+            //            Console.Clear();
+            //            Console.WriteLine(this.GameModel.AllDrawItems.GroupBy(item => item.GetType(), (typeKey, typeSource) => new KeyValuePair<string, int>(typeKey.Name, typeSource.Count())).Select((pair => $"{pair.Key}: {pair.Value}")).Aggregate((s, s1) => $"{s}\n{s1}"));
         }
 
 
