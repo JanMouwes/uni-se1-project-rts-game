@@ -19,6 +19,7 @@ namespace kbs2.Actions.ActionMVC
 
         public string SpriteFont { get {return "BuildingTimer"; } set {; } }
         public string Text { get {return actionModel.CurrentCoolDown>0? ((int)actionModel.CurrentCoolDown).ToString(): " " ; } set {; } }
+        public double Rotation { get; }
         public FloatCoords Coords { get => ActionButtonPosition.GetPosition(gameController, index); set {; } }
         public int ZIndex { get {return 2; }  set {; } }
         public Color Colour { get {return Color.White; } set {; } }

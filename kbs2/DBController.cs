@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using kbs2.Actions;
 using kbs2.Resources.Enums;
 using kbs2.utils;
 using kbs2.WorldEntity.Interfaces;
@@ -235,6 +236,29 @@ namespace kbs2
         }
 
 
+        private static HealthDef GetHealth(int id)
+        {
+            DBConn = OpenConnection("DefDex.db");
+
+            const string query = "SELECT * FROM Def_HealthValues WHERE id = @i";
+            int healthDef;
+            using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
+            {
+                cmd.Parameters.Add(new SqliteParameter("@i", id));
+
+
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                        throw new DataNotFoundException($"HealthValues with id {id}");
+
+                    healthDef = int.Parse(reader["base_health"].ToString());
+                }
+            }
+
+            return new HealthDef(healthDef) { };
+        }
+
         // Get the Def from the given unit
         public static UnitDef GetUnitDef(int unitId)
         {
@@ -260,6 +284,10 @@ namespace kbs2
                         returnedUnitDef.ViewRange = int.Parse(reader["ViewRange"].ToString());
                         returnedUnitDef.TrainingTime = uint.Parse(reader["TrainingTime"].ToString());
 
+                        int healthDefId = int.Parse(reader["health_values_id"].ToString());
+
+                        returnedUnitDef.MaxHealth = GetHealth(healthDefId).MaxHealth;
+
                         // This is for the different defs not implemented yet
                         /*returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());
                         returnedUnitDef.BattleDef.DefenseModifier = double.Parse(reader["BattleDef.DefenseModifier"].ToString());
@@ -267,8 +295,6 @@ namespace kbs2
                         returnedUnitDef.BattleDef.DodgeChance = double.Parse(reader["BattleDef.DodgeChance"].ToString());
                         returnedUnitDef.BattleDef.RangeModifier = double.Parse(reader["BattleDef.RangeModifier"].ToString());
 
-                        returnedUnitDef.HPDef.CurrentHP = int.Parse(reader["HPDef.CurrentHP"].ToString());
-                        returnedUnitDef.HPDef.MaxHP = int.Parse(reader["HPDef.MaxHP"].ToString());
 
                         returnedUnitDef.LevelXPDef.Level = int.Parse(reader["LevelXPDef.Level"].ToString());
                         returnedUnitDef.LevelXPDef.XP = int.Parse(reader["LevelXPDef.XP"].ToString());
@@ -276,6 +302,7 @@ namespace kbs2
                     }
                 }
             }
+
 
             return returnedUnitDef;
         }

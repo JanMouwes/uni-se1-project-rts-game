@@ -11,6 +11,7 @@ namespace kbs2.WorldEntity.Unit.MVC
 
         public string ImageSrcShad { get; set; }
 
+		public double Rotation { get; }
 		public FloatCoords Coords { get { return Unit_Controller.LocationController.LocationModel.FloatCoords; } set {; } }
 
 		public float Width { get; set; }

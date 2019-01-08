@@ -15,6 +15,7 @@ namespace kbs2.UserInterface.GameActionGui
 
         private GraphicsDevice GraphicsDevice => model.GraphicsDevice;
 
+        public double Rotation { get; }
         public FloatCoords Coords => (FloatCoords) model.Coords;
 
         public float Height => (int) (GraphicsDevice.Viewport.Height * (GameActionGuiModel.HEIGHT_PERCENT / 100));

@@ -28,5 +28,27 @@ namespace kbs2.utils
         /// <param name="b"></param>
         /// <returns>Positive distance</returns>
         public static double DiagonalDistance(FloatCoords a, FloatCoords b) => Pythagoras(CalcDistance(a.x, b.x), CalcDistance(a.y, b.y));
+
+        /// <summary>
+        /// <para>Returns angle between two degrees</para>
+        /// <para>Angle is between 0 and 360</para>
+        /// </summary>
+        /// <param name="a">Starting-coordinate</param>
+        /// <param name="b">End-coordinate</param>
+        /// <returns>Angle between 0 and 360</returns>
+        public static double DegreesFromCoords(FloatCoords a, FloatCoords b)
+
+        {
+            FloatCoords delta = b - a;
+
+            if (!(delta.y > 0 || delta.y < 0)) return delta.x > 0 ? 0 : 180;
+
+            double tan = Math.Tan(delta.x / delta.y);
+
+            double radians = Math.Atan2(delta.y, delta.x);
+            double angle = radians * (180 / Math.PI);
+
+            return angle > 0 ? angle : 360 + angle;
+        }
     }
 }

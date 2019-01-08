@@ -7,6 +7,7 @@ namespace kbs2.View.GUI.ActionBox
 {
     public class ActionBoxView : IViewImage
     {
+        public double Rotation { get; }
         public FloatCoords Coords { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }

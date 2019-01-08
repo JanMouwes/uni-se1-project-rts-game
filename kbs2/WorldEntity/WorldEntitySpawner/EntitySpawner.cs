@@ -32,6 +32,19 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             World.WorldModel.Units.Add(unit);
             unit.Faction.RegisterUnit(unit);
             Game.onTick += unit.Update;
+            unit.Death += (sender, eventArgs) => DespawnUnit(eventArgs.Value);
+        }
+        
+        /// <summary>
+        /// Spawns Unit at coords, registers unit to faction, subscribes unit's Update to onTick
+        /// </summary>
+        /// <param name="unit">Unit to be spawned</param>
+        /// <param name="coords">Location at which to spawn unit</param>
+        public virtual void DespawnUnit(UnitController unit)
+        {;
+            World.WorldModel.Units.Remove(unit);
+            unit.Faction.UnregisterUnit(unit);
+            Game.onTick -= unit.Update;
         }
 
         /// <summary>

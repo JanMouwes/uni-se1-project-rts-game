@@ -10,6 +10,8 @@ namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
     {
         public ConstructingBuildingController ConstructingBuildingController { get; set; }
 
+        public double Rotation { get; }
+
         public FloatCoords Coords
         {
             get => new FloatCoords()

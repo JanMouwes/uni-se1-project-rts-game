@@ -69,7 +69,7 @@ namespace Tests
             SpawnAction spawnAction = new SpawnAction(actionDef.Object, gameController, factionController);
 
             //    Act
-            spawnAction.Execute(target.Object);
+            spawnAction.TryExecute(target.Object);
 
             //    Assert
 
@@ -106,7 +106,7 @@ namespace Tests
             SpawnAction spawnAction = new SpawnAction(actionDef.Object, gameController, factionController);
 
             //    Act
-            spawnAction.Execute(target.Object);
+            spawnAction.TryExecute(target.Object);
 
             //    Assert
 

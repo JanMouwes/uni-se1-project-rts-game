@@ -9,6 +9,7 @@ namespace kbs2.WorldEntity.Structures.ResourceFactory
     {
         private readonly ResourceFactoryModel model;
 
+        public double Rotation { get; }
         public FloatCoords Coords => (FloatCoords) model.TopLeft;
         
         public float Width => model.Def.ViewValues.Width;

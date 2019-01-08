@@ -11,7 +11,7 @@ namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
         private string ImageSrc { get; }
 
 
-        // Implementation IViewable
+        public double Rotation { get; }
         public FloatCoords Coords => (FloatCoords) Model.StartCoords;
 
         public float Width => Model.BuildingDef.ViewValues.Width;

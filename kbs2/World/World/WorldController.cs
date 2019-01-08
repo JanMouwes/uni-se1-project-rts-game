@@ -66,6 +66,18 @@ namespace kbs2.World.World
             //FIXME throw new CellNotFoundException();
         }
 
+        public bool CellContainsStructure(Coords coords, out IStructure<IStructureDef> structure)
+        {
+            WorldCellController cell = GetCellFromCoords(coords);
+
+            structure = null;
+            if (cell == null) return false;
+
+            structure = GetCellFromCoords(coords).worldCellModel.BuildingOnTop;
+
+            return structure != null;
+        }
+
 
         // check if coords-range contains building or illegal terrain
         public bool AreTerrainCellsLegal(IEnumerable<Coords> coordsList, List<TerrainType> whiteList)

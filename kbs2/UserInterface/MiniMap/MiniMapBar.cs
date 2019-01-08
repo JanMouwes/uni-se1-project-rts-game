@@ -16,6 +16,8 @@ namespace kbs2.UserInterface
             y = (int) (GraphicsDevice.Viewport.Height * .70)
         };
 
+        public double Rotation { get; }
+
         public FloatCoords Coords
         {
             get { return (FloatCoords) coords; }
