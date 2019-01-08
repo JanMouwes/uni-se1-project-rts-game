@@ -9,16 +9,18 @@ using kbs2.WorldEntity.Pathfinder;
 
 namespace kbs2.GamePackage
 {
-	public class GameModel
-	{
-		public WorldController World { get; set; }
-		public MouseInput MouseInput { get; set; }
-		public List<Faction_Controller> Factions { get; set; }
-		public ActionBoxController ActionBox { get; set; }
-		public float Time { get; set; }
-		public GameState GameState { get; set; }
-		public GameSpeed GameSpeed { get; set; }
-		public Pathfinder pathfinder { get; set; }
+    public class GameModel
+    {
+        public bool FogEnabled { get; set; } = true;
+
+        public WorldController World { get; set; }
+        public MouseInput MouseInput { get; set; }
+        public List<Faction_Controller> Factions { get; set; }
+//        public ActionBoxController ActionBox { get; set; }
+        public float Time { get; set; }
+        public GameState GameState { get; set; }
+        public GameSpeed GameSpeed { get; set; }
+        public Pathfinder pathfinder { get; set; }
 
         public IEnumerable<IViewItem> AllDrawItems => ItemList.Select(item => (IViewItem) item).Concat(GuiItemList).Concat(TextList).Concat(GuiTextList);
 

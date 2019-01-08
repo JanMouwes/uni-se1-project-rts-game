@@ -54,6 +54,8 @@ namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 
         public float Height => ConstructingBuildingView.Height;
 
+        public ViewMode ViewMode { set => ConstructingBuildingView.ViewMode = value; }
+
         public ConstructingBuildingController(ConstructingBuildingDef def)
         {
             ConstructingBuildingModel.BuildingDef = def;
@@ -66,7 +68,7 @@ namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
         // check if timer has run out and update counter
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
-            if (eventArgs.GameTime.TotalGameTime.TotalSeconds > ConstructingBuildingModel.FinishTime)
+            if (eventArgs.GameTime.TotalGameTime.TotalSeconds >= ConstructingBuildingModel.FinishTime)
             {
                 ConstructionComplete?.Invoke(this, new EventArgsWithPayload<IStructureDef>(ConstructingBuildingModel.BuildingDef));
                 ConstructionComplete = null;

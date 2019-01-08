@@ -80,18 +80,6 @@
 /processorParam:TextureFormat=Color
 /build:Construction.png
 
-#begin curhpbar.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:curhpbar.png
-
 #begin Currency.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -135,7 +123,7 @@
 /processorParam:TextureFormat=Color
 /build:grass.png
 
-#begin hpbar.png
+#begin mapaction-lightningbolt.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -145,7 +133,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:hpbar.png
+/build:mapaction-lightningbolt.png
+
+#begin mapaction-lightningbolt.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:mapaction-lightningbolt.png
 
 #begin pichu_idle.png
 /importer:TextureImporter
@@ -183,18 +183,6 @@
 /processorParam:TextureFormat=Color
 /build:PurpleLine.png
 
-#begin quitbutton.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:quitbutton.png
-
 #begin raichu_idle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -206,18 +194,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:raichu_idle.png
-
-#begin raichuIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:raichuIcon.png
 
 #begin rayquaza_idle.png
 /importer:TextureImporter
@@ -242,18 +218,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:rechtsondering.png
-
-#begin resumebutton.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:resumebutton.png
 
 #begin research_center.png
 /importer:TextureImporter
@@ -290,6 +254,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sand.png
+
+#begin selection-circle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:selection-circle.png
 
 #begin Snow.png
 /importer:TextureImporter
@@ -410,13 +386,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UITexture.png
-
-#begin unitstatinfo.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:unitstatinfo.spritefont
 
 #begin unittrainbalkje.png
 /importer:TextureImporter

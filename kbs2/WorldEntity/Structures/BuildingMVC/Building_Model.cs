@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using kbs2.Actions.GameActionDefs;
 using kbs2.Actions.GameActions;
+using kbs2.Actions.MapActionDefs;
+using kbs2.Actions.MapActions;
 using kbs2.World;
 using kbs2.World.Cell;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Unit.MVC;
 
 namespace kbs2.WorldEntity.Structures.BuildingMVC
 {
@@ -28,7 +31,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
         /// </summary>
         public ViewMode ViewMode;
 
-        public List<MapAction<MapActionDef>> Actions { get; }
+        public List<MapAction<BuildingController, MapActionDef>> Actions { get; }
 
         //    FIXME change to WorldCellController. Never access a Model directly
         /// <summary>
@@ -42,7 +45,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
         public BuildingModel()
         {
             LocationCells = new List<WorldCellModel>();
-            Actions = new List<MapAction<MapActionDef>>();
+            Actions = new List<MapAction<BuildingController, MapActionDef>>();
         }
     }
 }

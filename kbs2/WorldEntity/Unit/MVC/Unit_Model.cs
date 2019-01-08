@@ -6,8 +6,7 @@ using kbs2.GamePackage.AIPackage.Enums;
 using kbs2.Unit;
 using kbs2.Unit.Interfaces;
 using kbs2.World.Enums;
-using kbs2.WorldEntity.Unit;
-using kbs2.WorldEntity.Unit.MVC;
+using kbs2.WorldEntity.Health;
 
 namespace kbs2.Unit.Model
 {
@@ -41,10 +40,17 @@ namespace kbs2.Unit.Model
 
         public List<IGameAction> Actions { get; set; }
 
-        public Unit_Model()
+        public HealthValues HealthValues { get; set; }
+
+        public Unit_Model(UnitDef def)
         {
+            Def = def;
+            HealthValues = new HealthValues()
+            {
+                CurrentHP = def.MaxHealth,
+                MaxHP = def.MaxHealth
+            };
             Selected = false;
-            Actions = new List<IGameAction>();
             Order = Command.Idle;
         }
     }

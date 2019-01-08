@@ -23,7 +23,7 @@ namespace kbs2.WorldEntity.Structures
         public double Cost { get; set; }
         public double UpkeepCost { get; set; }
 
-        public HPDef HPDef { get; set; } = new HPDef();
+        public HealthValues HealthValues { get; set; } = new HealthValues();
 
 
         public ViewValues ViewValues { get; set; }

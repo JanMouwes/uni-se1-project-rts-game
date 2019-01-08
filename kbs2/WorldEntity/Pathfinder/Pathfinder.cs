@@ -22,6 +22,7 @@ namespace kbs2.WorldEntity.Pathfinder
         /// <para>Constants related to pathfinding-animation.</para>
         /// <para>Only relevant if ENABLE_ANIMATION is true/</para>
         /// </summary>
+
         #region Animation constants
 
         private const bool ENABLE_ANIMATION = false;
@@ -171,6 +172,8 @@ namespace kbs2.WorldEntity.Pathfinder
         /// <returns>Impassibility</returns>
         private bool IsCellImpassable(WorldCellModel cell, LocationModel unit)
         {
+            if (cell == null) return true;
+
             CoordsCalculator coordsCalculator = new CoordsCalculator((FloatCoords) cell.RealCoords);
 
             return coordsCalculator.DistanceToFloatCoords((FloatCoords) unit.Coords) > SearchLimit || CellIsObstacle(cell, unit);

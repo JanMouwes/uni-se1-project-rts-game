@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading;
 using kbs2.GamePackage.EventArgs;
 using kbs2.utils;
+using kbs2.World;
+using kbs2.World.Chunk;
 using kbs2.World.Structs;
 using kbs2.World.World;
 using kbs2.WorldEntity.Pathfinder.Exceptions;
@@ -15,6 +17,9 @@ namespace kbs2.WorldEntity.Location.LocationMVC
         public Pathfinder.Pathfinder Pathfinder;
         public LocationModel LocationModel;
         public Queue<FloatCoords> Waypoints = new Queue<FloatCoords>();
+
+        public delegate void EnterNewChunk(object sender, EventArgsWithPayload<Coords> eventArgs);
+        public event EnterNewChunk chunkChanged;
 
         public delegate void MoveCompleteDelegate(object sender, EventArgsWithPayload<FloatCoords> eventArgs);
 
@@ -91,11 +96,20 @@ namespace kbs2.WorldEntity.Location.LocationMVC
 
             difference.y = Waypoints.Peek().y < LocationModel.FloatCoords.y ? -difference.y : difference.y;
 
-            LocationModel.FloatCoords = new FloatCoords()
+            FloatCoords tempCoords = new FloatCoords()
             {
                 x = LocationModel.FloatCoords.x + difference.x,
                 y = LocationModel.FloatCoords.y + difference.y
             };
+
+            if(WorldPositionCalculator.ChunkCoordsOfCellCoords(tempCoords) != WorldPositionCalculator.ChunkCoordsOfCellCoords(LocationModel.FloatCoords))
+            {
+                EventArgsWithPayload<Coords> args = new EventArgsWithPayload<Coords>(WorldPositionCalculator.ChunkCoordsOfCellCoords(tempCoords));
+                chunkChanged?.Invoke(this, args);
+            }
+
+
+            LocationModel.FloatCoords = tempCoords;
         }
     }
 }

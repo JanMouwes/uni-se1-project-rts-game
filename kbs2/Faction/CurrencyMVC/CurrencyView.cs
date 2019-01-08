@@ -10,6 +10,7 @@ namespace kbs2.Faction.CurrencyMVC
     {
         private readonly Currency_Model model;
 
+        public double Rotation { get; }
         public FloatCoords Coords => new FloatCoords() {x = 135, y = 3};
 
         public string SpriteFont => "Currency";

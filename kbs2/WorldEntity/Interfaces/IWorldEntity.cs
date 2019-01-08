@@ -2,6 +2,7 @@ using kbs2.Faction.Interfaces;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
 using kbs2.Unit.Interfaces;
+using kbs2.World.Structs;
 
 namespace kbs2.WorldEntity.Interfaces
 {
@@ -24,5 +25,7 @@ namespace kbs2.WorldEntity.Interfaces
         /// <param name="sender">OnTick's sender</param>
         /// <param name="eventArgs">Event-payload</param>
         void Update(object sender, OnTickEventArgs eventArgs);
+
+        FloatCoords Centre { get; }
     }
 }

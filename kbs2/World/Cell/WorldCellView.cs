@@ -6,6 +6,7 @@ namespace kbs2.World.Cell
 {
     public class WorldCellView : IViewImage
     {
+        public double Rotation { get; }
         public FloatCoords Coords => (FloatCoords) model.RealCoords;
         public string Texture { get; set; }
         public float Width { get; set; } = 1;

@@ -73,5 +73,6 @@ namespace kbs2.WorldEntity.Structures.ResourceFactory
         }
 
         public List<IGameAction> GameActions { get; } = new List<IGameAction>();
+        public ViewMode ViewMode { set => Model.ViewMode = value; }
     }
 }

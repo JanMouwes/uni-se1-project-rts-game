@@ -24,11 +24,11 @@ namespace kbs2.GamePackage
             this.faction = faction;
             this.worldController = worldController;
 
-//            foreach (UnitController unit in faction.FactionModel.Units)
-//            {
-//                unit.OnMove += (sender, newLocation) => UpdateViewMode(ViewMode.Fog, unit.ViewRange, newLocation.Value);
-//                unit.OnMove += (sender, newLocation) => UpdateViewMode(ViewMode.Full, unit.ViewRange, newLocation.Value);
-//            }
+            //foreach (UnitController unit in faction.FactionModel.Units)
+            //{
+            //    unit.OnMove += (sender, newLocation) => UpdateViewMode(ViewMode.Fog, unit.ViewRange, newLocation.Value);
+            //    unit.OnMove += (sender, newLocation) => UpdateViewMode(ViewMode.Full, unit.ViewRange, newLocation.Value);
+            //}
         }
 
         /// <summary>
@@ -40,6 +40,7 @@ namespace kbs2.GamePackage
             // line of sight units
             foreach (UnitController unit in faction.FactionModel.Units)
             {
+                UpdateViewMode(mode, unit.ViewRange, unit.Center);
             }
 
             // lino of sight buildings
@@ -77,18 +78,9 @@ namespace kbs2.GamePackage
                     // set the viewmode
                     cellController.ChangeViewMode(mode);
                     // check if there is a building in the cell
-                    if (cellController.worldCellModel.BuildingOnTop == null) continue;
-                    // set viewmode of the building on the cell
-                    if (cellController.worldCellModel.BuildingOnTop.GetType() == typeof(BuildingController))
-                    {
-                        ((BuildingController) cellController.worldCellModel.BuildingOnTop).BuildingView.ViewMode = mode;
-                    }
+                    if (!(cellController.worldCellModel.BuildingOnTop is IStructure<IStructureDef>)) continue;
+                    cellController.worldCellModel.BuildingOnTop.ViewMode = mode;
 
-                    // set viewmode of the ConstructingBuilding on the cell
-                    if (cellController.worldCellModel.BuildingOnTop.GetType() == typeof(ConstructingBuildingController))
-                    {
-                        ((ConstructingBuildingController) cellController.worldCellModel.BuildingOnTop).ConstructingBuildingView.ViewMode = mode;
-                    }
                 }
             }
         }
@@ -130,10 +122,29 @@ namespace kbs2.GamePackage
             }
         }
 
+        public void SetEverything(ViewMode viewMode)
+        {
+            foreach (UnitController unit in worldController.WorldModel.Units)
+            {
+                unit.UnitView.ViewMode = viewMode;
+            }
+
+            foreach (KeyValuePair<Coords, WorldChunkController> grid in worldController.WorldModel.ChunkGrid)
+            {
+                foreach (var cell in grid.Value.WorldChunkModel.grid)
+                {
+                    cell.worldCellModel.ViewMode = viewMode;
+
+                    if (!(cell.worldCellModel.BuildingOnTop is IStructure<IStructureDef>)) continue;
+                    cell.worldCellModel.BuildingOnTop.ViewMode = viewMode;
+                }
+            }
+        }
+
         public void Update(object sender, OnTickEventArgs eventArgs)
         {
-            UpdateViewModes(ViewMode.Fog);
-            UpdateViewModes(ViewMode.Full);
+            //UpdateViewModes(ViewMode.Fog);
+            //UpdateViewModes(ViewMode.Full);
         }
     }
 }

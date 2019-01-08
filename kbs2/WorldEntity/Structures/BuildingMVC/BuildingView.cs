@@ -24,6 +24,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
         public float Height { get; }
         public float Width { get; }
 
+        public double Rotation { get; }
         public FloatCoords Coords => (FloatCoords) BuildingModel.TopLeft;
 
         public string Texture { get; }
@@ -42,7 +43,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
             Height = viewValues.Height;
             Width = viewValues.Width;
             Texture = viewValues.Image;
-            ViewMode = ViewMode.Fog;
+            ViewMode = ViewMode.Full;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using kbs2.View.GUI;
+﻿using System.Collections.Generic;
+using kbs2.View.GUI;
 using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
@@ -16,6 +17,7 @@ namespace kbs2.UserInterface
 		};
 
 
+		public double Rotation { get; }
 		public FloatCoords Coords { get { return (FloatCoords)coords; } set {; } }
 		public float Height { get { return (int)(GraphicsDevice.Viewport.Width *.03); } set {; } }
 		public float Width { get { return (int)(GraphicsDevice.Viewport.Width * .12); } set {; } }
@@ -31,7 +33,9 @@ namespace kbs2.UserInterface
 			
 		}
 
-        public LeftButtonBar(GraphicsDevice graphicsDevice)
+		public List<IGuiViewImage> GetContents()=> new List<IGuiViewImage>();
+
+		public LeftButtonBar(GraphicsDevice graphicsDevice)
 		{
 			this.GraphicsDevice = graphicsDevice;
 		}

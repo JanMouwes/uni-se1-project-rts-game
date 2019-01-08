@@ -20,12 +20,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
+using kbs2.Actions.ActionTabActions;
 using kbs2.Actions.GameActionDefs;
 using kbs2.Actions.GameActionGrid;
 using kbs2.Actions.GameActions;
 using kbs2.Actions.GameActionSelector;
 using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
+using kbs2.GamePackage.Animation;
+using kbs2.GamePackage.Interfaces;
+using kbs2.GamePackage.Selection;
 using kbs2.UserInterface.GameActionGui;
 using kbs2.View.GUI;
 using kbs2.WorldEntity.Interfaces;
@@ -52,6 +56,8 @@ namespace kbs2.GamePackage
 
     public class GameController : Game
     {
+        public const int CHUNK_LOAD_RANGE = 2;
+
         public int Id { get; } = -1;
 
         public GameModel GameModel { get; set; }
@@ -60,6 +66,8 @@ namespace kbs2.GamePackage
 
         public IMapAction SelectedMapAction => MapActionSelector.SelectedMapAction;
         public readonly MapActionSelector MapActionSelector;
+
+        public readonly AnimationController AnimationController;
 
         public GameTime LastUpdateGameTime { get; private set; }
 
@@ -94,6 +102,10 @@ namespace kbs2.GamePackage
         public MouseState PreviousMouseButtonsStatus { get; set; }
 
         public virtual event OnTickHandler onTick;
+
+        // testcode
+        public bool F7Pressed { get; set; } = false;
+
 
         //    GameState and its event
         private GameState gameState;
@@ -133,6 +145,9 @@ namespace kbs2.GamePackage
 
             GameStateChange += PauseGame;
             GameStateChange += UnPauseGame;
+
+            AnimationController = new AnimationController();
+
 
             PlayerFaction = new Faction_Controller("PlayerFaction", this);
 
@@ -196,15 +211,22 @@ namespace kbs2.GamePackage
 
             FogController = new FogController(PlayerFaction, GameModel.World);
 
-            //            onTick += FogController.Update;
 
             // Pathfinder 
             GameModel.pathfinder = new Pathfinder(GameModel.World);
 
+            //    Animation-frame-loading
+            onTick += (sender, args) =>
+            {
+                List<IViewItem> frameViewItems = AnimationController.NextFrame;
+                GameModel.ItemList.AddRange(frameViewItems.OfType<IViewImage>());
+                GameModel.TextList.AddRange(frameViewItems.OfType<IViewText>());
+            };
+
             // Spawner
             Spawner = new EntitySpawner(this);
 
-            GameModel.ActionBox = new ActionBoxController(new FloatCoords() { x = 50, y = 50 });
+//            GameModel.ActionBox = new ActionBoxController(new FloatCoords() {x = 50, y = 50});
 
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -248,10 +270,16 @@ namespace kbs2.GamePackage
             UnitDef unitdef2 = DBController.GetUnitDef(2);
             DBController.CloseConnection();
 
+
             for (int i = 0; i < 12; i++)
             {
-                FloatCoords coords = new FloatCoords() { x = i, y = 5 };
-                UnitController unit = UnitFactory.CreateNewUnit(unitdef, coords, GameModel.World, PlayerFaction);
+                FloatCoords coords = new FloatCoords() {x = i, y = 5};
+
+                UnitFactory unitFactory = new UnitFactory(PlayerFaction, this);
+
+                UnitController unit = unitFactory.CreateNewUnit(unitdef);
+
+                unit.LocationController.chunkChanged += LoadNewChunks;
 
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 Spawner.SpawnUnit(unit, (Coords)coords);
@@ -265,8 +293,25 @@ namespace kbs2.GamePackage
             //============= More TestCode ===============
 
             MouseStateChange += GameModel.MouseInput.OnMouseStateChange;
-            MouseStateChange += GameModel.ActionBox.OnRightClick;
+//            MouseStateChange += GameModel.ActionBox.OnRightClick;
             //TESTCODE
+
+            // NOT TESTCODE
+            onTick += (sender, args) =>
+            {
+                MouseState mouseState = Mouse.GetState();
+
+                Coords mouseCellCoords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords()
+                {
+                    x = mouseState.X,
+                    y = mouseState.Y
+                }, Camera.GetViewMatrix(), GameView.TileSize);
+
+                IWorldEntity worldEntity;
+                if (!CellContainsIWorldEntity((FloatCoords) mouseCellCoords, out worldEntity)) return;
+
+                GameModel.ItemList.Add(new SelectableImage(worldEntity));
+            };
         }
 
 
@@ -318,11 +363,57 @@ namespace kbs2.GamePackage
             shader();
         }
 
+        public void LoadNewChunks(object sender, EventArgsWithPayload<Coords> eventArgs)
+        {
+            for (int x = -CHUNK_LOAD_RANGE; x <= CHUNK_LOAD_RANGE; x++)
+            {
+                for (int y = -CHUNK_LOAD_RANGE; y <= CHUNK_LOAD_RANGE; y++)
+                {
+                    Coords chunkCoords = new Coords {x = x, y = y} + eventArgs.Value;
+                    if (ChunkExists(chunkCoords)) continue;
+
+                    GameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
+                    shader();
+                }
+            }
+
+            if (!GameModel.FogEnabled)
+            {
+                FogController.SetEverything(ViewMode.Full);
+            }
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
         private bool ChunkExists(Coords chunkCoords) => GameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
                                                         GameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
+
+        public bool CellContainsIWorldEntity(FloatCoords coords, out IWorldEntity targetable)
+        {
+            IEnumerable<TITargetableType> CellsITargetable<TITargetableType>(IEnumerable<TITargetableType> source) where TITargetableType : ITargetable =>
+                from item in source
+                where (Coords) item.FloatCoords == (Coords) coords
+                select item;
+
+            //    IStructure
+            IStructure<IStructureDef> cellsStructure;
+            bool cellContainsStructure = GameModel.World.CellContainsStructure((Coords) coords, out cellsStructure);
+
+            //    Unit
+            IEnumerable<UnitController> cellsUnit = CellsITargetable(GameModel.World.WorldModel.Units).ToList();
+            bool cellContainsUnit = cellsUnit.Any();
+
+            bool result = cellContainsStructure || cellContainsUnit;
+
+            targetable = null;
+            if (!result) return false;
+
+            targetable = cellContainsUnit ? (IWorldEntity) cellsUnit.First() : cellsStructure;
+
+            return true;
+        }
 
         /// <summary>
         /// This function and its actions need to be refactored
@@ -343,7 +434,13 @@ namespace kbs2.GamePackage
             GameModel.GuiItemList.Add(miniMap);
             GameModel.GuiItemList.Add(actionBar);
 
-            GameModel.GuiItemList.AddRange(actionBar.GetContents.Select(item => (IGuiViewImage)item));
+            List<IGuiViewImage> addList = new List<IGuiViewImage>();
+            foreach (IGuiViewImage guiViewImage in GameModel.GuiItemList)
+            {
+                addList.AddRange(guiViewImage.GetContents());
+            }
+
+            GameModel.GuiItemList.AddRange(addList);
         }
 
 
@@ -364,30 +461,20 @@ namespace kbs2.GamePackage
 
             if (Keyboard.GetState().IsKeyDown(Keys.Z)) GameState = GameState.Running;
 
-            if (gameState == GameState.Paused) return;
-
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            LastUpdateGameTime = gameTime;
 
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
 
-            // Clears the itemList
-            GameModel.ItemList.Clear();
-            GameModel.TextList.Clear();
+            //    Clear gui-item-list always
             GameModel.GuiItemList.Clear();
             GameModel.GuiTextList.Clear();
-
             AddGui();
-
             // ============== Temp Code ===================================================================
 
 
             MouseState temp = Mouse.GetState();
-            Coords tempcoords = new Coords { x = temp.X, y = temp.Y };
-            Coords coords = WorldPositionCalculator.DrawCoordsToCellCoords((Coords)WorldPositionCalculator.TransformWindowCoords(tempcoords, Camera.GetViewMatrix()), GameView.TileSize);
+            Coords tempcoords = new Coords {x = temp.X, y = temp.Y};
+            Coords coords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(tempcoords, Camera.GetViewMatrix(), GameView.TileSize);
             if (GameModel.World.GetCellFromCoords(coords) != null)
             {
                 TerrainTester terrainTester = new TerrainTester(new FloatCoords() { x = 0, y = 100 })
@@ -405,7 +492,26 @@ namespace kbs2.GamePackage
                 };
 
                 GameModel.GuiTextList.Add(tester);
+                TerrainTester fogtester = new TerrainTester(new FloatCoords {x = 0, y = 140})
+                {
+                    Text = $"view: {GameModel.World.GetCellFromCoords(coords).worldCellView.ViewMode}"
+                };
+
+                GameModel.GuiTextList.Add(fogtester);
             }
+
+
+            if (gameState == GameState.Paused) return;
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            LastUpdateGameTime = gameTime;
+            // Clears the itemList
+
+            GameModel.ItemList.Clear();
+            GameModel.TextList.Clear();
+
 
             // Update Buildings & constructing buildings on screen
             GameModel.ItemList.AddRange(GameModel.World.WorldModel.Structures.Select(building => building.View));
@@ -464,14 +570,21 @@ namespace kbs2.GamePackage
             GameModel.GuiTextList.Add(PlayerFaction.CurrencyController.View);
 
             // Chunks generate when hovered over
-            mouseChunkLoadUpdate(gameTime);
+            //mouseChunkLoadUpdate(gameTime);
 
             // fire Ontick event
             Stopwatch tick_stopwatch = new Stopwatch();
             tick_stopwatch.Start();
 
+
+            if (GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Fog);
+
+
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this, args);
+
+
+            if (GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Full);
 
             tick_stopwatch.Stop();
 
@@ -479,7 +592,7 @@ namespace kbs2.GamePackage
             //updates the viewmode for everything on screen
 
             // comment line bellow to turn on fog
-            FogController.UpdateEverythingVisible();
+            //FogController.UpdateEverythingVisible();
 
             // Calls the game update
 
@@ -495,6 +608,26 @@ namespace kbs2.GamePackage
             AddShader();
 
             if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F7) && !F7Pressed)
+            {
+                GameModel.FogEnabled = !GameModel.FogEnabled;
+                if (!GameModel.FogEnabled)
+                {
+                    FogController.SetEverything(ViewMode.Full);
+                }
+                else
+                {
+                    FogController.SetEverything(ViewMode.None);
+                }
+
+                F7Pressed = true;
+            }
+
+            if (!Keyboard.GetState().IsKeyDown(Keys.F7) && F7Pressed)
+            {
+                F7Pressed = false;
+            }
 
             stopwatch.Stop();
 
@@ -672,6 +805,9 @@ namespace kbs2.GamePackage
                 IGameAction[] mapActions = gameActionHolder.GameActions.ToArray();
                 GameActionTabModel gameActionTabModel = new GameActionTabModel(mapActions, GameActionGui);
                 gameActionTabModels.Add(gameActionTabModel);
+
+                if (!gameActionHolder.GameActions.Any(item => item is SelectMapAction_GameAction)) continue;
+                MapActionSelector.Select(gameActionHolder.GameActions.OfType<SelectMapAction_GameAction>().First().MapAction);
             }
 
             GameActionGui.SetActions(gameActionTabModels);

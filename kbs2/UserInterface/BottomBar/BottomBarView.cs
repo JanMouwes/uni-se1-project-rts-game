@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using kbs2.GamePackage;
-using kbs2.GamePackage.Interfaces;
-using kbs2.UserInterface.BottomBar;
+﻿using System.Collections.Generic;
 using kbs2.View.GUI;
 using kbs2.World;
 using kbs2.World.Structs;
@@ -23,10 +16,11 @@ namespace kbs2.UserInterface
             y = (int)(GraphicsDevice.Viewport.Height * .81)
         };
 
-        public FloatCoords Coords { get { return (FloatCoords)coords; } set {; } }
-        public float Height { get { return (int)(GraphicsDevice.Viewport.Height * .19); } set {; } }
-        public float Width { get { return (int)(GraphicsDevice.Viewport.Width * .70); } set {; } }
-        public string Texture { get { return "bottombarmid"; } set {; } }
+		public double Rotation { get; }
+		public FloatCoords Coords { get { return (FloatCoords)coords; } set {; } }
+		public float Height { get { return (int)(GraphicsDevice.Viewport.Height * .19); } set {; } }
+		public float Width { get { return (int)(GraphicsDevice.Viewport.Width * .70); } set {; } }
+		public string Texture { get { return "bottombarmid"; } set {; } }
 
         public BottomBarModel Model { get; set; }
 
@@ -39,7 +33,9 @@ namespace kbs2.UserInterface
 		{
 		}
 
-        public BottomBarView(GraphicsDevice GraphicsDevice)
+		public List<IGuiViewImage> GetContents() => new List<IGuiViewImage>();
+
+		public BottomBarView(GraphicsDevice GraphicsDevice)
 		{
 			this.GraphicsDevice = GraphicsDevice;
             Model = new BottomBarModel(this);

@@ -44,5 +44,7 @@ namespace kbs2.WorldEntity.Interfaces
         /// Entity's height in cells
         /// </summary>
         float Height { get; }
+
+        ViewMode ViewMode { set; }
     }
 }

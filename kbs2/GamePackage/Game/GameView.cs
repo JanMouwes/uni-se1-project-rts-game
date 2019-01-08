@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using kbs2.Actions;
 using kbs2.Desktop.View.Camera;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World;
@@ -38,10 +39,10 @@ namespace kbs2.GamePackage
                 Vector2 bottomRight = Vector2.Transform(new Vector2(graphicsDevice.Viewport.X + graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Y + graphicsDevice.Viewport.Height), camera.GetInverseViewMatrix()) / 20;
 
                 return (from viewText in SortByZIndex(gameModel.TextList)
-                    where !(viewText.Coords.x >= topLeft.X
-                            && viewText.Coords.y >= topLeft.Y
-                            && viewText.Coords.x <= bottomRight.X
-                            && viewText.Coords.y <= bottomRight.Y)
+                    where !(viewText.Coords.x < topLeft.X
+                            || viewText.Coords.y < topLeft.Y
+                            || viewText.Coords.x > bottomRight.X
+                            || viewText.Coords.y > bottomRight.Y)
                     select viewText).ToList();
             }
         }
@@ -87,6 +88,8 @@ namespace kbs2.GamePackage
             return cachedSpritefonts[spritefont];
         }
 
+        private double CalculateRotation(double rotation) => (rotation > 0 || rotation < 0) ? (float) (Math.PI / (180 / rotation)) : 0;
+
         // Draws every item in the DrawList with camera offset
         private void DrawNonGui()
         {
@@ -95,8 +98,17 @@ namespace kbs2.GamePackage
             {
                 Texture2D texture = ProvideTexture(drawItem.Texture);
 
-                Color color = drawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : drawItem.Colour;
-                spriteBatch.Draw(texture, new Rectangle((int) (drawItem.Coords.x * TileSize), (int) (drawItem.Coords.y * TileSize), (int) (drawItem.Width * TileSize), (int) (drawItem.Height * TileSize)), color);
+                Color colour = drawItem.ViewMode == ViewMode.Fog ? Color.DarkGray : drawItem.Colour;
+                spriteBatch.Draw(
+                    texture: texture,
+                    destinationRectangle: new Rectangle((int) (drawItem.Coords.x * TileSize), (int) (drawItem.Coords.y * TileSize), (int) (drawItem.Width * TileSize), (int) (drawItem.Height * TileSize)),
+                    sourceRectangle: null,
+                    color: colour,
+                    rotation: (float) CalculateRotation(drawItem.Rotation),
+                    origin: Vector2.Zero,
+                    effects: SpriteEffects.None,
+                    layerDepth: 1
+                );
             }
 
             foreach (IViewText drawItem in DrawText)

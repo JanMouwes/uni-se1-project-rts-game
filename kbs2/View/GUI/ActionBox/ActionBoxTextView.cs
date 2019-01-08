@@ -7,6 +7,7 @@ namespace kbs2.View.GUI.ActionBox
 {
     public class ActionBoxTextView : IViewText
     {
+        public double Rotation { get; }
         public FloatCoords Coords { get; set; }
         public string SpriteFont { get; set; }
         public string Text { get; set; }

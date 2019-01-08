@@ -42,12 +42,13 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
         public float Height => View.Height;
 
         public Faction_Controller Faction { get; set; }
+        public ViewMode ViewMode { set => Model.ViewMode = value; }
 
         public BuildingController(BuildingDef def)
         {
             Model.Def = def;
-
             BuildingView = new BuildingView(Model);
+            BuildingView.ViewMode = ViewMode.Full;
         }
 
         public void Update(object sender, OnTickEventArgs eventArgs)

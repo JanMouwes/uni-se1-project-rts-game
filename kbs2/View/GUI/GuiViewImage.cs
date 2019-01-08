@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using kbs2.GamePackage.Interfaces;
 using kbs2.World;
 using kbs2.World.Structs;
@@ -9,6 +10,8 @@ namespace kbs2.View.GUI
     public interface IGuiViewImage : IViewImage
     {
         void Click();
+
+        List<IGuiViewImage> GetContents();
     }
 
     public abstract class GuiViewImage : IGuiViewImage
@@ -25,11 +28,15 @@ namespace kbs2.View.GUI
             Texture = viewValues.Image;
         }
 
+        public double Rotation { get; }
         public virtual FloatCoords Coords { get; protected set; }
         public virtual float Width { get; protected set; }
         public virtual float Height { get; protected set; }
         public virtual string Texture { get; protected set; }
 
+
         public abstract void Click();
+
+        public virtual List<IGuiViewImage> GetContents() => new List<IGuiViewImage>();
     }
 }
