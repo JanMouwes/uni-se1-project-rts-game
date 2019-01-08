@@ -44,8 +44,8 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
         public BuildingController(BuildingDef def)
         {
             Model.Def = def;
-
             BuildingView = new BuildingView(Model);
+            BuildingView.ViewMode = ViewMode.Full;
         }
 
         public void Update(object sender, OnTickEventArgs eventArgs)
