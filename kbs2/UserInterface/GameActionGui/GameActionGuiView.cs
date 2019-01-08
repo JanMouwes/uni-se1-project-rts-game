@@ -30,13 +30,15 @@ namespace kbs2.UserInterface.GameActionGui
 
         public ViewMode ViewMode => ViewMode.Full;
 
-        public IEnumerable<IViewItem> GetContents => ((model.CurrentTab != null) 
-            ? model.CurrentTab.GameActionTabItems.Where(item => item != null).Select(item => (IViewItem) item).ToList() 
+        public IEnumerable<IViewItem> GetContents => ((model.CurrentTab != null)
+            ? model.CurrentTab.GameActionTabItems.Where(item => item != null).Select(item => (IViewItem) item).ToList()
             : new List<IViewItem>()).Concat(new List<IViewItem>() { });
 
         public void Click()
         {
         }
+
+        List<IGuiViewImage> IGuiViewImage.GetContents() => GetContents.Select(item => (IGuiViewImage) item).ToList();
 
         public GameActionGuiView(GameActionGuiModel model)
         {
