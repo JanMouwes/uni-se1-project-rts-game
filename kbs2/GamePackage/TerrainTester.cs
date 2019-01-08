@@ -8,6 +8,7 @@ namespace kbs2.GamePackage
 {
     public class TerrainTester : IViewText
     {
+        public double Rotation { get; }
         public FloatCoords Coords { get; set; }
 
         public string SpriteFont

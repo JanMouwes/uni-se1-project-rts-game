@@ -1,23 +1,34 @@
-﻿using kbs2.Actions.Interfaces;
+﻿using System.Collections.Generic;
+using kbs2.Actions.Interfaces;
 using kbs2.GamePackage.EventArgs;
+using kbs2.World.Structs;
 using kbs2.WorldEntity.Interfaces;
 using kbs2.WorldEntity.Structs;
 
-namespace kbs2.Actions.GameActions
+namespace kbs2.Actions.MapActions
 {
-    public abstract class MapAction<TActionDef> : IMapAction where TActionDef : IMapActionDef
+    public abstract class MapAction<TSenderDef, TActionDef> : IMapAction where TActionDef : IMapActionDef
     {
-        protected TActionDef ActionDef { get; }
+        public delegate void MapActionExecutedDelegate(TSenderDef sender, EventArgsWithPayload<FloatCoords> eventArgs);
 
-        public uint CurrentCooldown { get; set; }
+        public event MapActionExecutedDelegate MapActionExecuted;
 
-        public abstract void Execute(ITargetable target);
+        public TActionDef ActionDef { get; }
+
+        public uint CurrentCooldown { get; set; } = 0;
+
+        public abstract bool TryExecute(ITargetable target);
+        public abstract bool IsValidTarget(ITargetable targetable);
+
+        protected void InvokeMapActionExecuted(TSenderDef sender, FloatCoords coords) => MapActionExecuted?.Invoke(sender, new EventArgsWithPayload<FloatCoords>(coords));
+
+        private int previousCooldownUpdate;
 
         protected MapAction(TActionDef actionDef, ViewValues iconValues)
         {
             ActionDef = actionDef;
             IconValues = iconValues;
-            CurrentCooldown = actionDef.CooldownTime;
+            CurrentCooldown = 0;
         }
 
         /// <summary>
@@ -25,11 +36,20 @@ namespace kbs2.Actions.GameActions
         /// </summary>
         /// <param name="sender">Event sender</param>
         /// <param name="eventArgs">EventArgs in gametime</param>
-        public void Update(object sender, OnTickEventArgs eventArgs)
+        public virtual void Update(object sender, OnTickEventArgs eventArgs)
         {
-            CurrentCooldown -= (uint) eventArgs.GameTime.ElapsedGameTime.TotalSeconds;
+            double thisSecond = eventArgs.GameTime.TotalGameTime.TotalSeconds;
+            int thisSecondInt = (int) thisSecond;
+
+            //    Update cooldown-time
+            if (thisSecondInt <= previousCooldownUpdate || CurrentCooldown <= 0) return;
+            previousCooldownUpdate = thisSecondInt;
+            CurrentCooldown--;
         }
 
+        protected bool CooldownPassed => CurrentCooldown <= 0;
+
         public ViewValues IconValues { get; }
+        public abstract List<MapActionAnimationItem> GetAnimationItems(FloatCoords from, FloatCoords to);
     }
 }

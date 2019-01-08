@@ -61,6 +61,7 @@
     <Compile Include="BuildingFactoryTests.cs" />
     <Compile Include="CoordsCalculatorTests.cs" />
     <Compile Include="CurrencyTest.cs" />
+    <Compile Include="DistanceCalculatorTests.cs" />
     <Compile Include="EntitySpawnerTests.cs" />
     <Compile Include="FactionTests.cs" />
     <Compile Include="GameControllerTests.cs" />

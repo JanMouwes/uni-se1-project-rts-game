@@ -5,6 +5,7 @@ using kbs2.Faction.Interfaces;
 using kbs2.Unit;
 using kbs2.Unit.Interfaces;
 using kbs2.World.Enums;
+using kbs2.WorldEntity.Health;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
@@ -22,11 +23,18 @@ namespace kbs2.WorldEntity.Unit.MVC
 
         public float Speed { get; set; }
 
-        public List<IGameAction> Actions { get; } = new List<IGameAction>();
+        public List<IGameAction> Actions => Def.GameActions;
+
+        public HealthValues HealthValues { get; set; }
 
         public Unit_Model(UnitDef def)
         {
             Def = def;
+            HealthValues = new HealthValues()
+            {
+                CurrentHP = def.MaxHealth,
+                MaxHP = def.MaxHealth
+            };
             Selected = false;
         }
     }

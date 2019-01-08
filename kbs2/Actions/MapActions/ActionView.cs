@@ -15,6 +15,7 @@ namespace kbs2.Actions.ActionMVC
         public int index { get; set; }
 
         //stuff from IViewable
+        public double Rotation { get; }
         public FloatCoords Coords { get => ActionButtonPosition.GetPosition(gameController, index); set {; } }
         public float Width { get {return ActionButtonPosition.ButtonSize; } set {; } }
         public float Height { get { return ActionButtonPosition.ButtonSize; } set {; } }

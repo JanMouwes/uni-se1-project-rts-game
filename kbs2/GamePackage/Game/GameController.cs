@@ -20,12 +20,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
+using kbs2.Actions.ActionTabActions;
 using kbs2.Actions.GameActionDefs;
 using kbs2.Actions.GameActionGrid;
 using kbs2.Actions.GameActions;
 using kbs2.Actions.GameActionSelector;
 using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
+using kbs2.GamePackage.Animation;
+using kbs2.GamePackage.Interfaces;
+using kbs2.GamePackage.Selection;
 using kbs2.UserInterface.GameActionGui;
 using kbs2.View.GUI;
 using kbs2.WorldEntity.Interfaces;
@@ -58,6 +62,8 @@ namespace kbs2.GamePackage
 
         public IMapAction SelectedMapAction => MapActionSelector.SelectedMapAction;
         public readonly MapActionSelector MapActionSelector;
+
+        public readonly AnimationController AnimationController;
 
         public GameTime LastUpdateGameTime { get; private set; }
 
@@ -134,6 +140,9 @@ namespace kbs2.GamePackage
             GameStateChange += PauseGame;
             GameStateChange += UnPauseGame;
 
+            AnimationController = new AnimationController();
+
+
             PlayerFaction = new Faction_Controller("PlayerFaction", this);
 
             MapActionSelector = new MapActionSelector();
@@ -197,6 +206,14 @@ namespace kbs2.GamePackage
             // Pathfinder 
             GameModel.pathfinder = new Pathfinder(GameModel.World);
 
+            //    Animation-frame-loading
+            onTick += (sender, args) =>
+            {
+                List<IViewItem> frameViewItems = AnimationController.NextFrame;
+                GameModel.ItemList.AddRange(frameViewItems.OfType<IViewImage>());
+                GameModel.TextList.AddRange(frameViewItems.OfType<IViewText>());
+            };
+
             // Spawner
             Spawner = new EntitySpawner(this);
 
@@ -242,11 +259,17 @@ namespace kbs2.GamePackage
             UnitDef unitdef = DBController.GetUnitDef(1);
             DBController.CloseConnection();
 
+
             for (int i = 0; i < 12; i++)
             {
                 FloatCoords coords = new FloatCoords() {x = i, y = 5};
-                UnitController unit = UnitFactory.CreateNewUnit(unitdef, coords, GameModel.World, PlayerFaction);
+
+                UnitFactory unitFactory = new UnitFactory(PlayerFaction, this);
+
+                UnitController unit = unitFactory.CreateNewUnit(unitdef);
+
                 unit.LocationController.chunkChanged += LoadNewChunks;
+
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 Spawner.SpawnUnit(unit, (Coords) coords);
             }
@@ -256,6 +279,23 @@ namespace kbs2.GamePackage
             MouseStateChange += GameModel.MouseInput.OnMouseStateChange;
             MouseStateChange += GameModel.ActionBox.OnRightClick;
             //TESTCODE
+
+            // NOT TESTCODE
+            onTick += (sender, args) =>
+            {
+                MouseState mouseState = Mouse.GetState();
+
+                Coords mouseCellCoords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords()
+                {
+                    x = mouseState.X,
+                    y = mouseState.Y
+                }, Camera.GetViewMatrix(), GameView.TileSize);
+
+                IWorldEntity worldEntity;
+                if (!CellContainsIWorldEntity((FloatCoords) mouseCellCoords, out worldEntity)) return;
+
+                GameModel.ItemList.Add(new SelectableImage(worldEntity));
+            };
         }
 
 
@@ -333,6 +373,31 @@ namespace kbs2.GamePackage
         private bool ChunkExists(Coords chunkCoords) => GameModel.World.WorldModel.ChunkGrid.ContainsKey(chunkCoords) &&
                                                         GameModel.World.WorldModel.ChunkGrid[chunkCoords] != null;
 
+        public bool CellContainsIWorldEntity(FloatCoords coords, out IWorldEntity targetable)
+        {
+            IEnumerable<TITargetableType> CellsITargetable<TITargetableType>(IEnumerable<TITargetableType> source) where TITargetableType : ITargetable =>
+                from item in source
+                where (Coords) item.FloatCoords == (Coords) coords
+                select item;
+
+            //    IStructure
+            IStructure<IStructureDef> cellsStructure;
+            bool cellContainsStructure = GameModel.World.CellContainsStructure((Coords) coords, out cellsStructure);
+
+            //    Unit
+            IEnumerable<UnitController> cellsUnit = CellsITargetable(GameModel.World.WorldModel.Units).ToList();
+            bool cellContainsUnit = cellsUnit.Any();
+
+            bool result = cellContainsStructure || cellContainsUnit;
+
+            targetable = null;
+            if (!result) return false;
+
+            targetable = cellContainsUnit ? (IWorldEntity) cellsUnit.First() : cellsStructure;
+
+            return true;
+        }
+
         /// <summary>
         /// This function and its actions need to be refactored
         /// </summary>
@@ -373,24 +438,14 @@ namespace kbs2.GamePackage
 
             if (Keyboard.GetState().IsKeyDown(Keys.Z)) GameState = GameState.Running;
 
-            if (gameState == GameState.Paused) return;
-
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            LastUpdateGameTime = gameTime;
 
             // Updates camera according to the pressed buttons
             Camera.MoveCamera();
 
-            // Clears the itemList
-            GameModel.ItemList.Clear();
-            GameModel.TextList.Clear();
+            //    Clear gui-item-list always
             GameModel.GuiItemList.Clear();
             GameModel.GuiTextList.Clear();
-
             AddGui();
-
             // ============== Temp Code ===================================================================
 
 
@@ -421,7 +476,20 @@ namespace kbs2.GamePackage
 
                 GameModel.GuiTextList.Add(fogtester);
             }
+            
+            
+            if (gameState == GameState.Paused) return;
 
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            LastUpdateGameTime = gameTime;
+            // Clears the itemList
+
+            GameModel.ItemList.Clear();
+            GameModel.TextList.Clear();
+
+            
             // Update Buildings & constructing buildings on screen
             GameModel.ItemList.AddRange(GameModel.World.WorldModel.Structures.Select(building => building.View));
             GameModel.TextList.AddRange(GameModel.World.WorldModel.UnderConstruction.Select(building => building.Counter));
@@ -708,6 +776,9 @@ namespace kbs2.GamePackage
                 IGameAction[] mapActions = gameActionHolder.GameActions.ToArray();
                 GameActionTabModel gameActionTabModel = new GameActionTabModel(mapActions, GameActionGui);
                 gameActionTabModels.Add(gameActionTabModel);
+
+                if (!gameActionHolder.GameActions.Any(item => item is SelectMapAction_GameAction)) continue;
+                MapActionSelector.Select(gameActionHolder.GameActions.OfType<SelectMapAction_GameAction>().First().MapAction);
             }
 
             GameActionGui.SetActions(gameActionTabModels);

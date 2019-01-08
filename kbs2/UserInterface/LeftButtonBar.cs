@@ -16,6 +16,7 @@ namespace kbs2.UserInterface
 		};
 
 
+		public double Rotation { get; }
 		public FloatCoords Coords { get { return (FloatCoords)coords; } set {; } }
 		public float Height { get { return (int)(GraphicsDevice.Viewport.Width *.03); } set {; } }
 		public float Width { get { return (int)(GraphicsDevice.Viewport.Width * .12); } set {; } }

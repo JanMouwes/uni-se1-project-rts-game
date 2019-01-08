@@ -14,7 +14,8 @@ namespace kbs2.UserInterface
             x = 0,
             y = gameController.GraphicsDevice.Viewport.Height -140
         };
-        
+
+        public double Rotation { get; }
         public FloatCoords Coords { get { return (FloatCoords)coords; } set {; } }
         public float Height { get { return 140; } set {; } }
         public float Width { get { return gameController.GraphicsDevice.Viewport.Width; } set {; } }

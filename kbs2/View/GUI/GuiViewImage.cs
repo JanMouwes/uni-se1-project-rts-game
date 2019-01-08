@@ -25,6 +25,7 @@ namespace kbs2.View.GUI
             Texture = viewValues.Image;
         }
 
+        public double Rotation { get; }
         public virtual FloatCoords Coords { get; protected set; }
         public virtual float Width { get; protected set; }
         public virtual float Height { get; protected set; }

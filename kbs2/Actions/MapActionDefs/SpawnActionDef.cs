@@ -1,4 +1,8 @@
+using System.Collections.Generic;
+using kbs2.Actions.MapActionDefs;
+using kbs2.World.Structs;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Structs;
 
 namespace kbs2.Actions.GameActionDefs
 {
@@ -30,9 +34,11 @@ namespace kbs2.Actions.GameActionDefs
 
         public virtual ISpawnableDef SpawnableDef { get; set; }
 
-        public SpawnActionDef(uint cooldown, string imageSource, ISpawnableDef spawnableDef) : base(cooldown, imageSource)
+        public SpawnActionDef(uint cooldown, string imageSource, ISpawnableDef spawnableDef) : base(cooldown, new ViewValues(imageSource, 20, 20))
         {
             this.SpawnableDef = spawnableDef;
         }
+
+        public override List<MapActionAnimationItem> GetAnimationItems(FloatCoords @from, FloatCoords to) => new List<MapActionAnimationItem>();
     }
 }

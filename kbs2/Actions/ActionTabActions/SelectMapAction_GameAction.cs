@@ -10,8 +10,12 @@ namespace kbs2.Actions.ActionTabActions
         public ViewValues IconValues { get; set; }
         public void InvokeClick() => Clicked?.Invoke();
 
+        public IMapAction MapAction { get; }
+
         public SelectMapAction_GameAction(GameActionSelector.MapActionSelector selector, IMapAction mapAction, ViewValues iconValues)
         {
+            MapAction = mapAction;
+            
             IconValues = iconValues;
             Clicked += () =>
             {
