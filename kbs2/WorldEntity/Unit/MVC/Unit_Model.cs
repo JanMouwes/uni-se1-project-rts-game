@@ -7,6 +7,8 @@ using kbs2.Unit;
 using kbs2.Unit.Interfaces;
 using kbs2.World.Enums;
 using kbs2.WorldEntity.Health;
+using kbs2.WorldEntity.Unit;
+using kbs2.WorldEntity.Unit.MVC;
 
 namespace kbs2.Unit.Model
 {
@@ -47,8 +49,8 @@ namespace kbs2.Unit.Model
             Def = def;
             HealthValues = new HealthValues()
             {
-                CurrentHP = def.MaxHealth,
-                MaxHP = def.MaxHealth
+                CurrentHP = def.HPDef.MaxHP,
+                MaxHP = def.HPDef.CurrentHP
             };
             Selected = false;
             Order = Command.Idle;

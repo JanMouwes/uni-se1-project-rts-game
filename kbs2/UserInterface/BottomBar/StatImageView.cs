@@ -24,6 +24,8 @@ namespace kbs2.UserInterface.BottomBar
 
         public ViewMode ViewMode => ViewMode.Full;
 
+        public double Rotation => throw new NotImplementedException();
+
         // ENTITY IMAGE
         public StatImageView(FloatCoords coords, IViewImage entity)
         {
@@ -60,6 +62,11 @@ namespace kbs2.UserInterface.BottomBar
         public void Click()
         {
             
+        }
+
+        public List<IGuiViewImage> GetContents()
+        {
+            throw new NotImplementedException();
         }
     }
 }

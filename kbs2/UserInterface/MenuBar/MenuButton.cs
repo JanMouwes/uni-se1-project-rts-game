@@ -21,5 +21,7 @@ namespace kbs2.UserInterface.MenuBar
         public Color Colour { get; set; }
 
         public ViewMode ViewMode => ViewMode.Full;
+
+        public double Rotation => throw new NotImplementedException();
     }
 }

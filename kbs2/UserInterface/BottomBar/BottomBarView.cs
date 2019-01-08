@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using kbs2.UserInterface.BottomBar;
 using kbs2.View.GUI;
 using kbs2.World;
 using kbs2.World.Structs;

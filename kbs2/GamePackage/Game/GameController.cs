@@ -208,6 +208,7 @@ namespace kbs2.GamePackage
             // Create CPU player
             CPU1 = CPU_Factory.CreateSimpleCpu(new Faction_Controller("CPU1", this));
 
+            //GameModel.Factions.Add((SimpleAI)(CPU1.CpuModel.AI).Faction);
 
             FogController = new FogController(PlayerFaction, GameModel.World);
 
@@ -266,10 +267,11 @@ namespace kbs2.GamePackage
 
             //TESTCODE
             DBController.OpenConnection("DefDex.db");
-            UnitDef unitdef = DBController.GetUnitDef(1);
+            UnitDef unitdef = DBController.GetUnitDef(2);
             UnitDef unitdef2 = DBController.GetUnitDef(2);
             DBController.CloseConnection();
 
+            
 
             for (int i = 0; i < 12; i++)
             {
@@ -286,9 +288,11 @@ namespace kbs2.GamePackage
             }
 
             // Create a unit for the CPU1 Faction
+            /*UnitFactory unitFactory2 = new UnitFactory(, this);
+
             FloatCoords coords2 = new FloatCoords() { x = 20, y = 20 };
-            UnitController unit2 = UnitFactory.CreateNewUnit(unitdef2, coords2, GameModel.World, ((SimpleAI)CPU1.CpuModel.AI).Faction);
-            Spawner.SpawnUnit(unit2, (Coords)coords2);
+            UnitController unit2 = unitFactory2.CreateNewUnit(unitdef2);
+            Spawner.SpawnUnit(unit2, (Coords)coords2);*/
 
             //============= More TestCode ===============
 
@@ -521,13 +525,13 @@ namespace kbs2.GamePackage
             GameModel.ItemList.AddRange(GameModel.World.WorldModel.Units.Select(unit => unit.View));
 
             // Fires update function for all CPU players
-            CPU1.CpuModel.AI.Update(GameModel.Factions);
+            //CPU1.CpuModel.AI.Update(GameModel.Factions);
 
-            if (GameModel.ActionBox.BoxModel.Show)
+            /*if (GameModel.ActionBox.BoxModel.Show)
             {
                 //                GameModel.GuiItemList.Add(GameModel.ActionBox.BoxView);
                 GameModel.GuiTextList.Add(GameModel.ActionBox.BoxModel.Text);
-            }
+            }*/
 
             //    Calculate viewport-bounds
             Coords leftTopViewBound = (Coords)WorldPositionCalculator.WindowCoordsToCellCoords(new Coords

@@ -17,7 +17,7 @@ namespace kbs2.WorldEntity.Unit
         public float Height;
         public string Name;
         public BattleDef BattleDef => new BattleDef();
-        public HPDef HPDef => new HPDef();
+        public HealthValues HPDef => new HealthValues();
         public LevelXPDef LevelXPDef => new LevelXPDef();
 
         public ViewValues ViewValues

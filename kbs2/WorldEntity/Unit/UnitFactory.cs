@@ -44,8 +44,8 @@ namespace kbs2.WorldEntity.Unit
                 {
                     HPModel =
                     {
-                        CurrentHP = def.HPDef.CurrentHP,
-                        MaxHP = def.HPDef.MaxHP
+                        CurrentHP = (int)def.HPDef.CurrentHP,
+                        MaxHP = (int)def.HPDef.MaxHP
                     }
                 }
             };

@@ -22,6 +22,8 @@ namespace kbs2.UserInterface.BottomBar
 
         public ViewMode ViewMode => ViewMode.Full;
 
+        public double Rotation => throw new NotImplementedException();
+
         // Health
         public StatTextView(FloatCoords coords, HP_Model healthModel) : this(coords, $"{healthModel.CurrentHP} / {healthModel.MaxHP}") { Colour = Color.Red; }
 

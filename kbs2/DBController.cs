@@ -264,7 +264,7 @@ namespace kbs2
         {
             UnitDef returnedUnitDef = new UnitDef();
 
-            string query = $"SELECT * FROM UnitDef JOIN HPDef ON UnitDef.Id = HPDef.UnitDefId WHERE Id=@i";
+            string query = $"SELECT * FROM UnitDef JOIN Def_HealthValues AS H ON UnitDef.Id = H.id WHERE UnitDef.Id=@i";
                 
 
             using (SqliteCommand cmd = new SqliteCommand(query, DBConn))
@@ -280,10 +280,14 @@ namespace kbs2
                         returnedUnitDef.Width = float.Parse(reader["Width"].ToString());
                         returnedUnitDef.Height = float.Parse(reader["Height"].ToString());
                         returnedUnitDef.Name = reader["Name"].ToString();
+                        returnedUnitDef.Upkeep = float.Parse(reader["Upkeep"].ToString());
+                        returnedUnitDef.PurchaseCost = float.Parse(reader["Cost"].ToString());
+                        returnedUnitDef.ViewRange = int.Parse(reader["ViewRange"].ToString());
+                        returnedUnitDef.TrainingTime = uint.Parse(reader["TrainingTime"].ToString());
 
                         int healthDefId = int.Parse(reader["health_values_id"].ToString());
 
-                        returnedUnitDef.MaxHealth = GetHealth(healthDefId).MaxHealth;
+                        returnedUnitDef.HPDef.MaxHP = GetHealth(healthDefId).MaxHealth;
 
                         // This is for the different defs not implemented yet
                         //returnedUnitDef.BattleDef.AttackModifier = double.Parse(reader["BattleDef.AttackModifier"].ToString());
@@ -291,9 +295,6 @@ namespace kbs2
                         //returnedUnitDef.BattleDef.Accuracy = double.Parse(reader["BattleDef.Accuracy"].ToString());
                         //returnedUnitDef.BattleDef.DodgeChance = double.Parse(reader["BattleDef.DodgeChance"].ToString());
                         //returnedUnitDef.BattleDef.RangeModifier = double.Parse(reader["BattleDef.RangeModifier"].ToString());
-
-                        returnedUnitDef.HPDef.CurrentHP = int.Parse(reader["CurrentHP"].ToString());
-                        returnedUnitDef.HPDef.MaxHP = int.Parse(reader["MaxHP"].ToString());
 
                         //returnedUnitDef.LevelXPDef.Level = int.Parse(reader["LevelXPDef.Level"].ToString());
                         //returnedUnitDef.LevelXPDef.XP = int.Parse(reader["LevelXPDef.XP"].ToString());
