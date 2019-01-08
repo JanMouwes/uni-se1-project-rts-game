@@ -32,7 +32,7 @@ namespace kbs2.utils
         {
             return DrawCoordsToCellFloatCoords(TransformWindowCoords(windowCoords, viewMatrix), tileSize);
         }
-        
+
         //    Calculates cell-coords from draw-coords.
         public static Coords DrawCoordsToCellCoords(Coords drawCoords, int tileSize) =>
             (Coords) DrawCoordsToCellFloatCoords((FloatCoords) drawCoords, tileSize);
@@ -62,8 +62,8 @@ namespace kbs2.utils
 
         public static FloatCoords DrawCoordsToCellFloatCoords(FloatCoords drawCoords, int tileSize) => new FloatCoords
         {
-            x = drawCoords.x / tileSize - (drawCoords.x < 0 ? 1 : 0),
-            y = drawCoords.y / tileSize - (drawCoords.y < 0 ? 1 : 0)
+            x = (drawCoords.x / tileSize) - (drawCoords.x < 0 ? 1f : 0f),
+            y = (drawCoords.y / tileSize) - (drawCoords.y < 0 ? 1f : 0f)
         };
     }
 }

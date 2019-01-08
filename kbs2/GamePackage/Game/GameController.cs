@@ -284,14 +284,14 @@ namespace kbs2.GamePackage
             {
                 MouseState mouseState = Mouse.GetState();
 
-                Coords mouseCellCoords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords()
+                FloatCoords mouseCellCoords = WorldPositionCalculator.WindowCoordsToCellCoords(new Coords()
                 {
                     x = mouseState.X,
                     y = mouseState.Y
                 }, Camera.GetViewMatrix(), GameView.TileSize);
 
                 IWorldEntity worldEntity;
-                if (!CellContainsIWorldEntity((FloatCoords) mouseCellCoords, out worldEntity)) return;
+                if (!CellContainsIWorldEntity(mouseCellCoords, out worldEntity)) return;
 
                 GameModel.ItemList.Add(new SelectableImage(worldEntity));
             };
