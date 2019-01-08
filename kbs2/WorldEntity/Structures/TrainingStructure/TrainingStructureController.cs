@@ -100,5 +100,6 @@ namespace kbs2.WorldEntity.Structures.TrainingStructure
         }
 
         public List<IGameAction> GameActions { get; } = new List<IGameAction>();
+        public ViewMode ViewMode { set => Model.ViewMode = value; }
     }
 }

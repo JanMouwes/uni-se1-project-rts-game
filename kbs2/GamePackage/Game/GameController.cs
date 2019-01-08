@@ -52,6 +52,8 @@ namespace kbs2.GamePackage
 
     public class GameController : Game
     {
+        public const int CHUNK_LOAD_RANGE = 2;
+
         public int Id { get; } = -1;
 
         public GameModel GameModel { get; set; }
@@ -94,6 +96,10 @@ namespace kbs2.GamePackage
         public MouseState PreviousMouseButtonsStatus { get; set; }
 
         public virtual event OnTickHandler onTick;
+
+        // testcode
+        public bool F7Pressed { get; set; } = false;
+
 
         //    GameState and its event
         private GameState gameState;
@@ -195,7 +201,7 @@ namespace kbs2.GamePackage
 
             FogController = new FogController(PlayerFaction, GameModel.World);
 
-//            onTick += FogController.Update;
+
 
             // Pathfinder 
             GameModel.pathfinder = new Pathfinder(GameModel.World);
@@ -262,6 +268,7 @@ namespace kbs2.GamePackage
 
                 UnitController unit = unitFactory.CreateNewUnit(unitdef);
 
+                unit.LocationController.chunkChanged += LoadNewChunks;
 
                 unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
                 Spawner.SpawnUnit(unit, (Coords) coords);
@@ -339,6 +346,26 @@ namespace kbs2.GamePackage
             GameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
             shader();
         }
+
+        public void LoadNewChunks(object sender, EventArgsWithPayload<Coords> eventArgs)
+        {
+            for(int x = -CHUNK_LOAD_RANGE; x<=CHUNK_LOAD_RANGE; x++)
+            {
+                for(int y = -CHUNK_LOAD_RANGE; y <= CHUNK_LOAD_RANGE; y++)
+                {
+                    Coords chunkCoords = new Coords{ x = x, y = y }+eventArgs.Value;
+                    if (ChunkExists(chunkCoords)) continue;
+
+                    GameModel.World.WorldModel.ChunkGrid[chunkCoords] = WorldChunkLoader.ChunkGenerator(chunkCoords);
+                    shader();
+                }
+            }
+            if (!GameModel.FogEnabled)
+            {
+                FogController.SetEverything(ViewMode.Full);
+            }
+        }
+
 
         /// <summary>
         /// 
@@ -442,6 +469,12 @@ namespace kbs2.GamePackage
                 };
 
                 GameModel.GuiTextList.Add(tester);
+                TerrainTester fogtester = new TerrainTester(new FloatCoords { x = 0, y = 140 })
+                {
+                    Text = $"view: {GameModel.World.GetCellFromCoords(coords).worldCellView.ViewMode}"
+                };
+
+                GameModel.GuiTextList.Add(fogtester);
             }
             
             
@@ -511,14 +544,21 @@ namespace kbs2.GamePackage
             GameModel.GuiTextList.Add(PlayerFaction.CurrencyController.View);
 
             // Chunks generate when hovered over
-            mouseChunkLoadUpdate(gameTime);
+            //mouseChunkLoadUpdate(gameTime);
 
             // fire Ontick event
             Stopwatch tick_stopwatch = new Stopwatch();
             tick_stopwatch.Start();
 
+
+            if(GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Fog);
+
+
             OnTickEventArgs args = new OnTickEventArgs(gameTime);
             onTick?.Invoke(this, args);
+
+
+            if(GameModel.FogEnabled) FogController.UpdateViewModes(ViewMode.Full);
 
             tick_stopwatch.Stop();
 
@@ -526,7 +566,7 @@ namespace kbs2.GamePackage
             //updates the viewmode for everything on screen
 
             // comment line bellow to turn on fog
-            FogController.UpdateEverythingVisible();
+            //FogController.UpdateEverythingVisible();
 
             // Calls the game update
 
@@ -542,6 +582,23 @@ namespace kbs2.GamePackage
             AddShader();
 
             if (Keyboard.GetState().IsKeyDown(Keys.S)) SaveToDB();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F7)&& !F7Pressed) {
+                GameModel.FogEnabled = !GameModel.FogEnabled;
+                if (!GameModel.FogEnabled)
+                {
+                    FogController.SetEverything(ViewMode.Full);
+                }
+                else
+                {
+                    FogController.SetEverything(ViewMode.None);
+                }
+                F7Pressed = true;
+            }
+            if(!Keyboard.GetState().IsKeyDown(Keys.F7) && F7Pressed)
+            {
+                F7Pressed = false;
+            }
 
             stopwatch.Stop();
 
