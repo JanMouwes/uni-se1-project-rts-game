@@ -15,7 +15,7 @@ namespace kbs2.UserInterface.BottomBar
         public CurrentHPView CurHP { get; set; }
         public StatTextView StatName { get; set; }
 
-        public BottomBarStatView(BottomBarModel model, IViewImage entity, HP_Model healthModel)
+        public BottomBarStatView(BottomBarModel model, IViewImage entity, HealthValues healthModel)
         {
             Model = model;
             StatImage = new StatImageView(ListView(), entity);

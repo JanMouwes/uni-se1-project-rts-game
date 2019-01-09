@@ -79,10 +79,10 @@ namespace kbs2.UserInterface
             // Convert all IHasActions to Unit_Controllers
             List<IGameActionHolder> selection = eventArgs.Value;
             // Add new views to the model
-            foreach (UnitController unit in selection.OfType<UnitController>()) Model.StatViews.Add(new BottomBarStatView(Model, unit.UnitView, unit.HPController.HPModel));
+            foreach (UnitController unit in selection.OfType<UnitController>()) Model.StatViews.Add(new BottomBarStatView(Model, unit.UnitView, unit.HealthValues));
 
             // Add new views to the model
-            foreach (BuildingController building in selection.OfType<BuildingController>()) Model.StatViews.Add(new BottomBarStatView(Model, building.View, building.HPController.HPModel));
+            //foreach (BuildingController building in selection.OfType<BuildingController>()) Model.StatViews.Add(new BottomBarStatView(Model, building.View, building.HealthValues));
             /*
             if (Model.StatViews.Count == 1)
             {

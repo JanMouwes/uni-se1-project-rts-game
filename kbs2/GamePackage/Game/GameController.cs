@@ -305,7 +305,6 @@ namespace kbs2.GamePackage
             UnitController unit = unitFactory.CreateNewUnit(unitdef);
 
             unit.LocationController.chunkChanged += LoadNewChunks;
-
             unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
             Spawner.SpawnUnit(unit, currentCoords);
             Camera.LookAt(new Vector2(currentCoords.x * GameView.TileSize, currentCoords.y * GameView.TileSize));

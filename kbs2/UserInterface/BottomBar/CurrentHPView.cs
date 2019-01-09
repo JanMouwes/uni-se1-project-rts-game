@@ -19,14 +19,14 @@ namespace kbs2.UserInterface.BottomBar
         public FloatCoords Coords { get; set; }
         public int ZIndex { get; set; }
         public Color Colour { get; set; }
-        public HP_Model hpModel { get; set; }
+        public HealthValues hpModel { get; set; }
 
         public ViewMode ViewMode => ViewMode.Full;
 
         public double Rotation => throw new NotImplementedException();
         
         // CUR HP BAR
-        public CurrentHPView(FloatCoords coords, HP_Model hpModel, string image)
+        public CurrentHPView(FloatCoords coords, HealthValues hpModel, string image)
         {
             Coords = coords;
             Coords = new FloatCoords() { x = Coords.x + 1, y = Coords.y + 26 };
