@@ -275,21 +275,41 @@ namespace kbs2.GamePackage
             UnitDef unitdef2 = DBController.GetUnitDef(2);
             DBController.CloseConnection();
 
-            
+            // Get coords of a cell that has terrain a unit is allowed to walk on
+            Dictionary<int, Coords> itterator = new Dictionary<int, Coords>();
+            itterator.Add(0, new Coords {x = 0, y = 1});
+            itterator.Add(1, new Coords {x = 1, y = 0});
+            itterator.Add(2, new Coords {x = 0, y = -1});
+            itterator.Add(3, new Coords {x = -1, y = 0});
 
-            for (int i = 0; i < 12; i++)
+
+            List<Coords> CheckedCoords = new List<Coords>();
+            bool IsValid(Coords coords) => GameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain != TerrainType.Water;
+            bool Checked(Coords coords) => CheckedCoords.Contains(coords);
+
+            int i = 0;
+            Coords checkCoords = new Coords();
+            Coords currentCoords = new Coords();
+            while (!IsValid(currentCoords))
             {
-                FloatCoords coords = new FloatCoords() {x = i, y = 5};
+                if (!Checked(checkCoords)) i++;
 
-                UnitFactory unitFactory = new UnitFactory(PlayerFaction, this);
-
-                UnitController unit = unitFactory.CreateNewUnit(unitdef);
-
-                unit.LocationController.chunkChanged += LoadNewChunks;
-
-                unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
-                Spawner.SpawnUnit(unit, (Coords)coords);
+                Coords relativeCoords = itterator[i % 4];
+                currentCoords = checkCoords;
+                checkCoords = checkCoords + relativeCoords;
+                CheckedCoords.Add(currentCoords);
             }
+
+            UnitFactory unitFactory = new UnitFactory(PlayerFaction, this);
+
+            UnitController unit = unitFactory.CreateNewUnit(unitdef);
+
+            unit.LocationController.chunkChanged += LoadNewChunks;
+
+            unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
+            Spawner.SpawnUnit(unit, currentCoords);
+            Camera.LookAt(new Vector2(currentCoords.x * GameView.TileSize, currentCoords.y * GameView.TileSize));
+
 
             // Create a unit for the CPU1 Faction
             /*UnitFactory unitFactory2 = new UnitFactory(, this);
@@ -309,14 +329,14 @@ namespace kbs2.GamePackage
             {
                 MouseState mouseState = Mouse.GetState();
 
-                Coords mouseCellCoords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords()
+                FloatCoords mouseCellCoords = WorldPositionCalculator.WindowCoordsToCellCoords(new Coords()
                 {
                     x = mouseState.X,
                     y = mouseState.Y
                 }, Camera.GetViewMatrix(), GameView.TileSize);
 
                 IWorldEntity worldEntity;
-                if (!CellContainsIWorldEntity((FloatCoords) mouseCellCoords, out worldEntity)) return;
+                if (!CellContainsIWorldEntity(mouseCellCoords, out worldEntity)) return;
 
                 GameModel.ItemList.Add(new SelectableImage(worldEntity));
             };
@@ -354,8 +374,8 @@ namespace kbs2.GamePackage
                 y = mouseState.Y
             };
 
-            FloatCoords cellCoords = (FloatCoords)WorldPositionCalculator.DrawCoordsToCellCoords(
-                (Coords)WorldPositionCalculator.TransformWindowCoords(
+            FloatCoords cellCoords = (FloatCoords) WorldPositionCalculator.DrawCoordsToCellCoords(
+                (Coords) WorldPositionCalculator.TransformWindowCoords(
                     windowCoords,
                     Camera.GetViewMatrix()
                 ),
@@ -484,7 +504,7 @@ namespace kbs2.GamePackage
             Coords coords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(tempcoords, Camera.GetViewMatrix(), GameView.TileSize);
             if (GameModel.World.GetCellFromCoords(coords) != null)
             {
-                TerrainTester terrainTester = new TerrainTester(new FloatCoords() { x = 0, y = 100 })
+                TerrainTester terrainTester = new TerrainTester(new FloatCoords() {x = 0, y = 100})
                 {
                     Text = $"{coords.x},{coords.y}  {GameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain.ToString()}"
                 };
@@ -493,9 +513,9 @@ namespace kbs2.GamePackage
 
                 GameModel.GuiTextList.Add(terrainTester);
 
-                TerrainTester tester = new TerrainTester(new FloatCoords { x = 0, y = 120 })
+                TerrainTester tester = new TerrainTester(new FloatCoords {x = 0, y = 120})
                 {
-                    Text = $"Chunk: {WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords).x},{WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords)coords).y} "
+                    Text = $"Chunk: {WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).x},{WorldPositionCalculator.ChunkCoordsOfCellCoords((FloatCoords) coords).y} "
                 };
 
                 GameModel.GuiTextList.Add(tester);
@@ -527,22 +547,19 @@ namespace kbs2.GamePackage
             //    Update Units on screen
             GameModel.ItemList.AddRange(GameModel.World.WorldModel.Units.Select(unit => unit.View));
 
-            // Fires update function for all CPU players
-            //CPU1.CpuModel.AI.Update(GameModel.Factions);
-
-            /*if (GameModel.ActionBox.BoxModel.Show)
-            {
-                //                GameModel.GuiItemList.Add(GameModel.ActionBox.BoxView);
-                GameModel.GuiTextList.Add(GameModel.ActionBox.BoxModel.Text);
-            }*/
+//            if (GameModel.ActionBox.BoxModel.Show)
+//            {
+//                GameModel.GuiItemList.Add(GameModel.ActionBox.BoxView);
+//                GameModel.GuiTextList.Add(GameModel.ActionBox.BoxModel.Text);
+//            }
 
             //    Calculate viewport-bounds
-            Coords leftTopViewBound = (Coords)WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
+            Coords leftTopViewBound = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
             {
                 x = GraphicsDevice.Viewport.X,
                 y = GraphicsDevice.Viewport.Y
             }, Camera.GetViewMatrix(), GameView.TileSize);
-            Coords rightBottomViewBound = (Coords)WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
+            Coords rightBottomViewBound = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
             {
                 x = GraphicsDevice.Viewport.X + GraphicsDevice.Viewport.Width,
                 y = GraphicsDevice.Viewport.Y + GraphicsDevice.Viewport.Height
@@ -552,22 +569,22 @@ namespace kbs2.GamePackage
                 Math.Abs(leftTopViewBound.y - rightBottomViewBound.y));
 
             List<WorldChunkController> chunks = (from chunk in GameModel.World.WorldModel.ChunkGrid
-                                                 let rightBottomBound = new Coords
-                                                 {
-                                                     x = 20 + WorldChunkModel.ChunkSize,
-                                                     y = 20
-                                                 }
-                                                 let leftTopBound = new Coords
-                                                 {
-                                                     x = (chunk.Key.x * WorldChunkModel.ChunkSize),
-                                                     y = (chunk.Key.y * WorldChunkModel.ChunkSize)
-                                                 }
-                                                 let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y,
-                                                     Math.Abs(rightBottomBound.x),
-                                                     Math.Abs(rightBottomBound.y)
-                                                 )
-                                                 where (chunkRectangle.Intersects(viewRectangle))
-                                                 select chunk.Value).ToList();
+                let rightBottomBound = new Coords
+                {
+                    x = 20 + WorldChunkModel.ChunkSize,
+                    y = 20
+                }
+                let leftTopBound = new Coords
+                {
+                    x = (chunk.Key.x * WorldChunkModel.ChunkSize),
+                    y = (chunk.Key.y * WorldChunkModel.ChunkSize)
+                }
+                let chunkRectangle = new Rectangle(leftTopBound.x, leftTopBound.y,
+                    Math.Abs(rightBottomBound.x),
+                    Math.Abs(rightBottomBound.y)
+                )
+                where (chunkRectangle.Intersects(viewRectangle))
+                select chunk.Value).ToList();
 
             foreach (WorldChunkController chunk in chunks)
             {
@@ -692,9 +709,9 @@ namespace kbs2.GamePackage
                 BuildingDef def = DBController.GetBuildingDef(buildingId);
                 DBController.CloseConnection();
 
-                Coords tempCoords = new Coords { x = mouseState.X, y = mouseState.Y };
+                Coords tempCoords = new Coords {x = mouseState.X, y = mouseState.Y};
 
-                Coords coords = (Coords)WorldPositionCalculator.WindowCoordsToCellCoords(tempCoords, Camera.GetViewMatrix(), GameView.TileSize);
+                Coords coords = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(tempCoords, Camera.GetViewMatrix(), GameView.TileSize);
 
                 List<Coords> buildingCoords = new List<Coords>();
                 foreach (Coords buildingShape in def.BuildingShape) buildingCoords.Add(coords + buildingShape);
