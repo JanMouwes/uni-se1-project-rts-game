@@ -1,0 +1,50 @@
+﻿using kbs2.View.GUI;
+using kbs2.World;
+using kbs2.World.Structs;
+using kbs2.WorldEntity.Health;
+using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace kbs2.UserInterface.BottomBar
+{
+    public class CurrentHPView : IGuiViewImage
+    {
+        public float Width => (float)(((double)hpModel.CurrentHP / hpModel.MaxHP) * 28);
+        public float Height { get; set; }
+        public string Texture { get; set; }
+        public FloatCoords Coords { get; set; }
+        public int ZIndex { get; set; }
+        public Color Colour { get; set; }
+        public HP_Model hpModel { get; set; }
+
+        public ViewMode ViewMode => ViewMode.Full;
+
+        public double Rotation => throw new NotImplementedException();
+        
+        // CUR HP BAR
+        public CurrentHPView(FloatCoords coords, HP_Model hpModel, string image)
+        {
+            Coords = coords;
+            Coords = new FloatCoords() { x = Coords.x + 1, y = Coords.y + 26 };
+            this.hpModel = hpModel;
+            Height = 4;
+            Texture = image;
+            ZIndex = 1003;
+            Colour = Color.White;
+        }
+
+        public void Click()
+        {
+
+        }
+
+        public List<IGuiViewImage> GetContents()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

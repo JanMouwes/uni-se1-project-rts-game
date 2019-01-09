@@ -257,17 +257,21 @@ namespace kbs2.GamePackage
         protected override void LoadContent()
 
         {
+
+            bottomBarView = new BottomBarView(GraphicsDevice);
+
+
             //TESTCODE
 
             onTick += SetBuilding;
             onTick += TimeController.UpdateTime;
             onTick += GameModel.MouseInput.Selection.Update;
             GameModel.MouseInput.Selection.OnSelectionChanged += ChangeSelection;
-            GameModel.MouseInput.Selection.OnSelectionChanged += UpdateHUDOnSelect;
+            GameModel.MouseInput.Selection.OnSelectionChanged += bottomBarView.UpdateHUDOnSelect;
 
             //TESTCODE
             DBController.OpenConnection("DefDex.db");
-            UnitDef unitdef = DBController.GetUnitDef(2);
+            UnitDef unitdef = DBController.GetUnitDef(1);
             UnitDef unitdef2 = DBController.GetUnitDef(2);
             DBController.CloseConnection();
 
@@ -427,7 +431,6 @@ namespace kbs2.GamePackage
             StatusBarView statusBarView = new StatusBarView(GraphicsDevice);
             LeftButtonBar leftButtonBar = new LeftButtonBar(GraphicsDevice);
             RightButtonBar rightButtonBar = new RightButtonBar(GraphicsDevice);
-            bottomBarView = new BottomBarView(GraphicsDevice);
             MiniMapBar miniMap = new MiniMapBar(GraphicsDevice);
             GameActionGuiView actionBar = GameActionGui.View;
 
@@ -817,58 +820,6 @@ namespace kbs2.GamePackage
             GameActionGui.SetActions(gameActionTabModels);
         }
 
-        /// <summary>
-        /// Changes the HUD according to the selected entities
-        /// </summary>
-        /// <param name="eventArgs">List of selected entities</param>
-        public void UpdateHUDOnSelect(object sender, EventArgsWithPayload<List<IGameActionHolder>> eventArgs)
-        {
-            // Clean the GUI of selected entities
-            /*foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
-            {
-                GameModel.GuiItemList.Remove(view.StatImage);
-                GameModel.GuiItemList.Remove(view.CurHP);
-                GameModel.GuiItemList.Remove(view.MaxHP);
-                GameModel.GuiTextList.Remove(view.StatName);
-            }*/
-
-            //bottomBarView.Model.StatViews.Clear();
-
-            // Convert all IHasActions to Unit_Controllers
-            List<IGameActionHolder> units = GameModel.MouseInput.Selection.SelectUnits();
-            units.ConvertAll(o => (UnitController)o);
-            // Add new views to the model
-            foreach (UnitController unit in units)
-                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, unit.UnitView, unit.HPController.HPModel));
-            // Convert all IHasActions to Unit_Controllers
-            List<IGameActionHolder> buildings = GameModel.MouseInput.Selection.SelectBuildings();
-            buildings.ConvertAll(o => (BuildingController)o);
-            // Add new views to the model
-            foreach (BuildingController building in buildings)
-                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, building.View, building.HPController.HPModel));
-
-            if (bottomBarView.Model.StatViews.Count == 1)
-            {
-                if (units.Count > 0)
-                {
-                    bottomBarView.Model.StatViews[0].AddNameText(((UnitController)units[0]).UnitModel.Name);
-                }
-                else if (buildings.Count > 0)
-                {
-                    //bottomBarView.Model.StatViews[0].AddNameText(((BuildingController)buildings[0]));
-                }
-            }
-
-            // Adds the views to the gameModel
-            foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
-            {
-                GameModel.GuiItemList.Add(view.StatImage);
-                GameModel.GuiItemList.Add(view.MaxHP);
-                GameModel.GuiItemList.Add(view.CurHP);
-                if (view.StatName != null)
-                    GameModel.GuiTextList.Add(view.StatName);
-            }
-        }
 
         /// <summary>
         /// This is called when the game should draw itself.

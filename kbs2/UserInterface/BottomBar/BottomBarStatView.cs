@@ -12,7 +12,7 @@ namespace kbs2.UserInterface.BottomBar
 
         public StatImageView StatImage { get; set; }
         public StatImageView MaxHP { get; set; }
-        public StatImageView CurHP { get; set; }
+        public CurrentHPView CurHP { get; set; }
         public StatTextView StatName { get; set; }
 
         public BottomBarStatView(BottomBarModel model, IViewImage entity, HP_Model healthModel)
@@ -20,7 +20,7 @@ namespace kbs2.UserInterface.BottomBar
             Model = model;
             StatImage = new StatImageView(ListView(), entity);
             MaxHP = new StatImageView(ListView(), "hpbar");
-            CurHP = new StatImageView(ListView(), healthModel, "curhpbar");
+            CurHP = new CurrentHPView(ListView(), healthModel, "curhpbar");
         }
 
         public void AddNameText(string name)
