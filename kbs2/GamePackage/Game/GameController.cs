@@ -273,10 +273,10 @@ namespace kbs2.GamePackage
 
             // Get coords of a cell that has terrain a unit is allowed to walk on
             Dictionary<int, Coords> itterator = new Dictionary<int, Coords>();
-            itterator.Add(0, new Coords { x = 0, y = 1 });
-            itterator.Add(1, new Coords { x = 1, y = 0 });
-            itterator.Add(2, new Coords { x = 0, y = -1 });
-            itterator.Add(3, new Coords { x = -1, y = 0 });
+            itterator.Add(0, new Coords {x = 0, y = 1});
+            itterator.Add(1, new Coords {x = 1, y = 0});
+            itterator.Add(2, new Coords {x = 0, y = -1});
+            itterator.Add(3, new Coords {x = -1, y = 0});
 
 
             List<Coords> CheckedCoords = new List<Coords>();
@@ -370,8 +370,8 @@ namespace kbs2.GamePackage
                 y = mouseState.Y
             };
 
-            FloatCoords cellCoords = (FloatCoords)WorldPositionCalculator.DrawCoordsToCellCoords(
-                (Coords)WorldPositionCalculator.TransformWindowCoords(
+            FloatCoords cellCoords = (FloatCoords) WorldPositionCalculator.DrawCoordsToCellCoords(
+                (Coords) WorldPositionCalculator.TransformWindowCoords(
                     windowCoords,
                     Camera.GetViewMatrix()
                 ),
@@ -551,7 +551,7 @@ namespace kbs2.GamePackage
 //            }
 
             //    Calculate viewport-bounds
-            Coords leftTopViewBound = (Coords)WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
+            Coords leftTopViewBound = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
             {
                 x = GraphicsDevice.Viewport.X,
                 y = GraphicsDevice.Viewport.Y
@@ -853,24 +853,21 @@ namespace kbs2.GamePackage
 
             // Convert all IHasActions to Unit_Controllers
             List<IGameActionHolder> units = GameModel.MouseInput.Selection.SelectUnits();
-            units.ConvertAll(o => (UnitController)o);
             // Add new views to the model
-            foreach (UnitController unit in units)
-                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, unit.UnitView, unit.HPController.HPModel));
+            foreach (UnitController unit in units.OfType<UnitController>()) bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, unit.UnitView, unit.HPController.HPModel));
+
             // Convert all IHasActions to Unit_Controllers
-            List<IGameActionHolder> buildings = GameModel.MouseInput.Selection.SelectBuildings();
-            buildings.ConvertAll(o => (BuildingController)o);
+            List<IGameActionHolder> structures = GameModel.MouseInput.Selection.SelectBuildings();
             // Add new views to the model
-            foreach (BuildingController building in buildings)
-                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, building.View, building.HPController.HPModel));
+            foreach (BuildingController building in structures.OfType<BuildingController>()) bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, building.View, building.HPController.HPModel));
 
             if (bottomBarView.Model.StatViews.Count == 1)
             {
                 if (units.Count > 0)
                 {
-                    bottomBarView.Model.StatViews[0].AddNameText(((UnitController)units[0]).UnitModel.Name);
+                    bottomBarView.Model.StatViews[0].AddNameText(((UnitController) units[0]).UnitModel.Name);
                 }
-                else if (buildings.Count > 0)
+                else if (structures.Count > 0)
                 {
                     //bottomBarView.Model.StatViews[0].AddNameText(((BuildingController)buildings[0]));
                 }
