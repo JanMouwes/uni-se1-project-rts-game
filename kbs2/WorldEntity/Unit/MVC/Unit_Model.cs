@@ -50,7 +50,7 @@ namespace kbs2.Unit.Model
             HealthValues = new HealthValues()
             {
                 CurrentHP = def.HPDef.MaxHP,
-                MaxHP = def.HPDef.CurrentHP
+                MaxHP = def.HPDef.MaxHP
             };
             Selected = false;
             Order = Command.Idle;
