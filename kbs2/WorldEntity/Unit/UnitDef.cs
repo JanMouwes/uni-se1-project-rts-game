@@ -17,7 +17,7 @@ namespace kbs2.WorldEntity.Unit
         public float Height;
         public string Name;
         public BattleDef BattleDef => new BattleDef();
-        public HealthValues HPDef => new HealthValues();
+        public HealthValues HPDef { get; } = new HealthValues();
         public LevelXPDef LevelXPDef => new LevelXPDef();
 
         public ViewValues ViewValues
@@ -53,7 +53,7 @@ namespace kbs2.WorldEntity.Unit
         public double Cost { get; set; }
 
         public double UpkeepCost { get; set; }
-        
+
         public List<IGameAction> GameActions { get; } = new List<IGameAction>();
     }
 }
