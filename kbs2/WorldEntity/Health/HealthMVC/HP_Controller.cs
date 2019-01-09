@@ -2,20 +2,15 @@
 {
 	public class HP_Controller
 	{
-		private HP_Model HPModel;
+        public HP_Model HPModel => new HP_Model();
 
-		public HP_Controller()
+		public void AddHP()
 		{
-
+			
 		}
-
-		public int AddHP()
+		public void RemoveHP()
 		{
-			return 1;
-		}
-		public int RemoveHP()
-		{
-			return 1;
+			
 		}
 		private void AffectHP()
 		{

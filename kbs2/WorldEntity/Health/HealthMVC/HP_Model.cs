@@ -2,7 +2,7 @@
 {
 	public class HP_Model
 	{
-		public int CurrentHP;
-		public int MaxHP;
+		public int CurrentHP { get; set; }
+		public int MaxHP { get; set; }
 	}
 }

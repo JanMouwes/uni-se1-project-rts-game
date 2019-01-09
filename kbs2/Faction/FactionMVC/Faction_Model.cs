@@ -8,11 +8,13 @@ using kbs2.WorldEntity.Structures.ResourceFactory;
 
 namespace kbs2.Faction.FactionMVC
 {
-    public class FactionModel : IHasFactionUnit, IHasFactionBuilding
+    public class FactionModel : IFactionMember, IHasFactionBuilding
     {
+        public Faction_Controller Faction { get; set; }
+
         public string Name { get; set; }
         
-        public Dictionary<FactionModel, Faction_Relations> FactionRelationships { get; set; }
+        public Dictionary<Faction_Controller, Faction_Relations> FactionRelationships { get; set; }
 
         public List<IWorldEntity> Entities { get; } = new List<IWorldEntity>();
 
@@ -24,11 +26,10 @@ namespace kbs2.Faction.FactionMVC
             where building is ResourceFactoryController
             select (ResourceFactoryController) building;
 
-
         public FactionModel(string name)
         {
             Name = name;
-            FactionRelationships = new Dictionary<FactionModel, Faction_Relations>();
+            FactionRelationships = new Dictionary<Faction_Controller, Faction_Relations>();
             Units = new List<UnitController>();
             Buildings = new List<IStructure<IStructureDef>>();
         }

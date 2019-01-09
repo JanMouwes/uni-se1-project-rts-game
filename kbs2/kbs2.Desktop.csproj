@@ -75,6 +75,7 @@
     <Compile Include="DBController.cs" />
     <Compile Include="Faction\CurrencyMVC\CurrencyView.cs" />
     <Compile Include="Faction\Enums\Faction_Relations.cs" />
+    <Compile Include="Faction\FactionFactory.cs" />
     <Compile Include="Faction\FactionMVC\Faction_Controller.cs" />
     <Compile Include="Faction\FactionMVC\Faction_Model.cs" />
     <Compile Include="Faction\Interfaces\IHasFactionBuilding.cs" />
@@ -83,11 +84,17 @@
     <Compile Include="GamePackage\Animation\AnimationController.cs" />
     <Compile Include="GamePackage\Animation\AnimationModel.cs" />
     <Compile Include="GamePackage\Selection\SelectableImage.cs" />
+    <Compile Include="GamePackage\AIPackage\Enums\Command.cs" />
+    <Compile Include="GamePackage\AIPackage\Interfaces\IAI.cs" />
+    <Compile Include="GamePackage\AIPackage\SimpleAI.cs" />
+    <Compile Include="GamePackage\CPU\CPU_Controller.cs" />
+    <Compile Include="GamePackage\CPU\CPU_Factory.cs" />
+    <Compile Include="GamePackage\CPU\CPU_Model.cs" />
+    <Compile Include="GamePackage\TerrainTester.cs" />
     <Compile Include="Resources\ResourceCalculator.cs" />
     <Compile Include="GamePackage\FogController.cs" />
     <Compile Include="GamePackage\GameSaveManager\DataBaseContext.cs" />
     <Compile Include="GamePackage\GameSaveManager\GameSaveManager.cs" />
-    <Compile Include="GamePackage\TerrainTester.cs" />
     <Compile Include="GamePackage\DayCycle\TimeController.cs" />
     <Compile Include="GamePackage\DayCycle\IngameTime.cs" />
     <Compile Include="GamePackage\Enums\GameSpeed.cs" />
@@ -109,16 +116,21 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInterface\ActionBar\ActionBarModel.cs" />
+    <Compile Include="UserInterface\BottomBar\BottomBarStatView.cs" />
     <Compile Include="UserInterface\BuildGameActionHolder.cs" />
     <Compile Include="UserInterface\GameActionGui\GameActionGuiController.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarView.cs" />
     <Compile Include="UserInterface\BottomBar\BottomBarModel.cs" />
+    <Compile Include="UserInterface\BottomBar\StatImageView.cs" />
+    <Compile Include="UserInterface\BottomBar\StatTextView.cs" />
+    <Compile Include="UserInterface\Interfaces\IButton.cs" />
     <Compile Include="UserInterface\GameActionGui\GameActionGuiModel.cs" />
     <Compile Include="UserInterface\GameActionGui\GameActionGuiView.cs" />
     <Compile Include="UserInterface\LeftButtonBar.cs" />
+    <Compile Include="UserInterface\MenuBar\MenuBarModel.cs" />
+    <Compile Include="UserInterface\MenuBar\MenuButton.cs" />
     <Compile Include="UserInterface\MiniMap\MiniMapBar.cs" />
-    <Compile Include="UserInterface\MiniMap\MiniMapModel.cs" />
-    <Compile Include="UserInterface\RightButtonBar.cs" />
+    <Compile Include="UserInterface\MenuBar\RightButtonBar.cs" />
     <Compile Include="UserInterface\StatusBar\StatusBarView.cs" />
     <Compile Include="UserInterface\StatusBar\StatusBarModel.cs" />
     <Compile Include="UserInterface\UIView.cs" />
@@ -175,7 +187,6 @@
     <Compile Include="WorldEntity\Pathfinder\Pathfinder.cs" />
     <Compile Include="WorldEntity\Abstract\Hitbox.cs" />
     <Compile Include="WorldEntity\Enums\ElementType.cs" />
-    <Compile Include="WorldEntity\Interfaces\IClickable.cs" />
     <Compile Include="WorldEntity\Interfaces\IElemental.cs" />
     <Compile Include="WorldEntity\Interfaces\IHasPersonalSpace.cs" />
     <Compile Include="WorldEntity\Interfaces\IPurchasable.cs" />
@@ -188,6 +199,7 @@
     <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureController.cs" />
     <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureModel.cs" />
     <Compile Include="WorldEntity\Structures\TrainingStructure\TrainingStructureView.cs" />
+    <Compile Include="WorldEntity\Interfaces\IHasCommand.cs" />
     <Compile Include="WorldEntity\Unit\MVC\UnitController.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_Model.cs" />
     <Compile Include="WorldEntity\Unit\MVC\Unit_View.cs" />
@@ -343,9 +355,7 @@
     </Content>
     <Content Include="World\.DS_Store" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GamePackage\AI\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

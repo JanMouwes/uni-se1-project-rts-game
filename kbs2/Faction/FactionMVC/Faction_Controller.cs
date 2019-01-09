@@ -16,7 +16,7 @@ namespace kbs2.Faction.FactionMVC
     public class Faction_Controller : IHasFactionRelationship
     {
         public FactionModel FactionModel { get; set; }
-        public readonly Currency_Controller CurrencyController;
+        public Currency_Controller CurrencyController { get; set; }
 
         public Faction_Controller(string name, GameController game) : this(name, game, 500)
         {
@@ -50,7 +50,7 @@ namespace kbs2.Faction.FactionMVC
             }
 
             balance -= FactionModel.Buildings.Sum(structure => structure.Def.UpkeepCost);
-            balance -= FactionModel.Units.Sum(unit => unit.UnitModel.Def.Upkeep);
+            balance -= FactionModel.Units.Sum(unit => unit.Def.UpkeepCost);
 
             CurrencyController.AlterCurrency((float) balance);
         }
@@ -68,27 +68,27 @@ namespace kbs2.Faction.FactionMVC
         public void Purchase(IPurchasable purchasable) => CurrencyController.AlterCurrency((float) -purchasable.Cost);
 
         // Checks if the given faction is hostile to this faction
-        public bool IsHostileTo(FactionModel faction) => FactionModel.FactionRelationships[faction] == Faction_Relations.hostile;
+        public bool IsHostileTo(Faction_Controller faction) => FactionModel.FactionRelationships[faction] == Faction_Relations.hostile;
 
         // Checks if there is a relation with the given faction and changes it to the given relation if not the same
-        public void ChangeRelationship(FactionModel faction, Faction_Relations relation)
+        public void ChangeRelationship(Faction_Controller faction, Faction_Relations relation)
         {
             if (FactionModel.FactionRelationships[faction] == relation) return;
 
             FactionModel.FactionRelationships.Remove(faction);
             FactionModel.FactionRelationships.Add(faction, relation);
 
-            faction.FactionRelationships.Remove(FactionModel);
-            faction.FactionRelationships.Add(FactionModel, relation);
+            FactionModel.FactionRelationships.Remove(this);
+            FactionModel.FactionRelationships.Add(this, relation);
         }
 
         // Adds a relationship to the faction if it doesnt exist yet
-        public void AddRelationship(FactionModel faction, Faction_Relations relation)
+        public void AddRelationship(Faction_Controller faction, Faction_Relations relation)
         {
             if (FactionModel.FactionRelationships.ContainsKey(faction)) return;
 
             FactionModel.FactionRelationships.Add(faction, relation);
-            faction.FactionRelationships.Add(FactionModel, relation);
+            FactionModel.FactionRelationships.Add(this, relation);
         }
     }
 }

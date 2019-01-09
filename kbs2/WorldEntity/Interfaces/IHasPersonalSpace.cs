@@ -2,10 +2,7 @@
 {
     public interface IHasPersonalSpace
     {
-        /*Hitbox PersonalSpace
-        {
-            get;
-            set;
-        }*/
+        int TriggerRadius { get; set; }
+        int ChaseRadius { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace kbs2.UserInterface
 {
-    class RightButtonBar : IGuiViewImage
+    public class RightButtonBar : IGuiViewImage
     {
         public GraphicsDevice GraphicsDevice { get; set; }
 

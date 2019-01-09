@@ -35,5 +35,10 @@ namespace kbs2.GamePackage
 
         // List For everything in the gui
         public List<IViewText> GuiTextList = new List<IViewText>();
+
+        public GameModel()
+        {
+            Factions = new List<Faction_Controller>();
+        }
     }
 }

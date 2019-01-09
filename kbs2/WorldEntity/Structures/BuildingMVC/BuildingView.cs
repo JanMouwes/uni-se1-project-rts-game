@@ -43,7 +43,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
             Height = viewValues.Height;
             Width = viewValues.Width;
             Texture = viewValues.Image;
-            ViewMode = ViewMode.Fog;
+            ViewMode = ViewMode.Full;
         }
     }
 }

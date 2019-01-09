@@ -37,6 +37,10 @@ using kbs2.WorldEntity.Pathfinder;
 using kbs2.WorldEntity.Structures;
 using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.WorldEntitySpawner;
+using kbs2.WorldEntity.Structures.BuildingMVC;
+using kbs2.UserInterface.BottomBar;
+using kbs2.GamePackage.CPU;
+using kbs2.GamePackage.AIPackage;
 
 namespace kbs2.GamePackage
 {
@@ -70,6 +74,7 @@ namespace kbs2.GamePackage
         public MouseInput MouseInput { get; set; }
 
         public GameActionGuiController GameActionGui { get; set; }
+        private BottomBarView bottomBarView;
         public FogController FogController { get; set; }
 
         //    GameSpeed and its event
@@ -90,6 +95,7 @@ namespace kbs2.GamePackage
         public readonly TimeController TimeController = new TimeController();
 
         public Faction_Controller PlayerFaction;
+        public CPU_Controller CPU1;
 
         public event MouseStateObserver MouseStateChange;
 
@@ -199,6 +205,11 @@ namespace kbs2.GamePackage
             // Generate world
             GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.SimplexFractal);
 
+            // Create CPU player
+            CPU1 = CPU_Factory.CreateSimpleCpu(new Faction_Controller("CPU1", this));
+
+            //GameModel.Factions.Add((SimpleAI)(CPU1.CpuModel.AI).Faction);
+
             FogController = new FogController(PlayerFaction, GameModel.World);
 
 
@@ -252,10 +263,12 @@ namespace kbs2.GamePackage
             onTick += TimeController.UpdateTime;
             onTick += GameModel.MouseInput.Selection.Update;
             GameModel.MouseInput.Selection.OnSelectionChanged += ChangeSelection;
+            GameModel.MouseInput.Selection.OnSelectionChanged += UpdateHUDOnSelect;
 
             //TESTCODE
             DBController.OpenConnection("DefDex.db");
-            UnitDef unitdef = DBController.GetUnitDef(1);
+            UnitDef unitdef = DBController.GetUnitDef(2);
+            UnitDef unitdef2 = DBController.GetUnitDef(2);
             DBController.CloseConnection();
 
             // Get coords of a cell that has terrain a unit is allowed to walk on
@@ -293,6 +306,13 @@ namespace kbs2.GamePackage
             Spawner.SpawnUnit(unit, currentCoords);
             Camera.LookAt(new Vector2(currentCoords.x * GameView.TileSize, currentCoords.y * GameView.TileSize));
 
+
+            // Create a unit for the CPU1 Faction
+            /*UnitFactory unitFactory2 = new UnitFactory(, this);
+
+            FloatCoords coords2 = new FloatCoords() { x = 20, y = 20 };
+            UnitController unit2 = unitFactory2.CreateNewUnit(unitdef2);
+            Spawner.SpawnUnit(unit2, (Coords)coords2);*/
 
             //============= More TestCode ===============
 
@@ -350,8 +370,8 @@ namespace kbs2.GamePackage
                 y = mouseState.Y
             };
 
-            FloatCoords cellCoords = (FloatCoords) WorldPositionCalculator.DrawCoordsToCellCoords(
-                (Coords) WorldPositionCalculator.TransformWindowCoords(
+            FloatCoords cellCoords = (FloatCoords)WorldPositionCalculator.DrawCoordsToCellCoords(
+                (Coords)WorldPositionCalculator.TransformWindowCoords(
                     windowCoords,
                     Camera.GetViewMatrix()
                 ),
@@ -427,7 +447,7 @@ namespace kbs2.GamePackage
             StatusBarView statusBarView = new StatusBarView(GraphicsDevice);
             LeftButtonBar leftButtonBar = new LeftButtonBar(GraphicsDevice);
             RightButtonBar rightButtonBar = new RightButtonBar(GraphicsDevice);
-            BottomBarView bottomBarView = new BottomBarView(GraphicsDevice);
+            bottomBarView = new BottomBarView(GraphicsDevice);
             MiniMapBar miniMap = new MiniMapBar(GraphicsDevice);
             GameActionGuiView actionBar = GameActionGui.View;
 
@@ -459,8 +479,8 @@ namespace kbs2.GamePackage
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 GameState = GameState.Paused;
-//                SaveToDB();
-//                Exit();
+                //                SaveToDB();
+                //                Exit();
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Z)) GameState = GameState.Running;
@@ -531,7 +551,7 @@ namespace kbs2.GamePackage
 //            }
 
             //    Calculate viewport-bounds
-            Coords leftTopViewBound = (Coords) WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
+            Coords leftTopViewBound = (Coords)WorldPositionCalculator.WindowCoordsToCellCoords(new Coords
             {
                 x = GraphicsDevice.Viewport.X,
                 y = GraphicsDevice.Viewport.Y
@@ -635,11 +655,11 @@ namespace kbs2.GamePackage
             // Calls the game update
             base.Update(gameTime);
 
-            Console.Clear();
-            printStopWatchResults(tick_stopwatch, "OnTick");
-            printStopWatchResults(stopwatch, "Update");
-            Console.WriteLine($"OnTick's percentage: {(tick_stopwatch.Elapsed.Ticks / (float) stopwatch.Elapsed.Ticks) * 100}%");
-            Console.WriteLine("frames: " + FramesOutput);
+            //Console.Clear();
+            //printStopWatchResults(tick_stopwatch, "OnTick");
+            //printStopWatchResults(stopwatch, "Update");
+            //Console.WriteLine($"OnTick's percentage: {(tick_stopwatch.Elapsed.Ticks / (float)stopwatch.Elapsed.Ticks) * 100}%");
+            //Console.WriteLine("frames: " + FramesOutput);
         }
 
         public static void printStopWatchResults(Stopwatch toPrint, string description) => Console.WriteLine($"{description} took: {toPrint.Elapsed.Ticks} ticks or {toPrint.Elapsed.Milliseconds} ms");
@@ -814,6 +834,58 @@ namespace kbs2.GamePackage
             GameActionGui.SetActions(gameActionTabModels);
         }
 
+        /// <summary>
+        /// Changes the HUD according to the selected entities
+        /// </summary>
+        /// <param name="eventArgs">List of selected entities</param>
+        public void UpdateHUDOnSelect(object sender, EventArgsWithPayload<List<IGameActionHolder>> eventArgs)
+        {
+            // Clean the GUI of selected entities
+            /*foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
+            {
+                GameModel.GuiItemList.Remove(view.StatImage);
+                GameModel.GuiItemList.Remove(view.CurHP);
+                GameModel.GuiItemList.Remove(view.MaxHP);
+                GameModel.GuiTextList.Remove(view.StatName);
+            }*/
+
+            //bottomBarView.Model.StatViews.Clear();
+
+            // Convert all IHasActions to Unit_Controllers
+            List<IGameActionHolder> units = GameModel.MouseInput.Selection.SelectUnits();
+            units.ConvertAll(o => (UnitController)o);
+            // Add new views to the model
+            foreach (UnitController unit in units)
+                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, unit.UnitView, unit.HPController.HPModel));
+            // Convert all IHasActions to Unit_Controllers
+            List<IGameActionHolder> buildings = GameModel.MouseInput.Selection.SelectBuildings();
+            buildings.ConvertAll(o => (BuildingController)o);
+            // Add new views to the model
+            foreach (BuildingController building in buildings)
+                bottomBarView.Model.StatViews.Add(new BottomBarStatView(bottomBarView.Model, building.View, building.HPController.HPModel));
+
+            if (bottomBarView.Model.StatViews.Count == 1)
+            {
+                if (units.Count > 0)
+                {
+                    bottomBarView.Model.StatViews[0].AddNameText(((UnitController)units[0]).UnitModel.Name);
+                }
+                else if (buildings.Count > 0)
+                {
+                    //bottomBarView.Model.StatViews[0].AddNameText(((BuildingController)buildings[0]));
+                }
+            }
+
+            // Adds the views to the gameModel
+            foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
+            {
+                GameModel.GuiItemList.Add(view.StatImage);
+                GameModel.GuiItemList.Add(view.MaxHP);
+                GameModel.GuiItemList.Add(view.CurHP);
+                if (view.StatName != null)
+                    GameModel.GuiTextList.Add(view.StatName);
+            }
+        }
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -834,9 +906,9 @@ namespace kbs2.GamePackage
             printStopWatchResults(stopwatch, "Drawing");
 
 
-//            Uncomment the line below to show all view-items in the console
-//            Console.Clear();
-//            Console.WriteLine(this.GameModel.AllDrawItems.GroupBy(item => item.GetType(), (typeKey, typeSource) => new KeyValuePair<string, int>(typeKey.Name, typeSource.Count())).Select((pair => $"{pair.Key}: {pair.Value}")).Aggregate((s, s1) => $"{s}\n{s1}"));
+            //            Uncomment the line below to show all view-items in the console
+            //            Console.Clear();
+            //            Console.WriteLine(this.GameModel.AllDrawItems.GroupBy(item => item.GetType(), (typeKey, typeSource) => new KeyValuePair<string, int>(typeKey.Name, typeSource.Count())).Select((pair => $"{pair.Key}: {pair.Value}")).Aggregate((s, s1) => $"{s}\n{s1}"));
         }
 
 

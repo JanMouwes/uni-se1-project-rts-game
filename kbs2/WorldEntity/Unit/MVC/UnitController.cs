@@ -2,8 +2,11 @@
 using System.Linq;
 using kbs2.Actions.Interfaces;
 using kbs2.Faction.FactionMVC;
+using kbs2.GamePackage.AIPackage.Enums;
 using kbs2.GamePackage.EventArgs;
 using kbs2.GamePackage.Interfaces;
+using kbs2.Unit.Interfaces;
+using kbs2.Unit.Model;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
@@ -26,6 +29,7 @@ namespace kbs2.WorldEntity.Unit.MVC
         public event OnTakeHitDelegate OnTakeHit;
 
         public Location_Controller LocationController;
+        public HP_Controller HPController => new HP_Controller();
         public Unit_Model UnitModel;
         public Unit_View UnitView;
 

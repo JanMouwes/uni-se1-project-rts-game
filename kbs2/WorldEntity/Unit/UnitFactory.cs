@@ -36,7 +36,17 @@ namespace kbs2.WorldEntity.Unit
                 UnitModel =
                 {
                     Speed = def.Speed,
-                    Faction = factionController
+                    Faction = factionController,
+                    Def = def,
+                    Name = def.Name
+                },
+                HPController =
+                {
+                    HPModel =
+                    {
+                        CurrentHP = (int)def.HPDef.CurrentHP,
+                        MaxHP = (int)def.HPDef.MaxHP
+                    }
                 }
             };
 

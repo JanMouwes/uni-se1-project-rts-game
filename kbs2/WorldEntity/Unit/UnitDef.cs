@@ -15,9 +15,10 @@ namespace kbs2.WorldEntity.Unit
         public string Image { get; set; }
         public float Width;
         public float Height;
-        public BattleDef BattleDef { get; set; }
-        public int MaxHealth { get; set; }
-        public LevelXPDef LevelXPDef { get; set; }
+        public string Name;
+        public BattleDef BattleDef => new BattleDef();
+        public HealthValues HPDef => new HealthValues();
+        public LevelXPDef LevelXPDef => new LevelXPDef();
 
         public ViewValues ViewValues
         {
