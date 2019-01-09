@@ -258,20 +258,41 @@ namespace kbs2.GamePackage
             UnitDef unitdef = DBController.GetUnitDef(1);
             DBController.CloseConnection();
 
+            // Get coords of a cell that has terrain a unit is allowed to walk on
+            Dictionary<int, Coords> itterator = new Dictionary<int, Coords>();
+            itterator.Add(0, new Coords { x = 0, y = 1 });
+            itterator.Add(1, new Coords { x = 1, y = 0 });
+            itterator.Add(2, new Coords { x = 0, y = -1 });
+            itterator.Add(3, new Coords { x = -1, y = 0 });
 
-            for (int i = 0; i < 12; i++)
+
+            List<Coords> CheckedCoords = new List<Coords>();
+            bool IsValid(Coords coords) => GameModel.World.GetCellFromCoords(coords).worldCellModel.Terrain != TerrainType.Water;
+            bool Checked(Coords coords) => CheckedCoords.Contains(coords);
+
+            int i = 0;
+            Coords checkCoords = new Coords();
+            Coords currentCoords = new Coords();
+            while (!IsValid(currentCoords))
             {
-                FloatCoords coords = new FloatCoords() {x = i, y = 5};
+                if (!Checked(checkCoords)) i++;
 
-                UnitFactory unitFactory = new UnitFactory(PlayerFaction, this);
-
-                UnitController unit = unitFactory.CreateNewUnit(unitdef);
-
-                unit.LocationController.chunkChanged += LoadNewChunks;
-
-                unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
-                Spawner.SpawnUnit(unit, (Coords) coords);
+                Coords relativeCoords = itterator[i % 4];
+                currentCoords = checkCoords;
+                checkCoords = checkCoords + relativeCoords;
+                CheckedCoords.Add(currentCoords);
             }
+
+            UnitFactory unitFactory = new UnitFactory(PlayerFaction, this);
+
+            UnitController unit = unitFactory.CreateNewUnit(unitdef);
+
+            unit.LocationController.chunkChanged += LoadNewChunks;
+
+            unit.LocationController.LocationModel.UnwalkableTerrain.Add(TerrainType.Water);
+            Spawner.SpawnUnit(unit, currentCoords);
+            Camera.LookAt(new Vector2(currentCoords.x * GameView.TileSize, currentCoords.y * GameView.TileSize));
+
 
             //============= More TestCode ===============
 
