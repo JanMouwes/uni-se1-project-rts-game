@@ -142,20 +142,11 @@ namespace kbs2.utils
                     startPoint = Math.Floor(startPoint - endPoint);
                 }
 
-                for (int i = (int) startPoint - 1; i <= endPoint + 1; i++)
+                for (int i = (int) startPoint; i <= endPoint; i++)
                 {
                     Coords currentPoint = new Coords() {x = xCoord, y = i};
-                    CoordsCalculator coordsCalculator = new CoordsCalculator((FloatCoords) currentPoint);
 
-                    List<Coords> cells = new List<Coords> {currentPoint};
-                    cells.AddRange(coordsCalculator.GetNeighbours().Select(neighbour => (Coords) neighbour));
-
-                    foreach (Coords cell in cells)
-                    {
-                        if (outputList.Contains(cell)) continue;
-
-                        outputList.Add(cell);
-                    }
+                    outputList.Add(currentPoint);
                 }
             }
 
@@ -164,7 +155,7 @@ namespace kbs2.utils
             FloatCoords startCoords = this.coords;
 
             //    Switch start- and endpoints if necessary
-            if (startCoords.x > destination.x)
+            if (startCoords.x < destination.x)
             {
                 FloatCoords x = startCoords;
                 startCoords = destination;
