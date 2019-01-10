@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.GamePackage
 {
-    public delegate void OnSelectionChangedDelegate(object sender, EventArgsWithPayload<List<IGameActionHolder>> eventArgs);
+    public delegate void OnSelectionChangedDelegate(object sender, EventArgsWithPayload<Selection_Controller> eventArgs);
 
     public class Selection_Controller
     {
@@ -114,7 +114,7 @@ namespace kbs2.GamePackage
                 SelectedItems = (selection.Count > 0) ? isQueueButtonPressed ? SelectedItems.Union(selection).ToList() : selection : SelectBuildings();
             }
 
-            OnSelectionChanged?.Invoke(this, new EventArgsWithPayload<List<IGameActionHolder>>(SelectedItems));
+            OnSelectionChanged?.Invoke(this, new EventArgsWithPayload<Selection_Controller>(this));
         }
 
         // get all buildings from selectionbox
@@ -203,6 +203,30 @@ namespace kbs2.GamePackage
             Game.GameModel.ItemList.Add(RightView);
             Game.GameModel.ItemList.Add(TopView);
             Game.GameModel.ItemList.Add(BottomView);
+        }
+
+
+        public void setSelection(IGameActionHolder item)
+        {
+            SelectedItems.Clear();
+            SelectedItems.Add(item);
+            OnSelectionChanged?.Invoke(this, new EventArgsWithPayload<Selection_Controller>(this));
+        }
+
+        public void setSelection(List<IGameActionHolder> items)
+        {
+            SelectedItems = items;
+            OnSelectionChanged?.Invoke(this, new EventArgsWithPayload<Selection_Controller>(this));
+        }
+
+        //remove unit from selection
+        public void RemoveFromSelection(IGameActionHolder item)
+        {
+            if (SelectedItems.Contains(item))
+            {
+                SelectedItems.Remove(item);
+                OnSelectionChanged?.Invoke(this, new EventArgsWithPayload<Selection_Controller>(this));
+            }
         }
     }
 }

@@ -74,7 +74,7 @@ namespace kbs2.GamePackage
                             if (clickedGuiItems.Any())
                             {
                                 if (PreviousMouseState.LeftButton != ButtonState.Released) return;
-                                clickedGuiItems.First().Click();
+                                clickedGuiItems.First().Click(mouseState);
                                 return;
                             }
 
@@ -83,8 +83,8 @@ namespace kbs2.GamePackage
                             game.MapActionSelector.Clear();
                             break;
                         case ButtonState.Released:
-
-                            Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
+                            if (!clickedGuiItems.Any())
+                                Selection.ButtonRelease(Keyboard.GetState().IsKeyDown(Keys.LeftShift));
                             break;
                     }
 
@@ -96,7 +96,12 @@ namespace kbs2.GamePackage
                         //TODO RightButtonReleased?.Invoke()
                         case ButtonState.Pressed:
                             if (PreviousMouseState.RightButton != ButtonState.Released) break;
-
+                            if (clickedGuiItems.Any())
+                            {
+                                if (PreviousMouseState.LeftButton != ButtonState.Released) return;
+                                clickedGuiItems.First().Click(mouseState);
+                                return;
+                            }
 
                             FloatCoords cellCoords = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, game.Camera.GetViewMatrix()), game.GameView.TileSize);
 

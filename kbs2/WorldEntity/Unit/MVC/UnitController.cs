@@ -33,7 +33,7 @@ namespace kbs2.WorldEntity.Unit.MVC
         public Unit_Model UnitModel;
         public Unit_View UnitView;
 
-        public IViewImage View => UnitView;
+        public Unit_Controller View => UnitView;
 
         public List<IGameAction> GameActions { get; }
 

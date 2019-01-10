@@ -2,7 +2,9 @@
 using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Health;
+using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,18 +28,18 @@ namespace kbs2.UserInterface.BottomBar
         public double Rotation => throw new NotImplementedException();
         
         // CUR HP BAR
-        public CurrentHPView(FloatCoords coords, HealthValues hpModel, string image)
+        public CurrentHPView(FloatCoords coords, UnitController unit)
         {
             Coords = coords;
             Coords = new FloatCoords() { x = Coords.x + 1, y = Coords.y + 26 };
-            this.hpModel = hpModel;
+            this.hpModel = unit.HealthValues;
             Height = 4;
-            Texture = image;
+            Texture = "curhpbar";
             ZIndex = 1003;
             Colour = Color.White;
         }
 
-        public void Click()
+        public void Click(MouseState mouseState)
         {
 
         }

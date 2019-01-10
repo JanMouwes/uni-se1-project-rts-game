@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Unit.MVC
 {
-	public class Unit_View : IViewImage
+	public class Unit_View : Unit_Controller
 	{
         public UnitController Unit_Controller { get; set; }
 

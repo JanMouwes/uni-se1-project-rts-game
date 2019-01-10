@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.Actions
 {
-    public class MapActionAnimationItem : IViewImage
+    public class MapActionAnimationItem : Unit_Controller
     {
         public double Rotation { get; }
         public FloatCoords Coords { get; }

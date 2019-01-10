@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Structures.ResourceFactory
 {
-    public class ResourceFactoryView : IViewImage
+    public class ResourceFactoryView : Unit_Controller
     {
         private readonly ResourceFactoryModel model;
 

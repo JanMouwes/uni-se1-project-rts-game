@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.View.GUI.ActionBox
 {
-    public class ActionBoxView : IViewImage
+    public class ActionBoxView : Unit_Controller
     {
         public double Rotation { get; }
         public FloatCoords Coords { get; set; }

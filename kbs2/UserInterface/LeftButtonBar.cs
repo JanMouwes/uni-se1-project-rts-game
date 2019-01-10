@@ -4,6 +4,7 @@ using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.UserInterface
 {
@@ -28,7 +29,7 @@ namespace kbs2.UserInterface
 
         public ViewMode ViewMode => ViewMode.Full;
 		
-		public void Click()
+		public void Click(MouseState mouseState)
 		{
 			
 		}

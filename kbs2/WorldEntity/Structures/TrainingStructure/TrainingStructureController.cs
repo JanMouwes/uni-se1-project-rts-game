@@ -24,7 +24,7 @@ namespace kbs2.WorldEntity.Structures.TrainingStructure
         /// <inheritdoc cref="View"/>
         public TrainingStructureView TrainingStructureView { get; }
 
-        public IViewImage View => TrainingStructureView;
+        public Unit_Controller View => TrainingStructureView;
 
         public List<WorldCellModel> OccupiedCells { get; } = new List<WorldCellModel>();
 

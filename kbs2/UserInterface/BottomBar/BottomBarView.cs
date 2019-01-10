@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using kbs2.GamePackage;
 using kbs2.GamePackage.EventArgs;
 using kbs2.UserInterface.BottomBar;
 using kbs2.View.GUI;
@@ -10,6 +11,7 @@ using kbs2.WorldEntity.Structures.BuildingMVC;
 using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.UserInterface
 {
@@ -35,8 +37,9 @@ namespace kbs2.UserInterface
 
         public ViewMode ViewMode => ViewMode.Full;
 
-        public void Click()
+        public void Click(MouseState mouseState)
         {
+
         }
 
         public List<IGuiViewImage> GetContents()
@@ -63,23 +66,15 @@ namespace kbs2.UserInterface
         /// Changes the HUD according to the selected entities
         /// </summary>
         /// <param name="eventArgs">List of selected entities</param>
-        public void UpdateHUDOnSelect(object sender, EventArgsWithPayload<List<IGameActionHolder>> eventArgs)
+        public void UpdateHUDOnSelect(object sender, EventArgsWithPayload<Selection_Controller> eventArgs)
         {
-            // Clean the GUI of selected entities
-            /*foreach (BottomBarStatView view in bottomBarView.Model.StatViews)
-            {
-                GameModel.GuiItemList.Remove(view.StatImage);
-                GameModel.GuiItemList.Remove(view.CurHP);
-                GameModel.GuiItemList.Remove(view.MaxHP);
-                GameModel.GuiTextList.Remove(view.StatName);
-            }*/
 
             Model.StatViews.Clear();
 
             // Convert all IHasActions to Unit_Controllers
-            List<IGameActionHolder> selection = eventArgs.Value;
+            List<IGameActionHolder> selection = eventArgs.Value.SelectedItems;
             // Add new views to the model
-            foreach (UnitController unit in selection.OfType<UnitController>()) Model.StatViews.Add(new BottomBarStatView(Model, unit.UnitView, unit.HealthValues));
+            foreach (UnitController unit in selection.OfType<UnitController>()) Model.StatViews.Add(new BottomBarStatView(Model, unit, eventArgs.Value));
 
             // Add new views to the model
             //foreach (BuildingController building in selection.OfType<BuildingController>()) Model.StatViews.Add(new BottomBarStatView(Model, building.View, building.HealthValues));

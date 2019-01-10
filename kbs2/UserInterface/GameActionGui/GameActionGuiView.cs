@@ -6,6 +6,7 @@ using kbs2.World;
 using kbs2.World.Structs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.UserInterface.GameActionGui
 {
@@ -34,7 +35,7 @@ namespace kbs2.UserInterface.GameActionGui
             ? model.CurrentTab.GameActionTabItems.Where(item => item != null).Select(item => (IViewItem) item).ToList()
             : new List<IViewItem>()).Concat(new List<IViewItem>() { });
 
-        public void Click()
+        public void Click(MouseState mouseState)
         {
         }
 

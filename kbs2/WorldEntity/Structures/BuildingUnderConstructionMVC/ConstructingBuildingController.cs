@@ -33,7 +33,7 @@ namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 
         public int ViewRange => 8;
 
-        public IViewImage View => ConstructingBuildingView;
+        public Unit_Controller View => ConstructingBuildingView;
 
         public List<WorldCellModel> OccupiedCells => ConstructingBuildingModel.LocationCells;
 

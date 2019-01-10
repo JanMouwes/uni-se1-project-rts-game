@@ -1,7 +1,9 @@
-﻿using kbs2.GamePackage.Interfaces;
+﻿using kbs2.GamePackage;
+using kbs2.GamePackage.Interfaces;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Health;
 using kbs2.WorldEntity.Interfaces;
+using kbs2.WorldEntity.Unit.MVC;
 using Microsoft.Xna.Framework;
 
 namespace kbs2.UserInterface.BottomBar
@@ -15,12 +17,12 @@ namespace kbs2.UserInterface.BottomBar
         public CurrentHPView CurHP { get; set; }
         public StatTextView StatName { get; set; }
 
-        public BottomBarStatView(BottomBarModel model, IViewImage entity, HealthValues healthModel)
+        public BottomBarStatView(BottomBarModel model, UnitController unit, Selection_Controller selection_Controller)
         {
             Model = model;
-            StatImage = new StatImageView(ListView(), entity);
-            MaxHP = new StatImageView(ListView(), "hpbar");
-            CurHP = new CurrentHPView(ListView(), healthModel, "curhpbar");
+            StatImage = new StatImageView(ListView(), unit,selection_Controller);
+            MaxHP = new StatImageView(ListView(), unit, selection_Controller, "hpbar");
+            CurHP = new CurrentHPView(ListView(), unit);
         }
 
         public void AddNameText(string name)

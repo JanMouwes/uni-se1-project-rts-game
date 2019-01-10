@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.World.Cell
 {
-    public class WorldCellView : IViewImage
+    public class WorldCellView : Unit_Controller
     {
         public double Rotation { get; }
         public FloatCoords Coords => (FloatCoords) model.RealCoords;

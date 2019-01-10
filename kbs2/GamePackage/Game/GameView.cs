@@ -24,10 +24,10 @@ namespace kbs2.GamePackage
         private Dictionary<string, SpriteFont> cachedSpritefonts = new Dictionary<string, SpriteFont>();
 
         // List for drawing items with the camera offset
-        public List<IViewImage> DrawList => SortByZIndex(gameModel.ItemList);
+        public List<Unit_Controller> DrawList => SortByZIndex(gameModel.ItemList);
 
         // List for drawing items without offset
-        public List<IViewImage> DrawGuiList => SortByZIndex(gameModel.GuiItemList.Select(item => (IViewImage) item));
+        public List<Unit_Controller> DrawGuiList => SortByZIndex(gameModel.GuiItemList.Select(item => (Unit_Controller) item));
 
         // List for drawing text with the camera offset
         public List<IViewText> DrawText
@@ -94,7 +94,7 @@ namespace kbs2.GamePackage
         private void DrawNonGui()
         {
             spriteBatch.Begin(transformMatrix: camera.GetViewMatrix());
-            foreach (IViewImage drawItem in DrawList)
+            foreach (Unit_Controller drawItem in DrawList)
             {
                 Texture2D texture = ProvideTexture(drawItem.Texture);
 
@@ -126,7 +126,7 @@ namespace kbs2.GamePackage
         {
             spriteBatch.Begin();
 
-            foreach (IViewImage drawItem in DrawGuiList)
+            foreach (Unit_Controller drawItem in DrawGuiList)
             {
                 Texture2D texture = ProvideTexture(drawItem.Texture);
                 spriteBatch.Draw(texture, new Rectangle((int) drawItem.Coords.x, (int) drawItem.Coords.y, (int) drawItem.Width, (int) drawItem.Height), drawItem.Colour);
@@ -141,9 +141,9 @@ namespace kbs2.GamePackage
             spriteBatch.End();
         }
 
-        private List<IViewImage> GetCellsOnScreen(IEnumerable<IViewImage> drawList, Vector2 topLeft, Vector2 bottomRight)
+        private List<Unit_Controller> GetCellsOnScreen(IEnumerable<Unit_Controller> drawList, Vector2 topLeft, Vector2 bottomRight)
         {
-            List<IViewImage> returnList = new List<IViewImage>();
+            List<Unit_Controller> returnList = new List<Unit_Controller>();
 
             returnList = (from item in drawList
                 where (item.Coords.x > (topLeft.X / TileSize) - item.Width &&

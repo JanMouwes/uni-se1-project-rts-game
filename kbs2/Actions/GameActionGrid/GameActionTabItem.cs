@@ -1,6 +1,7 @@
 using kbs2.Actions.Interfaces;
 using kbs2.View.GUI;
 using kbs2.World.Structs;
+using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.Actions.GameActionGrid
 {
@@ -13,6 +14,6 @@ namespace kbs2.Actions.GameActionGrid
             this.GameAction = gameAction;
         }
 
-        public override void Click() => GameAction.InvokeClick();
+        public override void Click(MouseState mouseState) => GameAction.InvokeClick();
     }
 }

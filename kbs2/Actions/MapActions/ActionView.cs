@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.Actions.ActionMVC
 {
-    public class ActionView : IViewImage
+    public class ActionView : Unit_Controller
     {
         public GameController gameController { get; set; }
         

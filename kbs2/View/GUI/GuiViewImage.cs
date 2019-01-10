@@ -4,12 +4,13 @@ using kbs2.World;
 using kbs2.World.Structs;
 using kbs2.WorldEntity.Structs;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.View.GUI
 {
-    public interface IGuiViewImage : IViewImage
+    public interface IGuiViewImage : Unit_Controller
     {
-        void Click();
+        void Click(MouseState mouseState);
 
         List<IGuiViewImage> GetContents();
     }
@@ -35,7 +36,7 @@ namespace kbs2.View.GUI
         public virtual string Texture { get; protected set; }
 
 
-        public abstract void Click();
+        public abstract void Click(MouseState mouseState);
 
         public virtual List<IGuiViewImage> GetContents() => new List<IGuiViewImage>();
     }

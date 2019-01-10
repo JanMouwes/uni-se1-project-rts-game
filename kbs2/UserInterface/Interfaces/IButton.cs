@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace kbs2.UserInterface.Interfaces
 {
-    public interface IButton : IViewImage
+    public interface IButton : Unit_Controller
     {
         string Name { get; set; }
     }

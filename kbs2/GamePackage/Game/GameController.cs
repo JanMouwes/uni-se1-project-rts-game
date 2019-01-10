@@ -220,7 +220,7 @@ namespace kbs2.GamePackage
             onTick += (sender, args) =>
             {
                 List<IViewItem> frameViewItems = AnimationController.NextFrame;
-                GameModel.ItemList.AddRange(frameViewItems.OfType<IViewImage>());
+                GameModel.ItemList.AddRange(frameViewItems.OfType<Unit_Controller>());
                 GameModel.TextList.AddRange(frameViewItems.OfType<IViewText>());
             };
 
@@ -819,9 +819,9 @@ namespace kbs2.GamePackage
             }
         }
 
-        public void ChangeSelection(object sender, EventArgsWithPayload<List<IGameActionHolder>> eventArgs)
+        public void ChangeSelection(object sender, EventArgsWithPayload<Selection_Controller> eventArgs)
         {
-            List<IGameActionHolder> gameActionHolders = eventArgs.Value;
+            List<IGameActionHolder> gameActionHolders = eventArgs.Value.SelectedItems;
             List<GameActionTabModel> gameActionTabModels = new List<GameActionTabModel>();
             foreach (IGameActionHolder gameActionHolder in gameActionHolders)
             {

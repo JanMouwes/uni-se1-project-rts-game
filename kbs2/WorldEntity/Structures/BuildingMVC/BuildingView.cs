@@ -14,7 +14,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
         }
     }
 
-    public class BuildingView<TModelType, TDefType> : IViewImage
+    public class BuildingView<TModelType, TDefType> : Unit_Controller
         where TDefType : IStructureDef
         where TModelType : BuildingModel<TDefType>
     {

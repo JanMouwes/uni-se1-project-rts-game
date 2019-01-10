@@ -17,7 +17,7 @@ namespace kbs2.WorldEntity.Interfaces
         /// <summary>
         /// Entity's image to be displayed on the map
         /// </summary>
-        IViewImage View { get; }
+        Unit_Controller View { get; }
         
         /// <summary>
         /// Method subscribed to central 'OnTick'-event
