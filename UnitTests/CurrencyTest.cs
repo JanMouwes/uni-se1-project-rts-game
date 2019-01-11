@@ -16,7 +16,7 @@ namespace Tests
         [Test]
         [TestCase(20f)]
         [TestCase(30f)]
-        public void AddCurrency(float amount)
+        public void Test_ShouldAddCurrencyToBalance_WhenGivenAmount(float amount)
         {
             controller = new Currency_Controller(500);
             float expected = 500 + amount;
@@ -28,7 +28,7 @@ namespace Tests
         [Test]
         [TestCase(20f)]
         [TestCase(30f)]
-        public void RemoveCurrency(float amount)
+        public void Test_ShouldRemoveCurrencyToBalance_WhenGivenAmount(float amount)
         {
             controller = new Currency_Controller(500);
             float expected = 500 - amount;
