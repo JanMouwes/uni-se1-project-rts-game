@@ -1,0 +1,1505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="kbs2.Actions.ActionModels.SpawnActionModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAIAABQAAAAAAAAAAAAAAAAIAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Actions\ActionModels\SpawnActionModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Actions.ActionTabActions.SelectMapAction_GameAction" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="31.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAAAAAWAAAAAAAAAAAAA=</HashCode>
+      <FileName>Actions\ActionTabActions\SelectMapAction_GameAction.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Actions.GameActionFactory" Collapsed="true">
+    <Position X="19" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAIAAAAAEAAAAA=</HashCode>
+      <FileName>Actions\GameActionFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Actions.MapActionAnimationItem" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="36.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAAAAAAAEAAEAAAAAABQAIAABAAAAA=</HashCode>
+      <FileName>Actions\MapActionAnimationItem.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Actions.MapActionAnimationText" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="38.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAEAAAAAABQCAACBAAAAA=</HashCode>
+      <FileName>Actions\MapActionAnimationText.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Actions.MapActionFactory" Collapsed="true">
+    <Position X="19" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAEAAAAAACAAAAIAAAAAEAAAAA=</HashCode>
+      <FileName>Actions\MapActionFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Actions.GameActionGrid.GameActionTabItem" Collapsed="true">
+    <Position X="1.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Actions\GameActionGrid\GameActionTabItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Actions.GameActionGrid.GameActionTabModel" Collapsed="true">
+    <Position X="26" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAADkAAAAAAAAAACAAAAgAARgQAAAACA=</HashCode>
+      <FileName>Actions\GameActionGrid\GameActionTabModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Actions.GameActions.GameAction" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="38.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAA=</HashCode>
+      <FileName>Actions\GameActions\GameAction.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Actions.GameActions.SpawnAction" Collapsed="true">
+    <Position X="8.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAACAAAQAAAAAAAAAAAEAkIAQAAAAAAAAAA=</HashCode>
+      <FileName>Actions\MapActions\SpawnAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Actions.MapActionDefs.AttackActionDef" Collapsed="true">
+    <Position X="14.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAIAQAAAAAAAAAA=</HashCode>
+      <FileName>Actions\MapActionDefs\AttackActionDef.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Actions.MapActionDefs.MapActionDef" Collapsed="true">
+    <Position X="15.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAQAAAAAEAAAA=</HashCode>
+      <FileName>Actions\MapActionDefs\MapActionDef.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="kbs2.Actions.GameActionDefs.SpawnActionDef" Collapsed="true">
+    <Position X="16.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAQAAAAAAAAQAAAAAAAAQA=</HashCode>
+      <FileName>Actions\MapActionDefs\SpawnActionDef.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Actions.ActionMVC.ActionView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAQAAAAAEAAEAAAAAABQAIAABABAAA=</HashCode>
+      <FileName>Actions\MapActions\ActionView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Actions.ActionMVC.CooldownView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAIAQAAAAAAAAEAAAAAABQCAACBABAAA=</HashCode>
+      <FileName>Actions\MapActions\CooldownView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Actions.MapActions.AttackAction" Collapsed="true">
+    <Position X="6.25" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ARwAAAAAAAAAAIAQAAAAAAAAAAAAAAAAQAAIAQAAAAA=</HashCode>
+      <FileName>Actions\MapActions\AttackAction.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="kbs2.Actions.MapActions.MapAction&lt;TSenderDef, TActionDef&gt;" Collapsed="true">
+    <Position X="7.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAgAAAAACAgAAQAAAACAAAAAAAAEAAQAAAAAAAAAE=</HashCode>
+      <FileName>Actions\MapActions\MapAction.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="kbs2.Actions.GameActionSelector.MapActionSelector" Collapsed="true">
+    <Position X="20.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAgAA=</HashCode>
+      <FileName>Actions\MapActionSelector\MapActionSelector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.BuildingNotFoundException" Collapsed="true">
+    <Position X="11.25" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DBController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.DataNotFoundException" Collapsed="true">
+    <Position X="11.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DBController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.DBController" Collapsed="true">
+    <Position X="22.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAABABAEAAAAAAAABACAQEAAAAAAAAAACggAAA=</HashCode>
+      <FileName>DBController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Faction.CurrencyMVC.Currency_Controller" Collapsed="true">
+    <Position X="34.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAAAABAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Faction\CurrencyMVC\Currency_Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Faction.CurrencyMVC.Currency_Model" Collapsed="true">
+    <Position X="36.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Faction\CurrencyMVC\Currency_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Faction.CurrencyMVC.CurrencyView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="38.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAEAAAAAABQCAACBAIAAA=</HashCode>
+      <FileName>Faction\CurrencyMVC\CurrencyView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Faction.FactionFactory" Collapsed="true">
+    <Position X="31.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Faction\FactionFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Faction.FactionMVC.Faction_Controller" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAQAwAAAAAABAACAAFAQAAAAEBAAAAAA=</HashCode>
+      <FileName>Faction\FactionMVC\Faction_Controller.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Faction.FactionMVC.FactionModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAABAAAQAAAAAAAIAUAEAAAAAAAA=</HashCode>
+      <FileName>Faction\FactionMVC\Faction_Model.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.GamePackage.AIPackage.SimpleAI" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAAAAAAAAIAAAAAAABAAAAAQAAAAEQQAAAAAAABA=</HashCode>
+      <FileName>GamePackage\AIPackage\SimpleAI.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.GamePackage.Animation.AnimationController" Collapsed="true">
+    <Position X="31.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAABAQAAAAAAAAAAIAAAAAAAAAACAAAAIAEA=</HashCode>
+      <FileName>GamePackage\Animation\AnimationController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.Animation.AnimationModel" Collapsed="true">
+    <Position X="33" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Animation\AnimationModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.CPU.CPU_Controller" Collapsed="true">
+    <Position X="29.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\CPU\CPU_Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.CPU.CPU_Factory" Collapsed="true">
+    <Position X="31.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\CPU\CPU_Factory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.CPU.CPU_Model" Collapsed="true">
+    <Position X="33" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\CPU\CPU_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.DayCycle.TimeController" Collapsed="true">
+    <Position X="26" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABgAAgAICAAASAAAAAAAAAEAAAAACKAAAAAQAAAAAA=</HashCode>
+      <FileName>GamePackage\DayCycle\TimeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.FogController" Collapsed="true">
+    <Position X="36.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAgAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAAEAAAAI=</HashCode>
+      <FileName>GamePackage\FogController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.GameController" Collapsed="true">
+    <Position X="27.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICQCFDgCABR5BwAQAAoAAIGBJBAQEAgAkogjEEAAJAQ=</HashCode>
+      <FileName>GamePackage\Game\GameController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.GameModel" Collapsed="true">
+    <Position X="29.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEBAAABAAAAAAAgAAgAAAAgAAQAAAAEAAgAABKQA=</HashCode>
+      <FileName>GamePackage\Game\GameModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.GameView" Collapsed="true">
+    <Position X="36.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAKAEICAwCAEgEBAAAAAAgAAAAAACwAAEAAAAIAA4A=</HashCode>
+      <FileName>GamePackage\Game\GameView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.Location_controller" Collapsed="true">
+    <Position X="29.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Game\Location_controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.MouseInput" Collapsed="true">
+    <Position X="29.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAABAAAAAAAAAAAAAAAAAAAAAAAAQAIAAAAAAAAYAA=</HashCode>
+      <FileName>GamePackage\Selection\MouseInput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.Selection_Controller" Collapsed="true">
+    <Position X="26" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAVAAAAEAAkAAACCFAAAAAgEAAgDABAAAAhEIAICEAA=</HashCode>
+      <FileName>GamePackage\Selection\Selection_Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.TerrainTester" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAEAAAAAABQCAACBAAAAA=</HashCode>
+      <FileName>GamePackage\TerrainTester.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.GamePackage.EventArgs.EventArgsWithPayload&lt;T&gt;" Collapsed="true">
+    <Position X="27.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>GamePackage\EventArgs\EventArgsWithPayload.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.EventArgs.GameSpeedEventArgs" Collapsed="true">
+    <Position X="33" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\EventArgs\GameSpeedEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.EventArgs.OnTickEventArgs" Collapsed="true">
+    <Position X="33" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\EventArgs\OnTickEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Desktop.GamePackage.EventArgs.GameStateEventArgs" Collapsed="true">
+    <Position X="34.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>GamePackage\EventArgs\GameStateEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.GameSaveManager.DataBaseContext" Collapsed="true">
+    <Position X="20.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAIAABAAAAAAAAAAAgAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\GameSaveManager\DataBaseContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.GameSaveManager.GameSaveManager" Collapsed="true">
+    <Position X="31.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\GameSaveManager\GameSaveManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.Selection.SelectableImage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAAAAAAAEAAEAAAAAABQAIAABAAAAA=</HashCode>
+      <FileName>GamePackage\Selection\SelectableImage.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.GamePackage.Selection.Selection_Model" Collapsed="true">
+    <Position X="27.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Selection\Selection_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.GamePackage.Selection.Selection_View" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAAAAAAAEAAEAAAAAABQAIAABAAAAA=</HashCode>
+      <FileName>GamePackage\Selection\Selection_View.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.Desktop.Program" Collapsed="true">
+    <Position X="36.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Resources.ResourceCalculator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="38.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAICIAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Resources\ResourceCalculator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.ActionBar.ActionBarModel" Collapsed="true">
+    <Position X="19" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserInterface\ActionBar\ActionBarModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.UserInterface.BottomBar.BottomBarModel" Collapsed="true">
+    <Position X="19" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>UserInterface\BottomBar\BottomBarModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.UserInterface.BottomBar.BottomBarStatView" Collapsed="true">
+    <Position X="20.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAEAAABAAAAAAAgAoAAACAAAA=</HashCode>
+      <FileName>UserInterface\BottomBar\BottomBarStatView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.UserInterface.BottomBar.CurrentHPView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABAAAAIAAAAAAAEAAEAAAAAABQAIAABgAAgA=</HashCode>
+      <FileName>UserInterface\BottomBar\CurrentHPView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.BottomBar.StatImageView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="36.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABAAAAIAEIAAAAEAAEAAAAAABQAIAABAAAgA=</HashCode>
+      <FileName>UserInterface\BottomBar\StatImageView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.BottomBar.StatTextView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="38.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAEAAAAAABQCAACBAAAAA=</HashCode>
+      <FileName>UserInterface\BottomBar\StatTextView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.BottomBarView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABAAAAIAAAAAAAEAAEABAAAABQAoEABAAAgA=</HashCode>
+      <FileName>UserInterface\BottomBar\BottomBarView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.BuildGameActionHolder" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>UserInterface\BuildGameActionHolder.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.LeftButtonBar" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABAAAAIAAAAAAAEAAEABAAAABQAIEABAAAgA=</HashCode>
+      <FileName>UserInterface\LeftButtonBar.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.RightButtonBar" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABAAAAIAAAAAAAEAAEABAAAABQAIEABAAAgA=</HashCode>
+      <FileName>UserInterface\MenuBar\RightButtonBar.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.MiniMapBar" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABAAAAIAAAAAAAEAAEABAAAABQAIEABAAAgA=</HashCode>
+      <FileName>UserInterface\MiniMap\MiniMapBar.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.StatusBarView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABAAAAIAAAAAAAEAAEABAAAABQAIEABAAAgA=</HashCode>
+      <FileName>UserInterface\StatusBar\StatusBarView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.UIView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAQAAAAAEAAEABAAAABQAIAABAAAAA=</HashCode>
+      <FileName>UserInterface\UIView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.GameActionGui.GameActionGuiController" Collapsed="true">
+    <Position X="20.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IgAAAAAAAAAAAgAAAAABAAAAAAABAgAAAAAAAAAIAAA=</HashCode>
+      <FileName>UserInterface\GameActionGui\GameActionGuiController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.UserInterface.GameActionGui.GameActionGuiModel" Collapsed="true">
+    <Position X="22.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BBAAAhAAABAAAAACAAAAAAgAAAAAAAAAQAAEAAAoAAI=</HashCode>
+      <FileName>UserInterface\GameActionGui\GameActionGuiModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.UserInterface.GameActionGui.GameActionGuiView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABAAAAIAAAAAAAEAAEAAAEAABQAIEABAIAgA=</HashCode>
+      <FileName>UserInterface\GameActionGui\GameActionGuiView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.MenuBar.MenuBarModel" Collapsed="true">
+    <Position X="22.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserInterface\MenuBar\MenuBarModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.UserInterface.MenuBar.MenuButton" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAAAAAAAEQAEAAAAAABQAIAABAAAAA=</HashCode>
+      <FileName>UserInterface\MenuBar\MenuButton.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.UserInterface.StatusBar.StatusBarModel" Collapsed="true">
+    <Position X="19" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserInterface\StatusBar\StatusBarModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.utils.ActionButtonPosition" Collapsed="true">
+    <Position X="27.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAICAAAAAAAAAAAEAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>utils\ActionButtonPosition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.utils.BuildingShapeCalculator" Collapsed="true">
+    <Position X="29.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>utils\BuildingShapeCalculator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.utils.CoordsCalculator" Collapsed="true">
+    <Position X="26" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AECAAAIAAAAAAAAIAEAAAAAAAQBQAAAgAACAAAAABkg=</HashCode>
+      <FileName>utils\CoordsCalculator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.utils.CoordsConsoleUtil" Collapsed="true">
+    <Position X="27.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>utils\CoordsConsoleUtil.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.utils.DistanceCalculator" Collapsed="true">
+    <Position X="24.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAABAAAAAAABAAAAAAQAAAAAA=</HashCode>
+      <FileName>utils\DistanceCalculator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.utils.ModulusUtils" Collapsed="true">
+    <Position X="27.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>utils\ModulusUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.utils.WorldPositionCalculator" Collapsed="true">
+    <Position X="38.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAACAAAAAAAEAIAAAAAAAIAAAAI=</HashCode>
+      <FileName>utils\WorldPositionCalculator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Desktop.View.Camera.CameraController" Collapsed="true">
+    <Position X="31.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAABAAEAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>View\Camera\CameraController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Desktop.View.Camera.CameraModel" Collapsed="true">
+    <Position X="33" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAECAAAAAABAAEAAAAAAAAAQAAAgAABAAAAAAAAI=</HashCode>
+      <FileName>View\Camera\CameraModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Desktop.View.EventArgs.ZoomEventArgs" Collapsed="true">
+    <Position X="22.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\EventArgs\ZoomEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.View.GUI.ActionBox.ActionBoxController" Collapsed="true">
+    <Position X="20.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAIAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\GUI\ActionBox\ActionBoxController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.View.GUI.ActionBox.ActionBoxModel" Collapsed="true">
+    <Position X="22.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAACAAAAAA=</HashCode>
+      <FileName>View\GUI\ActionBox\ActionBoxModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.View.GUI.ActionBox.ActionBoxTextView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAEAAAAAABQCAACBAAAAA=</HashCode>
+      <FileName>View\GUI\ActionBox\ActionBoxTextView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.View.GUI.ActionBox.ActionBoxView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAAAAAAAEAAEAAAAAABQAIAABAAAAA=</HashCode>
+      <FileName>View\GUI\ActionBox\ActionBoxView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.View.GUI.GuiViewImage" Collapsed="true">
+    <Position X="1.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAABAAAAIAAAAAAAEAAEAAAAAABQAIAABAAAgA=</HashCode>
+      <FileName>View\GUI\GuiViewImage.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="kbs2.World.Cell.WorldCellController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACBAAAFAAAIAAAAAABAAAAA=</HashCode>
+      <FileName>World\Cell\WorldCellController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.World.Cell.WorldCellFactory" Collapsed="true">
+    <Position X="20.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAACAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>World\Cell\WorldCellFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.World.Cell.WorldCellModel" Collapsed="true">
+    <Position X="22.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAEAAAAAAAAAIEAAAAAAQAEAAAAAAAAA=</HashCode>
+      <FileName>World\Cell\WorldCellModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.World.Cell.WorldCellView" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAAAAAAAEAAEAAAAAABQAIAABAIAAA=</HashCode>
+      <FileName>World\Cell\WorldCellView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.World.Chunk.WorldChunkController" Collapsed="true">
+    <Position X="26" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgACBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>World\Chunk\WorldChunkController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.World.Chunk.WorldChunkFactory" Collapsed="true">
+    <Position X="27.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>World\Chunk\WorldChunkFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.World.Chunk.WorldChunkLoader" Collapsed="true">
+    <Position X="29.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>World\Chunk\WorldChunkLoader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.World.Chunk.WorldChunkModel" Collapsed="true">
+    <Position X="31.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>World\Chunk\WorldChunkModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.World.TerrainDef.TerrainDef" Collapsed="true">
+    <Position X="22.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>World\Def\TerrainDef.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastNoise" Collapsed="true">
+    <Position X="34.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>8ETzACABYhJScKhROEcAGEAsrARqMJgA5waBASUTQq0=</HashCode>
+      <FileName>World\Noise\FastNoise.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.World.World.WorldController" Collapsed="true">
+    <Position X="33" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgACAAAAACAAAAgAAAAAEAAAABAAAKAQAAAAAAAA=</HashCode>
+      <FileName>World\World\WorldController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.World.World.WorldFactory" Collapsed="true">
+    <Position X="34.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAACA=</HashCode>
+      <FileName>World\World\WorldFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.World.World.WorldModel" Collapsed="true">
+    <Position X="36.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAEAAACAAAAAAAAAAMAAAEAAAAAA=</HashCode>
+      <FileName>World\World\WorldModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Unit.Abstract.Hitbox" Collapsed="true">
+    <Position X="19" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Abstract\Hitbox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Battle.BattleDef" Collapsed="true">
+    <Position X="38.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAQgAAAAAAIAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Battle\BattleDef.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Battle.Battle_Controller" Collapsed="true">
+    <Position X="34.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgEAAAAAAAAAAAAAAAAAAAAAAEAAAIAEAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Battle\BattleMVC\Battle_Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Battle.Battle_Model" Collapsed="true">
+    <Position X="36.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAQgAAAAAAIAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Battle\BattleMVC\Battle_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Health.HP_Controller" Collapsed="true">
+    <Position X="20.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAACAAAAAABAAIA=</HashCode>
+      <FileName>WorldEntity\Health\HealthMVC\HP_Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Health.HP_Model" Collapsed="true">
+    <Position X="22.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Health\HealthMVC\HP_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Health.HealthValues" Collapsed="true">
+    <Position X="38.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Health\HealthValues.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Unit.MVC.Unit_View" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAQAIAIAAAAAEAAEAAAAAABQAIAABAAAAA=</HashCode>
+      <FileName>WorldEntity\Unit\MVC\Unit_View.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Unit.MVC.UnitController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QBQEAAAACAIAAACAAAAAAABAAAAJAAIhUIAAAAAIAQA=</HashCode>
+      <FileName>WorldEntity\Unit\MVC\UnitController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Location.LocationMVC.Location_Controller" Collapsed="true">
+    <Position X="31.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAkIAAAEIAEAAAAAAAACAAAA=</HashCode>
+      <FileName>WorldEntity\Location\LocationMVC\Location_Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Location.LocationModel" Collapsed="true">
+    <Position X="33" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAQABAAgAAQAAAQAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Location\LocationMVC\Location_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Pathfinder.Exceptions.NoPathFoundException" Collapsed="true">
+    <Position X="31.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Pathfinder\Exceptions\NoPathFoundException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Pathfinder.Pathfinder" Collapsed="true">
+    <Position X="34.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAA4QABAAAAIAAgAAAAAQAAAAAACIAAAAAAAGQAgAA=</HashCode>
+      <FileName>WorldEntity\Pathfinder\Pathfinder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingDef" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAIABAIGAAAgAAAAAFAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingDef.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingFactory" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAIAAAAAAAAAIAAAAAEAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.ConstructingBuildingFactory" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="38.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAACAIAAAAgAAAAAAAAAAAAEAAQAA=</HashCode>
+      <FileName>WorldEntity\Structures\ConstructingBuildingFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingMVC.BuildingModel" Collapsed="true">
+    <Position X="1.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingMVC\Building_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingMVC.BuildingModel&lt;TStructureDef&gt;" Collapsed="true">
+    <Position X="3.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAABCAAAAAAAAAEAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingMVC\Building_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingMVC.BuildingController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAABAQBAIAAACABAAAAEBAEAABAAIBQAgABAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingMVC\BuildingController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingMVC.BuildingView" Collapsed="true">
+    <Position X="3.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingMVC\BuildingView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingMVC.BuildingView&lt;TModelType, TDefType&gt;" Collapsed="true">
+    <Position X="2.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAAAAAAAEAAEAIAAAABQAIAABAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingMVC\BuildingView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC.ConstructingBuildingController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAAAAQBgIAAASABAAAAEBAEQABAAABQQAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingUnderConstructionMVC\ConstructingBuildingController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC.ConstructingBuildingModel" Collapsed="true">
+    <Position X="19" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAASAAAAAAAAAIAAAAAAgAAIAAABAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingUnderConstructionMVC\ConstructingBuildingModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC.ConstructingBuildingView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABIAAAIAAAAAAAEAAEAAAAAABQAoAABAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingUnderConstructionMVC\ConstructingBuildingView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC.ConstructionCounter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAEAAAAAABQCAAKBAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\BuildingUnderConstructionMVC\ConstructionCounter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.Defs.ConstructingBuildingDef" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="36.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAJGAAAgAAAAABAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\Defs\ConstructingBuildingDef.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.Defs.ResourceFactoryDef" Collapsed="true">
+    <Position X="13.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\Defs\ResourceFactoryDef.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.Defs.TrainingStructureDef" Collapsed="true">
+    <Position X="15.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\Defs\TrainingStructureDef.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.ResourceFactory.ResourceFactoryController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAAAAQBAIAAACABAAAQEBAEAABACABQAgAAAAAABA=</HashCode>
+      <FileName>WorldEntity\Structures\ResourceFactory\ResourceFactoryController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.ResourceFactory.ResourceFactoryModel" Collapsed="true">
+    <Position X="6" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\ResourceFactory\ResourceFactoryModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.ResourceFactory.ResourceFactoryView" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAIAAAAAAAEAAEAAAAAABQAIAABAIAAA=</HashCode>
+      <FileName>WorldEntity\Structures\ResourceFactory\ResourceFactoryView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.TrainingStructure.TrainingStructureController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQABAAQBAIAABCCBAAAIEBAEQABIAABQAgBQAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\TrainingStructure\TrainingStructureController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.TrainingStructure.TrainingStructureModel" Collapsed="true">
+    <Position X="3.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\TrainingStructure\TrainingStructureModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.Structures.TrainingStructure.TrainingStructureView" Collapsed="true">
+    <Position X="1.25" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structures\TrainingStructure\TrainingStructureView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.Unit.Model.Unit_Model" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="31.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEEBAAAIAAABECgAAAAADQBAhAAAAAAQAAgAAAAAAI=</HashCode>
+      <FileName>WorldEntity\Unit\MVC\Unit_Model.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Unit.UnitDef" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="36.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQABAICAQAgBAABAFQBAAAAABANgAAAACAAAAA=</HashCode>
+      <FileName>WorldEntity\Unit\UnitDef.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.Unit.UnitFactory" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="38.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAQAAEAAAAAAAAgAAAAAAAIAAAAAEAAAAA=</HashCode>
+      <FileName>WorldEntity\Unit\UnitFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="kbs2.WorldEntity.WorldEntitySpawner.EntitySpawner" Collapsed="true">
+    <Position X="26" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAABAABAAAAAQAAAAAAAgQAgAACAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\WorldEntitySpawner\EntitySpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.XP.XPMVC.LevelEventArgs" Collapsed="true">
+    <Position X="26" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\XP\LevelEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.XP.XPMVC.Lvl_Model" Collapsed="true">
+    <Position X="34.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAACAAAQABAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\XP\XPMVC\Lvl_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.XP.XPMVC.XP_Controller" Collapsed="true">
+    <Position X="19" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAAAAAAQACAAAA=</HashCode>
+      <FileName>WorldEntity\XP\XPMVC\XP_Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.XP.XPMVC.XP_Model" Collapsed="true">
+    <Position X="20.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>WorldEntity\XP\XPMVC\XP_Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kbs2.WorldEntity.XP.LevelXPDef" Collapsed="true">
+    <Position X="27.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAQABAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\XP\LevelXPDef.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="kbs2.GamePackage.DayCycle.IngameTime" Collapsed="true">
+    <Position X="33" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAEABAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>GamePackage\DayCycle\IngameTime.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.World.Coords" Collapsed="true">
+    <Position X="24.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAEQEEAAAAAAAAAAAAAAABgAAAAAiA=</HashCode>
+      <FileName>World\Structs\Coords.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.World.Structs.FloatCoords" Collapsed="true">
+    <Position X="27.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEQAEAAAAAAAAAAAAAAABgAAAAAiA=</HashCode>
+      <FileName>World\Structs\FloatCoords.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.Unit.CostValue" Collapsed="true">
+    <Position X="26" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structs\CostValue.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.WorldEntity.Shapes.Circle" Collapsed="true">
+    <Position X="22.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYJA=</HashCode>
+      <FileName>WorldEntity\Shapes\Circle.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.WorldEntity.Structs.BattleModifiers" Collapsed="true">
+    <Position X="19" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structs\BattleModifiers.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.WorldEntity.Structs.CellWeightValues" Collapsed="true">
+    <Position X="20.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAACAAgAAACAAAAAAAQAAAAAABSA=</HashCode>
+      <FileName>WorldEntity\Structs\CellWeightValues.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.WorldEntity.Structs.HealthDef" Collapsed="true">
+    <Position X="29.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structs\HealthDef.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.WorldEntity.Structs.HitValues" Collapsed="true">
+    <Position X="31.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structs\HitValues.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.WorldEntity.Structs.Level" Collapsed="true">
+    <Position X="34.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgBAAAAAAAAAAAAAQAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structs\Level.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kbs2.WorldEntity.Structs.ViewValues" Collapsed="true">
+    <Position X="36.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAEAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Structs\ViewValues.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="kbs2.Actions.IActionModel" Collapsed="true">
+    <Position X="19" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Actions\IActionModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Actions.Interfaces.IGameAction" Collapsed="true">
+    <Position X="27.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAA=</HashCode>
+      <FileName>Actions\Interfaces\IGameAction.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Actions.Interfaces.IMapAction" Collapsed="true">
+    <Position X="38.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAgAAAAAAAAAAQAAAAAAAAAAAAAEAAQAAAAAAAAAA=</HashCode>
+      <FileName>Actions\Interfaces\IMapAction.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Actions.Interfaces.IMapActionDef" Collapsed="true">
+    <Position X="19" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Actions\Interfaces\IMapActionDef.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Faction.Interfaces.IFactionMember" Collapsed="true">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Faction\Interfaces\IFactionMember.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Faction.Interfaces.IHasFactionBuilding" Collapsed="true">
+    <Position X="31.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Faction\Interfaces\IHasFactionBuilding.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Faction.Interfaces.IHasFactionRelationship" Collapsed="true">
+    <Position X="33" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAwAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Faction\Interfaces\IHasFactionRelationship.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Faction.Interfaces.IHasFactionUnit" Collapsed="true">
+    <Position X="34.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Faction\Interfaces\IHasFactionUnit.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.GamePackage.AIPackage.Interfaces.IAI" Collapsed="true">
+    <Position X="20.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>GamePackage\AIPackage\Interfaces\IAI.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.GamePackage.Interfaces.Unit_Controller" Collapsed="true">
+    <Position X="10.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAEAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Interfaces\IViewImage.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.GamePackage.Interfaces.IViewItem" Collapsed="true">
+    <Position X="11.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAEAAAAAABQAAAABAAAAA=</HashCode>
+      <FileName>GamePackage\Interfaces\IViewItem.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.GamePackage.Interfaces.IViewText" Collapsed="true">
+    <Position X="14" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAACAAAAAA=</HashCode>
+      <FileName>GamePackage\Interfaces\IViewText.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.UserInterface.Interfaces.IButton" Collapsed="true">
+    <Position X="9.5" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserInterface\Interfaces\IButton.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.View.GUI.IGuiViewImage" Collapsed="true">
+    <Position X="11.75" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>View\GUI\GuiViewImage.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.World.Interfaces.IConstructable" Collapsed="true">
+    <Position X="24.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>World\Interfaces\IConstructable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.IBattleEntity" Collapsed="true">
+    <Position X="22.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAQA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IBattleEntity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.IGameActionHolder" Collapsed="true">
+    <Position X="6.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IGameActionHolder.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.IImpassable" Collapsed="true">
+    <Position X="6.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IImpassable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.IMoveable" Collapsed="true">
+    <Position X="20.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IMoveable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.ISpawnable" Collapsed="true">
+    <Position X="6" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\ISpawnable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.ISpawnableDef">
+    <Position X="10.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\ISpawnableDef.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.IStructure&lt;TStructureDef&gt;" Collapsed="true">
+    <Position X="3.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAQBAIAAACABAAAAEAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IStructure.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.IStructureDef" Collapsed="true">
+    <Position X="10.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IStructureDef.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.ITargetable" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\ITargetable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.ITrainable" Collapsed="true">
+    <Position X="6" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\ITrainable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.ITrainableDef" Collapsed="true">
+    <Position X="10.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\ITrainableDef.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.ITrainingEntity" Collapsed="true">
+    <Position X="3.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABACAAAAIAAAAAAAIAAAAAABQAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\ITrainingEntity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.IWorldEntity" Collapsed="true">
+    <Position X="3.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IWorldEntity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Interfaces.IWorldEntityDef" Collapsed="true">
+    <Position X="10.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IWorldEntityDef.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Unit.Interfaces.IElemental" Collapsed="true">
+    <Position X="26" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IElemental.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Unit.Interfaces.IHasPersonalSpace" Collapsed="true">
+    <Position X="36.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IHasPersonalSpace.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.Unit.Interfaces.IPurchasable" Collapsed="true">
+    <Position X="13.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IPurchasable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="kbs2.WorldEntity.Unit.MVC.IHasCommand" Collapsed="true">
+    <Position X="29.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IHasCommand.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="kbs2.Faction.Enums.Faction_Relations" Collapsed="true">
+    <Position X="22.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAgIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Faction\Enums\Faction_Relations.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="kbs2.GamePackage.AIPackage.Enums.Command" Collapsed="true">
+    <Position X="19" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>GamePackage\AIPackage\Enums\Command.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="kbs2.GamePackage.GameSpeed" Collapsed="true">
+    <Position X="24.25" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>GamePackage\Enums\GameSpeed.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="kbs2.GamePackage.GameState" Collapsed="true">
+    <Position X="26" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAIAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Enums\GameState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="kbs2.GamePackage.MouseButton" Collapsed="true">
+    <Position X="27.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Selection\MouseInput.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="kbs2.Resources.Enums.ResourceType" Collapsed="true">
+    <Position X="29.5" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAgAAAAA=</HashCode>
+      <FileName>Resources\Enums\ResourceType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="kbs2.World.Enums.TerrainType" Collapsed="true">
+    <Position X="31.25" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEABAAEAAAAIAEAAIAAQAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>World\Enums\TerrainType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="kbs2.World.ViewMode" Collapsed="true">
+    <Position X="33" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAEAAAA=</HashCode>
+      <FileName>World\Enums\ViewMode.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="kbs2.Unit.ElementType" Collapsed="true">
+    <Position X="20.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAQAAAAAAAAAsAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>WorldEntity\Enums\ElementType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="kbs2.WorldEntity.Interfaces.WorldEntityType" Collapsed="true">
+    <Position X="34.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IWorldEntity.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Delegate Name="kbs2.Actions.Interfaces.TabActionDelegate" Collapsed="true">
+    <Position X="34.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Actions\Interfaces\IGameAction.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="kbs2.GamePackage.GameSpeedObserver" Collapsed="true">
+    <Position X="20.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Game\GameController.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="kbs2.GamePackage.GameStateObserver" Collapsed="true">
+    <Position X="22.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Game\GameController.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="kbs2.GamePackage.MouseStateObserver" Collapsed="true">
+    <Position X="24.25" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Game\GameController.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="kbs2.GamePackage.OnTickHandler" Collapsed="true">
+    <Position X="31.25" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Game\GameController.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="kbs2.GamePackage.ShaderDelegate" Collapsed="true">
+    <Position X="33" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Game\GameController.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="kbs2.GamePackage.OnSelectionChangedDelegate" Collapsed="true">
+    <Position X="27.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePackage\Selection\Selection_Controller.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="kbs2.WorldEntity.Interfaces.OnTakeHitDelegate" Collapsed="true">
+    <Position X="29.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IBattleEntity.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="kbs2.WorldEntity.Interfaces.OnMoveHandler" Collapsed="true">
+    <Position X="26" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Interfaces\IMoveable.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="kbs2.WorldEntity.Unit.MVC.DeathDelegate" Collapsed="true">
+    <Position X="19" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldEntity\Unit\MVC\UnitController.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
