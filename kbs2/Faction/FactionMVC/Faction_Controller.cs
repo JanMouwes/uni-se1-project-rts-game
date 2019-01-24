@@ -18,10 +18,6 @@ namespace kbs2.Faction.FactionMVC
         public FactionModel FactionModel { get; set; }
         public Currency_Controller CurrencyController { get; set; }
 
-        public Faction_Controller(string name, GameController game) : this(name, game, 500)
-        {
-        }
-
         public Faction_Controller(string name, GameController game, float startingBalance)
         {
             FactionModel = new FactionModel(name);

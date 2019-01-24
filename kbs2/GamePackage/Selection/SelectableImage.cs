@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.GamePackage.Selection
 {
-    public class SelectableImage : Unit_Controller
+    public class SelectableImage : IViewImage
     {
         public double Rotation { get; }
         public FloatCoords Coords { get; }

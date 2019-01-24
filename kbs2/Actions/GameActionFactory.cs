@@ -35,11 +35,9 @@ namespace kbs2.Actions
             return gameAction;
         }
 
-        public SelectMapAction_GameAction CreateSelectAction(GameController gameController, IMapAction mapAction)
+        public SelectMapAction_GameAction CreateSelectAction(IMapAction mapAction)
         {
-            if (gameController.MapActionSelector == null) throw new ArgumentNullException($"{nameof(gameController)}'s {nameof(GameActionSelector)} is null");
-
-            SelectMapAction_GameAction tabItemAction = new SelectMapAction_GameAction(gameController.MapActionSelector, mapAction, mapAction.IconValues);
+            SelectMapAction_GameAction tabItemAction = new SelectMapAction_GameAction(game.MapActionSelector, mapAction, mapAction.IconValues);
 
             return tabItemAction;
         }

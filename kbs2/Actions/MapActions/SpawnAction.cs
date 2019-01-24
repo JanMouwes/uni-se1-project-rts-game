@@ -12,7 +12,6 @@ using kbs2.WorldEntity.Structs;
 using kbs2.WorldEntity.Structures;
 using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.Unit;
-using kbs2.WorldEntity.Unit.MVC;
 
 namespace kbs2.Actions.GameActions
 {
@@ -33,44 +32,22 @@ namespace kbs2.Actions.GameActions
             this.factionController = factionController;
         }
 
-        /// <summary>
-        /// spawns a unit at a target location
-        /// </summary>
-        /// <param name="unit">unit to be spawned</param>
-        /// <param name="targetable">The target</param>
-        private void SpawnUnit(UnitController unit, ITargetable targetable)
-        {
-            gameController.Spawner.SpawnUnit(unit, (Coords) targetable.FloatCoords);
-        }
-
-        /// <summary>
-        /// Spawns a building at a target location
-        /// </summary>
-        /// <param name="building">building to be spawned</param>
-        /// <param name="spawntarget">The target</param>
-        private void SpawnBuilding(IStructure<IStructureDef> building, ITargetable spawntarget)
-        {
-            ConstructingBuildingController constructingBuilding = ConstructingBuildingFactory.CreateNewBUCAt(building.Def, (Coords) spawntarget.FloatCoords, factionController);
-            gameController.Spawner.SpawnStructure((Coords) spawntarget.FloatCoords, constructingBuilding);
-        }
-
         public override bool TryExecute(ITargetable target)
         {
+            IWorldEntity worldEntity;
             switch (SpawnableDef)
             {
                 case BuildingDef buildingDef:
                     using (ConstructingBuildingFactory factory = new ConstructingBuildingFactory(factionController))
                     {
-                        ConstructingBuildingController building = factory.CreateConstructingBuildingControllerOf(buildingDef);
-                        SpawnBuilding(building, target);
+                        worldEntity = factory.CreateConstructingBuildingControllerOf(buildingDef);
                     }
 
                     break;
                 case UnitDef unitDef:
                     using (UnitFactory factory = new UnitFactory(factionController, gameController))
                     {
-                        UnitController unit = factory.CreateNewUnit(unitDef);
-                        SpawnUnit(unit, target);
+                        worldEntity = factory.CreateNewUnit(unitDef);
                     }
 
                     break;
@@ -78,6 +55,8 @@ namespace kbs2.Actions.GameActions
                 default:
                     return false;
             }
+
+            gameController.Spawner.SpawnWorldEntity((Coords) target.FloatCoords, worldEntity);
 
             return true;
         }

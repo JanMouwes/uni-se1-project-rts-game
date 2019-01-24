@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using kbs2.Actions.GameActionGrid;
+using kbs2.Actions.Interfaces;
 using kbs2.GamePackage;
 
 namespace kbs2.UserInterface.GameActionGui
@@ -42,6 +44,13 @@ namespace kbs2.UserInterface.GameActionGui
             {
                 model.TabModels.Add(gameActionTabModel);
             }
+        }
+
+        public void SetActions(IEnumerable<IEnumerable<IGameAction>> gameActionLists)
+        {
+            IEnumerable<GameActionTabModel> gameActionTabModels = gameActionLists.Select(gameActionList => new GameActionTabModel(gameActionList.ToArray(), this));
+
+            SetActions(gameActionTabModels);
         }
 
         // remove all actions

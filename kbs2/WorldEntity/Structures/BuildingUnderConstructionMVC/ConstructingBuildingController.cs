@@ -11,7 +11,7 @@ using kbs2.WorldEntity.Structures.Defs;
 
 namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 {
-    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>, IGameActionHolder
+    public class ConstructingBuildingController : IStructure<ConstructingBuildingDef>
     {
         public delegate void ConstructionCompleteObserver(object sender, EventArgsWithPayload<IStructureDef> eventArgs);
 
@@ -33,7 +33,7 @@ namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 
         public int ViewRange => 8;
 
-        public Unit_Controller View => ConstructingBuildingView;
+        public IViewImage View => ConstructingBuildingView;
 
         public List<WorldCellModel> OccupiedCells => ConstructingBuildingModel.LocationCells;
 

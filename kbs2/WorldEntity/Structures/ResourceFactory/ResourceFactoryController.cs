@@ -22,7 +22,7 @@ namespace kbs2.WorldEntity.Structures.ResourceFactory
         /// <inheritdoc cref="View"/>
         public ResourceFactoryView ResourceFactoryView { get; }
 
-        public Unit_Controller View => ResourceFactoryView;
+        public IViewImage View => ResourceFactoryView;
 
         public List<WorldCellModel> OccupiedCells { get; } = new List<WorldCellModel>();
 

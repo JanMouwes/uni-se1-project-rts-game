@@ -12,7 +12,6 @@ using kbs2.World.Enums;
 using kbs2.World.Structs;
 using kbs2.World.TerrainDef;
 using kbs2.UserInterface;
-using kbs2.View.GUI.ActionBox;
 using kbs2.World.World;
 using kbs2.WorldEntity.Unit;
 using kbs2.WorldEntity.Unit.MVC;
@@ -22,10 +21,10 @@ using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using kbs2.Actions.ActionTabActions;
 using kbs2.Actions.GameActionDefs;
-using kbs2.Actions.GameActionGrid;
 using kbs2.Actions.GameActions;
 using kbs2.Actions.GameActionSelector;
 using kbs2.Actions.Interfaces;
+using kbs2.Faction;
 using kbs2.Faction.FactionMVC;
 using kbs2.GamePackage.Animation;
 using kbs2.GamePackage.Interfaces;
@@ -37,10 +36,7 @@ using kbs2.WorldEntity.Pathfinder;
 using kbs2.WorldEntity.Structures;
 using kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC;
 using kbs2.WorldEntity.WorldEntitySpawner;
-using kbs2.WorldEntity.Structures.BuildingMVC;
-using kbs2.UserInterface.BottomBar;
 using kbs2.GamePackage.CPU;
-using kbs2.GamePackage.AIPackage;
 
 namespace kbs2.GamePackage
 {
@@ -62,6 +58,9 @@ namespace kbs2.GamePackage
 
         public GameModel GameModel { get; set; }
         public GameView GameView { get; set; }
+
+        private GameScenario.GameScenario scenario;
+
         public EntitySpawner Spawner;
 
         public IMapAction SelectedMapAction => MapActionSelector.SelectedMapAction;
@@ -136,7 +135,13 @@ namespace kbs2.GamePackage
 
         #endregion
 
-        public GameController(GameSpeed gameSpeed, GameState gameState)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="scenario">Game-scenario. Null for default scenario</param>
+        /// <param name="gameSpeed">Game's default speed</param>
+        /// <param name="gameState">Game's default state</param>
+        public GameController(GameScenario.GameScenario scenario, GameSpeed gameSpeed = GameSpeed.Regular, GameState gameState = GameState.Paused)
         {
             this.GameSpeed = gameSpeed;
             this.GameState = gameState;
@@ -149,16 +154,21 @@ namespace kbs2.GamePackage
             AnimationController = new AnimationController();
 
 
-            PlayerFaction = new Faction_Controller("PlayerFaction", this);
-
             MapActionSelector = new MapActionSelector();
 
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
-
             shader = RandomPattern2;
 
             Content.RootDirectory = "Content";
+
+            FactionFactory factionFactory = new FactionFactory(this);
+
+            this.scenario = scenario ?? GameScenario.GameScenario.DefaultScenario;
+
+            PlayerFaction = factionFactory.CreatePlayerFaction("PlayerFaction", this.scenario.StartingBalance);
+
+            this.scenario.Initialise(this, PlayerFaction);
         }
 
         /// <summary>
@@ -206,7 +216,8 @@ namespace kbs2.GamePackage
             GameModel.World = WorldFactory.GetNewWorld(FastNoise.NoiseType.SimplexFractal);
 
             // Create CPU player
-            CPU1 = CPU_Factory.CreateSimpleCpu(new Faction_Controller("CPU1", this));
+            FactionFactory factionFactory = new FactionFactory(this);
+            CPU1 = CPU_Factory.CreateSimpleCpu(factionFactory.CreateCPUFaction("CPU1"));
 
             //GameModel.Factions.Add((SimpleAI)(CPU1.CpuModel.AI).Faction);
 
@@ -220,7 +231,7 @@ namespace kbs2.GamePackage
             onTick += (sender, args) =>
             {
                 List<IViewItem> frameViewItems = AnimationController.NextFrame;
-                GameModel.ItemList.AddRange(frameViewItems.OfType<Unit_Controller>());
+                GameModel.ItemList.AddRange(frameViewItems.OfType<IViewImage>());
                 GameModel.TextList.AddRange(frameViewItems.OfType<IViewText>());
             };
 
@@ -236,6 +247,11 @@ namespace kbs2.GamePackage
             GameView = new GameView(GameModel, graphicsDeviceManager, spriteBatch, Camera, GraphicsDevice, Content);
 
             GameActionGui = new GameActionGuiController(this);
+
+            GameActionGui.SetActions(new List<List<IGameAction>>
+            {
+                scenario.BaseActions.ToList()
+            });
 
             GameModel.MouseInput = new MouseInput(this);
 
@@ -255,9 +271,7 @@ namespace kbs2.GamePackage
         /// LoadContent is called once per game and is to load all the content.
         /// </summary>
         protected override void LoadContent()
-
         {
-
             bottomBarView = new BottomBarView(GraphicsDevice);
 
 
@@ -700,6 +714,7 @@ namespace kbs2.GamePackage
         /// </summary>
         public void SetBuilding(object sender, OnTickEventArgs eventArgs)
         {
+            //  IMPORTANT NOTE this method is only here to scavenge off of later. Don't delete it just yet, as we might need it later.
             void CheckKeysAndPlaceBuilding(bool isKeyPressed, int buildingId, MouseState mouseState, List<TerrainType> legalTerrainTypes)
             {
                 if (!isKeyPressed) return;
@@ -721,115 +736,28 @@ namespace kbs2.GamePackage
                 {
                     ConstructingBuildingController building = constructionFactory.CreateConstructingBuildingControllerOf(def);
                     Spawner.SpawnStructure(coords, building);
-                    building.ConstructionComplete += (o, args) => Spawner.ReplaceBuilding(o, args);
+                    
                 }
             }
+        }
 
-            KeyboardState keyboardState = Keyboard.GetState();
-
-            if (keyboardState.IsKeyDown(Keys.D8))
-            {
-                SpawnActionDef def = SpawnActionDef.Pikachu;
-                MapActionSelector.Select(new SpawnAction(def, this, PlayerFaction));
-                return;
-            }
-
-            if (keyboardState.IsKeyDown(Keys.D7))
-            {
-                SpawnActionDef def = SpawnActionDef.Raichu;
-                MapActionSelector.Select(new SpawnAction(def, this, PlayerFaction));
-                return;
-            }
-
-            if (keyboardState.IsKeyDown(Keys.D1))
-            {
-                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D1), 1, Mouse.GetState(),
-                    new List<TerrainType>()
-                    {
-                        TerrainType.Grass,
-                        TerrainType.Rock,
-                        TerrainType.Soil,
-                        TerrainType.Default
-                    }
-                );
-                return;
-            }
-
-            if (keyboardState.IsKeyDown(Keys.D2))
-            {
-                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D2), 2, Mouse.GetState(),
-                    new List<TerrainType>()
-                    {
-                        TerrainType.Grass,
-                        TerrainType.Rock,
-                        TerrainType.Soil,
-                        TerrainType.Default
-                    }
-                );
-                return;
-            }
-
-            if (keyboardState.IsKeyDown(Keys.D3))
-            {
-                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D3), 3, Mouse.GetState(),
-                    new List<TerrainType>()
-                    {
-                        TerrainType.Rock
-                    }
-                );
-                return;
-            }
-
-            if (keyboardState.IsKeyDown(Keys.D4))
-            {
-                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D4), 4, Mouse.GetState(),
-                    new List<TerrainType>()
-                    {
-                        TerrainType.Grass,
-                        TerrainType.Rock,
-                        TerrainType.Default
-                    }
-                );
-                return;
-            }
-
-            if (keyboardState.IsKeyDown(Keys.D5))
-            {
-                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D5), 5, Mouse.GetState(),
-                    new List<TerrainType>()
-                    {
-                        TerrainType.Trees
-                    }
-                );
-                return;
-            }
-
-            if (keyboardState.IsKeyDown(Keys.D6))
-            {
-                CheckKeysAndPlaceBuilding(keyboardState.IsKeyDown(Keys.D6), 6, Mouse.GetState(),
-                    new List<TerrainType>()
-                    {
-                        TerrainType.Grass,
-                        TerrainType.Soil,
-                        TerrainType.Sand,
-                        TerrainType.Default
-                    }
-                );
-                return;
-            }
+        private void AddGameActionTab()
+        {
         }
 
         public void ChangeSelection(object sender, EventArgsWithPayload<Selection_Controller> eventArgs)
         {
             List<IGameActionHolder> gameActionHolders = eventArgs.Value.SelectedItems;
-            List<GameActionTabModel> gameActionTabModels = new List<GameActionTabModel>();
+            List<List<IGameAction>> gameActionTabModels = eventArgs.Value.SelectedItems.Any()
+                ? gameActionHolders.Select(item => new List<IGameAction>(item.GameActions)).ToList()
+                : new List<List<IGameAction>>
+                {
+                    scenario.BaseActions.ToList()
+                };
+            
             foreach (IGameActionHolder gameActionHolder in gameActionHolders)
             {
-                IGameAction[] mapActions = gameActionHolder.GameActions.ToArray();
-                GameActionTabModel gameActionTabModel = new GameActionTabModel(mapActions, GameActionGui);
-                gameActionTabModels.Add(gameActionTabModel);
-
-                if (!gameActionHolder.GameActions.Any(item => item is SelectMapAction_GameAction)) continue;
+                if (!gameActionHolder.GameActions.OfType<SelectMapAction_GameAction>().Any()) continue;
                 MapActionSelector.Select(gameActionHolder.GameActions.OfType<SelectMapAction_GameAction>().First().MapAction);
             }
 

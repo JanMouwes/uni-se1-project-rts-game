@@ -105,7 +105,7 @@ namespace kbs2.GamePackage
 
                             FloatCoords cellCoords = WorldPositionCalculator.DrawCoordsToCellFloatCoords(WorldPositionCalculator.TransformWindowCoords((Coords) mouseCoords, game.Camera.GetViewMatrix()), game.GameView.TileSize);
 
-                            IWorldEntity worldEntity = null;
+                            IWorldEntity worldEntity;
                             ITargetable target = game.CellContainsIWorldEntity(cellCoords, out worldEntity) ? (ITargetable) worldEntity : game.GameModel.World.GetCellFromCoords((Coords) cellCoords);
                             if (game.MapActionSelector.IsMapActionSelected() && game.MapActionSelector.SelectedMapAction.IsValidTarget(target))
                             {

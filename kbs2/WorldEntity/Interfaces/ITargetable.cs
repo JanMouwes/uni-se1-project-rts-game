@@ -1,3 +1,4 @@
+using kbs2.World;
 using kbs2.World.Structs;
 
 namespace kbs2.WorldEntity.Interfaces

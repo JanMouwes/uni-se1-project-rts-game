@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.WorldEntity.Structures.BuildingUnderConstructionMVC
 {
-    public class ConstructingBuildingView : Unit_Controller
+    public class ConstructingBuildingView : IViewImage
     {
         public ConstructingBuildingModel Model { get; set; }
         private string ImageSrc { get; }

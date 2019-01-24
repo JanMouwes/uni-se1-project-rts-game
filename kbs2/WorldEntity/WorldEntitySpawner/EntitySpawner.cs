@@ -89,6 +89,7 @@ namespace kbs2.WorldEntity.WorldEntitySpawner
             if (!(structure is ConstructingBuildingController)) return;
 
             ConstructingBuildingController constructingBuilding = (ConstructingBuildingController) structure;
+            constructingBuilding.ConstructionComplete += this.ReplaceBuilding;
             constructingBuilding.ConstructingBuildingModel.FinishTime = (int) (constructingBuilding.Def.ConstructionTime + Game.LastUpdateGameTime.TotalGameTime.TotalSeconds);
         }
 

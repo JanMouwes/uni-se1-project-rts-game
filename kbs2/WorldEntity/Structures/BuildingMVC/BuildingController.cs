@@ -20,7 +20,7 @@ namespace kbs2.WorldEntity.Structures.BuildingMVC
 
         public HP_Controller HPController => new HP_Controller();
 
-        public Unit_Controller View => BuildingView;
+        public IViewImage View => BuildingView;
 
         public FloatCoords FloatCoords => (FloatCoords) Model.TopLeft;
         public FloatCoords Centre => new FloatCoords {x = (Model.TopLeft.x + View.Width / 2), y = (Model.TopLeft.y + View.Height / 2)};

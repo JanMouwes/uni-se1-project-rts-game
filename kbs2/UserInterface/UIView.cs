@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace kbs2.UserInterface
 {
-    public class UIView : Unit_Controller
+    public class UIView : IViewImage
     {
         public GameController gameController { get; set; }
         public Coords coords => new Coords

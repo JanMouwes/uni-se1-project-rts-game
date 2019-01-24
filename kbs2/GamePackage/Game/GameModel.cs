@@ -25,7 +25,7 @@ namespace kbs2.GamePackage
         public IEnumerable<IViewItem> AllDrawItems => ItemList.Select(item => (IViewItem) item).Concat(GuiItemList).Concat(TextList).Concat(GuiTextList);
 
         // List For everything
-        public List<Unit_Controller> ItemList = new List<Unit_Controller>();
+        public List<IViewImage> ItemList = new List<IViewImage>();
 
         // List For everything in the gui
         public List<IGuiViewImage> GuiItemList = new List<IGuiViewImage>();

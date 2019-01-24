@@ -14,8 +14,8 @@ namespace kbs2.Desktop
         [STAThread]
         static void Main()
         {
-            GameController game = new GameController(GameSpeed.Regular, GameState.Running);
-            
+            GameController game = new GameController(null, GameSpeed.Regular, GameState.Running);
+
 //            using (DataBaseContext dbContext = new DataBaseContext())
 //            {
 //                List<BuildingDef> defs = (from buildingDef in dbContext.BuildingDef select buildingDef).ToList();

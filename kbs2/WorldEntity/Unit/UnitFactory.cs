@@ -84,7 +84,7 @@ namespace kbs2.WorldEntity.Unit
             AttackActionDef attackActionDef = new AttackActionDef(3, new ViewValues("mapaction-lightningbolt", 20, 20), 20, ElementType.Electric);
 
             IMapAction mapAction = mapActionFactory.CreateAttackAction(attackActionDef, unit);
-            IGameAction gameAction = factory.CreateSelectAction(game, mapAction);
+            IGameAction gameAction = factory.CreateSelectAction(mapAction);
 
             unit.GameActions.Add(gameAction);
 

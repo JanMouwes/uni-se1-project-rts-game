@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace kbs2.View.GUI
 {
-    public interface IGuiViewImage : Unit_Controller
+    public interface IGuiViewImage : IViewImage
     {
         void Click(MouseState mouseState);
 
